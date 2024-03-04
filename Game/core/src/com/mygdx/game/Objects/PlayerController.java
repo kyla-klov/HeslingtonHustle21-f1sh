@@ -19,16 +19,16 @@ public class PlayerController extends GameObject {
 
     }
     public void update (float deltaTime) {
+
         bounds.x = pos.x - bounds.width / 2;
         bounds.y = pos.y - bounds.height / 2;
 
         pos = pos.mulAdd(getDir(),deltaTime*200);
     }
 
-    public Vector2 getDir()
-    {
+    public Vector2 getDir() {
+        //find overall direction of inputs and normalize vector2
         Vector2 dir = new Vector2(0,0);
-
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             dir.x -= 1;
         }
@@ -44,18 +44,16 @@ public class PlayerController extends GameObject {
         return dir.nor();
     }
     @Override
-    public void Render (Matrix4 projection, HesHustle game,ShapeRenderer shape, SpriteBatch sb){
+    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape){
+        //player box
         shape.setProjectionMatrix(projection);
         shape.begin(ShapeRenderer.ShapeType.Line);
         shape.setColor(Color.CHARTREUSE);
         shape.rect(pos.x, pos.y, bounds.width, bounds.height);
         shape.end();
-        sb.end();
-        sb.begin();
     }
     @Override
-    public void Dispose()
-    {
+    public void Dispose() {
 
     }
 }

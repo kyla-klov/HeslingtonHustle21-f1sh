@@ -20,16 +20,16 @@ public class Building extends GameObject{
     }
 
     @Override
-    public void Render(Matrix4 projection, HesHustle game, ShapeRenderer shape, SpriteBatch sb) {
-        sb.end();
+    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape) {
+        game.batch.end();
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.RED);
         shape.rect(pos.x, pos.y, 100, 100);
         shape.end();
-        sb.begin();
+        game.batch.begin();
         font2.draw(game.batch, name, pos.x+3, pos.y +bounds.height-3);
-        sb.end();
-        sb.begin();
+        game.batch.end();
+        game.batch.begin();
 
 
     }
