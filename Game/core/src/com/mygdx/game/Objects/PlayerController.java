@@ -12,11 +12,22 @@ import com.mygdx.game.HesHustle;
 public class PlayerController extends GameObject {
     public static final float width = 40;
     public static final float height = 40;
+    public enum state {
+        IDLE_LEFT,
+        IDLE_UP,
+        IDLE_RIGHT,
+        IDLE_DOWN,
+        WALK_LEFT,
+        WALK_UP,
+        WALK_RIGHT,
+        WALK_DOWN,
+    }
 
+    public state Pstate;
     public PlayerController(float xPos, float yPos)
     {
         super(xPos,yPos,width,height);
-
+        Pstate = state.IDLE_DOWN;
     }
     public void update (float deltaTime) {
 
