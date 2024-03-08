@@ -27,7 +27,7 @@ public class TiledTest extends ApplicationAdapter implements InputProcessor {
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
-        tiledMap = new TmxMapLoader().load("MyCrappyMap.tmx");
+        tiledMap = new TmxMapLoader().load("map1.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         Gdx.input.setInputProcessor(this);
     }
@@ -100,8 +100,6 @@ public class TiledTest extends ApplicationAdapter implements InputProcessor {
         return false;
     }
 
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
+
+
 }
