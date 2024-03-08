@@ -4,22 +4,25 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Anim {
-    private Texture SprSheet;
+    private final Texture SprSheet;
     private int FrameNo;
-    int time;
+    double time;
 
     public Anim(Texture SprSheet, int frameNo)
     {
         this.SprSheet = SprSheet;
-        this.FrameNo = FrameNo;
+        this.FrameNo = 1+FrameNo;
         this.time = 0;
     }
 
     public TextureRegion GetFrame(float deltaTime)
     {
-        time += deltaTime;
         if (time > 1) {time = 0;}
+        time += deltaTime;
 
-        return null;
+        double frameLen = 1/FrameNo;
+        int curFrame = (int) Math.floor(time/frameLen);
+        TextureRegion tex = new TextureRegion(SprSheet,16,32);
+        return tex;
     }
 }
