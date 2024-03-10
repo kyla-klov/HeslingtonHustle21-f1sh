@@ -1,5 +1,6 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -26,8 +27,6 @@ public class GameScreen implements Screen {
     //Game objects
     PlayerController Player;
     Building ComSci,Nisa;
-
-    TiledTest map;
     TiledMapRenderer TmRender;
     TiledMap tiledMap;
 
@@ -38,18 +37,24 @@ public class GameScreen implements Screen {
         extendViewport.getCamera().position.set(800,400,0);
         shape = new ShapeRenderer();
         this.objects = new ArrayList<GameObject>();
+
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
         create();
+
     }
     public void create(){
         ComSci = new Building(200,600,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
         Nisa = new Building(400,400,100,100,"Nisa",Boolean.TRUE);
         Player = new PlayerController(1000,1000);
 
+
+        objects.add(Player);
         objects.add(ComSci);
         objects.add(Nisa);
-        objects.add(Player);
+
+
+        Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
         for (GameObject gameObject : objects) {
@@ -77,11 +82,9 @@ public class GameScreen implements Screen {
     }
     public void renderObjects()
     {
-        game.batch.begin();
         for (GameObject gameObject : objects) {
             gameObject.render(extendViewport.getCamera().combined,game,shape);
         }
-        game.batch.end();
     }
 
     @Override

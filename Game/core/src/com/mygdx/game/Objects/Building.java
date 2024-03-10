@@ -19,19 +19,23 @@ public class Building extends GameObject{
         font2 = new BitmapFont(Gdx.files.internal("font.fnt"));
     }
 
+    public void update(float delta)
+    {
+        super.update(delta);
+
+    }
+
     @Override
     public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape) {
-        game.batch.end();
+        shape.setProjectionMatrix(projection);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.RED);
         shape.rect(pos.x, pos.y, 100, 100);
         shape.end();
+
         game.batch.begin();
         font2.draw(game.batch, name, pos.x+3, pos.y +bounds.height-3);
         game.batch.end();
-        game.batch.begin();
-
-
     }
 
     @Override
