@@ -7,32 +7,33 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
-import com.mygdx.game.Objects.Building;
-import com.mygdx.game.Objects.GameObject;
-import com.mygdx.game.Objects.PlayerController;
-import com.mygdx.game.Objects.TiledTest;
+import com.mygdx.game.Objects.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class GameScreen implements Screen {
     final HesHustle game;
     public ExtendViewport extendViewport;
     public ShapeRenderer shape;
     public final List<GameObject> objects;
-
+    public final List<Building> buildings;
     //Game objects
     PlayerController Player;
     Building ComSci,Nisa;
     TiledMapRenderer TmRender;
     TiledMap tiledMap;
+    EventManager EventM;
 
 
     public GameScreen(final HesHustle game) {
         this.game = game;
+        this.buildings = new ArrayList<Building>();
         extendViewport = new ExtendViewport(800,800);
         extendViewport.getCamera().position.set(800,400,0);
         shape = new ShapeRenderer();
@@ -40,15 +41,19 @@ public class GameScreen implements Screen {
 
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
+
         create();
 
     }
     public void create(){
         ComSci = new Building(200,600,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
         Nisa = new Building(400,400,100,100,"Nisa",Boolean.TRUE);
-        Player = new PlayerController(1000,1000);
+        buildings.add(ComSci);
+        buildings.add(Nisa);
+        EventM = new EventManager(buildings);
+        Player = new PlayerController(1000,1000, EventM);
 
-
+        objects.add(EventM);
         objects.add(Player);
         objects.add(ComSci);
         objects.add(Nisa);
@@ -60,6 +65,9 @@ public class GameScreen implements Screen {
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
+        if (!Objects.equals(null,getNearest()))
+        {EventM.interact(getNearest().name);}
+
     }
     @Override
     public void render(float delta) {
@@ -75,10 +83,20 @@ public class GameScreen implements Screen {
         TmRender.render();
 
         renderObjects();
+    }
 
-
-
-
+    public Building getNearest()
+    {
+        Building closest = null;
+        Float closDis = 100f;
+        for (Building bd : buildings) {
+            if (Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y)) <closDis)
+            {
+                closest = bd;
+                closDis = Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y);
+            }
+        }
+        return closest;
     }
     public void renderObjects()
     {
