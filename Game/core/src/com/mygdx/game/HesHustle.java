@@ -16,7 +16,6 @@ public class HesHustle extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
 		font = new BitmapFont(Gdx.files.internal("font.fnt"));
 		this.setScreen(new MenuScreen(this));
 	}
@@ -29,6 +28,5 @@ public class HesHustle extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
 }
