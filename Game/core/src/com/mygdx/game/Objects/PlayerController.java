@@ -48,6 +48,7 @@ public class PlayerController extends GameObject implements InputProcessor {
     private final static int right=Input.Keys.D;
 
     public EventManager EM;
+    public Building nearBD;
     public PlayerController(float xPos, float yPos, EventManager EM)
     {
         super(xPos,yPos,width,height);
@@ -55,6 +56,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         loadAnims();
         Panim = IDLE_DOWN;
         this.EM = EM;
+        nearBD = null;
     }
     public void loadAnims() {
         IDLE_LEFT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
@@ -140,11 +142,20 @@ public class PlayerController extends GameObject implements InputProcessor {
 
 
     }
+    public void setBD(Building BD){
+        nearBD = BD;
+    }
+    public void interact(){
+        nearBD.event();
+    }
 
     @Override
     public boolean keyDown(int keycode) {
 
         downKeys.add(keycode);
+        if (keycode == Input.Keys.SPACE){
+            interact();
+        }
         if (downKeys.size >= 2){
 
             return onMultipleKeysDown(keycode);

@@ -65,8 +65,8 @@ public class GameScreen implements Screen {
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
-        if (!Objects.equals(null,getNearest()))
-        {EventM.interact(getNearest().name);}
+        Player.setBD(getNearest());
+
 
     }
     @Override
@@ -88,12 +88,12 @@ public class GameScreen implements Screen {
     public Building getNearest()
     {
         Building closest = null;
-        Float closDis = 100f;
+        float closDis = 500f;
         for (Building bd : buildings) {
             if (Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y)) <closDis)
             {
                 closest = bd;
-                closDis = Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y);
+                closDis = (float) Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y));
             }
         }
         return closest;
