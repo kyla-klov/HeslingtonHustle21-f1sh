@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.mygdx.game.HesHustle;
 
+import java.util.Random;
+
 public class Building extends GameObject{
     public String name;
     public Boolean interact;
@@ -38,6 +40,10 @@ public class Building extends GameObject{
         game.batch.end();
     }
 
+    public void event()
+    {
+        Gdx.app.log("hi",name);
+    }
     @Override
     public void Dispose() {
         font2.dispose();

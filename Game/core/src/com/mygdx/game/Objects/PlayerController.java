@@ -46,12 +46,17 @@ public class PlayerController extends GameObject implements InputProcessor {
     private final static int down=Input.Keys.S;
     private final static int left=Input.Keys.A;
     private final static int right=Input.Keys.D;
-    public PlayerController(float xPos, float yPos)
+
+    public EventManager EM;
+    public Building nearBD;
+    public PlayerController(float xPos, float yPos, EventManager EM)
     {
         super(xPos,yPos,width,height);
         Pstate = state.IDLE_DOWN;
         loadAnims();
         Panim = IDLE_DOWN;
+        this.EM = EM;
+        nearBD = null;
     }
     public void loadAnims() {
         IDLE_LEFT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
@@ -71,6 +76,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         txr = getAnim(Pstate).GetFrame(deltaTime);
         pos = pos.mulAdd(getDir().nor(),deltaTime*200);
 
+        EM.update(deltaTime);
 
     }
 
@@ -136,16 +142,28 @@ public class PlayerController extends GameObject implements InputProcessor {
 
 
     }
+    public void setBD(Building BD){
+        nearBD = BD;
+    }
+    public void interact(){
+        if (nearBD!=null)
+        {
+            EM.interact(nearBD.name);
+        }
+
+    }
 
     @Override
     public boolean keyDown(int keycode) {
 
         downKeys.add(keycode);
+        if (keycode == Input.Keys.SPACE){
+            interact();
+        }
         if (downKeys.size >= 2){
 
             return onMultipleKeysDown(keycode);
         }
-        Gdx.app.log("hi", Integer.toString(downKeys.size));
         return true;
 
     }
@@ -153,17 +171,17 @@ public class PlayerController extends GameObject implements InputProcessor {
         if ((keycode==left && downKeys.contains(right)) || (keycode==right && downKeys.contains(left))) {
             downKeys.remove(left);
             downKeys.remove(right);
-            Gdx.app.log("hi", Integer.toString(downKeys.size));
+
             return true;
         }
         else if ((keycode==up && downKeys.contains(down)) || (keycode==down && downKeys.contains(up))) {
             downKeys.remove(up);
             downKeys.remove(down);
-            Gdx.app.log("hi", Integer.toString(downKeys.size));
+
             return true;
         } else {
             downKeys.add(keycode);
-            Gdx.app.log("hi", Integer.toString(downKeys.size));
+
             return true;
         }
 
