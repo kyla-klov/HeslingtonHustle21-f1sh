@@ -111,6 +111,62 @@ public class Event extends GameObject {
         return description;
     }
 
+    /**
+     * returns the score for the game based on the list of events
+     *
+     * @params playedEvents, a list of events that have occured during the game
+     * @returns score, an integer representing the players geades
+     */
+    /
+    public static int Score(List<Event> playedEvents) {
+        int score = 0;
+        int cumulativeEat = 1;
+        int cumulativeSleep = 1;
+        int fatigue = 0;
+        int studyCount = 0;
+        int studyTotal = 0;
+        int recCount = 0;
+        int recTotal = 0;
+        double studyDebuff = 1;
+        double recDebuff = 1;
+        for (Event event : playedEvents) {
+            switch (event.getEventType()) {
+                case EAT:
+                    score += cumulativeEat;
+                    cumulativeEat += cumulativeEat;
+                    break;
+                case SLEEP:
+                    score += cumulativeSleep;
+                    cumulativeSleep += cumulativeSleep;
+                    break;
+                case RECREATIONAL:
+                    score += event.getEnjoymentStudyLevel();
+                    recCount += 1;
+                    score += event.getFatigue();
+                    break;
+                case STUDY:
+                    studyTotal += event.getEnjoymentStudyLevel();
+                    studyCount += 1;
+                    score += event.getFatigue();
+                    break;
+                default:
+                    score += 1;
+                    break;
+
+            }
+            studyDebuff = 0.15 * (-(studyCount * studyCount) + (28 * studyCount));
+            recDebuff = (double) 140 / (((recCount - 10) * (recCount- 10)) + 5);
+        }
+
+        score += (int) Math.round(studyDebuff * studyTotal);
+        score += (int) Math.round(recDebuff * recTotal);
+
+        // 692 is the theoretical max a score can be, excluding debuffs and assuming 14 study sessions and 10 recreational session
+        return (int)((score / 692)* 10 - ());
+    }
+
+
+
     /*
     this class allows for the interfacing of the time and energy classes
     it holds the event name a link to the event constants and the values it holds for scoring
