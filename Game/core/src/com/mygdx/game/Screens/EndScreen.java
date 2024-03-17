@@ -2,7 +2,6 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -10,62 +9,59 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.HesHustle;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 
-
-public class MenuScreen implements Screen {
+public class EndScreen implements Screen{
     final HesHustle game;
-    OrthographicCamera camera;
-    private Skin skin;
     private Stage stage;
-    private Label titleLabel;
+    private Skin skin;
 
 
-    public MenuScreen(final HesHustle game) {
+    public EndScreen(final HesHustle game) {
         this.game = game;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 800);
-
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"));
+        setupUi();
+    }
 
-        titleLabel = new Label("Heslington Hustle", skin, "default");
-        titleLabel.setFontScale(2.0f);
-
-        TextButton playButton = new TextButton("Play", skin);
-        TextButton exitButton = new TextButton("Exit", skin);
-
-        Table table = new Table();
+    private void setupUi(){
+        Table table = new Table ();
         table.setFillParent(true);
-        table.add(titleLabel).padBottom(50).row(); // Add the title label and move to the next row
-        table.add(playButton).pad(10).row(); // Add the play button and move to the next row
-        table.add(exitButton).pad(10); // Add the exit button
-
         stage.addActor(table);
 
-        playButton.addListener(event -> {
-            if (!event.isHandled())
-                return false;
-            game.setScreen(new GameScreen(game));
+        TextButton playAgainButton = new TextButton("Play Again", skin);
+        TextButton mainMenuButton = new TextButton("Main Menu", skin);
+        TextButton exitButton = new TextButton("Exit", skin);
+
+        // Add functionality to buttons
+        playAgainButton.addListener(event -> {
+            if (!event.isHandled()) return false;
+            game.setScreen(new GameScreen(game)); // Restart the game
+            return true;
+        });
+
+        mainMenuButton.addListener(event -> {
+            if (!event.isHandled()) return false;
+            game.setScreen(new MenuScreen(game)); // Go back to the main menu
             return true;
         });
 
         exitButton.addListener(event -> {
             if (!event.isHandled()) return false;
-            Gdx.app.exit();
+            Gdx.app.exit(); // Exit the game
             return true;
         });
 
-
-
+        // Layout the buttons in the table
+        table.add(playAgainButton).pad(10).row();
+        table.add(mainMenuButton).pad(10).row();
+        table.add(exitButton).pad(10);
     }
 
     @Override
     public void show() {
-        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -96,5 +92,7 @@ public class MenuScreen implements Screen {
     public void dispose() {
         if (stage != null) stage.dispose();
         if (skin != null) skin.dispose();
+
+
     }
 }
