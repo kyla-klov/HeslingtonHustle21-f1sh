@@ -146,7 +146,11 @@ public class PlayerController extends GameObject implements InputProcessor {
         nearBD = BD;
     }
     public void interact(){
-        nearBD.event();
+        if (nearBD!=null)
+        {
+            EM.interact(nearBD.name);
+        }
+
     }
 
     @Override

@@ -1,25 +1,30 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.mygdx.game.HesHustle;
-
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
 public class EventManager extends GameObject{
     Event event1,event2,event3,eatingA,eatingB,studying,studyCatchUp;
-    public Float TRaw;
-    Integer TSec, TMin;
+    Event curEvent = null;
+    public Float TRaw,Twait;
+    public Integer TSec, TMin;
     Integer day;
     List<Building> buildings;
+
     public EventManager(List<Building> buildings) {
         super(0,0,0,0);
         this.buildings = buildings;
         TRaw = 0.0f;
         TSec = 0;
-        TMin = 0;
+        TMin = 8;
+        Twait = 0f;
         day = 1;
         generateEvents();
     }
@@ -35,16 +40,29 @@ public class EventManager extends GameObject{
     }
     public void interact(String name)
     {
+        Gdx.app.log("a","adsa");
         switch (name){
-            case "Nisa": Gdx.app.log("hi",name);
-            case "Computer\nScience\nDepartment": Gdx.app.log("hi",name);
-            //case "Nisa": Gdx.app.log("hi",name);
+            default:
+                curEvent = null;
+                break;
+            case "Nisa":
+                curEvent = eatingA;
+                Twait = 8f;
+                break;
+            case "Computer\nScience\nDepartment":
+                curEvent = studying;
+                break;
         }
     }
     @Override
     public void update(float deltaTime) {
         TRaw += deltaTime;
-        if (TRaw >= 0.3){
+        Twait -= deltaTime;
+        if (Twait<0)
+        {
+            curEvent = null;
+        }
+        if (TRaw >= 2){
             TSec++;
             TRaw = 0f;
         }
@@ -54,13 +72,24 @@ public class EventManager extends GameObject{
         }
 
     }
-    @Override
-    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape)
+
+    public String getTime()
     {
-        game.batch.begin();
-        game.font.draw(game.batch, Integer.toString(TSec) , 1000, 1000);
-        game.font.draw(game.batch, Integer.toString(TMin)+":" , 975, 1000);
-        game.batch.end();
+        String forTime = "";
+        String z1 = "",z2 = "";
+        if (TMin < 10) {z1="0";}
+        if (TSec < 10) {z2="0";}
+
+        return "Time: " + z1 +TMin + ":" + z2 +TSec;
+    }
+
+
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape)
+    {
+        if(curEvent!=null){
+            curEvent.render(projection, game, shape);
+        }
+
     }
 
 
