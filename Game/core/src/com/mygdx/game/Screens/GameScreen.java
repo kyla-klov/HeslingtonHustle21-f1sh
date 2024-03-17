@@ -1,6 +1,7 @@
 package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -23,6 +24,9 @@ public class GameScreen implements Screen {
     public ExtendViewport extendViewport;
     public ShapeRenderer shape;
     public final List<GameObject> objects;
+
+    public static final int TARGET_X = 500;
+    public static final int TARGET_Y = 500;
 
     //Game objects
     PlayerController Player;
@@ -60,12 +64,22 @@ public class GameScreen implements Screen {
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
+        if (checkGameOverCondition()) {
+            game.setScreen(new EndScreen(game)); // Switch to EndScreen
+        }
+    }
+
+    private boolean checkGameOverCondition(){
+        // TO-DO
+        return false;
     }
     @Override
     public void render(float delta) {
         update(delta);
-
-
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new PauseScreen(game));
+            dispose();
+        }
         ScreenUtils.clear(0, 0, 0.2f, 1);
         extendViewport.apply();
         extendViewport.getCamera().position.set(Player.pos.x,Player.pos.y,0);
@@ -75,10 +89,6 @@ public class GameScreen implements Screen {
         TmRender.render();
 
         renderObjects();
-
-
-
-
     }
     public void renderObjects()
     {
