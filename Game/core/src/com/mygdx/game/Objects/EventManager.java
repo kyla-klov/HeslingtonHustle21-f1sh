@@ -33,13 +33,13 @@ public class EventManager extends GameObject{
         generateEvents();
     }
     public void generateEvents() {
-        event1 = new Event( 1, 2, 10,-5,Event.type.RECREATIONAL, "");
-        event2 = new Event( 1, 2,20,-10, Event.type.RECREATIONAL, 15, "");
-        event3 = new Event(2, 2,50,10, Event.type.RECREATIONAL, 25, "");
-        eatingA = new Event(2, -10, Event.type.EAT, "");
-        eatingB = new Event(1, -5, Event.type.EAT, "");
-        studying = new Event( 2 , 10, 10, 10, Event.type.STUDY, "");
-        studyCatchUp = new Event( 5 , 20, 20, 20, Event.type.STUDY, "");
+        event1 = new Event( 60, 2, 10,-5,Event.type.RECREATIONAL, "");
+        event2 = new Event( 60, 2,20,-10, Event.type.RECREATIONAL, 15, "");
+        event3 = new Event(120, 2,50,10, Event.type.RECREATIONAL, 25, "");
+        eatingA = new Event(120, -10, Event.type.EAT, "");
+        eatingB = new Event(60, -5, Event.type.EAT, "");
+        studying = new Event( 120 , 10, 10, 10, Event.type.STUDY, "");
+        studyCatchUp = new Event( 300 , 20, 20, 20, Event.type.STUDY, "");
 
     }
     public void interact(String name)
