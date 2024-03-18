@@ -58,23 +58,18 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
 
-        // Initialize the detector
-        collisionDetector = new CollisionDetector();
-
-        // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
-        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
-        collisionDetector.registerObjects(objects, collisionLayer);
-
         create();
 
     }
     public void create(){
+        // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
         ComSci = new Building(200,600,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
         Nisa = new Building(400,400,100,100,"Nisa",Boolean.TRUE);
         buildings.add(ComSci);
         buildings.add(Nisa);
         EventM = new EventManager(buildings);
-        Player = new PlayerController(1000,1000, EventM);
+        Player = new PlayerController(1000,1000, EventM, collisionLayer);
         gui = new GUI(game.batch,EventM);
         objects.add(EventM);
         objects.add(Player);
@@ -87,9 +82,6 @@ public class GameScreen implements Screen {
     public void update(float delta) {
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
-
-            // Detect collisions
-            collisionDetector.detectCollisions();
         }
 
         Player.setBD(getNearest());

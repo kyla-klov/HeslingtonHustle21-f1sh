@@ -1,5 +1,6 @@
 package com.mygdx.game.Objects;
 
+import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Objects.GameObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Intersector;
@@ -13,50 +14,45 @@ import java.util.List;
 public class CollisionDetector {
     private List<GameObject> objects;
     private TiledMapTileLayer tileMapLayer;
+    private PlayerController player;
 
-    public void registerObjects(List<GameObject> objects, TiledMapTileLayer tileMapLayer) {
-        this.objects = objects;
+    public void registerCollisions(PlayerController player, TiledMapTileLayer tileMapLayer) {
+        this.player = player;
         this.tileMapLayer = tileMapLayer;
     }
 
     public void detectCollisions() {
         // If time map is null throw error (Testing :P)
-        if (tileMapLayer == null) {
+        if (tileMapLayer == null || player == null) {
             throw new NullPointerException("TileMapTileLayer is null in CollisionDetector");
         }
 
-        // Iterate thru objects (Left this here an unsure if collisions based off tilemap or objects is more suitable)
-        for (GameObject object : objects) {
+        // Get player info (Position, Previous position, bounds, velocity)
+        float playerX = player.getPos().x;
+        float playerY = player.getPos().y;
+        float prevX = player.getPrev().x;
+        float prevY = player.getPrev().y;
+        float boundsX = player.getBounds().x;
+        float boundsY = player.getBounds().y;
+        Vector2 dir = player.getDir();
 
-            // Player
-            if (object instanceof PlayerController) {
-                PlayerController player = (PlayerController) object;
-                // Get the player's bounding box
-                float playerX = player.pos.x;
-                float playerY = player.pos.y;
-                float playerWidth = player.width;
-                float playerHeight = player.height;
-
-
-
-                // Calculate the tiles that the player overlaps
-                int startX = (int) (playerX / tileMapLayer.getTileWidth());
-                int endX = (int) ((playerX + playerWidth) / tileMapLayer.getTileWidth());
-                int startY = (int) (playerY / tileMapLayer.getTileHeight());
-                int endY = (int) ((playerY + playerHeight) / tileMapLayer.getTileHeight());
-
-                // Check for collisions with blocked tiles
-                for (int y = startY; y <= endY; y++) {
-                    for (int x = startX; x <= endX; x++) {
-                        if (tileMapLayer.getCell(x, y) != null && tileMapLayer.getCell(x, y).getTile() != null &&
-                                tileMapLayer.getCell(x, y).getTile().getProperties().containsKey("blocked")) {
-                            // Trigger collision response in player
-                            System.out.println("Collision");
-                        }
-                    }
-                }
-            }
+        // Players direction
+        if (dir.x > 0) {
+            // Moving right
+            System.out.println("Right");
+        } else if (dir.x < 0) {
+            // Moving left
+            System.out.println("Left");
         }
+
+        if (dir.y > 0) {
+            // Moving up
+            System.out.println("Up");
+        } else if (dir.y < 0) {
+            // Moving down
+            System.out.println("Down");
+        }
+
     }
 
 //    private void handleCollision(GameObject obj1, GameObject obj2) {
