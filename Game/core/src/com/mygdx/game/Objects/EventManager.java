@@ -17,10 +17,9 @@ public class EventManager extends GameObject{
     Event FeedDucks,Sleep,StudyCS,EatPiazza,PlayBBall;
     Event curEvent = null;
     public Float TRaw,Twait;
-    public Integer TSec, TMin; 
-    private int energy; 
+    public Integer TSec, TMin,energy, day;
     private int money;
-    Integer day;
+
     List<Building> buildings;
     List<Event> playedEvents;
 
@@ -32,7 +31,7 @@ public class EventManager extends GameObject{
         TSec = 0;
         TMin = 8;
         Twait = 0f; 
-        energy = 30;
+        energy = 100;
         day = 1;
         generateEvents();
     }
@@ -42,7 +41,7 @@ public class EventManager extends GameObject{
         StudyCS = new Event( 1, -20,20,-10, Event.type.STUDY, 15, "",new Texture("Activitys/cs.png"));
         PlayBBall = new Event(2, -30,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
         Sleep = new Event(8, 90, Event.type.SLEEP, "",new Texture("Activitys/langwith.png"));
-        EatPiazza = new Event(0.5, 10, Event.type.EAT, "",new Texture("Activitys/piazza.png"));
+        EatPiazza = new Event(1, 10, Event.type.EAT, "",new Texture("Activitys/piazza.png"));
 //        studying = new Event( 2.5 , 100, 10, 10, Event.type.STUDY, "",new Texture("Activitys/cs.png"));
 //        studyCatchUp = new Event( 5 , 200, 20, 20, Event.type.STUDY, "",new Texture("Activitys/basketballcourt.png"));
 
@@ -80,6 +79,9 @@ public class EventManager extends GameObject{
                 Twait = 8f;
                 break;
         }
+        assert curEvent != null;
+        updateTime(curEvent);
+        updateEnergy(curEvent);
     }
     @Override
     public void update(float deltaTime) {
@@ -125,6 +127,25 @@ public class EventManager extends GameObject{
      * @params playedEvents, a list of events that have occured during the game
      * @returns score, an integer representing the players geades
      */
+
+    public void updateTime(Event e)
+    {
+
+        TMin += (int) Math.floor(e.getTimeCost());
+        if (TMin > 24 ) {
+            TMin -= 24;
+            day++;
+        }
+    }
+    public void updateEnergy(Event e)
+    {
+        energy += e.getEnergyCost();
+        if (energy<0)
+        {
+            //pass out or something
+        }
+
+    }
 
     public int Score() {
         int score = 0;

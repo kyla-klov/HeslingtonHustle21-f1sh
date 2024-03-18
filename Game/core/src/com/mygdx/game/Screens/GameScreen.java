@@ -138,7 +138,10 @@ public class GameScreen implements Screen {
         return closest;
     }
     private boolean checkGameOverCondition(){
-        // TO-DO
+        if (EventM.day > 7)
+        {
+            return true;
+        }
         return false;
 
     }
