@@ -187,7 +187,7 @@ public class EventManager extends GameObject{
                 isComplete = 1;
                 break;
             case "h":
-                currentEvent = new Event(time.getHours(), - energy, Event.type.SLEEP, "");
+                currentEvent = new Event((TMin + (TSec / 60)), - energy, Event.type.SLEEP, "");
                 isComplete = 1;
                 break;
             default:
@@ -195,13 +195,14 @@ public class EventManager extends GameObject{
 
         }
         if(currentEvent != null){
-            if(time.checkTime >= currentEvent.getTimeCost() && energy >= currentEvent.getEnergyCost()) {
-                time.decreaseHours(currentEvent.getTimeCost());
+            if((TMin + (TSec / 60)) >= currentEvent.getTimeCost() && energy >= currentEvent.getEnergyCost()) {
+                TMin += (currentEvent.getTimeCost());
                 energy += (currentEvent.getEnergyCost());
-                if(time.getHours() == 0 ){
-                    time.resetHours();
-                    time.decreaseDays();
-                } else if (plCharacter.getEnergy() == 0) {
+                if((TMin + (TSec / 60)) == 960 ){
+                    TMin = 0;
+                    TSec = 0;
+                    day += 1;
+                } else if (energy == 0) {
                     energy = 30;
                     days += 1;
                 }
