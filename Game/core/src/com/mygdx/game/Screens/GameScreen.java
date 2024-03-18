@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
+import com.mygdx.game.Objects.CollisionDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,8 +39,11 @@ public class GameScreen implements Screen {
     PlayerController Player;
     Building ComSci,Nisa;
     TiledMapRenderer TmRender;
+    TiledMapTileLayer collisionLayer;
     TiledMap tiledMap;
     EventManager EventM;
+    // Collision detection
+    CollisionDetector collisionDetector;
 
     GUI gui;
 
@@ -53,7 +58,12 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
 
+        // Initialize the detector
+        collisionDetector = new CollisionDetector();
 
+        // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
+        collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("cs building");
+        collisionDetector.registerObjects(objects, collisionLayer);
 
         create();
 
@@ -71,13 +81,15 @@ public class GameScreen implements Screen {
         objects.add(ComSci);
         objects.add(Nisa);
 
-
         Gdx.input.setInputProcessor(Player);
 
     }
     public void update(float delta) {
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
+
+            // Detect collisions
+            collisionDetector.detectCollisions();
         }
 
         Player.setBD(getNearest());
