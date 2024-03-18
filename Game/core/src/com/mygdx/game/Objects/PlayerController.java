@@ -46,12 +46,13 @@ public class PlayerController extends GameObject implements InputProcessor {
     private final static int down=Input.Keys.S;
     private final static int left=Input.Keys.A;
     private final static int right=Input.Keys.D;
+    private boolean shouldStopMoving = false;
     private Vector2 previousPosition;
-
     public EventManager EM;
     public Building nearBD;
     public PlayerController(float xPos, float yPos, EventManager EM)
     {
+
         super(xPos,yPos,width,height);
         Pstate = state.IDLE_DOWN;
         loadAnims();
@@ -59,7 +60,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         this.EM = EM;
         nearBD = null;
 
-        previousPosition = new Vector2(x, y);
+        previousPosition = new Vector2(xPos, yPos);
     }
     public void loadAnims() {
         IDLE_LEFT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
@@ -82,7 +83,10 @@ public class PlayerController extends GameObject implements InputProcessor {
         pos = pos.mulAdd(getDir().nor(),deltaTime*200);
 
         EM.update(deltaTime);
+    }
 
+    public void stopMoving() {
+        pos.set(previousPosition);
     }
 
     public Vector2 getPreviousPosition() {
