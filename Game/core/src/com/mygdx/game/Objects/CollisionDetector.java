@@ -20,7 +20,15 @@ public class CollisionDetector {
     }
 
     public void detectCollisions() {
+        // If time map is null throw error (Testing :P)
+        if (tileMapLayer == null) {
+            throw new NullPointerException("TileMapTileLayer is null in CollisionDetector");
+        }
+
+        // Iterate thru objects (Left this here an unsure if collisions based off tilemap or objects is more suitable)
         for (GameObject object : objects) {
+
+            // Player
             if (object instanceof PlayerController) {
                 PlayerController player = (PlayerController) object;
                 // Get the player's bounding box

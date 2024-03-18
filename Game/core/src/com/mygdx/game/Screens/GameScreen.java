@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
         collisionDetector = new CollisionDetector();
 
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
-        collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("cs building");
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
         collisionDetector.registerObjects(objects, collisionLayer);
 
         create();
