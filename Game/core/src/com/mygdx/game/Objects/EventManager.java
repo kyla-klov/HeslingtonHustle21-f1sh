@@ -14,7 +14,9 @@ public class EventManager extends GameObject{
     Event event1,event2,event3,eatingA,eatingB,studying,studyCatchUp;
     Event curEvent = null;
     public Float TRaw,Twait;
-    public Integer TSec, TMin;
+    public Integer TSec, TMin; 
+    private int energy; 
+    private int money;
     Integer day;
     List<Building> buildings;
     List<Event> playedEvents;
@@ -25,7 +27,8 @@ public class EventManager extends GameObject{
         TRaw = 0.0f;
         TSec = 0;
         TMin = 8;
-        Twait = 0f;
+        Twait = 0f; 
+        energy = 30;
         day = 1;
         generateEvents();
     }
@@ -143,7 +146,7 @@ public class EventManager extends GameObject{
         score += (int) Math.round(recDebuff * recTotal);
 
         // 692 is the theoretical max a score can be, excluding debuffs and assuming 14 study sessions and 10 recreational session
-        return (int)((score / 692)* 10 - ());
+        return (int)((score / 692)* 10);
     }
 
     public void addEvent(String event){
@@ -155,16 +158,16 @@ public class EventManager extends GameObject{
                 break;
             case "b":
                 currentEvent = event2;
-                if(plCharacter.getMoney() - currentEvent.getMoneyCost() > 0){
+                if(money - currentEvent.getMoneyCost() > 0){
                     isComplete = 1;
-                    plCharacter.addMoney(- currentEvent.getMoneyCost());
+                    money -=  currentEvent.getMoneyCost();
                 }
                 break;
             case "c":
                 currentEvent = event3;
-                if(plCharacter.getMoney() - currentEvent.getMoneyCost() > 0){
+                if(money - currentEvent.getMoneyCost() > 0){
                     isComplete = 1;
-                    plCharacter.addMoney(- currentEvent.getMoneyCost());
+                    money -=  currentEvent.getMoneyCost();
                 }
                 break;
             case "d":
@@ -184,7 +187,7 @@ public class EventManager extends GameObject{
                 isComplete = 1;
                 break;
             case "h":
-                currentEvent = new Event(time.getHours(), - plCharacter.getEnergy(), Event.type.SLEEP, "");
+                currentEvent = new Event(time.getHours(), - energy, Event.type.SLEEP, "");
                 isComplete = 1;
                 break;
             default:
@@ -192,15 +195,15 @@ public class EventManager extends GameObject{
 
         }
         if(currentEvent != null){
-            if(time.checkTime(currentEvent.getTimeCost()) && plCharacter.checkEnergy(currentEvent.getEnergyCost())) {
+            if(time.checkTime >= currentEvent.getTimeCost() && energy >= currentEvent.getEnergyCost()) {
                 time.decreaseHours(currentEvent.getTimeCost());
-                plCharacter.decreaseEnergy(currentEvent.getEnergyCost());
+                energy += (currentEvent.getEnergyCost());
                 if(time.getHours() == 0 ){
                     time.resetHours();
                     time.decreaseDays();
                 } else if (plCharacter.getEnergy() == 0) {
-                    plCharacter.resetEnergy();
-                    time.decreaseDays();
+                    energy = 30;
+                    days += 1;
                 }
                 playedEvents.add(currentEvent);
             }
