@@ -2,6 +2,7 @@ package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.mygdx.game.HesHustle;
@@ -29,13 +30,13 @@ public class EventManager extends GameObject{
         generateEvents();
     }
     public void generateEvents() {
-        event1 = new Event( 1, 2, 10,-5,Event.type.RECREATIONAL, "");
-        event2 = new Event( 1, 2,20,-10, Event.type.RECREATIONAL, 15, "");
-        event3 = new Event(2, 2,50,10, Event.type.RECREATIONAL, 25, "");
-        eatingA = new Event(1, -10, Event.type.EAT, "");
-        eatingB = new Event(0.5, -5, Event.type.EAT, "");
-        studying = new Event( 2.5 , 100, 10, 10, Event.type.STUDY, "");
-        studyCatchUp = new Event( 5 , 200, 20, 20, Event.type.STUDY, "");
+        event1 = new Event( 1, 2, 10,-5,Event.type.RECREATIONAL, "",new Texture("Activitys/basketballcourt.png"));
+        event2 = new Event( 1, 2,20,-10, Event.type.RECREATIONAL, 15, "",new Texture("Activitys/cs.png"));
+        event3 = new Event(2, 2,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
+        eatingA = new Event(1, -10, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
+        eatingB = new Event(0.5, -5, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
+        studying = new Event( 2.5 , 100, 10, 10, Event.type.STUDY, "",new Texture("Activitys/cs.png"));
+        studyCatchUp = new Event( 5 , 200, 20, 20, Event.type.STUDY, "",new Texture("Activitys/basketballcourt.png"));
 
     }
     public void interact(String name)
@@ -51,6 +52,7 @@ public class EventManager extends GameObject{
                 break;
             case "Computer\nScience\nDepartment":
                 curEvent = studying;
+                Twait = 8f;
                 break;
         }
     }
