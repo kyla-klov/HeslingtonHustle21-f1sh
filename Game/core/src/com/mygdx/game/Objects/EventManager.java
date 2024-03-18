@@ -17,6 +17,7 @@ public class EventManager extends GameObject{
     public Integer TSec, TMin;
     Integer day;
     List<Building> buildings;
+    List<Event> playedEvents;
 
     public EventManager(List<Building> buildings) {
         super(0,0,0,0);
@@ -32,10 +33,10 @@ public class EventManager extends GameObject{
         event1 = new Event( 1, 2, 10,-5,Event.type.RECREATIONAL, "");
         event2 = new Event( 1, 2,20,-10, Event.type.RECREATIONAL, 15, "");
         event3 = new Event(2, 2,50,10, Event.type.RECREATIONAL, 25, "");
-        eatingA = new Event(1, -10, Event.type.EAT, "");
-        eatingB = new Event(0.5, -5, Event.type.EAT, "");
-        studying = new Event( 2.5 , 100, 10, 10, Event.type.STUDY, "");
-        studyCatchUp = new Event( 5 , 200, 20, 20, Event.type.STUDY, "");
+        eatingA = new Event(2, -10, Event.type.EAT, "");
+        eatingB = new Event(1, -5, Event.type.EAT, "");
+        studying = new Event( 2 , 10, 10, 10, Event.type.STUDY, "");
+        studyCatchUp = new Event( 5 , 20, 20, 20, Event.type.STUDY, "");
 
     }
     public void interact(String name)
@@ -99,7 +100,7 @@ public class EventManager extends GameObject{
      * @returns score, an integer representing the players geades
      */
     /
-    public static int Score(List<Event> playedEvents) {
+    public int Score(List<Event> playedEvents) {
         int score = 0;
         int cumulativeEat = 1;
         int cumulativeSleep = 1;
@@ -143,6 +144,70 @@ public class EventManager extends GameObject{
 
         // 692 is the theoretical max a score can be, excluding debuffs and assuming 14 study sessions and 10 recreational session
         return (int)((score / 692)* 10 - ());
+    }
+
+    public void addEvent(String event){
+        // todo add the money and time functions to event manager
+        switch (event.toLowerCase()){
+            case "a":
+                currentEvent = event1;
+                isComplete = 1;
+                break;
+            case "b":
+                currentEvent = event2;
+                if(plCharacter.getMoney() - currentEvent.getMoneyCost() > 0){
+                    isComplete = 1;
+                    plCharacter.addMoney(- currentEvent.getMoneyCost());
+                }
+                break;
+            case "c":
+                currentEvent = event3;
+                if(plCharacter.getMoney() - currentEvent.getMoneyCost() > 0){
+                    isComplete = 1;
+                    plCharacter.addMoney(- currentEvent.getMoneyCost());
+                }
+                break;
+            case "d":
+                currentEvent = eatingA;
+                isComplete = 1;
+                break;
+            case "e":
+                currentEvent = eatingB;
+                isComplete = 1;
+                break;
+            case "f":
+                currentEvent = studying;
+                isComplete = 1;
+                break;
+            case "g":
+                currentEvent = studyCatchUp;
+                isComplete = 1;
+                break;
+            case "h":
+                currentEvent = new Event(time.getHours(), - plCharacter.getEnergy(), Event.type.SLEEP, "");
+                isComplete = 1;
+                break;
+            default:
+                System.out.println("invalid input");
+
+        }
+        if(currentEvent != null){
+            if(time.checkTime(currentEvent.getTimeCost()) && plCharacter.checkEnergy(currentEvent.getEnergyCost())) {
+                time.decreaseHours(currentEvent.getTimeCost());
+                plCharacter.decreaseEnergy(currentEvent.getEnergyCost());
+                if(time.getHours() == 0 ){
+                    time.resetHours();
+                    time.decreaseDays();
+                } else if (plCharacter.getEnergy() == 0) {
+                    plCharacter.resetEnergy();
+                    time.decreaseDays();
+                }
+                playedEvents.add(currentEvent);
+            }
+        }
+
+
+
     }
 
 
