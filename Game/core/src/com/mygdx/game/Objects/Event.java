@@ -3,10 +3,14 @@ package com.mygdx.game.Objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.HesHustle;
 
 public class Event extends GameObject {
@@ -14,6 +18,7 @@ public class Event extends GameObject {
     private float realTime = 0f;
     private int energyCost,fatigue,enjoymentStudyLevel,moneyCost;
     private String description;
+    private Texture txt;
     public enum type {
         EAT,
         SLEEP,
@@ -23,7 +28,7 @@ public class Event extends GameObject {
 
     private type eventType;
 
-    public Event(double time,int energy, type eventType,String description) {
+    public Event(double time, int energy, type eventType, String description, Texture txt) {
 
 
         super(0,0,10,10);
@@ -33,11 +38,12 @@ public class Event extends GameObject {
         energyCost = energy;
         this.eventType = eventType;
         this.description = description;
+        this.txt = txt;
 
     }
 
 
-    public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, type eventType, String description) {
+    public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, type eventType, String description, Texture txt) {
         // since externally there is no difference between using an int for enjoyment and one for studylevel, they are combined to a single variable whose relevance is determined by the event type.
         super(0,0,10,10);
 
@@ -47,9 +53,10 @@ public class Event extends GameObject {
         this.fatigue = fatigue;
         this.eventType = eventType;
         this.description = description;
+        this.txt = txt;
     }
 
-    public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, type eventType, int moneyCost, String description) {
+    public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, type eventType, int moneyCost, String description, Texture txt) {
         super(0,0,10,10);
         timeCost = time;
         energyCost = energy;
@@ -58,19 +65,25 @@ public class Event extends GameObject {
         this.eventType = eventType;
         this.moneyCost = moneyCost;
         this.description = description;
+        this.txt = txt;
     }
 
     public void render(Camera projection, HesHustle game, ShapeRenderer shape)
     {
         Gdx.app.log("","space works");
         shape.setProjectionMatrix(projection.combined);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.RED);
-        shape.rect((projection.position.x - projection.viewportWidth*0.85f/2), (projection.position.y - projection.viewportHeight*0.85f/2), projection.viewportWidth*0.85f, projection.viewportHeight*0.85f);
+        shape.setColor(new Color(0,0,0.2f,0.7f));
+        shape.rect((projection.position.x - projection.viewportWidth/2), (projection.position.y - projection.viewportHeight/2), projection.viewportWidth, projection.viewportHeight);
+        shape.setColor(Color.BLACK);
+        shape.rect((projection.position.x - projection.viewportHeight*0.9f/2), (projection.position.y - projection.viewportHeight*0.9f/2), projection.viewportHeight*0.9f, projection.viewportHeight*0.9f);
         shape.end();
-
+        Gdx.gl.glDisable(GL20.GL_BLEND);
         game.batch.begin();
-        game.font.draw(game.batch, "hahah", projection.position.x, projection.position.y);
+        game.batch.setProjectionMatrix(projection.combined);
+        game.batch.draw(new TextureRegion(txt),(projection.position.x - (projection.viewportHeight*0.85f/2)),(projection.position.y - projection.viewportHeight*0.85f/2),0,0,projection.viewportHeight*0.85f,projection.viewportHeight*0.85f,1,1,0);
         game.batch.end();
     }
 

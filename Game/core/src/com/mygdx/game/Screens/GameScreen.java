@@ -1,6 +1,7 @@
 package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -33,21 +34,18 @@ public class GameScreen implements Screen {
     TiledMapRenderer TmRender;
     TiledMap tiledMap;
     EventManager EventM;
-
     GUI gui;
 
     public GameScreen(final HesHustle game) {
         this.game = game;
-        this.buildings = new ArrayList<Building>();
-        extendViewport = new ExtendViewport(800,800);
-        extendViewport.getCamera().position.set(800,400,0);
-        shape = new ShapeRenderer();
-        this.objects = new ArrayList<GameObject>();
 
+        extendViewport = new ExtendViewport(800,800);
+        shape = new ShapeRenderer();
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
 
-
+        this.objects = new ArrayList<GameObject>();
+        this.buildings = new ArrayList<Building>();
 
         create();
 
@@ -55,38 +53,42 @@ public class GameScreen implements Screen {
     public void create(){
         ComSci = new Building(200,600,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
         Nisa = new Building(400,400,100,100,"Nisa",Boolean.TRUE);
+
         buildings.add(ComSci);
         buildings.add(Nisa);
+
         EventM = new EventManager(buildings);
         Player = new PlayerController(1000,1000, EventM);
         gui = new GUI(game.batch,EventM);
+
         objects.add(EventM);
         objects.add(Player);
         objects.add(ComSci);
         objects.add(Nisa);
 
-
         Gdx.input.setInputProcessor(Player);
-
     }
     public void update(float delta) {
+
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
+
         Player.setBD(getNearest());
+
         gui.update(delta);
 
-
+        if (checkGameOverCondition()) {
+            game.setScreen(new EndScreen(game)); // Switch to EndScreen
+        }
     }
+
     @Override
     public void render(float delta) {
         update(delta);
 
-
-        //ScreenUtils.clear(0, 0, 0f, 1);
         Gdx.gl.glClearColor(0.1f,0.1f,0.9f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
 
         extendViewport.apply();
         extendViewport.getCamera().position.set(Player.pos.x,Player.pos.y,0);
@@ -95,32 +97,39 @@ public class GameScreen implements Screen {
         TmRender.setView(extendViewport.getCamera().combined, 0,0,5000,5000);
         TmRender.render();
 
-
         renderObjects();
 
         gui.render(extendViewport.getCamera().combined,game,shape);
         EventM.render(extendViewport.getCamera(),game,shape);
-    }
 
-    public Building getNearest()
-    {
-        Building closest = null;
-        float closDis = 200f;
-        for (Building bd : buildings) {
-            if (Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y)) <closDis)
-            {
-                closest = bd;
-                closDis = (float) Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y));
-            }
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(new PauseScreen(game));
+            dispose();
         }
-
-        return closest;
     }
     public void renderObjects()
     {
         for (GameObject gameObject : objects) {
             gameObject.render(extendViewport.getCamera().combined,game,shape);
         }
+    }
+    public Building getNearest()
+    {
+        Building closest = null;
+        float closDis = 200f;
+        for (Building bd : buildings) {
+            if (Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y)) < closDis)
+            {
+                closest = bd;
+                closDis = (float) Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y));
+            }
+        }
+        return closest;
+    }
+    private boolean checkGameOverCondition(){
+        // TO-DO
+        return false;
+
     }
 
     @Override
