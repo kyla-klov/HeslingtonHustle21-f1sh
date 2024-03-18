@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
     public final List<Building> buildings;
     //Game objects
     PlayerController Player;
-    Building ComSci,Nisa;
+    Building ComSci,BBall,Duck,Piazza,Langwith;
     TiledMapRenderer TmRender;
     TiledMap tiledMap;
     EventManager EventM;
@@ -51,11 +51,18 @@ public class GameScreen implements Screen {
 
     }
     public void create(){
-        ComSci = new Building(200,600,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
-        Nisa = new Building(400,400,100,100,"Nisa",Boolean.TRUE);
+        ComSci = new Building(600,1000,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
+        BBall = new Building(800,1000,100,100,"BasketBall",Boolean.TRUE);
+        Duck = new Building(1000,1000,100,100,"Ducks",Boolean.TRUE);
+        Langwith = new Building(1200,1000,100,100,"Langwith",Boolean.TRUE);
+        Piazza = new Building(1400,1000,100,100,"Piazza",Boolean.TRUE);
+
 
         buildings.add(ComSci);
-        buildings.add(Nisa);
+        buildings.add(BBall);
+        buildings.add(Duck);
+        buildings.add(Langwith);
+        buildings.add(Piazza);
 
         EventM = new EventManager(buildings);
         Player = new PlayerController(1000,1000, EventM);
@@ -64,7 +71,11 @@ public class GameScreen implements Screen {
         objects.add(EventM);
         objects.add(Player);
         objects.add(ComSci);
-        objects.add(Nisa);
+        objects.add(BBall);
+        objects.add(Duck);
+        objects.add(Langwith);
+        objects.add(Piazza);
+
 
         Gdx.input.setInputProcessor(Player);
     }

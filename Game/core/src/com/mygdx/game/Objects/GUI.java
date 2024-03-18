@@ -24,7 +24,7 @@ public class GUI extends GameObject{
     Table bottom,botLeft,botMid,botRight;
     ProgressBar pb,nrgBar;
     int prog =0;
-    TextButton lbl;
+    TextButton TimeButt,ScoreButt;
 
     EventManager EM;
     String timeStr;
@@ -80,8 +80,10 @@ public class GUI extends GameObject{
     }
 
     public void createDraws(){
-        lbl = new TextButton("he he ha",skin);
-        topLeft.add(lbl).pad(4);
+        ScoreButt = new TextButton("Score",skin);
+        TimeButt = new TextButton("Time",skin);
+        topLeft.add(ScoreButt).pad(4).row();
+        topLeft.add(TimeButt).pad(4);
         TextButton txtbutt = new TextButton("Energy",skin);
         topLeft.row();
         topLeft.add(txtbutt).pad(4);
@@ -106,8 +108,9 @@ public class GUI extends GameObject{
         if (prog == 100 ){
             prog = 0;
         }
-        lbl.setText(EM.getTime());
-        lbl.scaleBy(5);
+        ScoreButt.setText("Score: " + EM.Score());
+        TimeButt.setText(EM.getTime());
+        TimeButt.scaleBy(5);
 
     }
 
