@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="90" height="70" tilewidth="32" tileheight="32" infinite="0" nextlayerid="109" nextobjectid="1">
+ <properties>
+  <property name="blocked" value=""/>
+ </properties>
  <tileset firstgid="1" source="Modern_Exteriors_Complete_Tileset_32x32.tsx"/>
  <group id="20" name="grass" offsetx="1.89538" offsety="1.13687e-13">
   <layer id="1" name="grass1" width="90" height="70" locked="1">

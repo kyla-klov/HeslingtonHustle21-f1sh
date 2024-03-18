@@ -37,6 +37,8 @@ public class CollisionDetector {
                 float playerWidth = player.width;
                 float playerHeight = player.height;
 
+
+
                 // Calculate the tiles that the player overlaps
                 int startX = (int) (playerX / tileMapLayer.getTileWidth());
                 int endX = (int) ((playerX + playerWidth) / tileMapLayer.getTileWidth());
@@ -57,17 +59,17 @@ public class CollisionDetector {
         }
     }
 
-    private void handleCollision(GameObject obj1, GameObject obj2) {
-        // Player + Building collision
-        if (obj1 instanceof PlayerController && obj2 instanceof Building) {
-            PlayerController player = (PlayerController) obj1;
-            Building building = (Building) obj2;
-            // Stop player movement and enable an interaction
-
-        }
-
-        else if (obj1 instanceof Building && obj2 instanceof PlayerController) {
-            handleCollision(obj2, obj1);
-        }
-    }
+//    private void handleCollision(GameObject obj1, GameObject obj2) {
+//        // Player + Building collision
+//        if (obj1 instanceof PlayerController && obj2 instanceof Building) {
+//            PlayerController player = (PlayerController) obj1;
+//            Building building = (Building) obj2;
+//            // Stop player movement and enable an interaction
+//
+//        }
+//
+//        else if (obj1 instanceof Building && obj2 instanceof PlayerController) {
+//            handleCollision(obj2, obj1);
+//        }
+//    }
 }
