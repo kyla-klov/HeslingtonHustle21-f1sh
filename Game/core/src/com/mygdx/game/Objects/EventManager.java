@@ -35,13 +35,13 @@ public class EventManager extends GameObject{
     }
     public void generateEvents() {
 
-        event1 = new Event( 1, 2, 10,-5,Event.type.RECREATIONAL, "",new Texture("Activitys/basketballcourt.png"));
-        event2 = new Event( 1, 2,20,-10, Event.type.RECREATIONAL, 15, "",new Texture("Activitys/cs.png"));
-        event3 = new Event(2, 2,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
-        eatingA = new Event(1, -10, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
-        eatingB = new Event(0.5, -5, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
-        studying = new Event( 2.5 , 100, 10, 10, Event.type.STUDY, "",new Texture("Activitys/cs.png"));
-        studyCatchUp = new Event( 5 , 200, 20, 20, Event.type.STUDY, "",new Texture("Activitys/basketballcourt.png"));
+        event1 = new Event( 60, 2, 10,-5,Event.type.RECREATIONAL, "",new Texture("Activitys/basketballcourt.png"));
+        event2 = new Event( 60, 2,20,-10, Event.type.RECREATIONAL, 15, "",new Texture("Activitys/cs.png"));
+        event3 = new Event(120, 2,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
+        eatingA = new Event(30, -10, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
+        eatingB = new Event(30, -5, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
+        studying = new Event( 150 , 10, 10, 10, Event.type.STUDY, "",new Texture("Activitys/cs.png"));
+        studyCatchUp = new Event( 300 , 20, 20, 20, Event.type.STUDY, "",new Texture("Activitys/basketballcourt.png"));
 
     }
     public void interact(String name)
@@ -102,11 +102,10 @@ public class EventManager extends GameObject{
     /**
      * returns the score for the game based on the list of events
      *
-     * @params playedEvents, a list of events that have occured during the game
-     * @returns score, an integer representing the players geades
+     * @return score an integer representing the players geades
      */
     /
-    public int Score(List<Event> playedEvents) {
+    public int Score() {
         int score = 0;
         int cumulativeEat = 1;
         int cumulativeSleep = 1;
@@ -116,6 +115,7 @@ public class EventManager extends GameObject{
         int recTotal = 0;
         double studyDebuff = 1;
         double recDebuff = 1;
+        int fatigue = 0;
         for (Event event : playedEvents) {
             switch (event.getEventType()) {
                 case EAT:
@@ -152,8 +152,12 @@ public class EventManager extends GameObject{
         return (int)((score / 692)* 10);
     }
 
+    /**
+     * Adds a valid event to the list of events that occured, based on the user input
+     *
+     * @param event the name of the event that occured
+     * */
     public void addEvent(String event){
-        // todo add the money and time functions to event manager
         switch (event.toLowerCase()){
             case "a":
                 currentEvent = event1;
