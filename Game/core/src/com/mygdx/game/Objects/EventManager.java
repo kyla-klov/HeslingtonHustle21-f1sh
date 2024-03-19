@@ -104,7 +104,7 @@ public class EventManager extends GameObject{
      *
      * @return score an integer representing the players geades
      */
-    /
+
     public int Score() {
         int score = 0;
         int cumulativeEat = 1;
