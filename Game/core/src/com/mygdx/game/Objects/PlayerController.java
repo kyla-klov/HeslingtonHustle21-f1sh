@@ -10,9 +10,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.HesHustle;
+import com.mygdx.game.Objects.CollisionDetector;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 
 import java.util.Objects;
 
@@ -45,17 +50,31 @@ public class PlayerController extends GameObject implements InputProcessor {
     private final static int down=Input.Keys.S;
     private final static int left=Input.Keys.A;
     private final static int right=Input.Keys.D;
-
+    private final Vector2 previousPosition;
     public EventManager EM;
     public Building nearBD;
-    public PlayerController(float xPos, float yPos, EventManager EM)
+    TiledMap tiledMap;
+    TiledMapTileLayer collisionLayer;
+
+    CollisionDetector collisionDetector;
+    public PlayerController(float xPos, float yPos, EventManager EM, TiledMapTileLayer collisionLayer)
     {
+
         super(xPos,yPos,width,height);
         Pstate = state.IDLE_DOWN;
         loadAnims();
         Panim = IDLE_DOWN;
         this.EM = EM;
         nearBD = null;
+
+        previousPosition = new Vector2(xPos, yPos);
+
+        // Initialize the detector
+        collisionDetector = new CollisionDetector();
+
+        // Initialize the collision layer
+        collisionDetector.registerCollisions(this, collisionLayer);
+
     }
     public void loadAnims() {
         IDLE_LEFT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
@@ -69,6 +88,8 @@ public class PlayerController extends GameObject implements InputProcessor {
     }
 
     public void update (float deltaTime) {
+        //Update previous position
+        previousPosition.set(pos.x, pos.y);
 
         bounds.x = pos.x - bounds.width / 2;
         bounds.y = pos.y - bounds.height / 2;
@@ -80,7 +101,30 @@ public class PlayerController extends GameObject implements InputProcessor {
 
         EM.update(deltaTime);
 
+        // Detect collisions
+        collisionDetector.detectCollisions();
     }
+
+    public void stopMoving() {
+        pos.set(previousPosition);
+    }
+
+    public Vector2 getPrev() {
+        return previousPosition;
+    }
+
+    public Vector2 getPos() {
+        return pos;
+    }
+
+    public Rectangle getBounds() {
+        float boundsX = bounds.x;
+        float boundsY = bounds.y;
+        float boundsWidth = bounds.width;
+        float boundsHeight = bounds.height;
+        return new Rectangle(boundsX, boundsY, boundsWidth, boundsHeight);
+    }
+
 
     public Vector2 getDir() {
         //find overall direction of inputs and normalize vector2

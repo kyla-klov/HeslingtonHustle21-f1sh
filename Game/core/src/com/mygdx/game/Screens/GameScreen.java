@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -19,6 +20,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
+import com.mygdx.game.Objects.CollisionDetector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,8 +37,12 @@ public class GameScreen implements Screen {
     PlayerController Player;
     Building ComSci,BBall,Duck,Piazza,Langwith;
     TiledMapRenderer TmRender;
+    TiledMapTileLayer collisionLayer;
     TiledMap tiledMap;
     EventManager EventM;
+    // Collision detection
+    CollisionDetector collisionDetector;
+
     GUI gui;
     LightCycle LC;
     private Music BGmusic;
@@ -49,6 +55,7 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
 
+
         this.objects = new ArrayList<GameObject>();
         this.buildings = new ArrayList<Building>();
 
@@ -56,15 +63,21 @@ public class GameScreen implements Screen {
         BGmusic.play();
         BGmusic.setLooping(true);
 
+
         create();
 
     }
     public void create(){
+
+        // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
+        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
+
         ComSci = new Building(600,1000,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
         BBall = new Building(800,1000,100,100,"BasketBall",Boolean.TRUE);
         Duck = new Building(1000,1000,100,100,"Ducks",Boolean.TRUE);
         Langwith = new Building(1200,1000,100,100,"Langwith",Boolean.TRUE);
         Piazza = new Building(1400,1000,100,100,"Piazza",Boolean.TRUE);
+
 
 
         buildings.add(ComSci);
@@ -74,18 +87,22 @@ public class GameScreen implements Screen {
         buildings.add(Piazza);
 
         EventM = new EventManager(buildings);
-        Player = new PlayerController(1000,1000, EventM);
+        Player = new PlayerController(1000,1000, EventM, collisionLayer);
         gui = new GUI(game.batch,EventM);
 
         objects.add(EventM);
         objects.add(Player);
         objects.add(ComSci);
+
+
+
         objects.add(BBall);
         objects.add(Duck);
         objects.add(Langwith);
         objects.add(Piazza);
 
         LC = new LightCycle();
+
         Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
