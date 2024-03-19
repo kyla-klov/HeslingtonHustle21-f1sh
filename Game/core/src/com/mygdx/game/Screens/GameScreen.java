@@ -23,6 +23,7 @@ import com.mygdx.game.Objects.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Vector;
 
 public class GameScreen implements Screen {
     final HesHustle game;
@@ -42,7 +43,7 @@ public class GameScreen implements Screen {
     public GameScreen(final HesHustle game) {
         this.game = game;
 
-        extendViewport = new ExtendViewport(800,800);
+        extendViewport = new ExtendViewport(1600,900);
         shape = new ShapeRenderer();
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
@@ -87,7 +88,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
-        Gdx.input.setInputProcessor(Player);
+
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
@@ -105,14 +106,14 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         update(delta);
 
-        Gdx.gl.glClearColor(0.1f,0.1f,0.9f,1);
+        Gdx.gl.glClearColor(0f,0f,0f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         extendViewport.apply();
-        extendViewport.getCamera().position.set(Player.pos.x,Player.pos.y,0);
+        updateCamera();
         game.batch.setProjectionMatrix(extendViewport.getCamera().combined);
 
-        TmRender.setView(extendViewport.getCamera().combined, 0,0,5000,5000);
+        TmRender.setView(extendViewport.getCamera().combined, 0,0,2887,2242);
         TmRender.render();
 
         renderObjects();
@@ -131,6 +132,27 @@ public class GameScreen implements Screen {
             gameObject.render(extendViewport.getCamera().combined,game,shape);
         }
     }
+    // method updates the camera position so it follows the player but shows less out of bounds area
+    public void updateCamera()
+    {
+        float x,y;
+        float xConst = (float)1600/Gdx.graphics.getWidth();
+        float yConst = (float)900/Gdx.graphics.getHeight();
+
+        float camWidth = extendViewport.getScreenWidth()/2;
+        float camHeight = extendViewport.getScreenHeight()/2;
+
+        if (Player.pos.x > 2884 - camWidth*xConst) {
+            x = 2884- camWidth*xConst;
+        } else if (Player.pos.x < camWidth*xConst) {x = camWidth*xConst;} else {x=Player.pos.x;}
+
+        if (Player.pos.y > 2238- camHeight*yConst) {
+            y = 2238- camHeight*yConst;
+        } else if (Player.pos.y < camHeight*yConst) {y = camHeight*yConst;} else {y=Player.pos.y;}
+
+        extendViewport.getCamera().position.set(x,y,0);
+    }
+
     public Building getNearest()
     {
         Building closest = null;
@@ -161,11 +183,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(Player);
     }
 
     @Override
     public void hide() {
+
     }
 
     @Override
