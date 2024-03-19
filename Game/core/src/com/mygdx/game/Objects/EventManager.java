@@ -7,59 +7,83 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
 import java.util.Objects;
 
 public class EventManager extends GameObject{
-    Event event1,event2,event3,eatingA,eatingB,studying,studyCatchUp;
+    Event FeedDucks,Sleep,StudyCS,EatPiazza,PlayBBall;
     Event curEvent = null;
     public Float TRaw,Twait;
-    public Integer TSec, TMin; 
-    private int energy; 
+    public Integer TSec, TMin,energy, day;
     private int money;
-    Integer day;
+    boolean frozen = false;
+
     List<Building> buildings;
     List<Event> playedEvents;
 
     public EventManager(List<Building> buildings) {
         super(0,0,0,0);
         this.buildings = buildings;
+        playedEvents = new ArrayList<>();
         TRaw = 0.0f;
         TSec = 0;
         TMin = 8;
         Twait = 0f; 
-        energy = 30;
+        energy = 100;
         day = 1;
         generateEvents();
     }
     public void generateEvents() {
 
-        event1 = new Event( 60, 2, 10,-5,Event.type.RECREATIONAL, "",new Texture("Activitys/basketballcourt.png"));
-        event2 = new Event( 60, 2,20,-10, Event.type.RECREATIONAL, 15, "",new Texture("Activitys/cs.png"));
-        event3 = new Event(120, 2,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
-        eatingA = new Event(30, -10, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
-        eatingB = new Event(30, -5, Event.type.EAT, "",new Texture("Activitys/basketballcourt.png"));
-        studying = new Event( 150 , 10, 10, 10, Event.type.STUDY, "",new Texture("Activitys/cs.png"));
-        studyCatchUp = new Event( 300 , 20, 20, 20, Event.type.STUDY, "",new Texture("Activitys/basketballcourt.png"));
+
+        FeedDucks = new Event( 1, 2, 10,-5,Event.type.RECREATIONAL, "",new Texture("Activitys/lakemap.png"));
+        StudyCS = new Event( 1, -20,20,-10, Event.type.STUDY, 15, "",new Texture("Activitys/cs.png"));
+        PlayBBall = new Event(2, -30,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
+        Sleep = new Event(8, 90, Event.type.SLEEP, "",new Texture("Activitys/langwith.png"));
+        EatPiazza = new Event(1, 10, Event.type.EAT, "",new Texture("Activitys/piazza.png"));
+//        studying = new Event( 2.5 , 100, 10, 10, Event.type.STUDY, "",new Texture("Activitys/cs.png"));
+//        studyCatchUp = new Event( 5 , 200, 20, 20, Event.type.STUDY, "",new Texture("Activitys/basketballcourt.png"));
 
     }
     public void interact(String name)
     {
-        Gdx.app.log("a","adsa");
         switch (name){
             default:
                 curEvent = null;
                 break;
-            case "Nisa":
-                curEvent = eatingA;
+            case "Piazza":
+                curEvent = EatPiazza;
+                playedEvents.add(EatPiazza);
                 Twait = 8f;
                 break;
             case "Computer\nScience\nDepartment":
-                curEvent = studying;
+                curEvent = StudyCS;
+                playedEvents.add(StudyCS);
+                Twait = 8f;
+                break;
+            case "Langwith":
+                curEvent = Sleep;
+                playedEvents.add(Sleep);
+                Twait = 8f;
+                break;
+            case "Ducks":
+                curEvent = FeedDucks;
+                playedEvents.add(FeedDucks);
+                Twait = 8f;
+                break;
+            case "BasketBall":
+                curEvent = PlayBBall;
+                playedEvents.add(PlayBBall);
                 Twait = 8f;
                 break;
         }
+        assert curEvent != null;
+        frozen = true;
+        updateTime(curEvent);
+        updateEnergy(curEvent);
     }
     @Override
     public void update(float deltaTime) {
@@ -68,6 +92,7 @@ public class EventManager extends GameObject{
         if (Twait<0)
         {
             curEvent = null;
+            frozen = false;
         }
         if (TRaw >= 2){
             TSec++;
@@ -104,6 +129,36 @@ public class EventManager extends GameObject{
      *
      * @return score an integer representing the players geades
      */
+
+    public void updateTime(Event e)
+    {
+        if (e.getEventType() == Event.type.SLEEP)
+        {
+            TSec = 0;
+            TMin = 8;
+            day++;
+        }
+        else {
+            TMin += (int) Math.floor(e.getTimeCost());
+            if (TMin > 23 ) {
+                TMin -= 24;
+                day++;
+            }
+        }
+
+    }
+    public void updateEnergy(Event e)
+    {
+        energy += e.getEnergyCost();
+        if (energy<0)
+        {
+            //pass out or something
+        } else if (energy>100)
+        {
+            energy=100;
+        }
+
+    }
 
     public int Score() {
         int score = 0;
@@ -149,15 +204,79 @@ public class EventManager extends GameObject{
         score += (int) Math.round(recDebuff * recTotal);
 
         // 692 is the theoretical max a score can be, excluding debuffs and assuming 14 study sessions and 10 recreational session
-        return (int)((score / 692)* 10);
+        return (int) score;
+        // / 692)* 10);
     }
+
+
+//    public void addEvent(String event){
+//        // todo add the money and time functions to event manager
+//        switch (event.toLowerCase()){
+//            case "a":
+//                currentEvent = event1;
+//                isComplete = 1;
+//                break;
+//            case "b":
+//                currentEvent = event2;
+//                if(money - currentEvent.getMoneyCost() > 0){
+//                    isComplete = 1;
+//                    money -=  currentEvent.getMoneyCost();
+//                }
+//                break;
+//            case "c":
+//                currentEvent = event3;
+//                if(money - currentEvent.getMoneyCost() > 0){
+//                    isComplete = 1;
+//                    money -=  currentEvent.getMoneyCost();
+//                }
+//                break;
+//            case "d":
+//                currentEvent = eatingA;
+//                isComplete = 1;
+//                break;
+//            case "e":
+//                currentEvent = eatingB;
+//                isComplete = 1;
+//                break;
+//            case "f":
+//                currentEvent = studying;
+//                isComplete = 1;
+//                break;
+//            case "g":
+//                currentEvent = studyCatchUp;
+//                isComplete = 1;
+//                break;
+//            case "h":
+//                currentEvent = new Event((TMin + (TSec / 60)), - energy, Event.type.SLEEP, "");
+//                isComplete = 1;
+//                break;
+//            default:
+//                System.out.println("invalid input");
+//
+//        }
+//        if(currentEvent != null){
+//            if((TMin + (TSec / 60)) >= currentEvent.getTimeCost() && energy >= currentEvent.getEnergyCost()) {
+//                TMin += (currentEvent.getTimeCost());
+//                energy += (currentEvent.getEnergyCost());
+//                if((TMin + (TSec / 60)) == 960 ){
+//                    TMin = 0;
+//                    TSec = 0;
+//                    day += 1;
+//                } else if (energy == 0) {
+//                    energy = 30;
+//                    days += 1;
+//                }
+//                playedEvents.add(currentEvent);
+//            }
+//        }
+//    }
 
     /**
      * Adds a valid event to the list of events that occured, based on the user input
      *
      * @param event the name of the event that occured
      * */
-    public void addEvent(String event){
+    /*public void addEvent(String event){
         switch (event.toLowerCase()){
             case "a":
                 currentEvent = event1;
@@ -219,7 +338,8 @@ public class EventManager extends GameObject{
 
 
 
-    }
+    }*/
+
 
 
     /*

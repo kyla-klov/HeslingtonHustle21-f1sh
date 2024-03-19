@@ -25,7 +25,6 @@ public class Event extends GameObject {
         STUDY,
         RECREATIONAL
     };
-
     private type eventType;
 
     public Event(double time, int energy, type eventType, String description, Texture txt) {
@@ -80,7 +79,6 @@ public class Event extends GameObject {
 
     public void render(Camera projection, HesHustle game, ShapeRenderer shape)
     {
-        Gdx.app.log("","space works");
         shape.setProjectionMatrix(projection.combined);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

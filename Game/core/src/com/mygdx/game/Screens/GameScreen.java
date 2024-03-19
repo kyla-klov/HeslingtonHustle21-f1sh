@@ -1,8 +1,10 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,6 +23,7 @@ import com.mygdx.game.Objects.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Vector;
 
 public class GameScreen implements Screen {
     final HesHustle game;
@@ -30,16 +33,18 @@ public class GameScreen implements Screen {
     public final List<Building> buildings;
     //Game objects
     PlayerController Player;
-    Building ComSci,Nisa;
+    Building ComSci,BBall,Duck,Piazza,Langwith;
     TiledMapRenderer TmRender;
     TiledMap tiledMap;
     EventManager EventM;
     GUI gui;
+    LightCycle LC;
+    private Music BGmusic;
 
     public GameScreen(final HesHustle game) {
         this.game = game;
 
-        extendViewport = new ExtendViewport(800,800);
+        extendViewport = new ExtendViewport(1600,900);
         shape = new ShapeRenderer();
         tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
@@ -47,15 +52,26 @@ public class GameScreen implements Screen {
         this.objects = new ArrayList<GameObject>();
         this.buildings = new ArrayList<Building>();
 
+        BGmusic = Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3"));
+        BGmusic.play();
+        BGmusic.setLooping(true);
+
         create();
 
     }
     public void create(){
-        ComSci = new Building(200,600,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
-        Nisa = new Building(400,400,100,100,"Nisa",Boolean.TRUE);
+        ComSci = new Building(600,1000,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
+        BBall = new Building(800,1000,100,100,"BasketBall",Boolean.TRUE);
+        Duck = new Building(1000,1000,100,100,"Ducks",Boolean.TRUE);
+        Langwith = new Building(1200,1000,100,100,"Langwith",Boolean.TRUE);
+        Piazza = new Building(1400,1000,100,100,"Piazza",Boolean.TRUE);
+
 
         buildings.add(ComSci);
-        buildings.add(Nisa);
+        buildings.add(BBall);
+        buildings.add(Duck);
+        buildings.add(Langwith);
+        buildings.add(Piazza);
 
         EventM = new EventManager(buildings);
         Player = new PlayerController(1000,1000, EventM);
@@ -64,8 +80,12 @@ public class GameScreen implements Screen {
         objects.add(EventM);
         objects.add(Player);
         objects.add(ComSci);
-        objects.add(Nisa);
+        objects.add(BBall);
+        objects.add(Duck);
+        objects.add(Langwith);
+        objects.add(Piazza);
 
+        LC = new LightCycle();
         Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
@@ -75,7 +95,7 @@ public class GameScreen implements Screen {
         }
 
         Player.setBD(getNearest());
-
+        LC.update(delta);
         gui.update(delta);
 
         if (checkGameOverCondition()) {
@@ -87,23 +107,24 @@ public class GameScreen implements Screen {
     public void render(float delta) {
         update(delta);
 
-        Gdx.gl.glClearColor(0.1f,0.1f,0.9f,1);
+        Gdx.gl.glClearColor(0f,0f,0f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         extendViewport.apply();
-        extendViewport.getCamera().position.set(Player.pos.x,Player.pos.y,0);
+        updateCamera();
         game.batch.setProjectionMatrix(extendViewport.getCamera().combined);
 
-        TmRender.setView(extendViewport.getCamera().combined, 0,0,5000,5000);
+        TmRender.setView(extendViewport.getCamera().combined, 0,0,2887,2242);
         TmRender.render();
 
         renderObjects();
-
+        LC.render(extendViewport.getCamera().combined,game,shape);
         gui.render(extendViewport.getCamera().combined,game,shape);
+
         EventM.render(extendViewport.getCamera(),game,shape);
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new PauseScreen(game));
+            game.setScreen(new PauseScreen(game,this));
             dispose();
         }
     }
@@ -113,6 +134,27 @@ public class GameScreen implements Screen {
             gameObject.render(extendViewport.getCamera().combined,game,shape);
         }
     }
+    // method updates the camera position so it follows the player but shows less out of bounds area
+    public void updateCamera()
+    {
+        float x,y;
+        float xConst = (float)1600/Gdx.graphics.getWidth();
+        float yConst = (float)900/Gdx.graphics.getHeight();
+
+        float camWidth = extendViewport.getScreenWidth()/2;
+        float camHeight = extendViewport.getScreenHeight()/2;
+
+        if (Player.pos.x > 2884 - camWidth*xConst) {
+            x = 2884- camWidth*xConst;
+        } else if (Player.pos.x < camWidth*xConst) {x = camWidth*xConst;} else {x=Player.pos.x;}
+
+        if (Player.pos.y > 2238- camHeight*yConst) {
+            y = 2238- camHeight*yConst;
+        } else if (Player.pos.y < camHeight*yConst) {y = camHeight*yConst;} else {y=Player.pos.y;}
+
+        extendViewport.getCamera().position.set(x,y,0);
+    }
+
     public Building getNearest()
     {
         Building closest = null;
@@ -127,7 +169,10 @@ public class GameScreen implements Screen {
         return closest;
     }
     private boolean checkGameOverCondition(){
-        // TO-DO
+        if (EventM.day > 7)
+        {
+            return true;
+        }
         return false;
 
     }
@@ -140,11 +185,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        Gdx.input.setInputProcessor(Player);
     }
 
     @Override
     public void hide() {
+
     }
 
     @Override

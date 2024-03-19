@@ -38,7 +38,9 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/beckp/Documents/Github/HeslingtonHustle21/Game/build.gradle&quot;,
@@ -47,13 +49,16 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+
+        <option value="jdk-11.0.22-corretto-11.0.22-4caba194b151-868cef46" />
+
       </set>
     </attachedChunks>
   </component>
@@ -66,6 +71,8 @@
       <option name="presentableId" value="Default" />
       <updated>1710509960435</updated>
       <workItem from="1710509966444" duration="522000" />
+      <workItem from="1710794728911" duration="136000" />
+      <workItem from="1710858748164" duration="53000" />
     </task>
     <servers />
   </component>
