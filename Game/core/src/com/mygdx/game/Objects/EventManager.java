@@ -38,6 +38,7 @@ public class EventManager extends GameObject{
     }
     public void generateEvents() {
 
+
         FeedDucks = new Event( 1, 2, 10,-5,Event.type.RECREATIONAL, "",new Texture("Activitys/lakemap.png"));
         StudyCS = new Event( 1, -20,20,-10, Event.type.STUDY, 15, "",new Texture("Activitys/cs.png"));
         PlayBBall = new Event(2, -30,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
@@ -126,8 +127,7 @@ public class EventManager extends GameObject{
     /**
      * returns the score for the game based on the list of events
      *
-     * @params playedEvents, a list of events that have occured during the game
-     * @returns score, an integer representing the players geades
+     * @return score an integer representing the players geades
      */
 
     public void updateTime(Event e)
@@ -170,6 +170,7 @@ public class EventManager extends GameObject{
         int recTotal = 0;
         double studyDebuff = 1;
         double recDebuff = 1;
+        int fatigue = 0;
         for (Event event : playedEvents) {
             switch (event.getEventType()) {
                 case EAT:
@@ -206,6 +207,7 @@ public class EventManager extends GameObject{
         return (int) score;
         // / 692)* 10);
     }
+
 
 //    public void addEvent(String event){
 //        // todo add the money and time functions to event manager
@@ -268,6 +270,76 @@ public class EventManager extends GameObject{
 //            }
 //        }
 //    }
+
+    /**
+     * Adds a valid event to the list of events that occured, based on the user input
+     *
+     * @param event the name of the event that occured
+     * */
+    /*public void addEvent(String event){
+        switch (event.toLowerCase()){
+            case "a":
+                currentEvent = event1;
+                isComplete = 1;
+                break;
+            case "b":
+                currentEvent = event2;
+                if(money - currentEvent.getMoneyCost() > 0){
+                    isComplete = 1;
+                    money -=  currentEvent.getMoneyCost();
+                }
+                break;
+            case "c":
+                currentEvent = event3;
+                if(money - currentEvent.getMoneyCost() > 0){
+                    isComplete = 1;
+                    money -=  currentEvent.getMoneyCost();
+                }
+                break;
+            case "d":
+                currentEvent = eatingA;
+                isComplete = 1;
+                break;
+            case "e":
+                currentEvent = eatingB;
+                isComplete = 1;
+                break;
+            case "f":
+                currentEvent = studying;
+                isComplete = 1;
+                break;
+            case "g":
+                currentEvent = studyCatchUp;
+                isComplete = 1;
+                break;
+            case "h":
+                currentEvent = new Event((TMin + (TSec / 60)), - energy, Event.type.SLEEP, "");
+                isComplete = 1;
+                break;
+            default:
+                System.out.println("invalid input");
+
+        }
+        if(currentEvent != null){
+            if((TMin + (TSec / 60)) >= currentEvent.getTimeCost() && energy >= currentEvent.getEnergyCost()) {
+                TMin += (currentEvent.getTimeCost());
+                energy += (currentEvent.getEnergyCost());
+                if((TMin + (TSec / 60)) == 960 ){
+                    TMin = 0;
+                    TSec = 0;
+                    day += 1;
+                } else if (energy == 0) {
+                    energy = 30;
+                    days += 1;
+                }
+                playedEvents.add(currentEvent);
+            }
+        }
+
+
+
+    }*/
+
 
 
     /*

@@ -41,7 +41,17 @@ public class Event extends GameObject {
 
     }
 
-
+    /**
+     * generates a new instance of an event, representing the possible activities a player can undertake
+     *
+     * @param enjoymentStudyLevel      The relative value for how good an activity is for enjoyment / study as an integer
+     * @param description              A description of the event
+     * @param energy                   The amoount of energy an event requires
+     * @param time                     The time required for an event as a double
+     * @param eventType                the type of event (sleep, eaty, study, recreational)
+     * @param fatigue                  The amount of fatigue a player has after an event
+     * @param txt                      The texture associated with an event
+     */
     public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, type eventType, String description, Texture txt) {
         // since externally there is no difference between using an int for enjoyment and one for studylevel, they are combined to a single variable whose relevance is determined by the event type.
         super(0,0,10,10);
@@ -126,11 +136,7 @@ public class Event extends GameObject {
 
 
 
-    /*
-    this class allows for the interfacing of the time and energy classes
-    it holds the event name a link to the event constants and the values it holds for scoring
-    in the primary gameplay loop the number if events and their nature is stored and then
-    the results are used to output score after 7 days*/
+
 
 }
 
