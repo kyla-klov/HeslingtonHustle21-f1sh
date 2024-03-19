@@ -19,12 +19,11 @@ public class GUI extends GameObject{
     private Skin skin;
     public Stage stage;
     private Table root;
-    Table top,topLeft,topMid,topRight;
-    Table middle,midLeft,midMid,midRight;
-    Table bottom,botLeft,botMid,botRight;
-    ProgressBar pb,nrgBar;
-    int prog =0;
-    TextButton lbl;
+    Table topLeft,topRight;
+    Table botLeft,botRight;
+    ProgressBar nrgBar;
+    int prog = 0;
+    TextButton TimeButt,ScoreButt,DayButt;
 
     EventManager EM;
     String timeStr;
@@ -80,8 +79,12 @@ public class GUI extends GameObject{
     }
 
     public void createDraws(){
-        lbl = new TextButton("he he ha",skin);
-        topLeft.add(lbl).pad(4);
+        ScoreButt = new TextButton("Score",skin);
+        DayButt = new TextButton("Day",skin);
+        TimeButt = new TextButton("Time",skin);
+        topLeft.add(ScoreButt).pad(4).row();
+        topLeft.add(DayButt).pad(4).row();
+        topLeft.add(TimeButt).pad(4);
         TextButton txtbutt = new TextButton("Energy",skin);
         topLeft.row();
         topLeft.add(txtbutt).pad(4);
@@ -101,13 +104,11 @@ public class GUI extends GameObject{
 
     }
     public void update(float deltaTime){
-        prog+=1;
-        nrgBar.setValue(prog);
-        if (prog == 100 ){
-            prog = 0;
-        }
-        lbl.setText(EM.getTime());
-        lbl.scaleBy(5);
+        nrgBar.setValue(EM.energy);
+        ScoreButt.setText("Score: " + EM.Score());
+        DayButt.setText("Day: " + EM.day);
+        TimeButt.setText(EM.getTime());
+        TimeButt.scaleBy(5);
 
     }
 

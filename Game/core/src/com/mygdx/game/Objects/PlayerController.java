@@ -24,7 +24,6 @@ import java.util.Objects;
 public class PlayerController extends GameObject implements InputProcessor {
     public static final float width = 32;
     public static final float height = 64;
-
     public enum state {
         IDLE_LEFT,
         IDLE_UP,
@@ -95,7 +94,10 @@ public class PlayerController extends GameObject implements InputProcessor {
         bounds.x = pos.x - bounds.width / 2;
         bounds.y = pos.y - bounds.height / 2;
         txr = getAnim(Pstate).GetFrame(deltaTime);
-        pos = pos.mulAdd(getDir().nor(),deltaTime*200);
+        if (!EM.frozen){
+            pos = pos.mulAdd(getDir().nor(),deltaTime*200);
+        }
+
 
         EM.update(deltaTime);
 
@@ -190,8 +192,9 @@ public class PlayerController extends GameObject implements InputProcessor {
         nearBD = BD;
     }
     public void interact(){
-        if (nearBD!=null)
+        if (nearBD!=null && !EM.frozen)
         {
+
             EM.interact(nearBD.name);
         }
 

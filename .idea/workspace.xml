@@ -3,12 +3,7 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="ChangeListManager">
-    <list default="true" id="9a7166b1-2b1d-47db-aa59-0f30ad1b3f2e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Game/core/src/com/mygdx/game/Objects/CollisionDetector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Game/assets/MAP/map1.tmx" beforeDir="false" afterPath="$PROJECT_DIR$/Game/assets/MAP/map1.tmx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Game/core/src/com/mygdx/game/Screens/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/Game/core/src/com/mygdx/game/Screens/GameScreen.java" afterDir="false" />
+  <component name="ChangeListManager"
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +11,11 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="AddEventFunctions" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -33,7 +33,6 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;TiledCollisions&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/beckp/Documents/Github/HeslingtonHustle21/Game/build.gradle&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -41,9 +40,21 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+
+        <option value="jdk-11.0.22-corretto-11.0.22-4caba194b151-868cef46" />
+
+      </set>
+    </attachedChunks>
+  </component>
+
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -53,12 +64,22 @@
       <option name="presentableId" value="Default" />
       <updated>1710509960435</updated>
       <workItem from="1710509966444" duration="522000" />
-      <workItem from="1710750354529" duration="341000" />
-      <workItem from="1710761499816" duration="140000" />
+
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
