@@ -25,7 +25,6 @@ public class Event extends GameObject {
         STUDY,
         RECREATIONAL
     };
-
     private type eventType;
 
     public Event(double time, int energy, type eventType, String description, Texture txt) {

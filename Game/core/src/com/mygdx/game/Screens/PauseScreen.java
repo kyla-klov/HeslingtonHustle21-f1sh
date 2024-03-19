@@ -17,9 +17,11 @@ public class PauseScreen implements Screen {
     final HesHustle game;
     private Stage stage;
     private Skin skin;
+    private GameScreen gameScreen;
 
-    public PauseScreen(final HesHustle game) {
+    public PauseScreen(final HesHustle game, GameScreen gameScreen) {
         this.game = game;
+        this.gameScreen = gameScreen;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -38,7 +40,7 @@ public class PauseScreen implements Screen {
         resumeButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 // Ensure this transitions back to your game screen, adjusting as necessary
-                game.setScreen(new GameScreen(game));
+                game.setScreen(gameScreen);
             }
         });
         mainMenuButton.addListener(new ClickListener() {

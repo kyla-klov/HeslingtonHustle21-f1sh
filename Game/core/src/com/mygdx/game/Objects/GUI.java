@@ -19,11 +19,10 @@ public class GUI extends GameObject{
     private Skin skin;
     public Stage stage;
     private Table root;
-    Table top,topLeft,topMid,topRight;
-    Table middle,midLeft,midMid,midRight;
-    Table bottom,botLeft,botMid,botRight;
-    ProgressBar pb,nrgBar;
-    int prog =0;
+    Table topLeft,topRight;
+    Table botLeft,botRight;
+    ProgressBar nrgBar;
+    int prog = 0;
     TextButton TimeButt,ScoreButt,DayButt;
 
     EventManager EM;

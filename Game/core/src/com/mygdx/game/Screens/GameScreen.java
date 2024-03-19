@@ -1,8 +1,10 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -35,6 +37,7 @@ public class GameScreen implements Screen {
     TiledMap tiledMap;
     EventManager EventM;
     GUI gui;
+    private Music BGmusic;
 
     public GameScreen(final HesHustle game) {
         this.game = game;
@@ -46,6 +49,10 @@ public class GameScreen implements Screen {
 
         this.objects = new ArrayList<GameObject>();
         this.buildings = new ArrayList<Building>();
+
+        BGmusic = Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3"));
+        BGmusic.play();
+        BGmusic.setLooping(true);
 
         create();
 
@@ -80,7 +87,7 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
-
+        Gdx.input.setInputProcessor(Player);
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
@@ -114,7 +121,7 @@ public class GameScreen implements Screen {
         EventM.render(extendViewport.getCamera(),game,shape);
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new PauseScreen(game));
+            game.setScreen(new PauseScreen(game,this));
             dispose();
         }
     }

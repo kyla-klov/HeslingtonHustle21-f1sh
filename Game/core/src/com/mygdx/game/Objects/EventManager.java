@@ -19,6 +19,7 @@ public class EventManager extends GameObject{
     public Float TRaw,Twait;
     public Integer TSec, TMin,energy, day;
     private int money;
+    boolean frozen = false;
 
     List<Building> buildings;
     List<Event> playedEvents;
@@ -48,7 +49,6 @@ public class EventManager extends GameObject{
     }
     public void interact(String name)
     {
-        Gdx.app.log("a","adsa");
         switch (name){
             default:
                 curEvent = null;
@@ -80,6 +80,7 @@ public class EventManager extends GameObject{
                 break;
         }
         assert curEvent != null;
+        frozen = true;
         updateTime(curEvent);
         updateEnergy(curEvent);
     }
@@ -90,6 +91,7 @@ public class EventManager extends GameObject{
         if (Twait<0)
         {
             curEvent = null;
+            frozen = false;
         }
         if (TRaw >= 2){
             TSec++;
@@ -130,12 +132,20 @@ public class EventManager extends GameObject{
 
     public void updateTime(Event e)
     {
-
-        TMin += (int) Math.floor(e.getTimeCost());
-        if (TMin > 24 ) {
-            TMin -= 24;
+        if (e.getEventType() == Event.type.SLEEP)
+        {
+            TSec = 0;
+            TMin = 8;
             day++;
         }
+        else {
+            TMin += (int) Math.floor(e.getTimeCost());
+            if (TMin > 23 ) {
+                TMin -= 24;
+                day++;
+            }
+        }
+
     }
     public void updateEnergy(Event e)
     {
@@ -143,6 +153,9 @@ public class EventManager extends GameObject{
         if (energy<0)
         {
             //pass out or something
+        } else if (energy>100)
+        {
+            energy=100;
         }
 
     }
