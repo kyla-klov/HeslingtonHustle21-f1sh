@@ -38,6 +38,7 @@ public class GameScreen implements Screen {
     TiledMap tiledMap;
     EventManager EventM;
     GUI gui;
+    LightCycle LC;
     private Music BGmusic;
 
     public GameScreen(final HesHustle game) {
@@ -84,7 +85,7 @@ public class GameScreen implements Screen {
         objects.add(Langwith);
         objects.add(Piazza);
 
-
+        LC = new LightCycle();
         Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
@@ -94,7 +95,7 @@ public class GameScreen implements Screen {
         }
 
         Player.setBD(getNearest());
-
+        LC.update(delta);
         gui.update(delta);
 
         if (checkGameOverCondition()) {
@@ -117,8 +118,9 @@ public class GameScreen implements Screen {
         TmRender.render();
 
         renderObjects();
-
+        LC.render(extendViewport.getCamera().combined,game,shape);
         gui.render(extendViewport.getCamera().combined,game,shape);
+
         EventM.render(extendViewport.getCamera(),game,shape);
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
