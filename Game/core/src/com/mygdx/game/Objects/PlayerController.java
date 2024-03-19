@@ -51,8 +51,7 @@ public class PlayerController extends GameObject implements InputProcessor {
     private final static int down=Input.Keys.S;
     private final static int left=Input.Keys.A;
     private final static int right=Input.Keys.D;
-    private boolean shouldStopMoving = false;
-    private Vector2 previousPosition;
+    private final Vector2 previousPosition;
     public EventManager EM;
     public Building nearBD;
     TiledMap tiledMap;
