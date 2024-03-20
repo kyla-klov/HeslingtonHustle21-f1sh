@@ -71,12 +71,12 @@ public class GameScreen implements Screen {
 
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
-
-        ComSci = new Building(600,1000,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
-        BBall = new Building(800,1000,100,100,"BasketBall",Boolean.TRUE);
-        Duck = new Building(1000,1000,100,100,"Ducks",Boolean.TRUE);
-        Langwith = new Building(1200,1000,100,100,"Langwith",Boolean.TRUE);
-        Piazza = new Building(1400,1000,100,100,"Piazza",Boolean.TRUE);
+        collisionLayer.setVisible(false);
+        ComSci = new Building(530,380,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
+        BBall = new Building(1450,2000,100,100,"BasketBall",Boolean.TRUE);
+        Duck = new Building(2112,360,100,100,"Ducks",Boolean.TRUE);
+        Langwith = new Building(1360,1375,100,100,"Langwith",Boolean.TRUE);
+        Piazza = new Building(2550,1380,100,100,"Piazza",Boolean.TRUE);
 
 
 
@@ -112,12 +112,15 @@ public class GameScreen implements Screen {
         }
 
         Player.setBD(getNearest());
+        LC.getTime(EventM.TMin, EventM.TSec);
         LC.update(delta);
         gui.update(delta);
 
         if (checkGameOverCondition()) {
             game.setScreen(new EndScreen(game)); // Switch to EndScreen
         }
+
+
     }
 
     @Override
@@ -133,6 +136,7 @@ public class GameScreen implements Screen {
 
         TmRender.setView(extendViewport.getCamera().combined, 0,0,2887,2242);
         TmRender.render();
+
 
         renderObjects();
         LC.render(extendViewport.getCamera().combined,game,shape);

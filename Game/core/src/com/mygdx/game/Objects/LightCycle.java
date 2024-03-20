@@ -12,30 +12,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LightCycle extends GameObject{
-
     Interpolation inter;
-    float alpha;
     float prog=0;
     float[] Col1,Col2,Col3;
     int segment = 0;
     public LightCycle() {
-        super(-300, -300, 3000, 3000);
-        inter  = new Interpolation.Exp(100,1);
-        alpha = 0;
-        Col1 = new float[]{238/255f, 130/255f, 0, 0.2f};
-        Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};
-        Col3 = new float[]{113/255f, 0/255f, 143/255f, 0.3f};
+        super(0, 0, 4000, 4000);
+        Col1 = new float[]{238/255f, 130/255f, 0, 0.2f}; //orange
+        Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};//blue
+        Col3 = new float[]{113/255f, 0/255f, 143/255f, 0.3f};//purple
     }
     public void update(float delta){
-        prog+=delta*0.2;
-        if (prog >1){
-            prog = 0;
-            segment++;
-            if(segment>2){segment = 0;}
-        }
-        alpha = inter.apply(prog);
-        Gdx.app.log("hi",Float.toString(alpha));
     }
+
+    public void getTime(int TMin, int TSec)
+    {
+        int rawTime = TMin*60 + TSec; // total time in "seconds"
+        if (TMin > 5 && TMin <12)//morning to day
+        {
+            rawTime-=6*60;
+            segment = 0;
+        } else if (TMin > 11 && TMin < 18) { //day to afternoon
+            rawTime-=12*60;
+            segment = 1;
+        } else if (TMin > 17 && TMin < 24) {//afternoon to evening
+            rawTime-=18*60;
+            segment = 2;
+        } else {// evening to morning
+            segment = 3;
+        }
+        prog = (float)rawTime/360;
+    }
+
 
     public Color getColor(float[] Col1,float[] Col2,Interpolation inter)
     {
@@ -50,7 +58,6 @@ public class LightCycle extends GameObject{
             fin[i] = Col2[i] + trans[i]* inter.apply(prog);
         }
         return new Color(fin[0],fin[1],fin[2],fin[3]);
-
     }
 
 
@@ -61,12 +68,19 @@ public class LightCycle extends GameObject{
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         switch(segment){
             case 0:
+                inter = Interpolation.pow3Out;
                 shape.setColor(getColor(Col2,Col1,inter));
                 break;
             case 1:
-                shape.setColor(getColor(Col3,Col2,inter));
+                inter = Interpolation.pow3In;
+                shape.setColor(getColor(Col1,Col2,inter));
                 break;
             case 2:
+                inter = Interpolation.pow3Out;
+                shape.setColor(getColor(Col3,Col1,inter));
+                break;
+            case 3:
+                inter = Interpolation.pow3In;
                 shape.setColor(getColor(Col1,Col3,inter));
                 break;
         }

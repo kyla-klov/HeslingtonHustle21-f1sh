@@ -44,8 +44,7 @@ public class EventManager extends GameObject{
         PlayBBall = new Event(2, -30,50,10, Event.type.RECREATIONAL, 25, "",new Texture("Activitys/basketballcourt.png"));
         Sleep = new Event(8, 90, Event.type.SLEEP, "",new Texture("Activitys/langwith.png"));
         EatPiazza = new Event(1, 10, Event.type.EAT, "",new Texture("Activitys/piazza.png"));
-//        studying = new Event( 2.5 , 100, 10, 10, Event.type.STUDY, "",new Texture("Activitys/cs.png"));
-//        studyCatchUp = new Event( 5 , 200, 20, 20, Event.type.STUDY, "",new Texture("Activitys/basketballcourt.png"));
+
 
     }
     public void interact(String name)
@@ -94,13 +93,17 @@ public class EventManager extends GameObject{
             curEvent = null;
             frozen = false;
         }
-        if (TRaw >= 2){
+        if (TRaw >= 0.5f){
             TSec++;
             TRaw = 0f;
         }
         if (TSec>=60){
             TSec = 0;
             TMin++;
+        }
+        if (TMin > 23 ) {
+            TMin -= 24;
+            day++;
         }
 
     }

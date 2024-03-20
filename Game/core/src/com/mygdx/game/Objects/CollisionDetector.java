@@ -1,5 +1,6 @@
 package com.mygdx.game.Objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Objects.GameObject;
 import com.badlogic.gdx.math.Rectangle;
@@ -48,7 +49,7 @@ public class CollisionDetector {
     public boolean collidesRight() {
         boolean collides = false;
 
-        for (float step = 0; step < getBoundsHeight(); step += collisionLayer.getTileHeight() / 4) {
+        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
             if (collides = isCellBlocked(getX() + getBoundsWidth(), getY() + step)) {
                 break;
             }
@@ -60,7 +61,7 @@ public class CollisionDetector {
     public boolean collidesLeft() {
         boolean collides = false;
 
-        for (float step = 0; step < getBoundsHeight(); step += collisionLayer.getTileHeight() / 4) {
+        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
             if (collides = isCellBlocked(getX(), getY() + step)) {
                 break;
             }
@@ -72,7 +73,7 @@ public class CollisionDetector {
     public boolean collidesTop() {
         boolean collides = false;
 
-        for (float step = 0; step < getBoundsWidth(); step += collisionLayer.getTileWidth() / 4) {
+        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
             if (collides = isCellBlocked(getX() + step, getY() + getBoundsHeight())) {
                 break;
             }
@@ -84,7 +85,7 @@ public class CollisionDetector {
     public boolean collidesBottom() {
         boolean collides = false;
 
-        for (float step = 0; step < getBoundsWidth(); step += collisionLayer.getTileWidth() / 4) {
+        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
             if (collides = isCellBlocked(getX() + step, getY())) {
                 break;
             }
@@ -92,9 +93,7 @@ public class CollisionDetector {
 
         return collides;
     }
-
-
-
+    /*
     public void detectCollisions() {
         // If time map is null throw error (Testing :P)
         if (collisionLayer == null || player == null) {
@@ -134,5 +133,5 @@ public class CollisionDetector {
         if (collisionY) {
             player.stopMoving();
         }
-    }
+    }*/
 }

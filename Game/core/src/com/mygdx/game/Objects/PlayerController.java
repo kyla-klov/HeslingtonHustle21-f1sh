@@ -88,31 +88,14 @@ public class PlayerController extends GameObject implements InputProcessor {
     }
 
     public void update (float deltaTime) {
-        //Update previous position
-        previousPosition.set(pos.x, pos.y);
-
         bounds.x = pos.x - bounds.width / 2;
         bounds.y = pos.y - bounds.height / 2;
         txr = getAnim(Pstate).GetFrame(deltaTime);
         if (!EM.frozen){
-            pos = pos.mulAdd(getDir().nor(),deltaTime*200);
+            pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
         }
-
-
         EM.update(deltaTime);
-
-        // Detect collisions
-        collisionDetector.detectCollisions();
     }
-
-    public void stopMoving() {
-        pos.set(previousPosition);
-    }
-
-    public Vector2 getPrev() {
-        return previousPosition;
-    }
-
     public Vector2 getPos() {
         return pos;
     }
@@ -127,7 +110,7 @@ public class PlayerController extends GameObject implements InputProcessor {
 
 
     public Vector2 getDir() {
-        //find overall direction of inputs and normalize vector2
+        //find overall direction of inputs
         Vector2 dir = new Vector2(0,0);
         if (downKeys.contains(up)){ dir.y = 1;}
         if (downKeys.contains(down)){ dir.y = -1;}
@@ -135,6 +118,16 @@ public class PlayerController extends GameObject implements InputProcessor {
         if (downKeys.contains(right)){ dir.x = 1;}
         return dir;
     }
+    public Vector2 colCorrect(Vector2 dir)
+    {
+        Vector2 colDir = new Vector2(dir.x,dir.y);
+        if ((dir.x==1) && collisionDetector.collidesRight()){colDir.x=0;}
+        if ((dir.x==-1) && collisionDetector.collidesLeft()){colDir.x=0;}
+        if ((dir.y==1) && collisionDetector.collidesTop()){colDir.y=0;}
+        if ((dir.y==-1) && collisionDetector.collidesBottom()){colDir.y=0;}
+        return colDir;
+    }
+
     public Anim getAnim(state Pstate)
     {
         Vector2 dir = getDir();

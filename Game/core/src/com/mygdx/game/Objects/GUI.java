@@ -24,9 +24,8 @@ public class GUI extends GameObject{
     ProgressBar nrgBar;
     int prog = 0;
     TextButton TimeButt,ScoreButt,DayButt;
-
+    TextButton RecButt,EatButt,StudyButt,SleepButt;
     EventManager EM;
-    String timeStr;
     public GUI(Batch batch, EventManager EM) {
         super(0,0,0,0);
         this.EM = EM;
@@ -47,26 +46,6 @@ public class GUI extends GameObject{
         topRight = new Table();
         botLeft = new Table();
         botRight = new Table();
-
-        //code to test table locations comment out create draws first
-/*        TextButton txtbutt = new TextButton("topLeft",skin);
-        topLeft.add(txtbutt).grow();
-        txtbutt = new TextButton("topMid",skin);
-        topMid.add(txtbutt).grow();
-        txtbutt = new TextButton("topRight",skin);
-        topRight.add(txtbutt).grow();
-        txtbutt = new TextButton("midLeft",skin);
-        midLeft.add(txtbutt).grow();
-        txtbutt = new TextButton("midMid",skin);
-        midMid.add(txtbutt).grow();
-        txtbutt = new TextButton("midRight",skin);
-        midRight.add(txtbutt).grow();
-        txtbutt = new TextButton("botLeft",skin);
-        botLeft.add(txtbutt).grow();
-        txtbutt = new TextButton("botMid",skin);
-        botMid.add(txtbutt).grow();
-        txtbutt = new TextButton("botRight",skin);
-        botRight.add(txtbutt).grow();*/
     }
     private void formatTables(){
         root.add(topLeft).left().grow();
@@ -74,8 +53,6 @@ public class GUI extends GameObject{
         root.row();
         root.add(botLeft).grow();
         root.add(botRight).grow().row();
-
-
     }
 
     public void createDraws(){
@@ -92,15 +69,16 @@ public class GUI extends GameObject{
         topLeft.add(nrgBar).pad(2);
         topLeft.pad(25);
         topLeft.align(Align.topLeft);
-/*        txtbutt = new TextButton("topRight",skin);
-        topRight.add(txtbutt);
-        txtbutt = new TextButton("botLeft",skin);
-        botLeft.add(txtbutt);
-        txtbutt = new TextButton("botRight",skin);
-        botRight.add(txtbutt);*/
 
-
-
+        RecButt  = new TextButton("RecNo:",skin);
+        SleepButt  = new TextButton("SlpNo:",skin);
+        EatButt  = new TextButton("EatNo:",skin);
+        StudyButt  = new TextButton("StdyNo:",skin);
+        topRight.add(RecButt);
+        topRight.add(SleepButt);
+        topRight.add(EatButt);
+        topRight.add(StudyButt);
+        topRight.align(Align.top);
 
     }
     public void update(float deltaTime){
@@ -109,7 +87,34 @@ public class GUI extends GameObject{
         DayButt.setText("Day: " + EM.day);
         TimeButt.setText(EM.getTime());
         TimeButt.scaleBy(5);
+        int [] count = countActivitys();
+        RecButt.setText("RecNo: " + count[0]);
+        SleepButt.setText("SlpNo: " + count[1]);
+        EatButt.setText("EatNo: " + count[2]);
+        StudyButt.setText("StdyNo: " + count[3]);
 
+    }
+    public int[] countActivitys(){
+        int rec=0,slp=0,eat=0,stdy=0;
+        for (Event e : EM.playedEvents)
+        {
+            switch (e.getEventType())
+            {
+                case EAT:
+                    eat++;
+                    break;
+                case SLEEP:
+                    slp++;
+                    break;
+                case STUDY:
+                    stdy++;
+                    break;
+                case RECREATIONAL:
+                    rec++;
+                    break;
+            }
+        }
+        return new int[] {rec,slp,eat,stdy};
     }
 
     public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape)
