@@ -2,11 +2,8 @@ package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
@@ -14,16 +11,22 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.HesHustle;
-import com.mygdx.game.Objects.CollisionDetector;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-
 import java.util.Objects;
 
+/**Controller Class which the user interacts with the game through, has input processor which must be set active on each GameScreen
+ *
+ */
 public class PlayerController extends GameObject implements InputProcessor {
+    /**Width of character sprite
+     */
     public static final float width = 32;
+    /**Height of character sprite
+     */
     public static final float height = 64;
+
+    /**Enum of states the player character can be in
+     */
     public enum state {
         IDLE_LEFT,
         IDLE_UP,
@@ -34,6 +37,10 @@ public class PlayerController extends GameObject implements InputProcessor {
         WALK_RIGHT,
         WALK_DOWN,
     }
+
+    /**
+     * Animation for each state
+     */
     Anim IDLE_LEFT,
             IDLE_UP,
             IDLE_RIGHT,
@@ -42,24 +49,40 @@ public class PlayerController extends GameObject implements InputProcessor {
             WALK_UP,
             WALK_RIGHT,
             WALK_DOWN;
+    /**Current state of player
+     */
     public state Pstate;
+    /**Current player animation
+     */
     public Anim Panim;
+    /**Stores current texture region to be rendered
+     *
+     */
     TextureRegion txr;
-    private IntSet downKeys = new IntSet(20);
-    private final static int up=Input.Keys.W;
-    private final static int down=Input.Keys.S;
-    private final static int left=Input.Keys.A;
-    private final static int right=Input.Keys.D;
-    private final Vector2 previousPosition;
+    /**IntSet storing the key values of every key being pressed
+     * (Still has trouble with more than 3 inputs)
+     */
+    private final IntSet downKeys = new IntSet(20);
+    /**Stores the Key values of the direction keys you want to use
+     */
+    private final static int up=Input.Keys.W,down=Input.Keys.S,left=Input.Keys.A,right=Input.Keys.D;
+    /**Event Manager used to interact with events*/
     public EventManager EM;
+    /**Ref to nearest building (Activity) for interaction*/
     public Building nearBD;
-    TiledMap tiledMap;
-    TiledMapTileLayer collisionLayer;
-
+    /**Detects player collision
+     *
+     */
     CollisionDetector collisionDetector;
-    public PlayerController(float xPos, float yPos, EventManager EM, TiledMapTileLayer collisionLayer)
-    {
 
+    /**
+     * Constructor of PlayerController
+     * @param xPos Initial x position
+     * @param yPos Initial y position
+     * @param EM EventManager
+     * @param collisionLayer Collision Layer of the Tiled Map
+     */
+    public PlayerController(float xPos, float yPos, EventManager EM, TiledMapTileLayer collisionLayer) {
         super(xPos,yPos,width,height);
         Pstate = state.IDLE_DOWN;
         loadAnims();
@@ -67,7 +90,6 @@ public class PlayerController extends GameObject implements InputProcessor {
         this.EM = EM;
         nearBD = null;
 
-        previousPosition = new Vector2(xPos, yPos);
 
         // Initialize the detector
         collisionDetector = new CollisionDetector();
@@ -76,7 +98,11 @@ public class PlayerController extends GameObject implements InputProcessor {
         collisionDetector.registerCollisions(this, collisionLayer);
 
     }
-    public void loadAnims() {
+
+    /**
+     * Function to generate all the Animations from the sprite sheets
+     */
+    private void loadAnims() {
         IDLE_LEFT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
         IDLE_UP = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),6,11,24,12);
         IDLE_RIGHT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),0,5,24,12);
@@ -87,14 +113,19 @@ public class PlayerController extends GameObject implements InputProcessor {
         WALK_DOWN = new Anim(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),18,23,24,12);
     }
 
+    /**
+     * Update function extended from GameObject
+     * @param deltaTime deltaTime
+     */
     public void update (float deltaTime) {
-        bounds.x = pos.x - bounds.width / 2;
-        bounds.y = pos.y - bounds.height / 2;
+        //get texture region to draw
         txr = getAnim(Pstate).GetFrame(deltaTime);
+        //update position using normalised direction vector using vector addition (delta time in scalar)
         if (!EM.frozen){
             pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
         }
         EM.update(deltaTime);
+        Gdx.app.log("hi", String.valueOf(Pstate));
     }
     public Vector2 getPos() {
         return pos;
@@ -112,10 +143,22 @@ public class PlayerController extends GameObject implements InputProcessor {
     public Vector2 getDir() {
         //find overall direction of inputs
         Vector2 dir = new Vector2(0,0);
-        if (downKeys.contains(up)){ dir.y = 1;}
-        if (downKeys.contains(down)){ dir.y = -1;}
-        if (downKeys.contains(left)){ dir.x = -1;}
-        if (downKeys.contains(right)){ dir.x = 1;}
+        if (downKeys.contains(up)){
+            dir.y = 1;
+            Pstate = state.WALK_UP;
+        }
+        if (downKeys.contains(down)){
+            dir.y = -1;
+            Pstate = state.WALK_DOWN;
+        }
+        if (downKeys.contains(left)){
+            dir.x = -1;
+            Pstate = state.WALK_LEFT;
+        }
+        if (downKeys.contains(right)){
+            dir.x = 1;
+            Pstate = state.WALK_RIGHT;
+        }
         return dir;
     }
     public Vector2 colCorrect(Vector2 dir)
@@ -157,17 +200,18 @@ public class PlayerController extends GameObject implements InputProcessor {
                 return WALK_LEFT;
             }
             if (dir.y == 1){
-            return WALK_UP;
+                return WALK_UP;
             } else if (dir.y == -1){
-            return WALK_DOWN;
+                return WALK_DOWN;
             }
 
         }
+
         return null;
     }
     @Override
     public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape){
-        //player box
+        //Debug Box for player
         /*
         shape.setProjectionMatrix(projection);
         shape.begin(ShapeRenderer.ShapeType.Line);
@@ -187,7 +231,6 @@ public class PlayerController extends GameObject implements InputProcessor {
     public void interact(){
         if (nearBD!=null && !EM.frozen)
         {
-
             EM.interact(nearBD.name);
         }
 

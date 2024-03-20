@@ -113,7 +113,6 @@ public class GameScreen implements Screen {
 
         Player.setBD(getNearest());
         LC.getTime(EventM.TMin, EventM.TSec);
-        LC.update(delta);
         gui.update(delta);
 
         if (checkGameOverCondition()) {
