@@ -130,7 +130,7 @@ public class EventManager extends GameObject{
     /**
      * returns the score for the game based on the list of events
      *
-     * @return score an integer representing the players geades
+     * @return score an integer representing the players grades
      */
 
     public void updateTime(Event e)
