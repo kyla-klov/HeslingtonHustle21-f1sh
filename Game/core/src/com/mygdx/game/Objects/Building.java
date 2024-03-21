@@ -13,12 +13,11 @@ import java.util.Random;
 public class Building extends GameObject{
     public String name;
     public Boolean interact;
-    public BitmapFont font2;
     public Building(float x, float y, float width, float height,String name, Boolean interact) {
         super(x, y, width, height);
         this.name = name;
         this.interact = interact;
-        font2 = new BitmapFont(Gdx.files.internal("font.fnt"));
+
     }
 
     public void update(float delta)
@@ -36,16 +35,11 @@ public class Building extends GameObject{
         shape.end();
 
         game.batch.begin();
-        font2.draw(game.batch, name, pos.x+3, pos.y +bounds.height-3);
+        game.font.draw(game.batch, name, pos.x+3, pos.y +bounds.height-3);
         game.batch.end();
-    }
-
-    public void event()
-    {
-        Gdx.app.log("hi",name);
     }
     @Override
     public void Dispose() {
-        font2.dispose();
+
     }
 }

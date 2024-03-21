@@ -10,9 +10,7 @@ import com.mygdx.game.Screens.MenuScreen;
 
 public class HesHustle extends Game {
 	public SpriteBatch batch;
-	Texture img;
 	public BitmapFont font;
-	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();

@@ -1,6 +1,5 @@
 package com.mygdx.game.Screens;
 
-import com.badlogic.gdx.Audio;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -13,20 +12,17 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
-import com.mygdx.game.Objects.CollisionDetector;
+
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Vector;
 
+/**
+ * Main game loop
+ */
 public class GameScreen implements Screen {
     final HesHustle game;
     public ExtendViewport extendViewport;
@@ -37,11 +33,8 @@ public class GameScreen implements Screen {
     PlayerController Player;
     Building ComSci,BBall,Duck,Piazza,Langwith;
     TiledMapRenderer TmRender;
-    TiledMapTileLayer collisionLayer;
     TiledMap tiledMap;
     EventManager EventM;
-    // Collision detection
-    CollisionDetector collisionDetector;
 
     GUI gui;
     LightCycle LC;
@@ -56,8 +49,8 @@ public class GameScreen implements Screen {
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
 
 
-        this.objects = new ArrayList<GameObject>();
-        this.buildings = new ArrayList<Building>();
+        this.objects = new ArrayList<>();
+        this.buildings = new ArrayList<>();
 
         BGmusic = Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3"));
         BGmusic.play();
@@ -78,30 +71,27 @@ public class GameScreen implements Screen {
         Langwith = new Building(1360,1375,100,100,"Langwith",Boolean.TRUE);
         Piazza = new Building(2550,1380,100,100,"Piazza",Boolean.TRUE);
 
-
-
         buildings.add(ComSci);
         buildings.add(BBall);
         buildings.add(Duck);
         buildings.add(Langwith);
         buildings.add(Piazza);
 
-        EventM = new EventManager(buildings);
+        EventM = new EventManager();
         Player = new PlayerController(1000,1000, EventM, collisionLayer);
         gui = new GUI(game.batch,EventM);
+        LC = new LightCycle();
 
         objects.add(EventM);
         objects.add(Player);
+
         objects.add(ComSci);
-
-
-
         objects.add(BBall);
         objects.add(Duck);
         objects.add(Langwith);
         objects.add(Piazza);
 
-        LC = new LightCycle();
+
 
         Gdx.input.setInputProcessor(Player);
     }

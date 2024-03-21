@@ -15,7 +15,6 @@ import com.mygdx.game.HesHustle;
 
 public class Event extends GameObject {
     private double timeCost;
-    private float realTime = 0f;
     private int energyCost,fatigue,enjoymentStudyLevel,moneyCost;
     private String description;
     private Texture txt;

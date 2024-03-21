@@ -1,24 +1,11 @@
 package com.mygdx.game.Objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.mygdx.game.Objects.GameObject;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Intersector;
-import com.mygdx.game.Objects.GameObject;
-import com.mygdx.game.Objects.Building;
-import com.mygdx.game.Objects.PlayerController;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
-
-import java.util.List;
 
 public class CollisionDetector {
-    private List<GameObject> objects;
     private TiledMapTileLayer collisionLayer;
     private PlayerController player;
-
-    public void registerCollisions(PlayerController player, TiledMapTileLayer collisionLayer) {
+    public CollisionDetector(PlayerController player, TiledMapTileLayer collisionLayer) {
         this.player = player;
         this.collisionLayer = collisionLayer;
     }
@@ -54,7 +41,6 @@ public class CollisionDetector {
                 break;
             }
         }
-
         return collides;
     }
 
@@ -70,7 +56,7 @@ public class CollisionDetector {
         return collides;
     }
 
-    public boolean collidesTop() {
+    public boolean collidesUp() {
         boolean collides = false;
 
         for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
@@ -82,7 +68,7 @@ public class CollisionDetector {
         return collides;
     }
 
-    public boolean collidesBottom() {
+    public boolean collidesDown() {
         boolean collides = false;
 
         for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
@@ -93,45 +79,4 @@ public class CollisionDetector {
 
         return collides;
     }
-    /*
-    public void detectCollisions() {
-        // If time map is null throw error (Testing :P)
-        if (collisionLayer == null || player == null) {
-            throw new NullPointerException("TileMapTileLayer is null in CollisionDetector");
-        }
-
-        // Get player info (Position, Previous position, bounds, velocity)
-        Vector2 dir = player.getDir();
-
-
-        //Collision on X/Y
-        boolean collisionX = false;
-        boolean collisionY = false;
-
-        // Players direction
-        if (dir.x < 0) {
-            // Moving left
-            collisionX = collidesLeft();
-        } else if (dir.x > 0) {
-            // Moving right
-            System.out.println("Right");
-            collisionX = collidesRight();
-        }
-
-// Deal with x collision
-        if (collisionX) {
-            player.stopMoving();
-        }
-
-        if (dir.y < 0) {
-            collisionY = collidesBottom();
-        } else if (dir.y > 0) {
-            // Moving up
-            collisionY = collidesTop();
-        }
-// Deal with y collision
-        if (collisionY) {
-            player.stopMoving();
-        }
-    }*/
 }

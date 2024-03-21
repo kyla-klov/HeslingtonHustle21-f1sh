@@ -1,7 +1,6 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
@@ -9,20 +8,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
-
-import javax.swing.text.View;
 
 public class GUI extends GameObject{
     private Skin skin;
     public Stage stage;
     private Table root;
-    Table topLeft,topRight;
-    Table botLeft,botRight;
+    Table leftTab, rightTab;
     ProgressBar nrgBar;
-    int prog = 0;
     TextButton TimeButt,ScoreButt,DayButt;
     TextButton RecButt,EatButt,StudyButt,SleepButt;
     EventManager EM;
@@ -42,48 +35,44 @@ public class GUI extends GameObject{
     }
 
     private void createTables() {
-        topLeft = new Table();
-        topRight = new Table();
-        botLeft = new Table();
-        botRight = new Table();
+        leftTab = new Table();
+        rightTab = new Table();
     }
     private void formatTables(){
-        root.add(topLeft).left().grow();
-        root.add(topRight).grow();
+        root.add(leftTab).left().grow();
+        root.add(rightTab).grow();
         root.row();
-        root.add(botLeft).grow();
-        root.add(botRight).grow().row();
     }
 
     public void createDraws(){
         ScoreButt = new TextButton("Score",skin);
         DayButt = new TextButton("Day",skin);
         TimeButt = new TextButton("Time",skin);
-        topLeft.add(ScoreButt).pad(4).row();
-        topLeft.add(DayButt).pad(4).row();
-        topLeft.add(TimeButt).pad(4);
+        leftTab.add(ScoreButt).pad(4).row();
+        leftTab.add(DayButt).pad(4).row();
+        leftTab.add(TimeButt).pad(4);
         TextButton txtbutt = new TextButton("Energy",skin);
-        topLeft.row();
-        topLeft.add(txtbutt).pad(4);
+        leftTab.row();
+        leftTab.add(txtbutt).pad(4);
         nrgBar = new ProgressBar(0,100,2,false,skin);
-        topLeft.add(nrgBar).pad(2);
-        topLeft.pad(25);
-        topLeft.align(Align.topLeft);
+        leftTab.add(nrgBar).pad(2);
+        leftTab.pad(25);
+        leftTab.align(Align.topLeft);
 
         RecButt  = new TextButton("RecNo:",skin);
         SleepButt  = new TextButton("SlpNo:",skin);
         EatButt  = new TextButton("EatNo:",skin);
         StudyButt  = new TextButton("StdyNo:",skin);
-        topRight.add(RecButt);
-        topRight.add(SleepButt);
-        topRight.add(EatButt);
-        topRight.add(StudyButt);
-        topRight.align(Align.top);
+        rightTab.add(RecButt);
+        rightTab.add(SleepButt);
+        rightTab.add(EatButt);
+        rightTab.add(StudyButt);
+        rightTab.align(Align.top);
 
     }
     public void update(float deltaTime){
         nrgBar.setValue(EM.energy);
-        ScoreButt.setText("Score: " + EM.Score());
+        ScoreButt.setText("Score: " + EM.getScore());
         DayButt.setText("Day: " + EM.day);
         TimeButt.setText(EM.getTime());
         TimeButt.scaleBy(5);

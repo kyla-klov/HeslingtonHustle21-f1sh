@@ -92,10 +92,7 @@ public class PlayerController extends GameObject implements InputProcessor {
 
 
         // Initialize the detector
-        collisionDetector = new CollisionDetector();
-
-        // Initialize the collision layer
-        collisionDetector.registerCollisions(this, collisionLayer);
+        collisionDetector = new CollisionDetector(this, collisionLayer);
 
     }
 
@@ -125,19 +122,10 @@ public class PlayerController extends GameObject implements InputProcessor {
             pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
         }
         EM.update(deltaTime);
-        Gdx.app.log("hi", String.valueOf(Pstate));
     }
-    public Vector2 getPos() {
-        return pos;
-    }
+    public Vector2 getPos() { return pos; }
 
-    public Rectangle getBounds() {
-        float boundsX = bounds.x;
-        float boundsY = bounds.y;
-        float boundsWidth = bounds.width;
-        float boundsHeight = bounds.height;
-        return new Rectangle(boundsX, boundsY, boundsWidth, boundsHeight);
-    }
+    public Rectangle getBounds() { return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height); }
 
 
     public Vector2 getDir() {
@@ -161,16 +149,27 @@ public class PlayerController extends GameObject implements InputProcessor {
         }
         return dir;
     }
+
+    /**
+     * Alters the direction vector to account for collisions
+     * @param dir
+     * @return
+     */
     public Vector2 colCorrect(Vector2 dir)
     {
         Vector2 colDir = new Vector2(dir.x,dir.y);
         if ((dir.x==1) && collisionDetector.collidesRight()){colDir.x=0;}
         if ((dir.x==-1) && collisionDetector.collidesLeft()){colDir.x=0;}
-        if ((dir.y==1) && collisionDetector.collidesTop()){colDir.y=0;}
-        if ((dir.y==-1) && collisionDetector.collidesBottom()){colDir.y=0;}
+        if ((dir.y==1) && collisionDetector.collidesUp()){colDir.y=0;}
+        if ((dir.y==-1) && collisionDetector.collidesDown()){colDir.y=0;}
         return colDir;
     }
 
+    /**
+     * Method to return animation to play
+     * @param Pstate
+     * @return Anim
+     */
     public Anim getAnim(state Pstate)
     {
         Vector2 dir = getDir();
@@ -225,6 +224,11 @@ public class PlayerController extends GameObject implements InputProcessor {
 
 
     }
+
+    /**
+     * sets the nearest builiding value
+     * @param BD
+     */
     public void setBD(Building BD){
         nearBD = BD;
     }
