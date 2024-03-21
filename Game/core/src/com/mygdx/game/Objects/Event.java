@@ -76,18 +76,27 @@ public class Event extends GameObject {
         this.txt = txt;
     }
 
+    /**
+     * Viewport height and width used to render the event place holder so it appears kinda like a GUI
+     * @param projection
+     * @param game
+     * @param shape
+     */
     public void render(Camera projection, HesHustle game, ShapeRenderer shape)
     {
         shape.setProjectionMatrix(projection.combined);
-        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glEnable(GL20.GL_BLEND); // ALLOWS TRANSPARENCY
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        //Draw transparent background
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(new Color(0,0,0.2f,0.7f));
         shape.rect((projection.position.x - projection.viewportWidth/2), (projection.position.y - projection.viewportHeight/2), projection.viewportWidth, projection.viewportHeight);
+        //draw black outline
         shape.setColor(Color.BLACK);
         shape.rect((projection.position.x - projection.viewportHeight*0.9f/2), (projection.position.y - projection.viewportHeight*0.9f/2), projection.viewportHeight*0.9f, projection.viewportHeight*0.9f);
         shape.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        //Draw the Image
         game.batch.begin();
         game.batch.setProjectionMatrix(projection.combined);
         game.batch.draw(new TextureRegion(txt),(projection.position.x - (projection.viewportHeight*0.85f/2)),(projection.position.y - projection.viewportHeight*0.85f/2),0,0,projection.viewportHeight*0.85f,projection.viewportHeight*0.85f,1,1,0);

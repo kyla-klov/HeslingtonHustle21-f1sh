@@ -254,6 +254,12 @@ public class PlayerController extends GameObject implements InputProcessor {
         return true;
 
     }
+
+    /**
+     * When multiple keys pressed it cancels out opposing directions, added back on key up
+     * @param keycode
+     * @return
+     */
     public boolean onMultipleKeysDown(int keycode){
         if ((keycode==left && downKeys.contains(right)) || (keycode==right && downKeys.contains(left))) {
             downKeys.remove(left);

@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+/**
+ * Class to generate animation based off spritesheet
+ */
 public class Anim {
     int curFrame=0;
     private final Texture SprSheet;
@@ -11,6 +14,14 @@ public class Anim {
     double time,frameTime;
     int frameStart,width,height;
 
+    /**
+     * Remember 1st frame is frame 0
+     * @param SprSheet
+     * @param frameStart
+     * @param frameEnd
+     * @param frameTot
+     * @param fps
+     */
     public Anim(Texture SprSheet, int frameStart, int frameEnd,int frameTot,int fps)
     {
         this.SprSheet = SprSheet;
@@ -25,6 +36,11 @@ public class Anim {
 
     }
 
+    /**
+     * Return the current animation frame give this to your renderer
+     * @param deltaTime
+     * @return
+     */
     public TextureRegion GetFrame(float deltaTime)
     {
         if (time > frameTime) {

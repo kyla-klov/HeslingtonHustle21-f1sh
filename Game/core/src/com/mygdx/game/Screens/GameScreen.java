@@ -65,13 +65,13 @@ public class GameScreen implements Screen {
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
         collisionLayer.setVisible(false);
-        ComSci = new Building(530,380,100,100,"Computer\nScience\nDepartment",Boolean.TRUE);
-        BBall = new Building(1450,2000,100,100,"BasketBall",Boolean.TRUE);
-        Duck = new Building(2112,360,100,100,"Ducks",Boolean.TRUE);
-        Langwith = new Building(1360,1375,100,100,"Langwith",Boolean.TRUE);
-        Piazza = new Building(2550,1380,100,100,"Piazza",Boolean.TRUE);
+        ComSci = new Building(530,380,100,100,"Computer\nScience\nDepartment");
+        BBall = new Building(1450,2000,100,100,"BasketBall");
+        Duck = new Building(2112,360,100,100,"Ducks");
+        Langwith = new Building(1360,1375,100,100,"Langwith");
+        Piazza = new Building(2550,1380,100,100,"Piazza");
 
-        buildings.add(ComSci);
+        buildings.add(ComSci);//seperate building list to cycle through to find closest to player
         buildings.add(BBall);
         buildings.add(Duck);
         buildings.add(Langwith);
@@ -128,10 +128,11 @@ public class GameScreen implements Screen {
 
 
         renderObjects();
-        LC.render(extendViewport.getCamera().combined,game,shape);
+        LC.render(extendViewport.getCamera().combined,game,shape);//these could be in the objects list
         gui.render(extendViewport.getCamera().combined,game,shape);
 
-        EventM.render(extendViewport.getCamera(),game,shape);
+        EventM.render(extendViewport.getCamera(),game,shape);//need camera not camera.combined because you cant get
+                                                            // position of the projection matrix and we need it for the event render
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.setScreen(new PauseScreen(game,this));
@@ -148,8 +149,8 @@ public class GameScreen implements Screen {
     public void updateCamera()
     {
         float x,y;
-        float xConst = (float)1600/Gdx.graphics.getWidth();
-        float yConst = (float)900/Gdx.graphics.getHeight();
+        float xConst = (float)1600/Gdx.graphics.getWidth(); // these constants are the ration of initial screen width to current
+        float yConst = (float)900/Gdx.graphics.getHeight(); // if screen is half as wide it zooms out so its 2x smaller
 
         float camWidth = extendViewport.getScreenWidth()/2;
         float camHeight = extendViewport.getScreenHeight()/2;
@@ -165,7 +166,7 @@ public class GameScreen implements Screen {
         extendViewport.getCamera().position.set(x,y,0);
     }
 
-    public Building getNearest()
+    public Building getNearest() //calculated the nearest building to the player rn
     {
         Building closest = null;
         float closDis = 200f;
@@ -188,7 +189,7 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void resize(int width, int height) {
+    public void resize(int width, int height) { //This is important for the GUI class to stay in aspect
         extendViewport.update(width,height);
         gui.stage.getViewport().update(extendViewport.getScreenWidth(), extendViewport.getScreenHeight(),true);
     }

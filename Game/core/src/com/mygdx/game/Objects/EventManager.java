@@ -8,6 +8,11 @@ import com.mygdx.game.HesHustle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Manager of the game.
+ * Stores Time, Energy, Events etc.
+ * Helps interaction between player and buildings
+ */
 public class EventManager extends GameObject {
     Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
     Event curEvent = null;

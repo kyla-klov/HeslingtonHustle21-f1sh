@@ -10,13 +10,17 @@ import com.mygdx.game.HesHustle;
 
 import java.util.Random;
 
+/**
+ * Basic Building object the player can interact with
+ * Basic Red Square but easily changed, String name is public so accessed by GameScreen
+ */
 public class Building extends GameObject{
     public String name;
-    public Boolean interact;
-    public Building(float x, float y, float width, float height,String name, Boolean interact) {
+
+
+    public Building(float x, float y, float width, float height,String name) {
         super(x, y, width, height);
         this.name = name;
-        this.interact = interact;
 
     }
 

@@ -2,6 +2,9 @@ package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
+/**
+ * Uses the collision layer in the TileMap file to generate collisions
+ */
 public class CollisionDetector {
     private TiledMapTileLayer collisionLayer;
     private PlayerController player;

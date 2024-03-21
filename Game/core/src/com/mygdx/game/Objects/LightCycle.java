@@ -16,6 +16,11 @@ public class LightCycle extends GameObject{
     float prog=0;
     float[] Col1,Col2,Col3;
     int segment = 0;
+
+    /**
+     * 2 Gradients orange->blue and orange->purple just flipped on some of them
+     * lookup the LibGDX interpolation site for help the 4 Interpolations I used basically simulate a big squished sine wave
+     */
     public LightCycle() {
         super(0, 0, 4000, 4000);
         Col1 = new float[]{238/255f, 130/255f, 0, 0.2f}; //orange
@@ -44,7 +49,13 @@ public class LightCycle extends GameObject{
         prog = (float)rawTime/360;
     }
 
-
+    /**
+     * Calculate the resultant "color vector" then interpolation.apply(prog) will be between 0 and 1
+     * @param Col1
+     * @param Col2
+     * @param inter
+     * @return
+     */
     public Color getColor(float[] Col1,float[] Col2,Interpolation inter)
     {
         float[] trans = new float[]{0,0,0,0};
