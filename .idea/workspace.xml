@@ -35,6 +35,7 @@
     "Gradle./home/ftft/UoY/ENG1/HeslingtonHustle21-f1sh/Game/build.gradle.executor": "Run",
     "Gradle./home/ftft/UoY/ENG1/HeslingtonHustle21-f1sh/Game/core/build.gradle.executor": "Run",
     "Gradle./home/ftft/UoY/ENG1/HeslingtonHustle21-f1sh/Game/desktop/build.gradle.executor": "Run",
+    "Gradle./home/ftft/UoY/ENG1/HeslingtonHustle21-f1sh/Game/tests/build.gradle.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
