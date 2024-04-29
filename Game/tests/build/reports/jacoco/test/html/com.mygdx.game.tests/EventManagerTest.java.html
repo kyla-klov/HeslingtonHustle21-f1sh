@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventManagerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">EventManagerTest.java</span></div><h1>EventManagerTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+import com.mygdx.game.Objects.EventManager;
+import org.junit.runner.RunWith;
+
+import java.util.Optional;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L13">public class EventManagerTest {</span>
+<span class="fc" id="L14">    public EventManager eventManager = new EventManager();</span>
+
+    @Test
+    // Tests that all the Event objects are correctly created.
+    public void testGenerateEvents() {
+<span class="fc" id="L19">        eventManager.generateEvents();</span>
+<span class="fc" id="L20">        assertNotNull(eventManager.FeedDucks);</span>
+<span class="fc" id="L21">        assertNotNull(eventManager.StudyCS);</span>
+<span class="fc" id="L22">        assertNotNull(eventManager.PlayBBall);</span>
+<span class="fc" id="L23">        assertNotNull(eventManager.Sleep);</span>
+<span class="fc" id="L24">        assertNotNull(eventManager.EatPiazza);</span>
+<span class="fc" id="L25">    }</span>
+
+    @Test
+    public void testInteract() {
+<span class="fc" id="L29">        eventManager.energy = 50;</span>
+<span class="fc" id="L30">        eventManager.interact(&quot;Langwith&quot;);</span>
+<span class="fc" id="L31">        assertNotNull(eventManager.curEvent);</span>
+<span class="fc" id="L32">        assertEquals((double) 100, (double) eventManager.energy, (double) 0.0);</span>
+<span class="fc" id="L33">    }</span>
+
+
+    @Test
+    public void testUpdate() {
+        // tests the case where TRaw + deltaTime is less than 0.5f
+<span class="fc" id="L39">        eventManager.TRaw = 0.1f;</span>
+<span class="fc" id="L40">        eventManager.update(0.1f);</span>
+<span class="fc" id="L41">        assertEquals(0.2f, eventManager.TRaw, 0.01f);</span>
+<span class="fc" id="L42">        assertEquals(0L, eventManager.TSec, 0.0);</span>
+<span class="fc" id="L43">        assertEquals(8L, eventManager.TMin, 0.0);</span>
+<span class="fc" id="L44">        assertEquals(1L, eventManager.day, 0.0);</span>
+
+        // tests the boundary case where TRaw + deltaTime is 0.5f
+<span class="fc" id="L47">        eventManager.TRaw = 0.2f;</span>
+<span class="fc" id="L48">        eventManager.update(0.3f);</span>
+<span class="fc" id="L49">        assertEquals(0.0f, eventManager.TRaw, 0.01f);</span>
+<span class="fc" id="L50">        assertEquals(1L, eventManager.TSec, 0.0);</span>
+<span class="fc" id="L51">        assertEquals(8L, eventManager.TMin, 0.0);</span>
+<span class="fc" id="L52">        assertEquals(1L, eventManager.day, 0.0);</span>
+
+        // tests the case where TRaw + deltaTime is greater than 0.5f
+<span class="fc" id="L55">        eventManager.TRaw = 0.4f;</span>
+<span class="fc" id="L56">        eventManager.update(0.3f);</span>
+<span class="fc" id="L57">        assertEquals(0.0f, eventManager.TRaw, 0.01f);</span>
+<span class="fc" id="L58">        assertEquals(2L, eventManager.TSec, 0.0);</span>
+<span class="fc" id="L59">        assertEquals(8L, eventManager.TMin, 0.0);</span>
+<span class="fc" id="L60">        assertEquals(1L, eventManager.day, 0.0);</span>
+
+<span class="fc" id="L62">    }</span>
+
+    @Test
+    public void testGetScore() {
+        // Test code for score calculation
+<span class="fc" id="L67">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

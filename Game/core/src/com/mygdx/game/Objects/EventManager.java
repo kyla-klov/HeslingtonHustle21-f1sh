@@ -14,8 +14,8 @@ import java.util.List;
  * Helps interaction between player and buildings
  */
 public class EventManager extends GameObject {
-    Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
-    Event curEvent = null;
+    public Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
+    public Event curEvent = null;
     public Float TRaw, TWait;
     public Integer TSec, TMin, energy, day;
     boolean frozen = false;

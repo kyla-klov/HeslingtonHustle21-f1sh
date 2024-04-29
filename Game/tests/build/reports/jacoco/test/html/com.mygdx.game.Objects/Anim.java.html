@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Anim.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">Anim.java</span></div><h1>Anim.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
+/**
+ * Class to generate animation based off spritesheet
+ */
+public class Anim {
+<span class="nc" id="L11">    int curFrame=0;</span>
+    private final Texture SprSheet;
+    private final int frameNo;
+    double time,frameTime;
+    int frameStart,width,height;
+
+    /**
+     * Remember 1st frame is frame 0
+     * @param SprSheet
+     * @param frameStart
+     * @param frameEnd
+     * @param frameTot
+     * @param fps
+     */
+    public Anim(Texture SprSheet, int frameStart, int frameEnd,int frameTot,int fps)
+<span class="nc" id="L26">    {</span>
+<span class="nc" id="L27">        this.SprSheet = SprSheet;</span>
+<span class="nc" id="L28">        this.frameStart = frameStart;</span>
+<span class="nc" id="L29">        this.frameNo = frameEnd-frameStart;</span>
+
+<span class="nc" id="L31">        this.width = SprSheet.getWidth()/frameTot;</span>
+<span class="nc" id="L32">        this.height = SprSheet.getHeight();</span>
+
+<span class="nc" id="L34">        this.time = 0;</span>
+<span class="nc" id="L35">        this.frameTime= (double) 1 /fps;</span>
+
+<span class="nc" id="L37">    }</span>
+
+    /**
+     * Return the current animation frame give this to your renderer
+     * @param deltaTime
+     * @return
+     */
+    public TextureRegion GetFrame(float deltaTime)
+    {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (time &gt; frameTime) {</span>
+<span class="nc" id="L47">            time = 0;</span>
+<span class="nc" id="L48">            curFrame +=1;</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            if (curFrame &gt; frameNo-1){</span>
+<span class="nc" id="L50">                curFrame = 0;</span>
+            }
+        }
+<span class="nc" id="L53">        time += deltaTime;</span>
+<span class="nc" id="L54">        return new TextureRegion(SprSheet,width*(frameStart+curFrame),0,width,height);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
