@@ -19,7 +19,7 @@ public class EventManager extends GameObject {
     public Float TRaw, TWait;
     public Integer TSec, TMin, energy, day;
     boolean frozen = false;
-    List<Event> playedEvents;
+    public List<Event> playedEvents;
     public EventManager() {
         super(0, 0, 0, 0);
         playedEvents = new ArrayList<>();

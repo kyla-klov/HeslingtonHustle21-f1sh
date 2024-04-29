@@ -25,11 +25,32 @@ public class EventManagerTest {
     }
 
     @Test
+    // tests that interacting with something correctly edits the energy value
+    // needs cases adding for minimum energy and not surpassing 100;
     public void testInteract() {
+        // sleeping adds 50 energy
         eventManager.energy = 50;
         eventManager.interact("Langwith");
         assertNotNull(eventManager.curEvent);
         assertEquals((double) 100, (double) eventManager.energy, (double) 0.0);
+
+        // checks that sleeping will not increase energy above 100
+        eventManager.energy = 70;
+        eventManager.interact("Langwith");
+        assertNotNull(eventManager.curEvent);
+        assertEquals((double) 100, (double) eventManager.energy, (double) 0.0);
+
+        // checks that recreation decreases energy by 30
+        eventManager.energy = 50;
+        eventManager.interact("BasketBall");
+        assertNotNull(eventManager.curEvent);
+        assertEquals((double) 20, (double) eventManager.energy, (double) 0.0);
+
+        // checks that recreation will not decrease energy if there is not enough energy available
+        eventManager.energy = 10;
+        eventManager.interact("BasketBall");
+        assertNotNull(eventManager.curEvent);
+        assertEquals((double) 10, (double) eventManager.energy, (double) 0.0);
     }
 
 
@@ -63,6 +84,11 @@ public class EventManagerTest {
 
     @Test
     public void testGetScore() {
-        // Test code for score calculation
+        // this one needs fixing because im not sure what the expected score is actually supposed to be
+        eventManager.playedEvents.add(eventManager.FeedDucks);
+        eventManager.playedEvents.add(eventManager.StudyCS);
+        eventManager.playedEvents.add(eventManager.Sleep);
+        int expectedScore = 77;
+        assertEquals(expectedScore, eventManager.getScore());
     }
 }
