@@ -16,6 +16,10 @@ public class EndScreen implements Screen{
     private Stage stage;
     private Skin skin;
 
+    TextButton playAgainButton = new TextButton("Play Again", skin);
+    TextButton mainMenuButton = new TextButton("Main Menu", skin);
+    TextButton exitButton = new TextButton("Exit", skin);
+
 
     public EndScreen(final HesHustle game) {
         this.game = game;
@@ -26,14 +30,23 @@ public class EndScreen implements Screen{
         setupUi();
     }
 
+    public TextButton getPlayAgainButton() {
+        return playAgainButton;
+    }
+
+    public TextButton getMainMenuButton() {
+        return mainMenuButton;
+    }
+
+    public TextButton getExitButton() {
+        return exitButton;
+    }
+
     private void setupUi(){
         Table table = new Table ();
         table.setFillParent(true);
         stage.addActor(table);
 
-        TextButton playAgainButton = new TextButton("Play Again", skin);
-        TextButton mainMenuButton = new TextButton("Main Menu", skin);
-        TextButton exitButton = new TextButton("Exit", skin);
 
         // Add functionality to buttons
         playAgainButton.addListener(event -> {
@@ -58,7 +71,10 @@ public class EndScreen implements Screen{
         table.add(playAgainButton).pad(10).row();
         table.add(mainMenuButton).pad(10).row();
         table.add(exitButton).pad(10);
+
     }
+
+
 
     @Override
     public void show() {
@@ -79,6 +95,7 @@ public class EndScreen implements Screen{
     @Override
     public void pause() {
     }
+
 
     @Override
     public void resume() {

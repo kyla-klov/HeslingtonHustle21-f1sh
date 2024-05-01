@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayerController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">PlayerController.java</span></div><h1>PlayerController.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.IntSet;
+import com.mygdx.game.HesHustle;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import java.util.Objects;
+
+/**Controller Class which the user interacts with the game through, has input processor which must be set active on each GameScreen
+ *
+ */
+public class PlayerController extends GameObject implements InputProcessor {
+    /**Width of character sprite
+     */
+    public static final float width = 32;
+    /**Height of character sprite
+     */
+    public static final float height = 64;
+
+    /**Enum of states the player character can be in
+     */
+<span class="nc" id="L30">    public enum state {</span>
+<span class="nc" id="L31">        IDLE_LEFT,</span>
+<span class="nc" id="L32">        IDLE_UP,</span>
+<span class="nc" id="L33">        IDLE_RIGHT,</span>
+<span class="nc" id="L34">        IDLE_DOWN,</span>
+<span class="nc" id="L35">        WALK_LEFT,</span>
+<span class="nc" id="L36">        WALK_UP,</span>
+<span class="nc" id="L37">        WALK_RIGHT,</span>
+<span class="nc" id="L38">        WALK_DOWN,</span>
+    }
+
+    /**
+     * Animation for each state
+     */
+    Anim IDLE_LEFT,
+            IDLE_UP,
+            IDLE_RIGHT,
+            IDLE_DOWN,
+            WALK_LEFT,
+            WALK_UP,
+            WALK_RIGHT,
+            WALK_DOWN;
+    /**Current state of player
+     */
+    public state Pstate;
+    /**Current player animation
+     */
+    public Anim Panim;
+    /**Stores current texture region to be rendered
+     *
+     */
+    TextureRegion txr;
+    /**IntSet storing the key values of every key being pressed
+     * (Still has trouble with more than 3 inputs)
+     */
+<span class="nc" id="L65">    private final IntSet downKeys = new IntSet(20);</span>
+    /**Stores the Key values of the direction keys you want to use
+     */
+    private final static int up=Input.Keys.W,down=Input.Keys.S,left=Input.Keys.A,right=Input.Keys.D;
+    /**Event Manager used to interact with events*/
+    public EventManager EM;
+    /**Ref to nearest building (Activity) for interaction*/
+    public Building nearBD;
+    /**Detects player collision
+     *
+     */
+    CollisionDetector collisionDetector;
+
+    /**
+     * Constructor of PlayerController
+     * @param xPos Initial x position
+     * @param yPos Initial y position
+     * @param EM EventManager
+     * @param collisionLayer Collision Layer of the Tiled Map
+     */
+    public PlayerController(float xPos, float yPos, EventManager EM, TiledMapTileLayer collisionLayer) {
+<span class="nc" id="L86">        super(xPos,yPos,width,height);</span>
+<span class="nc" id="L87">        Pstate = state.IDLE_DOWN;</span>
+<span class="nc" id="L88">        loadAnims();</span>
+<span class="nc" id="L89">        Panim = IDLE_DOWN;</span>
+<span class="nc" id="L90">        this.EM = EM;</span>
+<span class="nc" id="L91">        nearBD = null;</span>
+
+
+        // Initialize the detector
+<span class="nc" id="L95">        collisionDetector = new CollisionDetector(this, collisionLayer);</span>
+
+<span class="nc" id="L97">    }</span>
+
+    /**
+     * Function to generate all the Animations from the sprite sheets
+     */
+    private void loadAnims() {
+<span class="nc" id="L103">        IDLE_LEFT = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_idle_anim_16x16.png&quot;)),12,17,24,12);</span>
+<span class="nc" id="L104">        IDLE_UP = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_idle_anim_16x16.png&quot;)),6,11,24,12);</span>
+<span class="nc" id="L105">        IDLE_RIGHT = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_idle_anim_16x16.png&quot;)),0,5,24,12);</span>
+<span class="nc" id="L106">        IDLE_DOWN = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_idle_anim_16x16.png&quot;)),18,23,24,12);</span>
+<span class="nc" id="L107">        WALK_LEFT = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_run_16x16.png&quot;)),12,17,24,12);</span>
+<span class="nc" id="L108">        WALK_UP = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_run_16x16.png&quot;)),6,11,24,12);</span>
+<span class="nc" id="L109">        WALK_RIGHT = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_run_16x16.png&quot;)),0,5,24,12);</span>
+<span class="nc" id="L110">        WALK_DOWN = new Anim(new Texture(Gdx.files.internal(&quot;Amelia_run_16x16.png&quot;)),18,23,24,12);</span>
+<span class="nc" id="L111">    }</span>
+
+    /**
+     * Update function extended from GameObject
+     * @param deltaTime deltaTime
+     */
+    public void update (float deltaTime) {
+        //get texture region to draw
+<span class="nc" id="L119">        txr = getAnim(Pstate).GetFrame(deltaTime);</span>
+        //update position using normalised direction vector using vector addition (delta time in scalar)
+<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (!EM.frozen){</span>
+<span class="nc" id="L122">            pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);</span>
+        }
+<span class="nc" id="L124">        EM.update(deltaTime);</span>
+<span class="nc" id="L125">    }</span>
+<span class="nc" id="L126">    public Vector2 getPos() { return pos; }</span>
+
+<span class="nc" id="L128">    public Rectangle getBounds() { return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height); }</span>
+
+
+    public Vector2 getDir() {
+        //find overall direction of inputs
+<span class="nc" id="L133">        Vector2 dir = new Vector2(0,0);</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (downKeys.contains(up)){</span>
+<span class="nc" id="L135">            dir.y = 1;</span>
+<span class="nc" id="L136">            Pstate = state.WALK_UP;</span>
+        }
+<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (downKeys.contains(down)){</span>
+<span class="nc" id="L139">            dir.y = -1;</span>
+<span class="nc" id="L140">            Pstate = state.WALK_DOWN;</span>
+        }
+<span class="nc bnc" id="L142" title="All 2 branches missed.">        if (downKeys.contains(left)){</span>
+<span class="nc" id="L143">            dir.x = -1;</span>
+<span class="nc" id="L144">            Pstate = state.WALK_LEFT;</span>
+        }
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (downKeys.contains(right)){</span>
+<span class="nc" id="L147">            dir.x = 1;</span>
+<span class="nc" id="L148">            Pstate = state.WALK_RIGHT;</span>
+        }
+<span class="nc" id="L150">        return dir;</span>
+    }
+
+    /**
+     * Alters the direction vector to account for collisions
+     * @param dir
+     * @return
+     */
+    public Vector2 colCorrect(Vector2 dir)
+    {
+<span class="nc" id="L160">        Vector2 colDir = new Vector2(dir.x,dir.y);</span>
+<span class="nc bnc" id="L161" title="All 4 branches missed.">        if ((dir.x==1) &amp;&amp; collisionDetector.collidesRight()){colDir.x=0;}</span>
+<span class="nc bnc" id="L162" title="All 4 branches missed.">        if ((dir.x==-1) &amp;&amp; collisionDetector.collidesLeft()){colDir.x=0;}</span>
+<span class="nc bnc" id="L163" title="All 4 branches missed.">        if ((dir.y==1) &amp;&amp; collisionDetector.collidesUp()){colDir.y=0;}</span>
+<span class="nc bnc" id="L164" title="All 4 branches missed.">        if ((dir.y==-1) &amp;&amp; collisionDetector.collidesDown()){colDir.y=0;}</span>
+<span class="nc" id="L165">        return colDir;</span>
+    }
+
+    /**
+     * Method to return animation to play
+     * @param Pstate
+     * @return Anim
+     */
+    public Anim getAnim(state Pstate)
+    {
+<span class="nc" id="L175">        Vector2 dir = getDir();</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (Objects.equals(dir, new Vector2(0, 0)))</span>
+        {
+<span class="nc bnc" id="L178" title="All 5 branches missed.">            switch (Pstate)</span>
+            {
+                case WALK_UP:
+                case IDLE_UP:
+<span class="nc" id="L182">                    return IDLE_UP;</span>
+                case WALK_DOWN:
+                case IDLE_DOWN:
+<span class="nc" id="L185">                    return IDLE_DOWN;</span>
+                case WALK_RIGHT:
+                case IDLE_RIGHT:
+<span class="nc" id="L188">                    return IDLE_RIGHT;</span>
+                case WALK_LEFT:
+                case IDLE_LEFT:
+<span class="nc" id="L191">                    return IDLE_LEFT;</span>
+            }
+        }
+        else
+        {
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            if (dir.x == 1){</span>
+<span class="nc" id="L197">                return WALK_RIGHT;</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">            } else if (dir.x == -1){</span>
+<span class="nc" id="L199">                return WALK_LEFT;</span>
+            }
+<span class="nc bnc" id="L201" title="All 2 branches missed.">            if (dir.y == 1){</span>
+<span class="nc" id="L202">                return WALK_UP;</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">            } else if (dir.y == -1){</span>
+<span class="nc" id="L204">                return WALK_DOWN;</span>
+            }
+
+        }
+
+<span class="nc" id="L209">        return null;</span>
+    }
+    @Override
+    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape){
+        //Debug Box for player
+        /*
+        shape.setProjectionMatrix(projection);
+        shape.begin(ShapeRenderer.ShapeType.Line);
+        shape.setColor(Color.CHARTREUSE);
+        shape.rect(pos.x, pos.y, bounds.width, bounds.height);
+        shape.end();*/
+<span class="nc" id="L220">        game.batch.begin();</span>
+<span class="nc" id="L221">        game.batch.draw(txr,pos.x, pos.y, bounds.width, bounds.height);</span>
+<span class="nc" id="L222">        game.batch.end();</span>
+
+
+
+<span class="nc" id="L226">    }</span>
+
+    /**
+     * sets the nearest builiding value
+     * @param BD
+     */
+    public void setBD(Building BD){
+<span class="nc" id="L233">        nearBD = BD;</span>
+<span class="nc" id="L234">    }</span>
+    public void interact(){
+<span class="nc bnc" id="L236" title="All 4 branches missed.">        if (nearBD!=null &amp;&amp; !EM.frozen)</span>
+        {
+<span class="nc" id="L238">            EM.interact(nearBD.name);</span>
+        }
+
+<span class="nc" id="L241">    }</span>
+
+    @Override
+    public boolean keyDown(int keycode) {
+
+<span class="nc" id="L246">        downKeys.add(keycode);</span>
+<span class="nc bnc" id="L247" title="All 2 branches missed.">        if (keycode == Input.Keys.SPACE){</span>
+<span class="nc" id="L248">            interact();</span>
+        }
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        if (downKeys.size &gt;= 2){</span>
+
+<span class="nc" id="L252">            return onMultipleKeysDown(keycode);</span>
+        }
+<span class="nc" id="L254">        return true;</span>
+
+    }
+
+    /**
+     * When multiple keys pressed it cancels out opposing directions, added back on key up
+     * @param keycode
+     * @return
+     */
+    public boolean onMultipleKeysDown(int keycode){
+<span class="nc bnc" id="L264" title="All 8 branches missed.">        if ((keycode==left &amp;&amp; downKeys.contains(right)) || (keycode==right &amp;&amp; downKeys.contains(left))) {</span>
+<span class="nc" id="L265">            downKeys.remove(left);</span>
+<span class="nc" id="L266">            downKeys.remove(right);</span>
+
+<span class="nc" id="L268">            return true;</span>
+        }
+<span class="nc bnc" id="L270" title="All 8 branches missed.">        else if ((keycode==up &amp;&amp; downKeys.contains(down)) || (keycode==down &amp;&amp; downKeys.contains(up))) {</span>
+<span class="nc" id="L271">            downKeys.remove(up);</span>
+<span class="nc" id="L272">            downKeys.remove(down);</span>
+
+<span class="nc" id="L274">            return true;</span>
+        } else {
+<span class="nc" id="L276">            downKeys.add(keycode);</span>
+
+<span class="nc" id="L278">            return true;</span>
+        }
+
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+<span class="nc bnc" id="L285" title="All 2 branches missed.">        if (downKeys.contains(keycode))</span>
+        {
+<span class="nc" id="L287">            downKeys.remove(keycode);</span>
+<span class="nc" id="L288">            return true;</span>
+        }
+        else
+        {
+<span class="nc bnc" id="L292" title="All 5 branches missed.">            switch(keycode)</span>
+            {
+                case up:
+<span class="nc" id="L295">                    downKeys.add(down);</span>
+<span class="nc" id="L296">                    break;</span>
+                case down:
+<span class="nc" id="L298">                    downKeys.add(up);</span>
+<span class="nc" id="L299">                    break;</span>
+                case left:
+<span class="nc" id="L301">                    downKeys.add(right);</span>
+<span class="nc" id="L302">                    break;</span>
+                case right:
+<span class="nc" id="L304">                    downKeys.add(left);</span>
+                    break;
+            }
+        }
+<span class="nc" id="L308">        return true;</span>
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+<span class="nc" id="L313">        return false;</span>
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+<span class="nc" id="L318">        return false;</span>
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+<span class="nc" id="L323">        return false;</span>
+    }
+
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+<span class="nc" id="L328">        return false;</span>
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+<span class="nc" id="L333">        return false;</span>
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+<span class="nc" id="L338">        return false;</span>
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+<span class="nc" id="L343">        return false;</span>
+    }
+
+    @Override
+    public void Dispose() {
+
+<span class="nc" id="L349">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

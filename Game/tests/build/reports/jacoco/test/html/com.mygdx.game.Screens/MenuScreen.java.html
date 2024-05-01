@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MenuScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Screens</a> &gt; <span class="el_source">MenuScreen.java</span></div><h1>MenuScreen.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.mygdx.game.HesHustle;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+
+
+
+public class MenuScreen implements Screen {
+    final HesHustle game;
+    OrthographicCamera camera;
+    private Skin skin;
+    private Stage stage;
+    private Label titleLabel;
+
+
+<span class="nc" id="L25">    public MenuScreen(final HesHustle game) {</span>
+<span class="nc" id="L26">        this.game = game;</span>
+<span class="nc" id="L27">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L28">        camera.setToOrtho(false, 800, 800);</span>
+
+<span class="nc" id="L30">        stage = new Stage(new ScreenViewport());</span>
+<span class="nc" id="L31">        Gdx.input.setInputProcessor(stage);</span>
+
+<span class="nc" id="L33">        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;));</span>
+
+<span class="nc" id="L35">        titleLabel = new Label(&quot;Heslington Hustle&quot;, skin, &quot;default&quot;);</span>
+<span class="nc" id="L36">        titleLabel.setFontScale(2.0f);</span>
+
+<span class="nc" id="L38">        TextButton playButton = new TextButton(&quot;Play&quot;, skin);</span>
+<span class="nc" id="L39">        TextButton exitButton = new TextButton(&quot;Exit&quot;, skin);</span>
+
+<span class="nc" id="L41">        Table table = new Table();</span>
+<span class="nc" id="L42">        table.setFillParent(true);</span>
+<span class="nc" id="L43">        table.add(titleLabel).padBottom(50).row(); // Add the title label and move to the next row</span>
+<span class="nc" id="L44">        table.add(playButton).pad(10).row(); // Add the play button and move to the next row</span>
+<span class="nc" id="L45">        table.add(exitButton).pad(10); // Add the exit button</span>
+
+<span class="nc" id="L47">        stage.addActor(table);</span>
+
+<span class="nc" id="L49">        playButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">            if (!event.isHandled())</span>
+<span class="nc" id="L51">                return false;</span>
+<span class="nc" id="L52">            game.setScreen(new GameScreen(game));</span>
+<span class="nc" id="L53">            return true;</span>
+        });
+
+<span class="nc" id="L56">        exitButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
+<span class="nc" id="L58">            Gdx.app.exit();</span>
+<span class="nc" id="L59">            return true;</span>
+        });
+
+
+
+<span class="nc" id="L64">    }</span>
+
+    @Override
+    public void show() {
+<span class="nc" id="L68">        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+<span class="nc" id="L69">    }</span>
+
+    @Override
+    public void render(float delta) {
+<span class="nc" id="L73">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L74">        stage.act(Math.min(delta, 1 / 30f));</span>
+<span class="nc" id="L75">        stage.draw();</span>
+<span class="nc" id="L76">    }</span>
+
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L80">        stage.getViewport().update(width, height, true);</span>
+<span class="nc" id="L81">    }</span>
+
+    @Override
+    public void pause() {
+<span class="nc" id="L85">    }</span>
+
+    @Override
+    public void resume() {
+<span class="nc" id="L89">    }</span>
+
+    @Override
+    public void hide() {
+<span class="nc" id="L93">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
+<span class="nc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
