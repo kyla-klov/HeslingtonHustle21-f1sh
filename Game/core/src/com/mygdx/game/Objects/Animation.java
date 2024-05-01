@@ -1,13 +1,12 @@
 package com.mygdx.game.Objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Class to generate animation based off spritesheet
  */
-public class Anim {
+public class Animation {
     int curFrame=0;
     private final Texture SprSheet;
     private final int frameNo;
@@ -22,7 +21,7 @@ public class Anim {
      * @param frameTot
      * @param fps
      */
-    public Anim(Texture SprSheet, int frameStart, int frameEnd,int frameTot,int fps)
+    public Animation(Texture SprSheet, int frameStart, int frameEnd, int frameTot, int fps)
     {
         this.SprSheet = SprSheet;
         this.frameStart = frameStart;
