@@ -1,5 +1,6 @@
 package com.mygdx.game.Utils;
 
+import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
 
 import java.util.ArrayList;
@@ -13,28 +14,27 @@ import java.util.List;
 public class EventManager {
     public Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
     public Event curEvent = null;
-    public Float TRaw, TWait;
-    public Integer TSec, TMin, energy, day;
+    public Integer energy;
     public boolean frozen = false;
     public List<Event> playedEvents;
     private final ResourceManager resourceManager;
+    private final HesHustle game;
+    private final GameClock gameClock;
 
-    public EventManager() {
+    public EventManager(HesHustle game, GameClock gameClock) {
+        this.game = game;
+        this.gameClock = gameClock;
         resourceManager = new ResourceManager();
         playedEvents = new ArrayList<>();
-        TRaw = 0.0f;
-        TSec = 0;
-        TMin = 8;
-        TWait = 0f;
         energy = 100;
-        day = 1;
         generateEvents();
     }
 
     public void generateEvents() {
         FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/lakemap.png")));
         StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
-        PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", resourceManager.addDisposable(new ActivityImage("Activitys/basketballcourt.png")));
+        PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN
+        );
         Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
     }
@@ -64,64 +64,19 @@ public class EventManager {
         assert curEvent != null;
         if (-curEvent.getEnergyCost() < energy) {
             playedEvents.add(curEvent);
-            TWait = 8f;
             frozen = true;
-            curEvent.getActivityImage().setActive();
+            if (curEvent.getActivityImage() != null) curEvent.getActivityImage().setActive();
+            else game.screenManager.setScreen(curEvent.getScreenType());
             updateTime(curEvent);
             updateEnergy(curEvent);
         }
-    }
-
-    public void update(float deltaTime) {
-        TRaw += deltaTime;
-        TWait -= deltaTime;
-        if (TWait < 0) {
-            if (curEvent != null) {
+        gameClock.addEvent(s -> {
+            if (curEvent != null && curEvent.getActivityImage() != null) {
                 curEvent.getActivityImage().setInactive();
                 curEvent = null;
             }
             frozen = false;
-        }
-        if (TRaw >= 0.5f) {
-            TSec++;
-            TRaw = 0f;
-        }
-        if (TSec >= 60) {
-            TSec = 0;
-            TMin++;
-        }
-        if (TMin > 23) {
-            TMin -= 24;
-            day++;
-        }
-
-    }
-
-    public String getTime() {
-        String z1 = "", z2 = "";
-        if (TMin < 10) {
-            z1 = "0";
-        }
-        if (TSec < 10) {
-            z2 = "0";
-        }
-
-        return "Time: " + z1 + TMin + ":" + z2 + TSec;
-    }
-
-    public void updateTime(Event e) {
-        if (e.getEventType() == Event.Type.SLEEP) {
-            TSec = 0;
-            TMin = 8;
-            day++;
-        } else {
-            TMin += (int) Math.floor(e.getTimeCost());
-            if (TMin > 23) {
-                TMin -= 24;
-                day++;
-            }
-        }
-
+        }, 4f);
     }
 
     public void updateEnergy(Event e) {
@@ -131,6 +86,21 @@ public class EventManager {
             //passout
         } else if (energy > 100) {
             energy = 100;
+        }
+
+    }
+
+    public void updateTime(Event e) {
+        if (e.getEventType() == Event.Type.SLEEP) {
+            gameClock.setMinutes(0);
+            gameClock.setHours(8);
+            gameClock.setDays(gameClock.getDays() + 1);
+        } else {
+            gameClock.setHours(gameClock.getHours() + (int) Math.floor(e.getTimeCost()));
+            if (gameClock.getHours() >= 24) {
+                gameClock.setHours(gameClock.getHours() - 24);
+                gameClock.setDays(gameClock.getDays() + 1);
+            }
         }
 
     }

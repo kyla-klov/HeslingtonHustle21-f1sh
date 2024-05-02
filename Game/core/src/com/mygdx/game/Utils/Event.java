@@ -10,6 +10,7 @@ public class Event {
     private final int moneyCost;
     private final String description;
     private final ActivityImage activityImage;
+    private final ScreenType screenType;
     public enum Type {
         EAT,
         SLEEP,
@@ -38,9 +39,24 @@ public class Event {
         this.moneyCost = moneyCost;
         this.description = description;
         this.activityImage = activityImage;
+        this.screenType = null;
+    }
+
+    public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, Type eventType, int moneyCost, String description, ScreenType screenType) {
+        this.timeCost = time;
+        this.energyCost = energy;
+        this.enjoymentStudyLevel = enjoymentStudyLevel;
+        this.fatigue = fatigue;
+        this.eventType = eventType;
+        this.moneyCost = moneyCost;
+        this.description = description;
+        this.activityImage = null;
+        this.screenType = screenType;
     }
 
     public ActivityImage getActivityImage() { return activityImage; }
+
+    public ScreenType getScreenType() { return screenType; }
 
     public int getEnergyCost() {
         return energyCost;

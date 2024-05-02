@@ -23,7 +23,7 @@ public class DuckGameScreen implements Screen {
     private int duckHeight;
     private int duckWidth;
 
-    public DuckGameScreen(final HesHustle game){
+    public DuckGameScreen(HesHustle game){
         this.game = game;
         // Update this
         duck = new Texture("");

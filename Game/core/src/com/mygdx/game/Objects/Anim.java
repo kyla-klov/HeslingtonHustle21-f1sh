@@ -1,6 +1,5 @@
 package com.mygdx.game.Objects;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -16,11 +15,11 @@ public class Anim {
 
     /**
      * Remember 1st frame is frame 0
-     * @param SprSheet
-     * @param frameStart
-     * @param frameEnd
-     * @param frameTot
-     * @param fps
+     * @param SprSheet .
+     * @param frameStart .
+     * @param frameEnd .
+     * @param frameTot .
+     * @param fps .
      */
     public Anim(Texture SprSheet, int frameStart, int frameEnd,int frameTot,int fps)
     {
@@ -38,8 +37,8 @@ public class Anim {
 
     /**
      * Return the current animation frame give this to your renderer
-     * @param deltaTime
-     * @return
+     * @param deltaTime .
+     * @return .
      */
     public TextureRegion GetFrame(float deltaTime)
     {

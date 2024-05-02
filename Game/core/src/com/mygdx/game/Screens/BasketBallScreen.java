@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.Ball;
 import com.mygdx.game.Utils.BallPhysics;
 
@@ -23,7 +24,7 @@ public class BasketBallScreen implements Screen, InputProcessor {
     BallPhysics ballPhysics;
     ShapeRenderer shapeRenderer;
 
-    public BasketBallScreen() {
+    public BasketBallScreen(HesHustle game) {
         horSurf = new ArrayList<>();
         vertSurf = new ArrayList<>();
         rectObjects = new ArrayList<>();

@@ -2,9 +2,7 @@ package com.mygdx.game.Utils;
 
 import com.badlogic.gdx.Screen;
 import com.mygdx.game.HesHustle;
-import com.mygdx.game.Screens.GameScreen;
-import com.mygdx.game.Screens.MenuScreen;
-import com.mygdx.game.Screens.PauseScreen;
+import com.mygdx.game.Screens.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +46,12 @@ public class ScreenManager {
                 return new GameScreen(game);
             case PAUSE_SCREEN:
                 return new PauseScreen(game);
+            case END_SCREEN:
+                return new EndScreen(game);
+            case BASKETBALL_SCREEN:
+                return new BasketBallScreen(game);
+            case DUCK_GAME_SCREEN:
+                return new DuckGameScreen(game);
             default:
                 return null;
         }

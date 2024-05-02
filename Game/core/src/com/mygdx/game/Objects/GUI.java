@@ -11,19 +11,22 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.Event;
 import com.mygdx.game.Utils.EventManager;
+import com.mygdx.game.Utils.GameClock;
 
 public class GUI extends GameObject{
     private Skin skin;
     public Stage stage;
     private Table root;
+    private GameClock gameClock;
     Table leftTab, rightTab;
     ProgressBar nrgBar;
     TextButton TimeButt,ScoreButt,DayButt;
     TextButton RecButt,EatButt,StudyButt,SleepButt;
     EventManager EM;
-    public GUI(Batch batch, EventManager EM) {
+    public GUI(Batch batch, EventManager EM, GameClock gameClock) {
         super(0,0,0,0);
         this.EM = EM;
+        this.gameClock = gameClock;
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
         stage = new Stage(new ExtendViewport(400,400),batch);
         root = new Table();
@@ -75,8 +78,8 @@ public class GUI extends GameObject{
     public void update(float deltaTime){
         nrgBar.setValue(EM.energy);
         ScoreButt.setText("Score: " + EM.getScore());
-        DayButt.setText("Day: " + EM.day);
-        TimeButt.setText(EM.getTime());
+        DayButt.setText("Day: " + gameClock.getDays());
+        TimeButt.setText(gameClock.getTime());
         TimeButt.scaleBy(5);
         int [] count = countActivitys();
         RecButt.setText("RecNo: " + count[0]);

@@ -1,5 +1,6 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -16,12 +17,14 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.EventManager;
+import com.mygdx.game.Utils.GameClock;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Main game loop
@@ -32,6 +35,7 @@ public class GameScreen implements Screen {
     private final HesHustle game;
     private final ExtendViewport extendViewport;
     private final ShapeRenderer shape;
+    private final GameClock gameClock;
     private final List<GameObject> objects;
     private final List<ActivityImage> activityImages;
     private final List<Building> buildings;
@@ -50,6 +54,7 @@ public class GameScreen implements Screen {
     public GameScreen(final HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
+        this.gameClock = new GameClock();
         extendViewport = new ExtendViewport(1600,900);
         shape = resourceManager.addDisposable(new ShapeRenderer());
         tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
@@ -61,7 +66,6 @@ public class GameScreen implements Screen {
 
         BGmusic = resourceManager.addDisposable(Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
         BGmusic.setLooping(true);
-
 
         create();
 
@@ -83,13 +87,12 @@ public class GameScreen implements Screen {
         buildings.add(Langwith);
         buildings.add(Piazza);
 
-        EventM = new EventManager();
+        EventM = new EventManager(game, gameClock);
         Player = new PlayerController(1000,1000, EventM, collisionLayer);
-        gui = new GUI(game.batch,EventM);
+        gui = new GUI(game.batch,EventM, gameClock);
         LC = new LightCycle();
 
 
-        //objects.add(EventM);
         activityImages.add(EventM.FeedDucks.getActivityImage());
         activityImages.add(EventM.EatPiazza.getActivityImage());
         activityImages.add(EventM.Sleep.getActivityImage());
@@ -107,15 +110,15 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
+        gameClock.update(delta);
 
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
 
-        EventM.update(delta);
-
         Player.setBD(getNearest());
-        LC.getTime(EventM.TMin, EventM.TSec);
+        LC.getTime(gameClock.getHours(), gameClock.getMinutes());
+
         gui.update(delta);
 
         if (checkGameOverCondition()) {
@@ -161,7 +164,7 @@ public class GameScreen implements Screen {
 
     public void renderActivityImages(){
         for (ActivityImage activityImage : activityImages) {
-            activityImage.render(extendViewport.getCamera(),game,shape);
+            if (activityImage != null) activityImage.render(extendViewport.getCamera(),game,shape);
         }
     }
 
@@ -200,7 +203,7 @@ public class GameScreen implements Screen {
         return closest;
     }
     private boolean checkGameOverCondition(){
-        if (EventM.day > 7)
+        if (gameClock.getDays() > 7)
         {
             return true;
         }
@@ -222,7 +225,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-
+        BGmusic.pause();
     }
 
     @Override

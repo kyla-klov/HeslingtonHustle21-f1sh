@@ -124,7 +124,6 @@ public class PlayerController extends GameObject implements InputProcessor {
         if (!EM.frozen){
             pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
         }
-        EM.update(deltaTime);
     }
     public Vector2 getPos() { return pos; }
 
