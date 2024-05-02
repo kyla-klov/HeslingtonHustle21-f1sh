@@ -15,14 +15,12 @@ import com.mygdx.game.Utils.ScreenType;
 
 
 public class PauseScreen implements Screen {
-    final HesHustle game;
-    private Stage stage;
-    private Skin skin;
-    private GameScreen gameScreen;
+    private final HesHustle game;
+    private final Stage stage;
+    private final Skin skin;
 
     public PauseScreen(final HesHustle game) {
         this.game = game;
-        this.gameScreen = gameScreen;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 

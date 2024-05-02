@@ -27,18 +27,24 @@ public class ScreenManager {
         }
     }
 
-    public void setScreen(ScreenType screenType){
+    public void setScreen(ScreenType screenType, Object... args){
         if (curScreen != null && !screensInMemory.containsKey(curScreenType)) {
             curScreen.dispose();
         }
         curScreenType = screenType;
         if ((curScreen = screensInMemory.get(screenType)) == null){
-            curScreen = createScreen(screenType);
+            curScreen = createScreen(screenType, args);
         }
         game.setScreen(curScreen);
     }
 
-    private Screen createScreen(ScreenType screenType){
+    public Screen getScreen(ScreenType screenType){
+        if (curScreenType == screenType) return curScreen;
+        return screensInMemory.get(screenType);
+    }
+
+    @SuppressWarnings("unused")
+    private Screen createScreen(ScreenType screenType, Object... args){
         switch (screenType){
             case MENU_SCREEN:
                 return new MenuScreen(game);

@@ -78,10 +78,12 @@ public class Event {
         return eventType;
     }
 
+    @SuppressWarnings("unused")
     public int getMoneyCost() {
         return moneyCost;
     }
 
+    @SuppressWarnings("unused")
     public String getDescription() {
         return description;
     }

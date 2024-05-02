@@ -1,15 +1,15 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Matrix4;
 import com.mygdx.game.HesHustle;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.Utils.GameClock;
+import com.mygdx.game.Utils.ScreenType;
 
 public class LightCycle extends GameObject{
     Interpolation inter;
@@ -27,20 +27,18 @@ public class LightCycle extends GameObject{
         Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};//blue
         Col3 = new float[]{113/255f, 0/255f, 143/255f, 0.3f};//purple
     }
-    public void update(float delta){
-    }
 
-    public void getTime(int TMin, int TSec)
+    public void getTime(int hours, int minutes)
     {
-        int rawTime = TMin*60 + TSec; // total time in "seconds"
-        if (TMin > 5 && TMin <12)//morning to day
+        int rawTime = hours*60 + minutes; // total time in "seconds"
+        if (hours > 5 && hours <12)//morning to day
         {
             rawTime-=6*60;
             segment = 0;
-        } else if (TMin > 11 && TMin < 18) { //day to afternoon
+        } else if (hours > 11 && hours < 18) { //day to afternoon
             rawTime-=12*60;
             segment = 1;
-        } else if (TMin > 17 && TMin < 24) {//afternoon to evening
+        } else if (hours > 17 && hours < 24) {//afternoon to evening
             rawTime-=18*60;
             segment = 2;
         } else {// evening to morning
@@ -51,10 +49,10 @@ public class LightCycle extends GameObject{
 
     /**
      * Calculate the resultant "color vector" then interpolation.apply(prog) will be between 0 and 1
-     * @param Col1
-     * @param Col2
-     * @param inter
-     * @return
+     * @param Col1 .
+     * @param Col2 .
+     * @param inter .
+     * @return .
      */
     public Color getColor(float[] Col1,float[] Col2,Interpolation inter)
     {
@@ -71,9 +69,11 @@ public class LightCycle extends GameObject{
         return new Color(fin[0],fin[1],fin[2],fin[3]);
     }
 
-
-    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape) {
-        shape.setProjectionMatrix(projection);
+    @Override
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
+        GameClock gameClock = ((GameScreen) game.screenManager.getScreen(ScreenType.GAME_SCREEN)).getGameClock();
+        getTime(gameClock.getHours(), gameClock.getMinutes());
+        shape.setProjectionMatrix(projection.combined);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);

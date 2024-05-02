@@ -24,6 +24,7 @@ public class BasketBallScreen implements Screen, InputProcessor {
     BallPhysics ballPhysics;
     ShapeRenderer shapeRenderer;
 
+    @SuppressWarnings("unused")
     public BasketBallScreen(HesHustle game) {
         horSurf = new ArrayList<>();
         vertSurf = new ArrayList<>();

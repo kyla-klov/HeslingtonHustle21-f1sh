@@ -1,9 +1,9 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
@@ -14,15 +14,16 @@ import com.mygdx.game.Utils.EventManager;
 import com.mygdx.game.Utils.GameClock;
 
 public class GUI extends GameObject{
-    private Skin skin;
-    public Stage stage;
-    private Table root;
-    private GameClock gameClock;
-    Table leftTab, rightTab;
-    ProgressBar nrgBar;
-    TextButton TimeButt,ScoreButt,DayButt;
-    TextButton RecButt,EatButt,StudyButt,SleepButt;
-    EventManager EM;
+    private final Skin skin;
+    private final Table root;
+    private final GameClock gameClock;
+    private final EventManager EM;
+    private final Stage stage;
+    private Table leftTab, rightTab;
+    private ProgressBar nrgBar;
+    private TextButton TimeButt,ScoreButt,DayButt;
+    private TextButton RecButt,EatButt,StudyButt,SleepButt;
+
     public GUI(Batch batch, EventManager EM, GameClock gameClock) {
         super(0,0,0,0);
         this.EM = EM;
@@ -47,6 +48,10 @@ public class GUI extends GameObject{
         root.add(leftTab).left().grow();
         root.add(rightTab).grow();
         root.row();
+    }
+
+    public Stage getStage(){
+        return stage;
     }
 
     public void createDraws(){
@@ -111,7 +116,8 @@ public class GUI extends GameObject{
         return new int[] {rec,slp,eat,stdy};
     }
 
-    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape)
+    @Override
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape)
     {
         stage.act();
         stage.draw();

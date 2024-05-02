@@ -7,8 +7,9 @@ import com.mygdx.game.Objects.PlayerController;
  * Uses the collision layer in the TileMap file to generate collisions
  */
 public class CollisionDetector {
-    private TiledMapTileLayer collisionLayer;
-    private PlayerController player;
+    private final TiledMapTileLayer collisionLayer;
+    private final PlayerController player;
+
     public CollisionDetector(PlayerController player, TiledMapTileLayer collisionLayer) {
         this.player = player;
         this.collisionLayer = collisionLayer;
@@ -38,49 +39,38 @@ public class CollisionDetector {
     }
 
     public boolean collidesRight() {
-        boolean collides = false;
-
-        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
-            if (collides = isCellBlocked(getX() + getBoundsWidth(), getY() + step)) {
-                break;
+        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+            if (isCellBlocked(getX() + getBoundsWidth(), getY() + step)) {
+                return true;
             }
         }
-        return collides;
+        return false;
     }
 
     public boolean collidesLeft() {
-        boolean collides = false;
-
-        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
-            if (collides = isCellBlocked(getX(), getY() + step)) {
-                break;
+        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+            if (isCellBlocked(getX(), getY() + step)) {
+                return true;
             }
         }
-
-        return collides;
+        return false;
     }
 
     public boolean collidesUp() {
-        boolean collides = false;
-
-        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
-            if (collides = isCellBlocked(getX() + step, getY() + getBoundsHeight())) {
-                break;
+        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+            if (isCellBlocked(getX() + step, getY() + getBoundsHeight())) {
+                return true;
             }
         }
-
-        return collides;
+        return false;
     }
 
     public boolean collidesDown() {
-        boolean collides = false;
-
-        for (float step = 4; step < getBoundsWidth()-4; step += (collisionLayer.getTileWidth()-8) / 4) {
-            if (collides = isCellBlocked(getX() + step, getY())) {
-                break;
+        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+            if (isCellBlocked(getX() + step, getY())) {
+                return true;
             }
         }
-
-        return collides;
+        return false;
     }
 }

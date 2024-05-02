@@ -12,13 +12,12 @@ import com.mygdx.game.HesHustle;
 
 
 public class EndScreen implements Screen{
-    final HesHustle game;
-    private Stage stage;
-    private Skin skin;
-
-    TextButton playAgainButton = new TextButton("Play Again", skin);
-    TextButton mainMenuButton = new TextButton("Main Menu", skin);
-    TextButton exitButton = new TextButton("Exit", skin);
+    private final HesHustle game;
+    private final Stage stage;
+    private final Skin skin;
+    private final TextButton playAgainButton;
+    private final TextButton mainMenuButton;
+    private final TextButton exitButton;
 
 
     public EndScreen(final HesHustle game) {
@@ -27,6 +26,9 @@ public class EndScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
 
         skin = new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"));
+        playAgainButton = new TextButton("Play Again", skin);
+        mainMenuButton = new TextButton("Main Menu", skin);
+        exitButton = new TextButton("Exit", skin);
         setupUi();
     }
 

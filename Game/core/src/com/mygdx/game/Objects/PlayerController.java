@@ -154,8 +154,8 @@ public class PlayerController extends GameObject implements InputProcessor {
 
     /**
      * Alters the direction vector to account for collisions
-     * @param dir
-     * @return
+     * @param dir .
+     * @return .
      */
     public Vector2 colCorrect(Vector2 dir)
     {
@@ -169,7 +169,7 @@ public class PlayerController extends GameObject implements InputProcessor {
 
     /**
      * Method to return animation to play
-     * @param Pstate
+     * @param Pstate .
      * @return Anim
      */
     public Animation getAnim(state Pstate)
@@ -212,13 +212,6 @@ public class PlayerController extends GameObject implements InputProcessor {
     }
     @Override
     public void render(Camera projection, HesHustle game, ShapeRenderer shape){
-        //Debug Box for player
-        /*
-        shape.setProjectionMatrix(projection);
-        shape.begin(ShapeRenderer.ShapeType.Line);
-        shape.setColor(Color.CHARTREUSE);
-        shape.rect(pos.x, pos.y, bounds.width, bounds.height);
-        shape.end();*/
         game.batch.begin();
         game.batch.draw(txr,pos.x, pos.y, bounds.width, bounds.height);
         game.batch.end();
@@ -229,7 +222,7 @@ public class PlayerController extends GameObject implements InputProcessor {
 
     /**
      * sets the nearest builiding value
-     * @param BD
+     * @param BD .
      */
     public void setBD(Building BD){
         nearBD = BD;
@@ -259,8 +252,8 @@ public class PlayerController extends GameObject implements InputProcessor {
 
     /**
      * When multiple keys pressed it cancels out opposing directions, added back on key up
-     * @param keycode
-     * @return
+     * @param keycode .
+     * @return .
      */
     public boolean onMultipleKeysDown(int keycode){
         if ((keycode==left && downKeys.contains(right)) || (keycode==right && downKeys.contains(left))) {
@@ -343,10 +336,5 @@ public class PlayerController extends GameObject implements InputProcessor {
     @Override
     public boolean scrolled(float amountX, float amountY) {
         return false;
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }

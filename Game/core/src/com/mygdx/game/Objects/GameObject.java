@@ -2,12 +2,10 @@ package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.HesHustle;
-import com.mygdx.game.Utils.ResourceManager;
 
 /** Base Class for most objects, Allows render and update to be inherited so in the main game objects can be looped through in a list
 

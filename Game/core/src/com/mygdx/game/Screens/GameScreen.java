@@ -1,6 +1,5 @@
 package com.mygdx.game.Screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -24,7 +23,6 @@ import com.mygdx.game.Utils.ScreenType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Main game loop
@@ -41,14 +39,12 @@ public class GameScreen implements Screen {
     private final List<Building> buildings;
 
     //Game objects
-    PlayerController Player;
-    Building ComSci,BBall,Duck,Piazza,Langwith;
-    TiledMapRenderer TmRender;
-    TiledMap tiledMap;
-    EventManager EventM;
+    private PlayerController Player;
+    private final TiledMapRenderer TmRender;
+    private final TiledMap tiledMap;
 
-    GUI gui;
-    LightCycle LC;
+    private GUI gui;
+    private LightCycle LC;
     private final Music BGmusic;
 
     public GameScreen(final HesHustle game) {
@@ -75,37 +71,37 @@ public class GameScreen implements Screen {
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
         collisionLayer.setVisible(false);
-        ComSci = new Building(530,380,100,100,"Computer\nScience\nDepartment");
-        BBall = new Building(1450,2000,100,100,"BasketBall");
-        Duck = new Building(2112,360,100,100,"Ducks");
-        Langwith = new Building(1360,1375,100,100,"Langwith");
-        Piazza = new Building(2550,1380,100,100,"Piazza");
+        Building comSci = new Building(530, 380, 100, 100, "Computer\nScience\nDepartment");
+        Building BBall = new Building(1450, 2000, 100, 100, "BasketBall");
+        Building duck = new Building(2112, 360, 100, 100, "Ducks");
+        Building langwith = new Building(1360, 1375, 100, 100, "Langwith");
+        Building piazza = new Building(2550, 1380, 100, 100, "Piazza");
 
-        buildings.add(ComSci);//separate building list to cycle through to find closest to player
+        buildings.add(comSci);//separate building list to cycle through to find closest to player
         buildings.add(BBall);
-        buildings.add(Duck);
-        buildings.add(Langwith);
-        buildings.add(Piazza);
+        buildings.add(duck);
+        buildings.add(langwith);
+        buildings.add(piazza);
 
-        EventM = new EventManager(game, gameClock);
-        Player = new PlayerController(1000,1000, EventM, collisionLayer);
-        gui = new GUI(game.batch,EventM, gameClock);
+        EventManager eventM = new EventManager(game, gameClock);
+        Player = new PlayerController(1000,1000, eventM, collisionLayer);
+        gui = new GUI(game.batch, eventM, gameClock);
         LC = new LightCycle();
 
 
-        activityImages.add(EventM.FeedDucks.getActivityImage());
-        activityImages.add(EventM.EatPiazza.getActivityImage());
-        activityImages.add(EventM.Sleep.getActivityImage());
-        activityImages.add(EventM.StudyCS.getActivityImage());
-        activityImages.add(EventM.PlayBBall.getActivityImage());
+        activityImages.add(eventM.FeedDucks.getActivityImage());
+        activityImages.add(eventM.EatPiazza.getActivityImage());
+        activityImages.add(eventM.Sleep.getActivityImage());
+        activityImages.add(eventM.StudyCS.getActivityImage());
+        activityImages.add(eventM.PlayBBall.getActivityImage());
 
         objects.add(Player);
 
-        objects.add(ComSci);
+        objects.add(comSci);
         objects.add(BBall);
-        objects.add(Duck);
-        objects.add(Langwith);
-        objects.add(Piazza);
+        objects.add(duck);
+        objects.add(langwith);
+        objects.add(piazza);
 
         Gdx.input.setInputProcessor(Player);
     }
@@ -117,7 +113,6 @@ public class GameScreen implements Screen {
         }
 
         Player.setBD(getNearest());
-        LC.getTime(gameClock.getHours(), gameClock.getMinutes());
 
         gui.update(delta);
 
@@ -144,15 +139,14 @@ public class GameScreen implements Screen {
 
 
         renderObjects();
-        LC.render(extendViewport.getCamera().combined,game,shape);//these could be in the objects list
-        gui.render(extendViewport.getCamera().combined,game,shape);
+        LC.render(extendViewport.getCamera(),game,shape);//these could be in the objects list
+        gui.render(extendViewport.getCamera(),game,shape);
         renderActivityImages();
 
                                                             // position of the projection matrix and we need it for the event render
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);
-            dispose();
         }
     }
     public void renderObjects()
@@ -168,23 +162,23 @@ public class GameScreen implements Screen {
         }
     }
 
-    // method updates the camera position so it follows the player but shows less out of bounds area
+    // method updates the camera position, so it follows the player but shows less out-of-bounds area
     public void updateCamera()
     {
         float x,y;
         float xConst = (float)1600/Gdx.graphics.getWidth(); // these constants are the ration of initial screen width to current
         float yConst = (float)900/Gdx.graphics.getHeight(); // if screen is half as wide it zooms out so its 2x smaller
 
-        float camWidth = extendViewport.getScreenWidth()/2;
-        float camHeight = extendViewport.getScreenHeight()/2;
+        float camWidth = (float) extendViewport.getScreenWidth() /2;
+        float camHeight = (float) extendViewport.getScreenHeight() /2;
 
         if (Player.pos.x > 2884 - camWidth*xConst) {
             x = 2884- camWidth*xConst;
-        } else if (Player.pos.x < camWidth*xConst) {x = camWidth*xConst;} else {x=Player.pos.x;}
+        } else x = Math.max(Player.pos.x, camWidth * xConst);
 
         if (Player.pos.y > 2238- camHeight*yConst) {
             y = 2238- camHeight*yConst;
-        } else if (Player.pos.y < camHeight*yConst) {y = camHeight*yConst;} else {y=Player.pos.y;}
+        } else y = Math.max(Player.pos.y, camHeight * yConst);
 
         extendViewport.getCamera().position.set(x,y,0);
     }
@@ -202,19 +196,20 @@ public class GameScreen implements Screen {
         }
         return closest;
     }
+
+    public GameClock getGameClock(){
+        return gameClock;
+    }
+
     private boolean checkGameOverCondition(){
-        if (gameClock.getDays() > 7)
-        {
-            return true;
-        }
-        return false;
+        return gameClock.getDays() > 7;
 
     }
 
     @Override
     public void resize(int width, int height) { //This is important for the GUI class to stay in aspect
         extendViewport.update(width,height);
-        gui.stage.getViewport().update(extendViewport.getScreenWidth(), extendViewport.getScreenHeight(),true);
+        gui.getStage().getViewport().update(extendViewport.getScreenWidth(), extendViewport.getScreenHeight(),true);
     }
 
     @Override
