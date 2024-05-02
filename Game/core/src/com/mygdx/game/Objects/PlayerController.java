@@ -3,15 +3,18 @@ package com.mygdx.game.Objects;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntSet;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.mygdx.game.Utils.EventManager;
+import com.mygdx.game.Utils.CollisionDetector;
+
 import java.util.Objects;
 
 /**Controller Class which the user interacts with the game through, has input processor which must be set active on each GameScreen
@@ -209,7 +212,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         return null;
     }
     @Override
-    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape){
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape){
         //Debug Box for player
         /*
         shape.setProjectionMatrix(projection);
@@ -344,7 +347,7 @@ public class PlayerController extends GameObject implements InputProcessor {
     }
 
     @Override
-    public void Dispose() {
+    public void dispose() {
 
     }
 }

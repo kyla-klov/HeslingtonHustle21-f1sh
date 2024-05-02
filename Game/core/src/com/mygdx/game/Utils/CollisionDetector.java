@@ -1,6 +1,7 @@
-package com.mygdx.game.Objects;
+package com.mygdx.game.Utils;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.mygdx.game.Objects.PlayerController;
 
 /**
  * Uses the collision layer in the TileMap file to generate collisions

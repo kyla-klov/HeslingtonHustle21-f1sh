@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Objects.Ball;
-import com.mygdx.game.Objects.BallPhysics;
+import com.mygdx.game.Utils.BallPhysics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,21 +18,23 @@ import java.util.List;
 public class BasketBallScreen implements Screen, InputProcessor {
     List<Vector3> horSurf;
     List<Vector3> vertSurf;
+    List<Rectangle> rectObjects;
     Ball ball;
     BallPhysics ballPhysics;
     ShapeRenderer shapeRenderer;
-    Rectangle rect1;
-    Rectangle rect2;
 
     public BasketBallScreen() {
         horSurf = new ArrayList<>();
         vertSurf = new ArrayList<>();
+        rectObjects = new ArrayList<>();
         horSurf.add(new Vector3(-100,0,2000));
         ball = new Ball(300, 500, 50);
-        rect1 = new Rectangle(1300, 300, 10, 100);
-        rect2 = new Rectangle(1415, 300, 10, 100);
-        addRectangleSurfaces(rect1);
-        addRectangleSurfaces(rect2);
+        rectObjects.add(new Rectangle(1300, 300, 10, 100));
+        rectObjects.add(new Rectangle(1415, 300, 10, 100));
+        rectObjects.add(new Rectangle(1425, 400, 10, 100));
+        for (Rectangle r : rectObjects) {
+            addRectangleSurfaces(r);
+        }
         ballPhysics = new BallPhysics(horSurf, vertSurf, ball);
         shapeRenderer = new ShapeRenderer();
     }
@@ -53,11 +55,12 @@ public class BasketBallScreen implements Screen, InputProcessor {
     public void render(float delta) {
         ballPhysics.adjustBall(delta);
         ball.update(delta);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled); // or ShapeType.Line for an outline
-        shapeRenderer.rect(rect1.x, rect1.y, rect1.width, rect1.height);
-        shapeRenderer.rect(rect2.x, rect2.y, rect2.width, rect2.height);
+        for (Rectangle r : rectObjects) {
+            shapeRenderer.rect(r.x, r.y, r.width, r.height);
+        }
         shapeRenderer.end();
         ball.render();
     }

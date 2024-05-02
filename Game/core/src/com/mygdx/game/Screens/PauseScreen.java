@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.mygdx.game.Utils.ScreenType;
 
 
 public class PauseScreen implements Screen {
@@ -19,7 +20,7 @@ public class PauseScreen implements Screen {
     private Skin skin;
     private GameScreen gameScreen;
 
-    public PauseScreen(final HesHustle game, GameScreen gameScreen) {
+    public PauseScreen(final HesHustle game) {
         this.game = game;
         this.gameScreen = gameScreen;
         stage = new Stage(new ScreenViewport());
@@ -40,13 +41,13 @@ public class PauseScreen implements Screen {
         resumeButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 // Ensure this transitions back to your game screen, adjusting as necessary
-                game.setScreen(gameScreen);
+                game.screenManager.setScreen(ScreenType.GAME_SCREEN);
             }
         });
         mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new MenuScreen(game));
+                game.screenManager.setScreen(ScreenType.MENU_SCREEN);
             }
         });
         table.add(resumeButton).pad(10).row();

@@ -4,10 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-import com.mygdx.game.Objects.EventManager;
+import com.mygdx.game.Utils.EventManager;
 import org.junit.runner.RunWith;
-
-import java.util.Optional;
 
 @RunWith(GdxTestRunner.class)
 public class EventManagerTest {

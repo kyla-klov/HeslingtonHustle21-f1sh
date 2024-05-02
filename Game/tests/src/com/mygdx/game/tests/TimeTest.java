@@ -1,9 +1,8 @@
 package com.mygdx.game.tests;
 
-import com.badlogic.gdx.Gdx;
 import org.junit.runner.RunWith;
 import org.junit.Test;
-import com.mygdx.game.Objects.EventManager;
+import com.mygdx.game.Utils.EventManager;
 
 import static org.junit.Assert.assertTrue;
 

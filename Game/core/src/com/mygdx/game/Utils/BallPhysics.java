@@ -1,7 +1,8 @@
-package com.mygdx.game.Objects;
+package com.mygdx.game.Utils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.Objects.Ball;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class BallPhysics {
             this.type = type;
         }
     }
-    private final float reduction = 0.3f;
+    private final float reduction = 0.4f;
     private final List<Vector3> horSurf;
     private final List<Vector3> vertSurf;
     private final List<Vector2> points;
@@ -155,7 +156,6 @@ public class BallPhysics {
     private void calcPoints(){
         for (Vector3 surface: horSurf){
             Vector2 point = new Vector2(surface.x, surface.y);
-            System.out.println(point);
             if (uniquePoint(point)) points.add(point);
             point = new Vector2(surface.x + surface.z, surface.y);
             if (uniquePoint(point)) points.add(point);

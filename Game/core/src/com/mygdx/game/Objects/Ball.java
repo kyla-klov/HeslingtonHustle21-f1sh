@@ -35,7 +35,7 @@ public class Ball {
 
     public void render(){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled); // or ShapeType.Line for an outline
-        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.setColor(Color.ORANGE);
         shapeRenderer.circle(position.x, position.y, radius);
         shapeRenderer.end();
     }

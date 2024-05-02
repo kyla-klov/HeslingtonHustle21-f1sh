@@ -15,6 +15,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
+import com.mygdx.game.Utils.EventManager;
+import com.mygdx.game.Utils.ResourceManager;
+import com.mygdx.game.Utils.ScreenType;
 
 
 import java.util.ArrayList;
@@ -24,11 +27,15 @@ import java.util.List;
  * Main game loop
  */
 public class GameScreen implements Screen {
-    final HesHustle game;
-    public ExtendViewport extendViewport;
-    public ShapeRenderer shape;
-    public final List<GameObject> objects;
-    public final List<Building> buildings;
+
+    private final ResourceManager resourceManager;
+    private final HesHustle game;
+    private final ExtendViewport extendViewport;
+    private final ShapeRenderer shape;
+    private final List<GameObject> objects;
+    private final List<ActivityImage> activityImages;
+    private final List<Building> buildings;
+
     //Game objects
     PlayerController Player;
     Building ComSci,BBall,Duck,Piazza,Langwith;
@@ -38,22 +45,21 @@ public class GameScreen implements Screen {
 
     GUI gui;
     LightCycle LC;
-    private Music BGmusic;
+    private final Music BGmusic;
 
     public GameScreen(final HesHustle game) {
         this.game = game;
-
+        this.resourceManager = new ResourceManager();
         extendViewport = new ExtendViewport(1600,900);
-        shape = new ShapeRenderer();
-        tiledMap = new TmxMapLoader().load("MAP/map1.tmx");
+        shape = resourceManager.addDisposable(new ShapeRenderer());
+        tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
 
-
         this.objects = new ArrayList<>();
+        this.activityImages = new ArrayList<>();
         this.buildings = new ArrayList<>();
 
-        BGmusic = Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3"));
-        BGmusic.play();
+        BGmusic = resourceManager.addDisposable(Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
         BGmusic.setLooping(true);
 
 
@@ -71,7 +77,7 @@ public class GameScreen implements Screen {
         Langwith = new Building(1360,1375,100,100,"Langwith");
         Piazza = new Building(2550,1380,100,100,"Piazza");
 
-        buildings.add(ComSci);//seperate building list to cycle through to find closest to player
+        buildings.add(ComSci);//separate building list to cycle through to find closest to player
         buildings.add(BBall);
         buildings.add(Duck);
         buildings.add(Langwith);
@@ -82,7 +88,14 @@ public class GameScreen implements Screen {
         gui = new GUI(game.batch,EventM);
         LC = new LightCycle();
 
-        objects.add(EventM);
+
+        //objects.add(EventM);
+        activityImages.add(EventM.FeedDucks.getActivityImage());
+        activityImages.add(EventM.EatPiazza.getActivityImage());
+        activityImages.add(EventM.Sleep.getActivityImage());
+        activityImages.add(EventM.StudyCS.getActivityImage());
+        activityImages.add(EventM.PlayBBall.getActivityImage());
+
         objects.add(Player);
 
         objects.add(ComSci);
@@ -91,8 +104,6 @@ public class GameScreen implements Screen {
         objects.add(Langwith);
         objects.add(Piazza);
 
-
-
         Gdx.input.setInputProcessor(Player);
     }
     public void update(float delta) {
@@ -100,6 +111,8 @@ public class GameScreen implements Screen {
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
+
+        EventM.update(delta);
 
         Player.setBD(getNearest());
         LC.getTime(EventM.TMin, EventM.TSec);
@@ -130,21 +143,28 @@ public class GameScreen implements Screen {
         renderObjects();
         LC.render(extendViewport.getCamera().combined,game,shape);//these could be in the objects list
         gui.render(extendViewport.getCamera().combined,game,shape);
+        renderActivityImages();
 
-        EventM.render(extendViewport.getCamera(),game,shape);//need camera not camera.combined because you cant get
                                                             // position of the projection matrix and we need it for the event render
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            game.setScreen(new PauseScreen(game,this));
+            game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);
             dispose();
         }
     }
     public void renderObjects()
     {
         for (GameObject gameObject : objects) {
-            gameObject.render(extendViewport.getCamera().combined,game,shape);
+            gameObject.render(extendViewport.getCamera(),game,shape);
         }
     }
+
+    public void renderActivityImages(){
+        for (ActivityImage activityImage : activityImages) {
+            activityImage.render(extendViewport.getCamera(),game,shape);
+        }
+    }
+
     // method updates the camera position so it follows the player but shows less out of bounds area
     public void updateCamera()
     {
@@ -197,6 +217,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(Player);
+        BGmusic.play();
     }
 
     @Override
@@ -214,7 +235,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        resourceManager.disposeAll();
     }
 
 }

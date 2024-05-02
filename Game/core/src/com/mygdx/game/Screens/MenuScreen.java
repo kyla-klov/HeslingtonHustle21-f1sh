@@ -2,41 +2,56 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.mygdx.game.Utils.ResourceManager;
+import com.mygdx.game.Utils.ScreenType;
 
 
 public class MenuScreen implements Screen {
-    final HesHustle game;
-    OrthographicCamera camera;
-    private Skin skin;
-    private Stage stage;
-    private Label titleLabel;
+    private final HesHustle game;
+    private final Stage stage;
+    private final ResourceManager resourceManager;
 
-
-    public MenuScreen(final HesHustle game) {
+    public MenuScreen(HesHustle game) {
         this.game = game;
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 800);
+        this.resourceManager = new ResourceManager();
+        this.stage =  resourceManager.addDisposable(new Stage(new ScreenViewport()));
+        initialiseMenu();
+    }
 
-        stage = new Stage(new ScreenViewport());
+    private void initialiseMenu(){
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"));
+        Skin skin = resourceManager.addDisposable(new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json")));
 
-        titleLabel = new Label("Heslington Hustle", skin, "default");
+        Label titleLabel = new Label("Heslington Hustle", skin, "default");
         titleLabel.setFontScale(2.0f);
 
         TextButton playButton = new TextButton("Play", skin);
+        playButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+            }
+        });
+
+
         TextButton exitButton = new TextButton("Exit", skin);
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
+            }
+        });
 
         Table table = new Table();
         table.setFillParent(true);
@@ -45,22 +60,6 @@ public class MenuScreen implements Screen {
         table.add(exitButton).pad(10); // Add the exit button
 
         stage.addActor(table);
-
-        playButton.addListener(event -> {
-            if (!event.isHandled())
-                return false;
-            game.setScreen(new GameScreen(game));
-            return true;
-        });
-
-        exitButton.addListener(event -> {
-            if (!event.isHandled()) return false;
-            Gdx.app.exit();
-            return true;
-        });
-
-
-
     }
 
     @Override
@@ -94,7 +93,6 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        if (stage != null) stage.dispose();
-        if (skin != null) skin.dispose();
+        resourceManager.disposeAll();
     }
 }

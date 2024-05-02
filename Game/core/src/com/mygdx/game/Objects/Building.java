@@ -1,6 +1,7 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,18 +22,16 @@ public class Building extends GameObject{
     public Building(float x, float y, float width, float height,String name) {
         super(x, y, width, height);
         this.name = name;
-
     }
 
     public void update(float delta)
     {
         super.update(delta);
-
     }
 
     @Override
-    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape) {
-        shape.setProjectionMatrix(projection);
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
+        shape.setProjectionMatrix(projection.combined);
         shape.begin(ShapeRenderer.ShapeType.Filled);
         shape.setColor(Color.RED);
         shape.rect(pos.x, pos.y, 100, 100);
@@ -43,7 +42,7 @@ public class Building extends GameObject{
         game.batch.end();
     }
     @Override
-    public void Dispose() {
+    public void dispose() {
 
     }
 }

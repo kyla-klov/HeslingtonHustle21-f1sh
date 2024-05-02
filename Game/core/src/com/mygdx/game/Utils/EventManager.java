@@ -1,9 +1,6 @@
-package com.mygdx.game.Objects;
+package com.mygdx.game.Utils;
 
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.mygdx.game.HesHustle;
+import com.mygdx.game.Objects.ActivityImage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +10,17 @@ import java.util.List;
  * Stores Time, Energy, Events etc.
  * Helps interaction between player and buildings
  */
-public class EventManager extends GameObject {
+public class EventManager {
     public Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
     public Event curEvent = null;
     public Float TRaw, TWait;
     public Integer TSec, TMin, energy, day;
-    boolean frozen = false;
+    public boolean frozen = false;
     public List<Event> playedEvents;
+    private final ResourceManager resourceManager;
+
     public EventManager() {
-        super(0, 0, 0, 0);
+        resourceManager = new ResourceManager();
         playedEvents = new ArrayList<>();
         TRaw = 0.0f;
         TSec = 0;
@@ -33,11 +32,11 @@ public class EventManager extends GameObject {
     }
 
     public void generateEvents() {
-        FeedDucks = new Event(1, 2, 10, -5, Event.type.RECREATIONAL, "", new Texture("Activitys/lakemap.png"));
-        StudyCS = new Event(3, -20, 20, -10, Event.type.STUDY, 15, "", new Texture("Activitys/cs.png"));
-        PlayBBall = new Event(2, -30, 50, 10, Event.type.RECREATIONAL, 25, "", new Texture("Activitys/basketballcourt.png"));
-        Sleep = new Event(8, 90, Event.type.SLEEP, "", new Texture("Activitys/langwith.png"));
-        EatPiazza = new Event(1, 10, Event.type.EAT, "", new Texture("Activitys/piazza.png"));
+        FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/lakemap.png")));
+        StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
+        PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", resourceManager.addDisposable(new ActivityImage("Activitys/basketballcourt.png")));
+        Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
+        EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
     }
 
     public void interact(String name) {
@@ -67,17 +66,20 @@ public class EventManager extends GameObject {
             playedEvents.add(curEvent);
             TWait = 8f;
             frozen = true;
+            curEvent.getActivityImage().setActive();
             updateTime(curEvent);
             updateEnergy(curEvent);
         }
     }
 
-    @Override
     public void update(float deltaTime) {
         TRaw += deltaTime;
         TWait -= deltaTime;
         if (TWait < 0) {
-            curEvent = null;
+            if (curEvent != null) {
+                curEvent.getActivityImage().setInactive();
+                curEvent = null;
+            }
             frozen = false;
         }
         if (TRaw >= 0.5f) {
@@ -96,7 +98,6 @@ public class EventManager extends GameObject {
     }
 
     public String getTime() {
-        String forTime = "";
         String z1 = "", z2 = "";
         if (TMin < 10) {
             z1 = "0";
@@ -108,22 +109,8 @@ public class EventManager extends GameObject {
         return "Time: " + z1 + TMin + ":" + z2 + TSec;
     }
 
-
-    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
-        if (curEvent != null) {
-            curEvent.render(projection, game, shape);
-        }
-
-    }
-
-    /**
-     * returns the score for the game based on the list of events
-     *
-     * @return score an integer representing the players grades
-     */
-
     public void updateTime(Event e) {
-        if (e.getEventType() == Event.type.SLEEP) {
+        if (e.getEventType() == Event.Type.SLEEP) {
             TSec = 0;
             TMin = 8;
             day++;
@@ -158,7 +145,7 @@ public class EventManager extends GameObject {
         int recTotal = 0;
         double studyDebuff = 1;
         double recDebuff = 1;
-        int fatigue = 0;
+        //int fatigue = 0;
         for (Event event : playedEvents) {
             switch (event.getEventType()) {
                 case EAT:
@@ -192,6 +179,6 @@ public class EventManager extends GameObject {
         score += (int) Math.round(recDebuff * recTotal);
 
 
-        return (int) score;
+        return score;
     }
 }

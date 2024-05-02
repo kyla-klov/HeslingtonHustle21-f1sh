@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
+import com.mygdx.game.Utils.Event;
+import com.mygdx.game.Utils.EventManager;
 
 public class GUI extends GameObject{
     private Skin skin;

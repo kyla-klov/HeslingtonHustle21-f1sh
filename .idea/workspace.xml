@@ -40,7 +40,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/hanna/Desktop/HeslingtonHustle21-f1sh/Game/build.gradle",
+    "last_opened_file_path": "C:/Users/Ben/IdeaProjects/21/Game",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -68,7 +68,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-11.0.22-corretto-11.0.22-4caba194b151-868cef46" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -81,6 +82,7 @@
       <option name="presentableId" value="Default" />
       <updated>1710509960435</updated>
       <workItem from="1710509966444" duration="522000" />
+      <workItem from="1714462249794" duration="63000" />
     </task>
     <servers />
   </component>
