@@ -44,7 +44,7 @@ public class PlayerController extends GameObject implements InputProcessor {
     /**
      * Animation for each state
      */
-    Anim IDLE_LEFT,
+    Animation IDLE_LEFT,
             IDLE_UP,
             IDLE_RIGHT,
             IDLE_DOWN,
@@ -57,7 +57,7 @@ public class PlayerController extends GameObject implements InputProcessor {
     public state Pstate;
     /**Current player animation
      */
-    public Anim Panim;
+    public Animation panim;
     /**Stores current texture region to be rendered
      *
      */
@@ -89,7 +89,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         super(xPos,yPos,width,height);
         Pstate = state.IDLE_DOWN;
         loadAnims();
-        Panim = IDLE_DOWN;
+        panim = IDLE_DOWN;
         this.EM = EM;
         nearBD = null;
 
@@ -103,14 +103,14 @@ public class PlayerController extends GameObject implements InputProcessor {
      * Function to generate all the Animations from the sprite sheets
      */
     private void loadAnims() {
-        IDLE_LEFT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
-        IDLE_UP = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),6,11,24,12);
-        IDLE_RIGHT = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),0,5,24,12);
-        IDLE_DOWN = new Anim(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),18,23,24,12);
-        WALK_LEFT = new Anim(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),12,17,24,12);
-        WALK_UP = new Anim(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),6,11,24,12);
-        WALK_RIGHT = new Anim(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),0,5,24,12);
-        WALK_DOWN = new Anim(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),18,23,24,12);
+        IDLE_LEFT = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
+        IDLE_UP = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),6,11,24,12);
+        IDLE_RIGHT = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),0,5,24,12);
+        IDLE_DOWN = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),18,23,24,12);
+        WALK_LEFT = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),12,17,24,12);
+        WALK_UP = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),6,11,24,12);
+        WALK_RIGHT = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),0,5,24,12);
+        WALK_DOWN = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),18,23,24,12);
     }
 
     /**
@@ -172,7 +172,7 @@ public class PlayerController extends GameObject implements InputProcessor {
      * @param Pstate
      * @return Anim
      */
-    public Anim getAnim(state Pstate)
+    public Animation getAnim(state Pstate)
     {
         Vector2 dir = getDir();
         if (Objects.equals(dir, new Vector2(0, 0)))
