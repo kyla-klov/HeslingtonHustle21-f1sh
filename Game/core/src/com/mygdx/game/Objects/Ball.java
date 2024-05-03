@@ -1,8 +1,8 @@
 package com.mygdx.game.Objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Ball {
@@ -10,34 +10,33 @@ public class Ball {
     private final Vector2 position;
     private final Vector2 velocity;
     private final Vector2 acceleration;
-    private final ShapeRenderer shapeRenderer;
+    private final Texture txt;
 
-    public Ball(float x, float y, float radius) {
+    private float angle = 0;
+
+    public Ball(Texture txt, float x, float y, float radius) {
         this.radius = radius;
         this.position = new Vector2(x, y);
         this.velocity = new Vector2(100, 0);
         this.acceleration = new Vector2(0, 0);
-        this.shapeRenderer = new ShapeRenderer();
-
+        this.txt = txt;
     }
 
-    public void update(float deltaTime){
+    public void update(float deltaTime, float wldWidth){
         position.add(velocity.cpy().scl(deltaTime));
         velocity.add(acceleration.cpy().scl(deltaTime));
-
-        if (position.x > Gdx.graphics.getWidth()){
-            position.x -= Gdx.graphics.getWidth();
+        float angularVelocity = (180 * velocity.x) / (3.14f * radius);
+        angle -= angularVelocity * deltaTime;
+        if (position.x > wldWidth){
+            position.x -= wldWidth;
         }
         if (position.x < 0){
-            position.x += Gdx.graphics.getWidth();
+            position.x += wldWidth;
         }
     }
 
-    public void render(){
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled); // or ShapeType.Line for an outline
-        shapeRenderer.setColor(Color.ORANGE);
-        shapeRenderer.circle(position.x, position.y, radius);
-        shapeRenderer.end();
+    public void render(SpriteBatch batch){
+        batch.draw(new TextureRegion(txt), position.x - radius, position.y - radius, (int) radius, (int) radius, (int) (2*radius), (int) (2*radius), 1, 1, angle);
     }
 
     public float getRadius() {

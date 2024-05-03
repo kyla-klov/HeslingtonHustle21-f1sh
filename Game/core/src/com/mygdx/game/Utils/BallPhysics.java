@@ -22,18 +22,17 @@ public class BallPhysics {
         }
     }
     private final float reduction = 0.4f;
-    private final List<Vector3> horSurf;
-    private final List<Vector3> vertSurf;
-    private final List<Vector2> points;
+    private final List<Collider> colliders;
     private final Ball ball;
 
-    public BallPhysics(List<Vector3> horSurf, List<Vector3> vertSurf, Ball ball){
-        this.horSurf = horSurf;
-        this.vertSurf = vertSurf;
-        this.points = new ArrayList<>();
+    public BallPhysics(Ball ball){
+        this.colliders = new ArrayList<>();
         this.ball = ball;
-        calcPoints();
         ball.setAcceleration(new Vector2(ball.getAcceleration().x, -2000));
+    }
+
+    public void addCollider(Collider collider){
+        colliders.add(collider);
     }
 
     public void adjustBall(float deltaTime){
@@ -43,26 +42,38 @@ public class BallPhysics {
         }
     }
 
-    public boolean detectCollision(Vector2 nextPos){
+    private boolean detectCollision(Vector2 nextPos){
         Vector2 dir = nextPos.cpy().sub(ball.getPosition()).nor();
         float grad = dir.y/dir.x;
         CollisionInfo closest = null;
-        for(Vector3 surface : horSurf){
-            CollisionInfo collision = horizontalCollision(surface, nextPos, grad);
-            if (closest == null || (collision != null && collision.score < closest.score)){
-                closest = collision;
+        for (Collider collider : colliders) {
+            for (Vector3 surface : collider.getHorSurfs()) {
+                CollisionInfo collision = horizontalCollision(surface, nextPos, grad);
+                if (closest == null || (collision != null && collision.score < closest.score)) {
+                    closest = collision;
+                }
             }
-        }
-        for(Vector3 surface : vertSurf){
-            CollisionInfo collision = verticalCollision(surface, nextPos, grad);
-            if (closest == null || (collision != null && collision.score < closest.score)){
-                closest = collision;
+            for (Vector3 surface : collider.getVerSurfs()) {
+                CollisionInfo collision = verticalCollision(surface, nextPos, grad);
+                if (closest == null || (collision != null && collision.score < closest.score)) {
+                    closest = collision;
+                }
             }
-        }
-        for(Vector2 point : points){
-            CollisionInfo collision = pointCollision(point, nextPos, grad);
-            if (closest == null || (collision != null && collision.score < closest.score)){
-                closest = collision;
+
+            for (Vector2 point : collider.getPoints()) {
+                CollisionInfo collision = pointCollision(point, nextPos, grad, false);
+                if (closest == null || (collision != null && collision.score < closest.score)) {
+                    closest = collision;
+                }
+            }
+
+            if (collider.isDampedPointsActive()) {
+                for (Vector2 point : collider.getDampedPoints()) {
+                    CollisionInfo collision = pointCollision(point, nextPos, grad, true);
+                    if (closest == null || (collision != null && collision.score < closest.score)) {
+                        closest = collision;
+                    }
+                }
             }
         }
         if (closest != null){
@@ -109,7 +120,8 @@ public class BallPhysics {
         return null;
     }
 
-    private CollisionInfo pointCollision(Vector2 point, Vector2 nextPos, float grad){
+
+    private CollisionInfo pointCollision(Vector2 point, Vector2 nextPos, float grad, boolean damped){
         Vector2 p = point.cpy().sub(ball.getPosition());
         Vector2 intercept = new Vector2();
         float c = p.y - grad * p.x;
@@ -123,13 +135,17 @@ public class BallPhysics {
         if (dist * distTravelled > 0 && Math.abs(dist) <= Math.abs(distTravelled)){
             float score = Math.abs(dist / ball.getVelocity().x);
             Vector2 fixedPosition = point.cpy().sub(intercept);
-            Vector2 velocity = bounce(-intercept.x/intercept.y);
+            Vector2 velocity = bounce(-intercept.x/intercept.y, damped);
             return new CollisionInfo(score, velocity, fixedPosition, "point");
         }
         return null;
     }
 
-    public Vector2 bounce(float grad) {
+    private Vector2 bounce(float grad, boolean damped) {
+        float reduction = this.reduction;
+        if (damped) {
+            reduction /= 10;
+        }
         double normFactor = Math.sqrt(grad * grad + 1);
         Vector2 n = new Vector2((float) (grad / normFactor), (float) (-1 / normFactor));
 
@@ -144,27 +160,4 @@ public class BallPhysics {
         return newNormalComponent.add(newTangentialComponent);
     }
 
-    private boolean uniquePoint(Vector2 point){
-        for (Vector2 p : points){
-            if (p.x == point.x && p.y == point.y){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void calcPoints(){
-        for (Vector3 surface: horSurf){
-            Vector2 point = new Vector2(surface.x, surface.y);
-            if (uniquePoint(point)) points.add(point);
-            point = new Vector2(surface.x + surface.z, surface.y);
-            if (uniquePoint(point)) points.add(point);
-        }
-        for (Vector3 surface: vertSurf){
-            Vector2 point = new Vector2(surface.x, surface.y);
-            if (uniquePoint(point)) points.add(point);
-            point = new Vector2(surface.x, surface.y + surface.z);
-            if (uniquePoint(point)) points.add(point);
-        }
-    }
 }

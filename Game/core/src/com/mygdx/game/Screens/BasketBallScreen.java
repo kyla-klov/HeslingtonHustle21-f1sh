@@ -5,47 +5,70 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.Ball;
+import com.mygdx.game.Objects.BallHoop;
 import com.mygdx.game.Utils.BallPhysics;
+import com.mygdx.game.Utils.Collider;
+import com.mygdx.game.Utils.GameClock;
+import com.mygdx.game.Utils.ResourceManager;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class BasketBallScreen implements Screen, InputProcessor {
-    List<Vector3> horSurf;
-    List<Vector3> vertSurf;
-    List<Rectangle> rectObjects;
-    Ball ball;
-    BallPhysics ballPhysics;
-    ShapeRenderer shapeRenderer;
+    private final Ball ball;
+    private final BallPhysics ballPhysics;
+    private final BallHoop ballHoop;
+    private final GameClock gameClock;
+    private final HesHustle game;
+    private final OrthographicCamera camera;
+    private final Viewport vp;
+    private final ResourceManager resourceManager;
+    private final Texture hoopTexture;
+    private final Texture backgroundTexture;
+    private boolean goal;
 
     @SuppressWarnings("unused")
     public BasketBallScreen(HesHustle game) {
-        horSurf = new ArrayList<>();
-        vertSurf = new ArrayList<>();
-        rectObjects = new ArrayList<>();
-        horSurf.add(new Vector3(-100,0,2000));
-        ball = new Ball(300, 500, 50);
-        rectObjects.add(new Rectangle(1300, 300, 10, 100));
-        rectObjects.add(new Rectangle(1415, 300, 10, 100));
-        rectObjects.add(new Rectangle(1425, 400, 10, 100));
-        for (Rectangle r : rectObjects) {
-            addRectangleSurfaces(r);
-        }
-        ballPhysics = new BallPhysics(horSurf, vertSurf, ball);
-        shapeRenderer = new ShapeRenderer();
+        this.game = game;
+        resourceManager = new ResourceManager();
+        hoopTexture = resourceManager.addDisposable(new Texture("Activitys/basketball/basketball_hoop.png"));
+        backgroundTexture = resourceManager.addDisposable(new Texture("Activitys/basketball/basketball_background.png"));
+
+        ball = new Ball(resourceManager.addDisposable(new Texture("Activitys/basketball/basketball.png")), 300, 500, 35);
+        ballHoop = new BallHoop(535, 330, 110, 10, 20);
+        ballPhysics = new BallPhysics(ball);
+        gameClock = new GameClock();
+        camera = new OrthographicCamera();
+        vp = new FitViewport(800, 600, camera);
+        goal = false;
+        camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);
+        camera.update();
+
+        Collider floor = new Collider();
+        floor.addSurface(new Vector3(-5000,0,10000), true);
+        ballPhysics.addCollider(floor);
+        ballPhysics.addCollider(ballHoop.getCollider());
     }
 
-    public void addRectangleSurfaces(Rectangle obj){
-        horSurf.add(new Vector3(obj.x, obj.y, obj.width));
-        horSurf.add(new Vector3(obj.x, obj.y + obj.height, obj.width));
-        vertSurf.add(new Vector3(obj.x, obj.y, obj.height));
-        vertSurf.add(new Vector3(obj.x + obj.width, obj.y, obj.height));
+    public void update(float delta){
+        camera.update();
+        gameClock.update(delta);
+        if (!goal && ballHoop.isGoal(ball, delta)){
+            goal = true;
+            gameClock.addEvent(f -> {
+                ball.setPosition(new Vector2(100, 100));
+                ball.setVelocity(new Vector2(10, 0));
+                goal = false;
+            }, 0.5f);
+        }
+        ballPhysics.adjustBall(delta);
+        ball.update(delta, vp.getWorldWidth());
     }
 
     @Override
@@ -55,21 +78,38 @@ public class BasketBallScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        ballPhysics.adjustBall(delta);
-        ball.update(delta);
-        Gdx.gl.glClearColor(0, 0, 1, 1);
+        update(delta);
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled); // or ShapeType.Line for an outline
-        for (Rectangle r : rectObjects) {
-            shapeRenderer.rect(r.x, r.y, r.width, r.height);
-        }
-        shapeRenderer.end();
-        ball.render();
+
+        vp.apply();
+
+        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
+        Gdx.gl.glScissor(vp.getScreenX(), vp.getScreenY(), vp.getScreenWidth(), vp.getScreenHeight());
+
+
+        Gdx.gl.glClearColor(0.5f, 0.7f, 0.9f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
+
+        camera.update();
+
+        game.batch.setProjectionMatrix(camera.combined);
+
+        game.batch.begin();
+        game.batch.draw(backgroundTexture, 0, 0, 800, 600);
+
+        ball.render(game.batch);
+
+        game.batch.draw(hoopTexture, 0, 0, 800, 600);
+        game.batch.end();
     }
 
     @Override
     public void resize(int width, int height) {
-
+        vp.update(width, height);
     }
 
     @Override
@@ -89,7 +129,7 @@ public class BasketBallScreen implements Screen, InputProcessor {
 
     @Override
     public void dispose() {
-
+        resourceManager.disposeAll();
     }
 
     @Override
