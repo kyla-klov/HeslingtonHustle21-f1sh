@@ -17,7 +17,7 @@ public class Ball {
     public Ball(Texture txt, float x, float y, float radius) {
         this.radius = radius;
         this.position = new Vector2(x, y);
-        this.velocity = new Vector2(100, 0);
+        this.velocity = new Vector2(0, 0);
         this.acceleration = new Vector2(0, 0);
         this.txt = txt;
     }

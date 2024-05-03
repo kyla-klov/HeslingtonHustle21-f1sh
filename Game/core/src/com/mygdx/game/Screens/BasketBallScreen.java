@@ -40,8 +40,8 @@ public class BasketBallScreen implements Screen, InputProcessor {
         hoopTexture = resourceManager.addDisposable(new Texture("Activitys/basketball/basketball_hoop.png"));
         backgroundTexture = resourceManager.addDisposable(new Texture("Activitys/basketball/basketball_background.png"));
 
-        ball = new Ball(resourceManager.addDisposable(new Texture("Activitys/basketball/basketball.png")), 300, 500, 35);
-        ballHoop = new BallHoop(535, 330, 110, 10, 20);
+        ball = new Ball(resourceManager.addDisposable(new Texture("Activitys/basketball/basketball.png")), 100, 100, 35);
+        ballHoop = new BallHoop(535, 330, 100, 15, 20);
         ballPhysics = new BallPhysics(ball);
         gameClock = new GameClock();
         camera = new OrthographicCamera();
@@ -51,7 +51,8 @@ public class BasketBallScreen implements Screen, InputProcessor {
         camera.update();
 
         Collider floor = new Collider();
-        floor.addSurface(new Vector3(-5000,0,10000), true);
+        floor.addSurface(new Vector3(-200,0,1000), true);
+        ball.setVelocity(new Vector2(10, 0));
         ballPhysics.addCollider(floor);
         ballPhysics.addCollider(ballHoop.getCollider());
     }
@@ -65,7 +66,7 @@ public class BasketBallScreen implements Screen, InputProcessor {
                 ball.setPosition(new Vector2(100, 100));
                 ball.setVelocity(new Vector2(10, 0));
                 goal = false;
-            }, 0.5f);
+            }, 0.75f);
         }
         ballPhysics.adjustBall(delta);
         ball.update(delta, vp.getWorldWidth());
