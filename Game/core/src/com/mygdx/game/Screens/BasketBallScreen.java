@@ -40,7 +40,7 @@ public class BasketBallScreen implements Screen, InputProcessor {
         hoopTexture = resourceManager.addDisposable(new Texture("Activitys/basketball/basketball_hoop.png"));
         backgroundTexture = resourceManager.addDisposable(new Texture("Activitys/basketball/basketball_background.png"));
 
-        ball = new Ball(resourceManager.addDisposable(new Texture("Activitys/basketball/basketball.png")), 100, 100, 35);
+        ball = new Ball(resourceManager.addDisposable(new Texture("Activitys/basketball/basketball.png")), 100, 100, 40);
         ballHoop = new BallHoop(535, 330, 100, 15, 20);
         ballPhysics = new BallPhysics(ball);
         gameClock = new GameClock();

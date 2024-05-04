@@ -22,19 +22,10 @@ public class BallHoop {
 
         Vector2[] vectors = new Vector2[] {
                 new Vector2(x + hoopWidth / 110f * 20, y - height),
-                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 14), y - height),
+                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 13), y - height),
 
                 new Vector2(x + hoopWidth / 110f * 24, y - height / 20 * 30),
-                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 18), y - height / 20 * 30),
-
-                new Vector2(x + hoopWidth / 110f * 24, y - height / 20 * 40),
-                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 18.5f), y - height / 20 * 40),
-
-                new Vector2(x + hoopWidth / 110f * (hoopWidth / 110f * 26), y - height / 20 * 50),
-                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 20), y - height / 20 * 50),
-
-                new Vector2(x + hoopWidth / 110f * 27, y - height / 20 * 70),
-                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 21), y - height / 20 * 70)
+                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 14), y - height / 20 * 30),
         };
 
         for (Vector2 vector : vectors) {
