@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TimeTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">TimeTest.java</span></div><h1>TimeTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
 
-import com.badlogic.gdx.Gdx;
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Utils.GameClock;
 import org.junit.runner.RunWith;
 import org.junit.Test;
-import com.mygdx.game.Objects.EventManager;
+import com.mygdx.game.Utils.EventManager;
 
 import static org.junit.Assert.assertTrue;
 
 
 @RunWith(GdxTestRunner.class)
-<span class="nc" id="L12">public class TimeTest {</span>
+<span class="nc" id="L13">public class TimeTest {</span>
     @Test
     public void testUpdateTime(){
-<span class="nc" id="L15">        EventManager event = new EventManager();</span>
-<span class="nc" id="L16">        assertTrue(&quot;a&quot;, true);</span>
-<span class="nc" id="L17">    }</span>
+<span class="nc" id="L16">        EventManager event = new EventManager(new HesHustle(), new GameClock());</span>
+<span class="nc" id="L17">        assertTrue(&quot;a&quot;, true);</span>
+<span class="nc" id="L18">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

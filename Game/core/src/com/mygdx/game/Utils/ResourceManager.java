@@ -1,6 +1,8 @@
 package com.mygdx.game.Utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
+
 import com.badlogic.gdx.utils.Disposable;
 
 public class ResourceManager {
@@ -16,4 +18,12 @@ public class ResourceManager {
             resource.dispose();
         }
     }
+
+/*    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ResourceManager)) return false;
+        ResourceManager that = (ResourceManager) o;
+        return Objects.equals(disposables, that.disposables);
+    }*/
 }

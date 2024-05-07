@@ -81,7 +81,7 @@ public class GUI extends GameObject{
 
     }
     public void update(float deltaTime){
-        nrgBar.setValue(EM.energy);
+        nrgBar.setValue(EM.getEnergy());
         ScoreButt.setText("Score: " + EM.getScore());
         DayButt.setText("Day: " + gameClock.getDays());
         TimeButt.setText(gameClock.getTime());

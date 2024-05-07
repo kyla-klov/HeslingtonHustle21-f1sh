@@ -12,88 +12,107 @@ import com.mygdx.game.HesHustle;
 
 
 public class EndScreen implements Screen{
-    final HesHustle game;
-    private Stage stage;
-    private Skin skin;
+    private final HesHustle game;
+    private final Stage stage;
+    private final Skin skin;
+    private final TextButton playAgainButton;
+    private final TextButton mainMenuButton;
+    private final TextButton exitButton;
 
 
-<span class="nc" id="L20">    public EndScreen(final HesHustle game) {</span>
-<span class="nc" id="L21">        this.game = game;</span>
-<span class="nc" id="L22">        stage = new Stage(new ScreenViewport());</span>
-<span class="nc" id="L23">        Gdx.input.setInputProcessor(stage);</span>
+<span class="nc" id="L23">    public EndScreen(final HesHustle game) {</span>
+<span class="nc" id="L24">        this.game = game;</span>
+<span class="nc" id="L25">        stage = new Stage(new ScreenViewport());</span>
+<span class="nc" id="L26">        Gdx.input.setInputProcessor(stage);</span>
 
-<span class="nc" id="L25">        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;));</span>
-<span class="nc" id="L26">        setupUi();</span>
-<span class="nc" id="L27">    }</span>
+<span class="nc" id="L28">        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;));</span>
+<span class="nc" id="L29">        playAgainButton = new TextButton(&quot;Play Again&quot;, skin);</span>
+<span class="nc" id="L30">        mainMenuButton = new TextButton(&quot;Main Menu&quot;, skin);</span>
+<span class="nc" id="L31">        exitButton = new TextButton(&quot;Exit&quot;, skin);</span>
+<span class="nc" id="L32">        setupUi();</span>
+<span class="nc" id="L33">    }</span>
+
+    public TextButton getPlayAgainButton() {
+<span class="nc" id="L36">        return playAgainButton;</span>
+    }
+
+    public TextButton getMainMenuButton() {
+<span class="nc" id="L40">        return mainMenuButton;</span>
+    }
+
+    public TextButton getExitButton() {
+<span class="nc" id="L44">        return exitButton;</span>
+    }
 
     private void setupUi(){
-<span class="nc" id="L30">        Table table = new Table ();</span>
-<span class="nc" id="L31">        table.setFillParent(true);</span>
-<span class="nc" id="L32">        stage.addActor(table);</span>
+<span class="nc" id="L48">        Table table = new Table ();</span>
+<span class="nc" id="L49">        table.setFillParent(true);</span>
+<span class="nc" id="L50">        stage.addActor(table);</span>
 
-<span class="nc" id="L34">        TextButton playAgainButton = new TextButton(&quot;Play Again&quot;, skin);</span>
-<span class="nc" id="L35">        TextButton mainMenuButton = new TextButton(&quot;Main Menu&quot;, skin);</span>
-<span class="nc" id="L36">        TextButton exitButton = new TextButton(&quot;Exit&quot;, skin);</span>
 
         // Add functionality to buttons
-<span class="nc" id="L39">        playAgainButton.addListener(event -&gt; {</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
-<span class="nc" id="L41">            game.setScreen(new GameScreen(game)); // Restart the game</span>
-<span class="nc" id="L42">            return true;</span>
+<span class="nc" id="L54">        playAgainButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
+<span class="nc" id="L56">            game.setScreen(new GameScreen(game)); // Restart the game</span>
+<span class="nc" id="L57">            return true;</span>
         });
 
-<span class="nc" id="L45">        mainMenuButton.addListener(event -&gt; {</span>
-<span class="nc bnc" id="L46" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
-<span class="nc" id="L47">            game.setScreen(new MenuScreen(game)); // Go back to the main menu</span>
-<span class="nc" id="L48">            return true;</span>
+<span class="nc" id="L60">        mainMenuButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
+<span class="nc" id="L62">            game.setScreen(new MenuScreen(game)); // Go back to the main menu</span>
+<span class="nc" id="L63">            return true;</span>
         });
 
-<span class="nc" id="L51">        exitButton.addListener(event -&gt; {</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
-<span class="nc" id="L53">            Gdx.app.exit(); // Exit the game</span>
-<span class="nc" id="L54">            return true;</span>
+<span class="nc" id="L66">        exitButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
+<span class="nc" id="L68">            Gdx.app.exit(); // Exit the game</span>
+<span class="nc" id="L69">            return true;</span>
         });
 
         // Layout the buttons in the table
-<span class="nc" id="L58">        table.add(playAgainButton).pad(10).row();</span>
-<span class="nc" id="L59">        table.add(mainMenuButton).pad(10).row();</span>
-<span class="nc" id="L60">        table.add(exitButton).pad(10);</span>
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L73">        table.add(playAgainButton).pad(10).row();</span>
+<span class="nc" id="L74">        table.add(mainMenuButton).pad(10).row();</span>
+<span class="nc" id="L75">        table.add(exitButton).pad(10);</span>
+
+<span class="nc" id="L77">    }</span>
+
+
 
     @Override
     public void show() {
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L83">    }</span>
 
     @Override
     public void render(float delta) {
-<span class="nc" id="L69">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
-<span class="nc" id="L70">        stage.act(Math.min(delta, 1 / 30f));</span>
-<span class="nc" id="L71">        stage.draw();</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L87">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L88">        stage.act(Math.min(delta, 1 / 30f));</span>
+<span class="nc" id="L89">        stage.draw();</span>
+<span class="nc" id="L90">    }</span>
 
     @Override
     public void resize(int width, int height) {
-<span class="nc" id="L76">        stage.getViewport().update(width, height, true);</span>
-<span class="nc" id="L77">    }</span>
+<span class="nc" id="L94">        stage.getViewport().update(width, height, true);</span>
+<span class="nc" id="L95">    }</span>
 
     @Override
     public void pause() {
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L99">    }</span>
+
 
     @Override
     public void resume() {
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L104">    }</span>
 
     @Override
     public void hide() {
-<span class="nc" id="L89">    }</span>
+<span class="nc" id="L108">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
-<span class="nc bnc" id="L94" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
 
 
-<span class="nc" id="L97">    }</span>
+<span class="nc" id="L116">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

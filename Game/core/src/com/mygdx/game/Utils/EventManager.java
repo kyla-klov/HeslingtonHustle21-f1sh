@@ -13,14 +13,15 @@ import java.util.List;
  */
 public class EventManager {
     public Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
-    public Event curEvent = null;
-    public Integer energy;
+
+    Event curEvent = null;
+
+    Integer energy;
     public boolean frozen = false;
     public List<Event> playedEvents;
     private final ResourceManager resourceManager;
     private final HesHustle game;
     private final GameClock gameClock;
-
     public EventManager(HesHustle game, GameClock gameClock) {
         this.game = game;
         this.gameClock = gameClock;
@@ -30,13 +31,17 @@ public class EventManager {
         generateEvents();
     }
 
-    public void generateEvents() {
+    private void generateEvents() {
         FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/lakemap.png")));
         StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
         PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN
         );
         Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
+    }
+
+    public Event getCurEvent() {
+        return curEvent;
     }
 
     public void interact(String name) {
@@ -105,6 +110,14 @@ public class EventManager {
 
     }
 
+    public Integer getEnergy() {
+        return energy;
+    }
+
+    public List<Event> getPlayedEvents() {
+        return playedEvents;
+    }
+
     public int getScore() {
         int score = 0;
         int cumulativeEat = 1;
@@ -151,4 +164,6 @@ public class EventManager {
 
         return score;
     }
+
+
 }

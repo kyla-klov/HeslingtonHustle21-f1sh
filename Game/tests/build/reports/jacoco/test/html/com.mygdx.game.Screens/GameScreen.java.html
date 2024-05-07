@@ -15,6 +15,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
+import com.mygdx.game.Utils.EventManager;
+import com.mygdx.game.Utils.GameClock;
+import com.mygdx.game.Utils.ResourceManager;
+import com.mygdx.game.Utils.ScreenType;
 
 
 import java.util.ArrayList;
@@ -24,198 +28,213 @@ import java.util.List;
  * Main game loop
  */
 public class GameScreen implements Screen {
-    final HesHustle game;
-    public ExtendViewport extendViewport;
-    public ShapeRenderer shape;
-    public final List&lt;GameObject&gt; objects;
-    public final List&lt;Building&gt; buildings;
+
+    private final ResourceManager resourceManager;
+    private final HesHustle game;
+    private final ExtendViewport extendViewport;
+    private final ShapeRenderer shape;
+    private final GameClock gameClock;
+    private final List&lt;GameObject&gt; objects;
+    private final List&lt;ActivityImage&gt; activityImages;
+    private final List&lt;Building&gt; buildings;
+
     //Game objects
-    PlayerController Player;
-    Building ComSci,BBall,Duck,Piazza,Langwith;
-    TiledMapRenderer TmRender;
-    TiledMap tiledMap;
-    EventManager EventM;
+    private PlayerController Player;
+    private final TiledMapRenderer TmRender;
+    private final TiledMap tiledMap;
 
-    GUI gui;
-    LightCycle LC;
-    private Music BGmusic;
+    private GUI gui;
+    private LightCycle LC;
+    private final Music BGmusic;
 
-<span class="nc" id="L43">    public GameScreen(final HesHustle game) {</span>
-<span class="nc" id="L44">        this.game = game;</span>
+<span class="nc" id="L50">    public GameScreen(final HesHustle game) {</span>
+<span class="nc" id="L51">        this.game = game;</span>
+<span class="nc" id="L52">        this.resourceManager = new ResourceManager();</span>
+<span class="nc" id="L53">        this.gameClock = new GameClock();</span>
+<span class="nc" id="L54">        extendViewport = new ExtendViewport(1600,900);</span>
+<span class="nc" id="L55">        shape = resourceManager.addDisposable(new ShapeRenderer());</span>
+<span class="nc" id="L56">        tiledMap = resourceManager.addDisposable(new TmxMapLoader().load(&quot;MAP/map1.tmx&quot;));</span>
+<span class="nc" id="L57">        TmRender = new OrthogonalTiledMapRenderer(tiledMap);</span>
 
-<span class="nc" id="L46">        extendViewport = new ExtendViewport(1600,900);</span>
-<span class="nc" id="L47">        shape = new ShapeRenderer();</span>
-<span class="nc" id="L48">        tiledMap = new TmxMapLoader().load(&quot;MAP/map1.tmx&quot;);</span>
-<span class="nc" id="L49">        TmRender = new OrthogonalTiledMapRenderer(tiledMap);</span>
+<span class="nc" id="L59">        this.objects = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L60">        this.activityImages = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L61">        this.buildings = new ArrayList&lt;&gt;();</span>
 
+<span class="nc" id="L63">        BGmusic = resourceManager.addDisposable(Gdx.audio.newMusic(Gdx.files.internal(&quot;XPT5HRY-video-game.mp3&quot;)));</span>
+<span class="nc" id="L64">        BGmusic.setLooping(true);</span>
 
-<span class="nc" id="L52">        this.objects = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L53">        this.buildings = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L66">        create();</span>
 
-<span class="nc" id="L55">        BGmusic = Gdx.audio.newMusic(Gdx.files.internal(&quot;XPT5HRY-video-game.mp3&quot;));</span>
-<span class="nc" id="L56">        BGmusic.play();</span>
-<span class="nc" id="L57">        BGmusic.setLooping(true);</span>
-
-
-<span class="nc" id="L60">        create();</span>
-
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L68">    }</span>
     public void create(){
 
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
-<span class="nc" id="L66">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get(&quot;collisionLayer&quot;);</span>
-<span class="nc" id="L67">        collisionLayer.setVisible(false);</span>
-<span class="nc" id="L68">        ComSci = new Building(530,380,100,100,&quot;Computer\nScience\nDepartment&quot;);</span>
-<span class="nc" id="L69">        BBall = new Building(1450,2000,100,100,&quot;BasketBall&quot;);</span>
-<span class="nc" id="L70">        Duck = new Building(2112,360,100,100,&quot;Ducks&quot;);</span>
-<span class="nc" id="L71">        Langwith = new Building(1360,1375,100,100,&quot;Langwith&quot;);</span>
-<span class="nc" id="L72">        Piazza = new Building(2550,1380,100,100,&quot;Piazza&quot;);</span>
+<span class="nc" id="L72">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get(&quot;collisionLayer&quot;);</span>
+<span class="nc" id="L73">        collisionLayer.setVisible(false);</span>
+<span class="nc" id="L74">        Building comSci = new Building(530, 380, 100, 100, &quot;Computer\nScience\nDepartment&quot;);</span>
+<span class="nc" id="L75">        Building BBall = new Building(1450, 2000, 100, 100, &quot;BasketBall&quot;);</span>
+<span class="nc" id="L76">        Building duck = new Building(2112, 360, 100, 100, &quot;Ducks&quot;);</span>
+<span class="nc" id="L77">        Building langwith = new Building(1360, 1375, 100, 100, &quot;Langwith&quot;);</span>
+<span class="nc" id="L78">        Building piazza = new Building(2550, 1380, 100, 100, &quot;Piazza&quot;);</span>
 
-<span class="nc" id="L74">        buildings.add(ComSci);//seperate building list to cycle through to find closest to player</span>
-<span class="nc" id="L75">        buildings.add(BBall);</span>
-<span class="nc" id="L76">        buildings.add(Duck);</span>
-<span class="nc" id="L77">        buildings.add(Langwith);</span>
-<span class="nc" id="L78">        buildings.add(Piazza);</span>
+<span class="nc" id="L80">        buildings.add(comSci);//separate building list to cycle through to find closest to player</span>
+<span class="nc" id="L81">        buildings.add(BBall);</span>
+<span class="nc" id="L82">        buildings.add(duck);</span>
+<span class="nc" id="L83">        buildings.add(langwith);</span>
+<span class="nc" id="L84">        buildings.add(piazza);</span>
 
-<span class="nc" id="L80">        EventM = new EventManager();</span>
-<span class="nc" id="L81">        Player = new PlayerController(1000,1000, EventM, collisionLayer);</span>
-<span class="nc" id="L82">        gui = new GUI(game.batch,EventM);</span>
-<span class="nc" id="L83">        LC = new LightCycle();</span>
-
-<span class="nc" id="L85">        objects.add(EventM);</span>
-<span class="nc" id="L86">        objects.add(Player);</span>
-
-<span class="nc" id="L88">        objects.add(ComSci);</span>
-<span class="nc" id="L89">        objects.add(BBall);</span>
-<span class="nc" id="L90">        objects.add(Duck);</span>
-<span class="nc" id="L91">        objects.add(Langwith);</span>
-<span class="nc" id="L92">        objects.add(Piazza);</span>
+<span class="nc" id="L86">        EventManager eventM = new EventManager(game, gameClock);</span>
+<span class="nc" id="L87">        Player = new PlayerController(1000,1000, eventM, collisionLayer);</span>
+<span class="nc" id="L88">        gui = new GUI(game.batch, eventM, gameClock);</span>
+<span class="nc" id="L89">        LC = new LightCycle();</span>
 
 
+<span class="nc" id="L92">        activityImages.add(eventM.FeedDucks.getActivityImage());</span>
+<span class="nc" id="L93">        activityImages.add(eventM.EatPiazza.getActivityImage());</span>
+<span class="nc" id="L94">        activityImages.add(eventM.Sleep.getActivityImage());</span>
+<span class="nc" id="L95">        activityImages.add(eventM.StudyCS.getActivityImage());</span>
+<span class="nc" id="L96">        activityImages.add(eventM.PlayBBall.getActivityImage());</span>
 
-<span class="nc" id="L96">        Gdx.input.setInputProcessor(Player);</span>
-<span class="nc" id="L97">    }</span>
+<span class="nc" id="L98">        objects.add(Player);</span>
+
+<span class="nc" id="L100">        objects.add(comSci);</span>
+<span class="nc" id="L101">        objects.add(BBall);</span>
+<span class="nc" id="L102">        objects.add(duck);</span>
+<span class="nc" id="L103">        objects.add(langwith);</span>
+<span class="nc" id="L104">        objects.add(piazza);</span>
+
+<span class="nc" id="L106">        Gdx.input.setInputProcessor(Player);</span>
+<span class="nc" id="L107">    }</span>
     public void update(float delta) {
+<span class="nc" id="L109">        gameClock.update(delta);</span>
 
-<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (GameObject gameObject : objects) {</span>
-<span class="nc" id="L101">            gameObject.update(delta);</span>
-<span class="nc" id="L102">        }</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        for (GameObject gameObject : objects) {</span>
+<span class="nc" id="L112">            gameObject.update(delta);</span>
+<span class="nc" id="L113">        }</span>
 
-<span class="nc" id="L104">        Player.setBD(getNearest());</span>
-<span class="nc" id="L105">        LC.getTime(EventM.TMin, EventM.TSec);</span>
-<span class="nc" id="L106">        gui.update(delta);</span>
+<span class="nc" id="L115">        Player.setBD(getNearest());</span>
 
-<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (checkGameOverCondition()) {</span>
-<span class="nc" id="L109">            game.setScreen(new EndScreen(game)); // Switch to EndScreen</span>
+<span class="nc" id="L117">        gui.update(delta);</span>
+
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (checkGameOverCondition()) {</span>
+<span class="nc" id="L120">            game.setScreen(new EndScreen(game)); // Switch to EndScreen</span>
         }
 
 
-<span class="nc" id="L113">    }</span>
+<span class="nc" id="L124">    }</span>
 
     @Override
     public void render(float delta) {
-<span class="nc" id="L117">        update(delta);</span>
+<span class="nc" id="L128">        update(delta);</span>
 
-<span class="nc" id="L119">        Gdx.gl.glClearColor(0f,0f,0f,1);</span>
-<span class="nc" id="L120">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+<span class="nc" id="L130">        Gdx.gl.glClearColor(0f,0f,0f,1);</span>
+<span class="nc" id="L131">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
 
-<span class="nc" id="L122">        extendViewport.apply();</span>
-<span class="nc" id="L123">        updateCamera();</span>
-<span class="nc" id="L124">        game.batch.setProjectionMatrix(extendViewport.getCamera().combined);</span>
+<span class="nc" id="L133">        extendViewport.apply();</span>
+<span class="nc" id="L134">        updateCamera();</span>
+<span class="nc" id="L135">        game.batch.setProjectionMatrix(extendViewport.getCamera().combined);</span>
 
-<span class="nc" id="L126">        TmRender.setView(extendViewport.getCamera().combined, 0,0,2887,2242);</span>
-<span class="nc" id="L127">        TmRender.render();</span>
+<span class="nc" id="L137">        TmRender.setView(extendViewport.getCamera().combined, 0,0,2887,2242);</span>
+<span class="nc" id="L138">        TmRender.render();</span>
 
 
-<span class="nc" id="L130">        renderObjects();</span>
-<span class="nc" id="L131">        LC.render(extendViewport.getCamera().combined,game,shape);//these could be in the objects list</span>
-<span class="nc" id="L132">        gui.render(extendViewport.getCamera().combined,game,shape);</span>
+<span class="nc" id="L141">        renderObjects();</span>
+<span class="nc" id="L142">        LC.render(extendViewport.getCamera(),game,shape);//these could be in the objects list</span>
+<span class="nc" id="L143">        gui.render(extendViewport.getCamera(),game,shape);</span>
+<span class="nc" id="L144">        renderActivityImages();</span>
 
-<span class="nc" id="L134">        EventM.render(extendViewport.getCamera(),game,shape);//need camera not camera.combined because you cant get</span>
                                                             // position of the projection matrix and we need it for the event render
 
-<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {</span>
-<span class="nc" id="L138">            game.setScreen(new PauseScreen(game,this));</span>
-<span class="nc" id="L139">            dispose();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {</span>
+<span class="nc" id="L149">            game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);</span>
         }
-<span class="nc" id="L141">    }</span>
+<span class="nc" id="L151">    }</span>
     public void renderObjects()
     {
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        for (GameObject gameObject : objects) {</span>
-<span class="nc" id="L145">            gameObject.render(extendViewport.getCamera().combined,game,shape);</span>
-<span class="nc" id="L146">        }</span>
-<span class="nc" id="L147">    }</span>
-    // method updates the camera position so it follows the player but shows less out of bounds area
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        for (GameObject gameObject : objects) {</span>
+<span class="nc" id="L155">            gameObject.render(extendViewport.getCamera(),game,shape);</span>
+<span class="nc" id="L156">        }</span>
+<span class="nc" id="L157">    }</span>
+
+    public void renderActivityImages(){
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        for (ActivityImage activityImage : activityImages) {</span>
+<span class="nc bnc" id="L161" title="All 2 branches missed.">            if (activityImage != null) activityImage.render(extendViewport.getCamera(),game,shape);</span>
+<span class="nc" id="L162">        }</span>
+<span class="nc" id="L163">    }</span>
+
+    // method updates the camera position, so it follows the player but shows less out-of-bounds area
     public void updateCamera()
     {
         float x,y;
-<span class="nc" id="L152">        float xConst = (float)1600/Gdx.graphics.getWidth(); // these constants are the ration of initial screen width to current</span>
-<span class="nc" id="L153">        float yConst = (float)900/Gdx.graphics.getHeight(); // if screen is half as wide it zooms out so its 2x smaller</span>
+<span class="nc" id="L169">        float xConst = (float)1600/Gdx.graphics.getWidth(); // these constants are the ration of initial screen width to current</span>
+<span class="nc" id="L170">        float yConst = (float)900/Gdx.graphics.getHeight(); // if screen is half as wide it zooms out so its 2x smaller</span>
 
-<span class="nc" id="L155">        float camWidth = extendViewport.getScreenWidth()/2;</span>
-<span class="nc" id="L156">        float camHeight = extendViewport.getScreenHeight()/2;</span>
+<span class="nc" id="L172">        float camWidth = (float) extendViewport.getScreenWidth() /2;</span>
+<span class="nc" id="L173">        float camHeight = (float) extendViewport.getScreenHeight() /2;</span>
 
-<span class="nc bnc" id="L158" title="All 2 branches missed.">        if (Player.pos.x &gt; 2884 - camWidth*xConst) {</span>
-<span class="nc" id="L159">            x = 2884- camWidth*xConst;</span>
-<span class="nc bnc" id="L160" title="All 2 branches missed.">        } else if (Player.pos.x &lt; camWidth*xConst) {x = camWidth*xConst;} else {x=Player.pos.x;}</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">        if (Player.pos.x &gt; 2884 - camWidth*xConst) {</span>
+<span class="nc" id="L176">            x = 2884- camWidth*xConst;</span>
+<span class="nc" id="L177">        } else x = Math.max(Player.pos.x, camWidth * xConst);</span>
 
-<span class="nc bnc" id="L162" title="All 2 branches missed.">        if (Player.pos.y &gt; 2238- camHeight*yConst) {</span>
-<span class="nc" id="L163">            y = 2238- camHeight*yConst;</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">        } else if (Player.pos.y &lt; camHeight*yConst) {y = camHeight*yConst;} else {y=Player.pos.y;}</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">        if (Player.pos.y &gt; 2238- camHeight*yConst) {</span>
+<span class="nc" id="L180">            y = 2238- camHeight*yConst;</span>
+<span class="nc" id="L181">        } else y = Math.max(Player.pos.y, camHeight * yConst);</span>
 
-<span class="nc" id="L166">        extendViewport.getCamera().position.set(x,y,0);</span>
-<span class="nc" id="L167">    }</span>
+<span class="nc" id="L183">        extendViewport.getCamera().position.set(x,y,0);</span>
+<span class="nc" id="L184">    }</span>
 
     public Building getNearest() //calculated the nearest building to the player rn
     {
-<span class="nc" id="L171">        Building closest = null;</span>
-<span class="nc" id="L172">        float closDis = 200f;</span>
-<span class="nc bnc" id="L173" title="All 2 branches missed.">        for (Building bd : buildings) {</span>
-<span class="nc bnc" id="L174" title="All 2 branches missed.">            if (Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y)) &lt; closDis)</span>
+<span class="nc" id="L188">        Building closest = null;</span>
+<span class="nc" id="L189">        float closDis = 200f;</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        for (Building bd : buildings) {</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            if (Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y)) &lt; closDis)</span>
             {
-<span class="nc" id="L176">                closest = bd;</span>
-<span class="nc" id="L177">                closDis = (float) Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y));</span>
+<span class="nc" id="L193">                closest = bd;</span>
+<span class="nc" id="L194">                closDis = (float) Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y));</span>
             }
-<span class="nc" id="L179">        }</span>
-<span class="nc" id="L180">        return closest;</span>
+<span class="nc" id="L196">        }</span>
+<span class="nc" id="L197">        return closest;</span>
     }
+
+    public GameClock getGameClock(){
+<span class="nc" id="L201">        return gameClock;</span>
+    }
+
     private boolean checkGameOverCondition(){
-<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (EventM.day &gt; 7)</span>
-        {
-<span class="nc" id="L185">            return true;</span>
-        }
-<span class="nc" id="L187">        return false;</span>
+<span class="nc bnc" id="L205" title="All 2 branches missed.">        return gameClock.getDays() &gt; 7;</span>
 
     }
 
     @Override
     public void resize(int width, int height) { //This is important for the GUI class to stay in aspect
-<span class="nc" id="L193">        extendViewport.update(width,height);</span>
-<span class="nc" id="L194">        gui.stage.getViewport().update(extendViewport.getScreenWidth(), extendViewport.getScreenHeight(),true);</span>
-<span class="nc" id="L195">    }</span>
-
-    @Override
-    public void show() {
-<span class="nc" id="L199">        Gdx.input.setInputProcessor(Player);</span>
-<span class="nc" id="L200">    }</span>
-
-    @Override
-    public void hide() {
-
-<span class="nc" id="L205">    }</span>
-
-    @Override
-    public void pause() {
-<span class="nc" id="L209">    }</span>
-
-    @Override
-    public void resume() {
+<span class="nc" id="L211">        extendViewport.update(width,height);</span>
+<span class="nc" id="L212">        gui.getStage().getViewport().update(extendViewport.getScreenWidth(), extendViewport.getScreenHeight(),true);</span>
 <span class="nc" id="L213">    }</span>
 
     @Override
-    public void dispose() {
+    public void show() {
+<span class="nc" id="L217">        Gdx.input.setInputProcessor(Player);</span>
+<span class="nc" id="L218">        BGmusic.play();</span>
+<span class="nc" id="L219">    }</span>
 
-<span class="nc" id="L218">    }</span>
+    @Override
+    public void hide() {
+<span class="nc" id="L223">        BGmusic.pause();</span>
+<span class="nc" id="L224">    }</span>
+
+    @Override
+    public void pause() {
+<span class="nc" id="L228">    }</span>
+
+    @Override
+    public void resume() {
+<span class="nc" id="L232">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L236">        resourceManager.disposeAll();</span>
+<span class="nc" id="L237">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

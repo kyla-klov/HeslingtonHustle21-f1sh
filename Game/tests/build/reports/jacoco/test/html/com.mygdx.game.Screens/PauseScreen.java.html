@@ -11,77 +11,76 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.mygdx.game.Utils.ScreenType;
 
 
 public class PauseScreen implements Screen {
-    final HesHustle game;
-    private Stage stage;
-    private Skin skin;
-    private GameScreen gameScreen;
+    private final HesHustle game;
+    private final Stage stage;
+    private final Skin skin;
 
-<span class="nc" id="L22">    public PauseScreen(final HesHustle game, GameScreen gameScreen) {</span>
+<span class="nc" id="L22">    public PauseScreen(final HesHustle game) {</span>
 <span class="nc" id="L23">        this.game = game;</span>
-<span class="nc" id="L24">        this.gameScreen = gameScreen;</span>
-<span class="nc" id="L25">        stage = new Stage(new ScreenViewport());</span>
-<span class="nc" id="L26">        Gdx.input.setInputProcessor(stage);</span>
+<span class="nc" id="L24">        stage = new Stage(new ScreenViewport());</span>
+<span class="nc" id="L25">        Gdx.input.setInputProcessor(stage);</span>
 
-<span class="nc" id="L28">        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)); // Ensure you have this file in your assets</span>
+<span class="nc" id="L27">        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)); // Ensure you have this file in your assets</span>
 
-<span class="nc" id="L30">        setupUi();</span>
-<span class="nc" id="L31">    }</span>
+<span class="nc" id="L29">        setupUi();</span>
+<span class="nc" id="L30">    }</span>
     private void setupUi() {
-<span class="nc" id="L33">        Table table = new Table();</span>
-<span class="nc" id="L34">        table.setFillParent(true);</span>
-<span class="nc" id="L35">        stage.addActor(table);</span>
+<span class="nc" id="L32">        Table table = new Table();</span>
+<span class="nc" id="L33">        table.setFillParent(true);</span>
+<span class="nc" id="L34">        stage.addActor(table);</span>
 
-<span class="nc" id="L37">        TextButton resumeButton = new TextButton(&quot;Resume&quot;, skin);</span>
-<span class="nc" id="L38">        TextButton mainMenuButton = new TextButton(&quot;Main Menu&quot;, skin);</span>
+<span class="nc" id="L36">        TextButton resumeButton = new TextButton(&quot;Resume&quot;, skin);</span>
+<span class="nc" id="L37">        TextButton mainMenuButton = new TextButton(&quot;Main Menu&quot;, skin);</span>
 
-<span class="nc" id="L40">        resumeButton.addListener(new ClickListener() {</span>
+<span class="nc" id="L39">        resumeButton.addListener(new ClickListener() {</span>
             public void clicked(InputEvent event, float x, float y) {
                 // Ensure this transitions back to your game screen, adjusting as necessary
-<span class="nc" id="L43">                game.setScreen(gameScreen);</span>
-<span class="nc" id="L44">            }</span>
+<span class="nc" id="L42">                game.screenManager.setScreen(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L43">            }</span>
         });
-<span class="nc" id="L46">        mainMenuButton.addListener(new ClickListener() {</span>
+<span class="nc" id="L45">        mainMenuButton.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L49">                game.setScreen(new MenuScreen(game));</span>
-<span class="nc" id="L50">            }</span>
+<span class="nc" id="L48">                game.screenManager.setScreen(ScreenType.MENU_SCREEN);</span>
+<span class="nc" id="L49">            }</span>
         });
-<span class="nc" id="L52">        table.add(resumeButton).pad(10).row();</span>
-<span class="nc" id="L53">        table.add(mainMenuButton).pad(10);</span>
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L51">        table.add(resumeButton).pad(10).row();</span>
+<span class="nc" id="L52">        table.add(mainMenuButton).pad(10);</span>
+<span class="nc" id="L53">    }</span>
     @Override
-<span class="nc" id="L56">    public void show() {}</span>
+<span class="nc" id="L55">    public void show() {}</span>
 
     @Override
     public void render(float delta) {
-<span class="nc" id="L60">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
-<span class="nc" id="L61">        stage.act(Math.min(delta, 1 / 30f));</span>
-<span class="nc" id="L62">        stage.draw();</span>
-<span class="nc" id="L63">    }@Override</span>
+<span class="nc" id="L59">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L60">        stage.act(Math.min(delta, 1 / 30f));</span>
+<span class="nc" id="L61">        stage.draw();</span>
+<span class="nc" id="L62">    }@Override</span>
     public void resize(int width, int height) {
-<span class="nc" id="L65">        stage.getViewport().update(width, height, true);</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L64">        stage.getViewport().update(width, height, true);</span>
+<span class="nc" id="L65">    }</span>
 
     @Override
     public void pause() {
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L69">    }</span>
 
     @Override
     public void resume() {
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L73">    }</span>
 
     @Override
     public void hide() {
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L77">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
-<span class="nc" id="L84">    }</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
+<span class="nc" id="L83">    }</span>
 
 
 

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LightCycle.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">LightCycle.java</span></div><h1>LightCycle.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.Matrix4;
 import com.mygdx.game.HesHustle;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.Utils.GameClock;
+import com.mygdx.game.Utils.ScreenType;
 
 public class LightCycle extends GameObject{
     Interpolation inter;
@@ -27,53 +27,53 @@ public class LightCycle extends GameObject{
 <span class="nc" id="L27">        Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};//blue</span>
 <span class="nc" id="L28">        Col3 = new float[]{113/255f, 0/255f, 143/255f, 0.3f};//purple</span>
 <span class="nc" id="L29">    }</span>
-    public void update(float delta){
-<span class="nc" id="L31">    }</span>
 
-    public void getTime(int TMin, int TSec)
+    public void getTime(int hours, int minutes)
     {
-<span class="nc" id="L35">        int rawTime = TMin*60 + TSec; // total time in &quot;seconds&quot;</span>
-<span class="nc bnc" id="L36" title="All 4 branches missed.">        if (TMin &gt; 5 &amp;&amp; TMin &lt;12)//morning to day</span>
+<span class="nc" id="L33">        int rawTime = hours*60 + minutes; // total time in &quot;seconds&quot;</span>
+<span class="nc bnc" id="L34" title="All 4 branches missed.">        if (hours &gt; 5 &amp;&amp; hours &lt;12)//morning to day</span>
         {
-<span class="nc" id="L38">            rawTime-=6*60;</span>
-<span class="nc" id="L39">            segment = 0;</span>
-<span class="nc bnc" id="L40" title="All 4 branches missed.">        } else if (TMin &gt; 11 &amp;&amp; TMin &lt; 18) { //day to afternoon</span>
-<span class="nc" id="L41">            rawTime-=12*60;</span>
-<span class="nc" id="L42">            segment = 1;</span>
-<span class="nc bnc" id="L43" title="All 4 branches missed.">        } else if (TMin &gt; 17 &amp;&amp; TMin &lt; 24) {//afternoon to evening</span>
-<span class="nc" id="L44">            rawTime-=18*60;</span>
-<span class="nc" id="L45">            segment = 2;</span>
+<span class="nc" id="L36">            rawTime-=6*60;</span>
+<span class="nc" id="L37">            segment = 0;</span>
+<span class="nc bnc" id="L38" title="All 4 branches missed.">        } else if (hours &gt; 11 &amp;&amp; hours &lt; 18) { //day to afternoon</span>
+<span class="nc" id="L39">            rawTime-=12*60;</span>
+<span class="nc" id="L40">            segment = 1;</span>
+<span class="nc bnc" id="L41" title="All 4 branches missed.">        } else if (hours &gt; 17 &amp;&amp; hours &lt; 24) {//afternoon to evening</span>
+<span class="nc" id="L42">            rawTime-=18*60;</span>
+<span class="nc" id="L43">            segment = 2;</span>
         } else {// evening to morning
-<span class="nc" id="L47">            segment = 3;</span>
+<span class="nc" id="L45">            segment = 3;</span>
         }
-<span class="nc" id="L49">        prog = (float)rawTime/360;</span>
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L47">        prog = (float)rawTime/360;</span>
+<span class="nc" id="L48">    }</span>
 
     /**
      * Calculate the resultant &quot;color vector&quot; then interpolation.apply(prog) will be between 0 and 1
-     * @param Col1
-     * @param Col2
-     * @param inter
-     * @return
+     * @param Col1 .
+     * @param Col2 .
+     * @param inter .
+     * @return .
      */
     public Color getColor(float[] Col1,float[] Col2,Interpolation inter)
     {
-<span class="nc" id="L61">        float[] trans = new float[]{0,0,0,0};</span>
-<span class="nc" id="L62">        float[] fin = new float[]{0,0,0,0};</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        for (int i = 0;i&lt;4;i++)</span>
+<span class="nc" id="L59">        float[] trans = new float[]{0,0,0,0};</span>
+<span class="nc" id="L60">        float[] fin = new float[]{0,0,0,0};</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        for (int i = 0;i&lt;4;i++)</span>
         {
-<span class="nc" id="L65">            trans[i] = Col1[i] - Col2[i];</span>
+<span class="nc" id="L63">            trans[i] = Col1[i] - Col2[i];</span>
         }
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        for (int i = 0;i&lt;4;i++)</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        for (int i = 0;i&lt;4;i++)</span>
         {
-<span class="nc" id="L69">            fin[i] = Col2[i] + trans[i]* inter.apply(prog);</span>
+<span class="nc" id="L67">            fin[i] = Col2[i] + trans[i]* inter.apply(prog);</span>
         }
-<span class="nc" id="L71">        return new Color(fin[0],fin[1],fin[2],fin[3]);</span>
+<span class="nc" id="L69">        return new Color(fin[0],fin[1],fin[2],fin[3]);</span>
     }
 
-
-    public void render(Matrix4 projection, HesHustle game, ShapeRenderer shape) {
-<span class="nc" id="L76">        shape.setProjectionMatrix(projection);</span>
+    @Override
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
+<span class="nc" id="L74">        GameClock gameClock = ((GameScreen) game.screenManager.getScreen(ScreenType.GAME_SCREEN)).getGameClock();</span>
+<span class="nc" id="L75">        getTime(gameClock.getHours(), gameClock.getMinutes());</span>
+<span class="nc" id="L76">        shape.setProjectionMatrix(projection.combined);</span>
 <span class="nc" id="L77">        shape.begin(ShapeRenderer.ShapeType.Filled);</span>
 <span class="nc" id="L78">        Gdx.gl.glEnable(GL20.GL_BLEND);</span>
 <span class="nc" id="L79">        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);</span>

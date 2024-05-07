@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.ResourceManager;
 
+import java.util.Objects;
+
 public class ActivityImage extends GameObject {
     private final Texture txt;
     private final ResourceManager resourceManager;
@@ -29,6 +31,26 @@ public class ActivityImage extends GameObject {
     public void setInactive(){
         active = false;
     }
+
+    public Texture getTxt() {
+        return txt;
+    }
+
+    public ResourceManager getResourceManager() {
+        return resourceManager;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    /*@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ActivityImage)) return false;
+        ActivityImage that = (ActivityImage) o;
+        return isActive() == that.isActive() && Objects.equals(getTxt().hashCode(), that.getTxt().hashCode()) && Objects.equals(getResourceManager(), that.getResourceManager());
+    }*/
 
     @Override
     public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
