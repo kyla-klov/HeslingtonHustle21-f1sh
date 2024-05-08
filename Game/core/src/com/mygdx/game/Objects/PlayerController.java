@@ -121,7 +121,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         //get texture region to draw
         txr = getAnim(Pstate).GetFrame(deltaTime);
         //update position using normalised direction vector using vector addition (delta time in scalar)
-        if (!EM.frozen){
+        if (!EM.isFrozen()){
             pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
         }
     }
@@ -228,7 +228,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         nearBD = BD;
     }
     public void interact(){
-        if (nearBD!=null && !EM.frozen)
+        if (nearBD!=null && !EM.isFrozen())
         {
             EM.interact(nearBD.name);
         }

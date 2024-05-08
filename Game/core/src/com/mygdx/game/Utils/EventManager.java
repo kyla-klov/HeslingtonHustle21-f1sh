@@ -12,12 +12,12 @@ import java.util.List;
  * Helps interaction between player and buildings
  */
 public class EventManager {
-    public Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
+    Event FeedDucks, Sleep, StudyCS, EatPiazza, PlayBBall;
 
     Event curEvent = null;
 
     Integer energy;
-    public boolean frozen = false;
+    boolean frozen = false;
     public List<Event> playedEvents;
     private final ResourceManager resourceManager;
     private final HesHustle game;
@@ -103,8 +103,9 @@ public class EventManager {
         } else {
             gameClock.setHours(gameClock.getHours() + (int) Math.floor(e.getTimeCost()));
             if (gameClock.getHours() >= 24) {
-                gameClock.setHours(gameClock.getHours() - 24);
-                gameClock.setDays(gameClock.getDays() + 1);
+                int day = (int) Math.floor(gameClock.getHours()/24);
+                gameClock.setHours(gameClock.getHours() - (24 * day));
+                gameClock.setDays(gameClock.getDays() + day);
             }
         }
 
@@ -165,5 +166,17 @@ public class EventManager {
         return score;
     }
 
+    public boolean isFrozen() {
+        return frozen;
+    }
 
+    public ArrayList<Event> listEvents(){
+        ArrayList<Event> list = new ArrayList<Event>();
+        list.add(FeedDucks);
+        list.add(Sleep);
+        list.add(StudyCS);
+        list.add(EatPiazza);
+        list.add(PlayBBall);
+        return list;
+    }
 }

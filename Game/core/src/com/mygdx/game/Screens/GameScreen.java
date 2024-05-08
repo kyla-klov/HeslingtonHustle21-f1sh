@@ -88,12 +88,14 @@ public class GameScreen implements Screen {
         gui = new GUI(game.batch, eventM, gameClock);
         LC = new LightCycle();
 
-
-        activityImages.add(eventM.FeedDucks.getActivityImage());
+        for (int i=0; i < eventM.listEvents().size(); i++) {
+            activityImages.add(eventM.listEvents().get(i).getActivityImage());
+        }
+        /*activityImages.add(eventM.FeedDucks.getActivityImage());
         activityImages.add(eventM.EatPiazza.getActivityImage());
         activityImages.add(eventM.Sleep.getActivityImage());
         activityImages.add(eventM.StudyCS.getActivityImage());
-        activityImages.add(eventM.PlayBBall.getActivityImage());
+        activityImages.add(eventM.PlayBBall.getActivityImage());*/
 
         objects.add(Player);
 

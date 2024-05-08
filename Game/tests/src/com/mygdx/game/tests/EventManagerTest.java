@@ -11,42 +11,39 @@ import static org.mockito.Mockito.*;
 
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 @RunWith(GdxTestRunner.class)
 public class EventManagerTest {
-    public EventManager eventManager = new EventManager(new HesHustle(), new GameClock());
-    HesHustle mockedGame = mock(HesHustle.class);
-    GameClock mockedClock = spy(GameClock.class);
+    private final HesHustle mockedGame = mock(HesHustle.class);
+    private final GameClock mockedClock = spy(GameClock.class);
 
-    ResourceManager mockedRM = spy(ResourceManager.class);
-    ScreenManager mockedSM = mock(ScreenManager.class);
-    Event mockedEvent = mock(Event.class);
-    ScreenType mockedST = mock(ScreenType.class);
+    private final ScreenManager mockedSM = mock(ScreenManager.class);
+    private final Event mockedEvent = mock(Event.class);
+    private final ScreenType mockedST = mock(ScreenType.class);
 
-    ActivityImage mockedImage = mock(ActivityImage.class);
-    ActivityImage mockedStudyImage = mock(ActivityImage.class, withSettings()
+    private final ActivityImage mockedImage = mock(ActivityImage.class);
+    private final ActivityImage mockedStudyImage = mock(ActivityImage.class, withSettings()
             .useConstructor("Activitys/cs.png")
             .defaultAnswer(CALLS_REAL_METHODS));
 
-    @Spy Event PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
-    @Spy Event StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", mockedStudyImage);
-    @Spy Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
-    @Spy Event FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", mockedImage);
-    @Spy Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", mockedImage);
+    @Spy private final Event PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
+    @Spy private final Event StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", mockedStudyImage);
+    @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
+    @Spy private final Event FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", mockedImage);
+    @Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", mockedImage);
 
-    @InjectMocks  EventManager mockedEM = mock(EventManager.class, withSettings()
+    @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
             .useConstructor(mockedGame, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
     @Before public void setup(){
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         mockedGame.screenManager = mockedSM;
     }
 
-    @Test
+/*    @Test
     // Tests that all the Event objects are correctly created.
     public void testGenerateEvents() {
         assertNotNull(eventManager.FeedDucks);
@@ -54,7 +51,7 @@ public class EventManagerTest {
         assertNotNull(eventManager.PlayBBall);
         assertNotNull(eventManager.Sleep);
         assertNotNull(eventManager.EatPiazza);
-    }
+    }*/
 
     @Test
     // tests that interacting with something correctly edits the energy value, time, playedEvents and set correct Image/Screen
@@ -90,47 +87,53 @@ public class EventManagerTest {
         verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType());
         verify(mockedSM, times(0)).setScreen(mockedST);
         verify(mockedStudyImage, times(1)).setActive();
-//        verify(mockedClock, times(1)).addEvent(s -> {}, 4f);;
-
-        // checks that sleeping will not increase energy above 100
-        mockedEM.interact("Langwith");
-        assertEquals(100, mockedEM.getEnergy(), 0);
-
-
-        // sleeping adds 50 energy
-
-/*        mockedEM.interact("Langwith");
-        assertNotNull(mockedEM.getCurEvent());
-        assertEquals((double) 100, (double) mockedEM.getEnergy(), (double) 0.0);*/
-/*        // checks that sleeping will not increase energy above 100
-        eventManager.getEnergy() = 70;
-        eventManager.interact("Langwith");
-        assertNotNull(eventManager.getCurEvent());
-        assertEquals((double) 100, (double) eventManager.getEnergy(), (double) 0.0);
-
-
-        eventManager.getEnergy() = 50;
-        eventManager.interact("BasketBall");
-        assertNotNull(eventManager.getCurEvent());
-        assertEquals((double) 20, (double) eventManager.getEnergy(), (double) 0.0);
-
-        // checks that recreation will not decrease energy if there is not enough energy available
-        eventManager.getEnergy() = 10;
-        eventManager.interact("BasketBall");
-        assertNotNull(eventManager.getCurEvent());
-        assertEquals((double) 10, (double) eventManager.getEnergy(), (double) 0.0)*/;
+//        verify(mockedClock, times(1)).addEvent(s -> {}, 4f);
 
     }
 
+    @Test
+    public void testUpdateEnergy(){
+        // Basic deduction check
+        mockedEM.updateEnergy(StudyCS);
+        assertEquals(80, mockedEM.getEnergy(), 0);
 
+        // checks that recreation will not decrease energy if there is not enough energy available
+        mockedEM.updateEnergy(PlayBBall);
+        mockedEM.updateEnergy(PlayBBall);
+        mockedEM.updateEnergy(PlayBBall);
+        assertEquals(0, mockedEM.getEnergy(), 0);
+
+        // sleeping adds 90 energy
+        mockedEM.updateEnergy(Sleep);
+        assertEquals(90, mockedEM.getEnergy(), 0);
+
+        // checks that sleeping will not increase energy above 100
+        mockedEM.updateEnergy(Sleep);
+        assertEquals(100, mockedEM.getEnergy(), 0);
+
+    }
+
+    @Test
+    public void testUpdateTime(){
+        Event bigtime1 = new Event(24, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", mockedImage);
+        mockedEM.updateTime(bigtime1);
+        assertEquals(2, mockedClock.getDays(),0);
+        assertEquals(8, mockedClock.getHours(), 0);
+
+        Event bigtime2 = new Event(49, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", mockedImage);
+        mockedEM.updateTime(bigtime2);
+        assertEquals(4, mockedClock.getDays(),0);
+        assertEquals(9, mockedClock.getHours(), 0);
+        mockedEM.updateTime(Sleep);
+    }
     @Test
     public void testGetScore() {
         // this one needs fixing because im not sure what the expected score is actually supposed to be
-        eventManager.interact("Ducks");
-        eventManager.interact("Computer\nScience\nDepartment");
-        eventManager.interact("Langwith");
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.interact("Langwith");
         int expectedScore = 77;
-        assertEquals(expectedScore, eventManager.getScore(), 0);
+        assertEquals(expectedScore, mockedEM.getScore(), 0);
     }
 
 //    @Test

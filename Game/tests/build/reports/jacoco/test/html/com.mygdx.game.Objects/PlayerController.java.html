@@ -121,7 +121,7 @@ public class PlayerController extends GameObject implements InputProcessor {
         //get texture region to draw
 <span class="nc" id="L122">        txr = getAnim(Pstate).GetFrame(deltaTime);</span>
         //update position using normalised direction vector using vector addition (delta time in scalar)
-<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (!EM.frozen){</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">        if (!EM.isFrozen()){</span>
 <span class="nc" id="L125">            pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);</span>
         }
 <span class="nc" id="L127">    }</span>
@@ -228,7 +228,7 @@ public class PlayerController extends GameObject implements InputProcessor {
 <span class="nc" id="L228">        nearBD = BD;</span>
 <span class="nc" id="L229">    }</span>
     public void interact(){
-<span class="nc bnc" id="L231" title="All 4 branches missed.">        if (nearBD!=null &amp;&amp; !EM.frozen)</span>
+<span class="nc bnc" id="L231" title="All 4 branches missed.">        if (nearBD!=null &amp;&amp; !EM.isFrozen())</span>
         {
 <span class="nc" id="L233">            EM.interact(nearBD.name);</span>
         }
