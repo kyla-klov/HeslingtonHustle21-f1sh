@@ -73,7 +73,7 @@ public class EventManagerTest {
         assertEquals(PlayBBall, mockedEM.getPlayedEvents().get(0));
         assertEquals(PlayBBall, mockedEM.getCurEvent());
         verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType());
-        verify(mockedEvent, times(0)).getActivityImage();
+        verify(PlayBBall, times(1)).getActivityImage();
 //        verify(mockedClock, times(1)).addEvent(s -> {}, 4f);;
 
         // checks that study decrease energy by 20 and takes 3 hours
@@ -84,6 +84,7 @@ public class EventManagerTest {
         assertEquals(0, mockedClock.getMinutes(), 0);
         assertEquals(StudyCS, mockedEM.getCurEvent());
         assertEquals(StudyCS, mockedEM.getPlayedEvents().get(1));
+        verify(StudyCS,times(2)).getActivityImage();
         verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType());
         verify(mockedSM, times(0)).setScreen(mockedST);
         verify(mockedStudyImage, times(1)).setActive();

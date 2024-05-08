@@ -27,6 +27,7 @@ public class EndScreenTest {
     private final HesHustle mockedGame = mock(HesHustle.class);
     private final Table mockedTable = mock(Table.class);
     private final ScreenViewport mockedSV = spy(ScreenViewport.class);
+    private final Stage mockedStage = mock(Stage.class);
     @Mock private Stage stage;
     @Mock private Skin skin;
     @Mock private TextButton playAgainButton;
@@ -47,7 +48,9 @@ public class EndScreenTest {
     // tests that all buttons have been properly created.
     public void testSetupUI() {
 //        doReturn(1).when(mockedEndScreen).render(1.1).;
-//        verify(stage).addActor(mockedTable);
+        mockedEndScreen.render(2);
+        verify(mockedStage).act(2);
+        verify(stage).draw();
     }
 }
 
