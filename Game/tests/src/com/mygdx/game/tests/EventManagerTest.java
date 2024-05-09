@@ -40,6 +40,7 @@ public class EventManagerTest {
             .useConstructor(mockedGame, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
+
     @Before public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
         mockedGame.screenManager = mockedSM;

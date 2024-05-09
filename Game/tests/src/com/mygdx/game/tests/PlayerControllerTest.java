@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
 import com.mygdx.game.Objects.Animation;
@@ -14,17 +13,18 @@ import com.mygdx.game.Utils.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.mockito.Mockito.*;
-
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+
 @RunWith(GdxTestRunner.class)
-public class CollisionDetectorTest {
+public class PlayerControllerTest {
     private AutoCloseable closeable;
+
     private final HesHustle mockedGame = mock(HesHustle.class);
     private final GameClock mockedClock = spy(GameClock.class);
 
@@ -58,41 +58,17 @@ public class CollisionDetectorTest {
             .useConstructor((float) 10, (float) 10, mockedEM, collisionLayer)
             .defaultAnswer(CALLS_REAL_METHODS));
 
-    private CollisionDetector mockedCollisionDetector = mock(CollisionDetector.class, withSettings()
-            .useConstructor(mockedPlayer, collisionLayer)
-            .defaultAnswer(CALLS_REAL_METHODS));
-
-    @Before public void setup(){
+    @Before
+    public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
+        mockedGame.screenManager = mockedSM;
     }
-
     @Test
-    // tests that ...
-    public void testCollidesRight() {
+    public void test(){
 
     }
-
-    @Test
-    // tests that ...
-    public void testCollidesLeft() {
-
-    }
-
-    @Test
-    // tests that ...
-    public void testCollidesUp() {
-
-    }
-
-    @Test
-    // tests that ...
-    public void testCollidesDown() {
-
-    }
-
     @After
     public void releaseMocks() throws Exception {
         closeable.close();
     }
-
 }
