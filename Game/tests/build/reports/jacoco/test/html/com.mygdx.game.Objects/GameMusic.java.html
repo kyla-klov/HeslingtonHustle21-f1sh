@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameMusic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">GameMusic.java</span></div><h1>GameMusic.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+
+/**
+ * The GameMusic class manages game music, including playback and volume level adjustments.
+ * Initializes the game's background music and allows for dynamic volume control.
+ */
+public class GameMusic {
+
+    Music audio;
+    // Music levels is quarters
+<span class="nc" id="L14">    private int musicLevel = 4;</span>
+
+<span class="nc" id="L16">    private final float musicCap = 0.1f;</span>
+    /**
+     * Constructor for GameMusic. Initializes and starts playing the game's background music at the maximum volume level.
+     */
+<span class="nc" id="L20">    public GameMusic() {</span>
+<span class="nc" id="L21">        audio = Gdx.audio.newMusic(Gdx.files.internal(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;));</span>
+<span class="nc" id="L22">        audio.play();</span>
+<span class="nc" id="L23">        audio.setVolume(musicCap); // Set volume to 100%</span>
+<span class="nc" id="L24">        audio.setLooping(true);</span>
+<span class="nc" id="L25">    }</span>
+
+    /**
+     * Returns the current music volume level.
+     * @return The current music volume level.
+     */
+    public int getMusicLevel(){
+<span class="nc" id="L32">        return this.musicLevel;</span>
+    }
+
+
+    /**
+     * Increments the music volume level by one, if it is not already at the maximum level. Adjusts the music playback volume accordingly.
+     */
+    public void incrementVolume() {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (musicLevel &lt;= 3){ // Check if volume is not already at maximum</span>
+<span class="nc" id="L41">            musicLevel = musicLevel + 1;</span>
+<span class="nc" id="L42">            float floatingMusicLevel = (float) musicLevel;</span>
+<span class="nc" id="L43">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
+        }
+<span class="nc" id="L45">    }</span>
+
+    /**
+     * Decrements the music volume level by one, if it is not already at the minimum level. Adjusts the music playback volume accordingly.
+     */
+    public void decrementVolume() {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (this.musicLevel &gt;= 1){ // Check if volume is not already at minimum</span>
+<span class="nc" id="L52">            musicLevel = musicLevel - 1;</span>
+<span class="nc" id="L53">            float floatingMusicLevel = (float) musicLevel;</span>
+<span class="nc" id="L54">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
+        }
+<span class="nc" id="L56">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

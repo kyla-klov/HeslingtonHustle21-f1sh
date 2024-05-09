@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActivityImage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">ActivityImage.java</span></div><h1>ActivityImage.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Utils.ResourceManager;
+
+import java.util.Objects;
+
+public class ActivityImage extends GameObject {
+    private final Texture txt;
+    private final ResourceManager resourceManager;
+    private boolean active;
+
+    public ActivityImage(String txt) {
+<span class="fc" id="L21">        super(0,0,10,10);</span>
+<span class="fc" id="L22">        this.resourceManager = new ResourceManager();</span>
+<span class="fc" id="L23">        this.txt = resourceManager.addDisposable(new Texture(txt));</span>
+<span class="fc" id="L24">        this.active = false;</span>
+<span class="fc" id="L25">    }</span>
+
+    public void setActive(){
+<span class="fc" id="L28">        active = true;</span>
+<span class="fc" id="L29">    }</span>
+
+    public void setInactive(){
+<span class="nc" id="L32">        active = false;</span>
+<span class="nc" id="L33">    }</span>
+
+    public Texture getTxt() {
+<span class="nc" id="L36">        return txt;</span>
+    }
+
+    public ResourceManager getResourceManager() {
+<span class="nc" id="L40">        return resourceManager;</span>
+    }
+
+    public boolean isActive() {
+<span class="nc" id="L44">        return active;</span>
+    }
+
+    /*@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ActivityImage)) return false;
+        ActivityImage that = (ActivityImage) o;
+        return isActive() == that.isActive() &amp;&amp; Objects.equals(getTxt().hashCode(), that.getTxt().hashCode()) &amp;&amp; Objects.equals(getResourceManager(), that.getResourceManager());
+    }*/
+
+    @Override
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (!active) return;</span>
+<span class="nc" id="L58">        shape.setProjectionMatrix(projection.combined);</span>
+<span class="nc" id="L59">        Gdx.gl.glEnable(GL20.GL_BLEND); // ALLOWS TRANSPARENCY</span>
+<span class="nc" id="L60">        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);</span>
+        //Draw transparent background
+<span class="nc" id="L62">        shape.begin(ShapeRenderer.ShapeType.Filled);</span>
+<span class="nc" id="L63">        shape.setColor(new Color(0,0,0.2f,0.7f));</span>
+<span class="nc" id="L64">        shape.rect((projection.position.x - projection.viewportWidth/2), (projection.position.y - projection.viewportHeight/2), projection.viewportWidth, projection.viewportHeight);</span>
+        //draw black outline
+<span class="nc" id="L66">        shape.setColor(Color.BLACK);</span>
+<span class="nc" id="L67">        shape.rect((projection.position.x - projection.viewportHeight*0.9f/2), (projection.position.y - projection.viewportHeight*0.9f/2), projection.viewportHeight*0.9f, projection.viewportHeight*0.9f);</span>
+<span class="nc" id="L68">        shape.end();</span>
+        //Draw the Image
+<span class="nc" id="L70">        game.batch.begin();</span>
+<span class="nc" id="L71">        game.batch.setProjectionMatrix(projection.combined);</span>
+<span class="nc" id="L72">        game.batch.draw(new TextureRegion(txt),(projection.position.x - (projection.viewportHeight*0.85f/2)),(projection.position.y - projection.viewportHeight*0.85f/2),0,0,projection.viewportHeight*0.85f,projection.viewportHeight*0.85f,1,1,0);</span>
+<span class="nc" id="L73">        game.batch.end();</span>
+<span class="nc" id="L74">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L78">        resourceManager.disposeAll();</span>
+<span class="nc" id="L79">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

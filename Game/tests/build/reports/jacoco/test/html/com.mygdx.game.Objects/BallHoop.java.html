@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BallHoop.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">BallHoop.java</span></div><h1>BallHoop.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.mygdx.game.Utils.Collider;
+
+public class BallHoop {
+    private final Vector2 position;
+    private final Collider collider;
+    private final float hoopWidth;
+    private final float edgeWidth;
+
+<span class="nc" id="L13">    public BallHoop(float x, float y, float hoopWidth, float edgeWidth, float height) {</span>
+<span class="nc" id="L14">        this.position = new Vector2(x, y);</span>
+<span class="nc" id="L15">        this.collider = new Collider();</span>
+<span class="nc" id="L16">        this.hoopWidth = hoopWidth;</span>
+<span class="nc" id="L17">        this.edgeWidth = edgeWidth;</span>
+<span class="nc" id="L18">        collider.addBoxCollider(new Rectangle(x, y, edgeWidth, height));</span>
+<span class="nc" id="L19">        collider.addBoxCollider(new Rectangle(x + edgeWidth + hoopWidth, y, edgeWidth, height));</span>
+<span class="nc" id="L20">        collider.addBoxCollider(new Rectangle(x + hoopWidth + edgeWidth * 2, y-height*2.2f, edgeWidth*1.4f, height * 11.4f));</span>
+
+
+<span class="nc" id="L23">        Vector2[] vectors = new Vector2[] {</span>
+                new Vector2(x + hoopWidth / 110f * 20, y - height),
+                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 13), y - height),
+
+                new Vector2(x + hoopWidth / 110f * 24, y - height / 20 * 30),
+                new Vector2(x + (hoopWidth + edgeWidth - hoopWidth / 110f * 14), y - height / 20 * 30),
+        };
+
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        for (Vector2 vector : vectors) {</span>
+<span class="nc" id="L32">            collider.addDampedPoint(vector);</span>
+        }
+<span class="nc" id="L34">    }</span>
+
+    public boolean isGoal(Ball ball, float deltaTime){
+<span class="nc bnc" id="L37" title="All 6 branches missed.">        if (ball.getPosition().y &gt; position.y &amp;&amp; ball.getPosition().x &gt; position.x + edgeWidth &amp;&amp; ball.getPosition().x &lt;= position.x + edgeWidth + hoopWidth) {</span>
+<span class="nc" id="L38">            collider.activateDampedPoints();</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">            return ball.nextPosition(deltaTime*3).y &lt;= position.y;</span>
+        }
+<span class="nc" id="L41">        collider.deactivateDampedPoints();</span>
+<span class="nc" id="L42">        return false;</span>
+    }
+
+    public Collider getCollider(){
+<span class="nc" id="L46">        return collider;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
