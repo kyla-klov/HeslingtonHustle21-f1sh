@@ -35,7 +35,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
     private
     final HesHustle game;
     int numberDucksClicked = 0;
-    int numberRounds = 10;
+    int numberRounds = 15;
     boolean isDuckOnScreen = false;
     private Texture duck;
     private float duckX;
