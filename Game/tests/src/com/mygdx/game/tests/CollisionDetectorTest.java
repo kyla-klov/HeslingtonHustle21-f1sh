@@ -36,13 +36,12 @@ public class CollisionDetectorTest {
     //@Spy private final Event FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", mockedImage);
     //@Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", mockedImage);
 
-    @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
+/*    @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
             .useConstructor(mockedGame, mockedClock)
-            .defaultAnswer(CALLS_REAL_METHODS));
+            .defaultAnswer(CALLS_REAL_METHODS));*/
 
     @Before public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
-        mockedGame.screenManager = mockedSM;
     }
 
     @Test
