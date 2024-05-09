@@ -114,3 +114,4 @@ Thumbs.db
 /ios/IOSLauncher.app.dSYM
 
 .vscode/
+tests/build/
