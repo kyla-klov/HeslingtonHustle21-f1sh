@@ -31,6 +31,7 @@ import static org.mockito.Mockito.mock;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
+import org.mockito.internal.util.Platform;
 
 public class 	GdxTestRunner extends BlockJUnit4ClassRunner implements ApplicationListener {
 
