@@ -5,8 +5,8 @@ import com.mygdx.game.Objects.ActivityImage;
 public class Event {
     private final double timeCost;
     private final int energyCost;
+    private final int studyTime;
     private final int fatigue;
-    private final int enjoymentStudyLevel;
     private final int moneyCost;
     private final String description;
     private final ActivityImage activityImage;
@@ -22,7 +22,7 @@ public class Event {
     /**
      * generates a new instance of an event, representing the possible activities a player can undertake
      *
-     * @param enjoymentStudyLevel      The relative value for how good an activity is for enjoyment / study as an integer
+     * @param studyTime      The relative value for how good an activity is for enjoyment / study as an integer
      * @param description              A description of the event
      * @param energy                   The amoount of energy an event requires
      * @param time                     The time required for an event as a double
@@ -30,10 +30,10 @@ public class Event {
      * @param fatigue                  The amount of fatigue a player has after an event
      */
 
-    public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, Type eventType, int moneyCost, String description, ActivityImage activityImage) {
+    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ActivityImage activityImage) {
         this.timeCost = time;
         this.energyCost = energy;
-        this.enjoymentStudyLevel = enjoymentStudyLevel;
+        this.studyTime = studyTime;
         this.fatigue = fatigue;
         this.eventType = eventType;
         this.moneyCost = moneyCost;
@@ -42,10 +42,10 @@ public class Event {
         this.screenType = null;
     }
 
-    public Event(double time,int energy, int enjoymentStudyLevel, int fatigue, Type eventType, int moneyCost, String description, ScreenType screenType) {
+    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ScreenType screenType) {
         this.timeCost = time;
         this.energyCost = energy;
-        this.enjoymentStudyLevel = enjoymentStudyLevel;
+        this.studyTime = studyTime;
         this.fatigue = fatigue;
         this.eventType = eventType;
         this.moneyCost = moneyCost;
@@ -66,8 +66,8 @@ public class Event {
         return timeCost;
     }
 
-    public int getEnjoymentStudyLevel() {
-        return enjoymentStudyLevel;
+    public int getStudyTime() {
+        return studyTime;
     }
 
     public int getFatigue() {
@@ -88,7 +88,7 @@ public class Event {
         Event e = (Event)obj;
         return this.timeCost == e.getTimeCost()
                 && this.energyCost == e.getEnergyCost()
-                && this.enjoymentStudyLevel == e.getEnjoymentStudyLevel()
+                && this.studyTime == e.getStudyTime()
                 && this.fatigue == e.getFatigue()
                 && this.eventType == e.getEventType()
                 && this.moneyCost == e.getMoneyCost()

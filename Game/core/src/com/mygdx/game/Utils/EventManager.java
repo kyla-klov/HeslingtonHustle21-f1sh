@@ -35,9 +35,9 @@ public class EventManager {
     }
 
     private void generateEvents() {
-        FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", ScreenType.DUCK_GAME_SCREEN);
-        StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
-        PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN
+        FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "", ScreenType.DUCK_GAME_SCREEN);
+        StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
+        PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN
         );
         Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
@@ -75,6 +75,14 @@ public class EventManager {
             frozen = true;
             if (curEvent.getActivityImage() != null) curEvent.getActivityImage().setActive();
             else game.screenManager.setScreen(curEvent.getScreenType());
+            gameScreen.setTotalStudyHours(gameScreen.getTotalStudyHours() + curEvent.getStudyTime());
+            if (curEvent.getStudyTime() > 0){
+                gameScreen.addStudy();
+                gameScreen.addStudyPlace(curEvent.getDescription());
+            } else if (curEvent.getEventType() == Event.Type.EAT){
+                gameScreen.addMeal(gameClock.getHours());
+            }
+
             updateTime(curEvent);
             updateEnergy(curEvent);
         }
@@ -106,7 +114,7 @@ public class EventManager {
         } else {
             gameClock.setHours(gameClock.getHours() + (int) Math.floor(e.getTimeCost()));
             if (gameClock.getHours() >= 24) {
-                int day = (int) Math.floor(gameClock.getHours()/24);
+                int day = (int) gameClock.getHours()/24;
                 gameClock.setHours(gameClock.getHours() - (24 * day));
                 gameClock.setDays(gameClock.getDays() + day);
             }
@@ -144,12 +152,12 @@ public class EventManager {
                     cumulativeSleep += cumulativeSleep;
                     break;
                 case RECREATIONAL:
-                    score += event.getEnjoymentStudyLevel();
+                    //score += event.getEnjoymentStudyLevel();
                     recCount += 1;
                     score += event.getFatigue();
                     break;
                 case STUDY:
-                    studyTotal += event.getEnjoymentStudyLevel();
+                    //studyTotal += event.getEnjoymentStudyLevel();
                     studyCount += 1;
                     score += event.getFatigue();
                     break;

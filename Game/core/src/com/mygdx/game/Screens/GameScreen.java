@@ -33,10 +33,10 @@ public class GameScreen implements Screen {
     private final HesHustle game;
     private final ExtendViewport extendViewport;
     private final ShapeRenderer shape;
-    private final GameClock gameClock;
     private final List<GameObject> objects;
     private final List<ActivityImage> activityImages;
     private final List<Building> buildings;
+    private final GameClock gameClock;
 
     //Game objects
     private PlayerController Player;
@@ -47,6 +47,14 @@ public class GameScreen implements Screen {
     private LightCycle LC;
     private final Music BGmusic;
 
+    //Game Score Data//
+    private final int[] dailyStudy;
+    private final int[] dailyRecreational;
+    private final List<List<Integer>> mealTimes;
+    private final List<String> placesStudied;
+    private int totalStudyHours;
+
+
     public GameScreen(final HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
@@ -55,6 +63,14 @@ public class GameScreen implements Screen {
         shape = resourceManager.addDisposable(new ShapeRenderer());
         tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
         TmRender = new OrthogonalTiledMapRenderer(tiledMap);
+        dailyStudy = new int[7];
+        dailyRecreational = new int[7];
+        mealTimes = new ArrayList<>();
+        placesStudied = new ArrayList<>();
+        totalStudyHours = 0;
+        for (int i = 0; i < 7; i++) {
+            mealTimes.add(new ArrayList<>());
+        }
 
         this.objects = new ArrayList<>();
         this.activityImages = new ArrayList<>();
@@ -83,19 +99,14 @@ public class GameScreen implements Screen {
         buildings.add(langwith);
         buildings.add(piazza);
 
-        EventManager eventM = new EventManager(game, gameClock);
+        EventManager eventM = new EventManager(game, this, gameClock);
         Player = new PlayerController(1000,1000, eventM, collisionLayer);
-        gui = new GUI(game.batch, eventM, gameClock);
+        gui = new GUI(game.batch, eventM, gameClock, this);
         LC = new LightCycle();
 
         for (int i=0; i < eventM.listEvents().size(); i++) {
             activityImages.add(eventM.listEvents().get(i).getActivityImage());
         }
-        /*activityImages.add(eventM.FeedDucks.getActivityImage());
-        activityImages.add(eventM.EatPiazza.getActivityImage());
-        activityImages.add(eventM.Sleep.getActivityImage());
-        activityImages.add(eventM.StudyCS.getActivityImage());
-        activityImages.add(eventM.PlayBBall.getActivityImage());*/
 
         objects.add(Player);
 
@@ -109,7 +120,6 @@ public class GameScreen implements Screen {
     }
     public void update(float delta) {
         gameClock.update(delta);
-
         for (GameObject gameObject : objects) {
             gameObject.update(delta);
         }
@@ -122,6 +132,99 @@ public class GameScreen implements Screen {
             game.setScreen(new EndScreen(game)); // Switch to EndScreen
         }
 
+
+    }
+
+    public float calcScore(){
+        int s1, s2, s3, s4, s5;
+
+        int num0s = 0;
+        int num1s = 0;
+        for (int study : dailyStudy){
+            if (study == 0){
+                num0s++;
+            } else if (study == 1){
+                num1s++;
+            }
+        }
+        if (num0s == 0 || (num0s == 1 && num1s <= 5)){
+            s1 = 100;
+        } else if (num0s == 2 && num1s <= 4){
+            s1 = 60;
+        } else if (num0s < 7){
+            s1 = 40;
+        } else{
+            s1 = 0;
+        }
+
+        switch(placesStudied.size()){
+            case 0:
+                s2 = 0;
+                break;
+            case 1:
+                s2 = 60;
+                break;
+            case 2:
+                s2 = 80;
+                break;
+            default:
+                s2 = 100;
+                break;
+        }
+
+        s3 = (totalStudyHours >= 28 && totalStudyHours <= 35) ? 100 : (totalStudyHours * 100 / 28);
+
+        int notEaten = 0;
+        for (List<Integer> times : mealTimes){
+            if (times.size() < 3){
+                notEaten++;
+            }
+        }
+        notEaten = (notEaten + 1)/2;
+        switch (notEaten){
+            case 0:
+                s4 = 100;
+                break;
+            case 1:
+                s4 = 80;
+                break;
+            case 2:
+                s4 = 60;
+                break;
+            case 3:
+                s4 = 40;
+                break;
+            default:
+                s4 = 0;
+                break;
+        }
+
+        int numBad = 0;
+        for (int recreate : dailyRecreational){
+            if (recreate == 0 || recreate >= 3){
+                numBad++;
+            }
+        }
+
+        switch (numBad){
+            case 0:
+                s5 = 100;
+                break;
+            case 1:
+                s5 = 80;
+                break;
+            case 2:
+            case 3:
+                s5 = 60;
+                break;
+            case 4:
+            case 5:
+                s5 = 40;
+                break;
+            default:
+                s5 = 20;
+        }
+        return (s1 + s2 + s3 + s4 + s5) / 5f;
 
     }
 
@@ -201,6 +304,32 @@ public class GameScreen implements Screen {
 
     public GameClock getGameClock(){
         return gameClock;
+    }
+
+    public int getTotalStudyHours(){
+        return totalStudyHours;
+    }
+
+    public void setTotalStudyHours(int totalStudyHours){
+        this.totalStudyHours = totalStudyHours;
+    }
+
+    public void addRecreational(){
+        dailyRecreational[gameClock.getDays()-1]++;
+    }
+
+    public void addStudy(){
+        dailyStudy[gameClock.getDays()-1]++;
+    }
+
+    public void addStudyPlace(String studyPlace){
+        if (!placesStudied.contains(studyPlace)){
+            placesStudied.add(studyPlace);
+        }
+    }
+
+    public void addMeal(int time){
+        mealTimes.get(gameClock.getDays()-1).add(time);
     }
 
     private boolean checkGameOverCondition(){

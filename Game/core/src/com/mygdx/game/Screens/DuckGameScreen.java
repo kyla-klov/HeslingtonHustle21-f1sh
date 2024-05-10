@@ -59,6 +59,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
         camera.update();
         // Update this
         duck = new Texture("Activitys/duck game/duck.png");
+        ((GameScreen) game.screenManager.getScreen(ScreenType.GAME_SCREEN)).addRecreational();
         spawnDuck();
     }
 
