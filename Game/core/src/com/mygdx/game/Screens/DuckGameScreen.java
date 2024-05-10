@@ -138,11 +138,11 @@ public class DuckGameScreen implements Screen, InputProcessor{
             String finalText = "Completed in " + timeToComplete + " seconds!";
 
             if (duckAchievement.isGoldAchieved()){
-                finalText = finalText + " Received Gold Achievement!";
+                finalText = finalText + " Current Achievement: gold";
             } else if (duckAchievement.isSilverAchieved()){
-                finalText = finalText + " Received Silver Achievement";
+                finalText = finalText + " Current Achievement: silver";
             } else if (duckAchievement.isBronzeAchieved()){
-                finalText = finalText + " Received Bronze Achievement";
+                finalText = finalText + " Current Achievement: bronze";
             }
 
             glyphLayout.setText(displayText, finalText);

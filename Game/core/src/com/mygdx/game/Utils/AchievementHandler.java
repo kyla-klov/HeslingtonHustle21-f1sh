@@ -35,6 +35,13 @@ public class AchievementHandler {
     }
 
     public Achievement createAchievement(String name, String description){
+
+        for (Achievement a : achievements){
+            if (a.getName().equals(name)){
+                return a;
+            }
+        }
+
         Achievement newAchievement = new Achievement(name, description);
         achievements.add(newAchievement);
         return newAchievement;

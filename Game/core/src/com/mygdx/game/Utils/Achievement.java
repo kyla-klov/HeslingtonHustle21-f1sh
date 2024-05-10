@@ -20,15 +20,19 @@ public class Achievement {
     }
 
     public void setSilverAchievement(){
-        achievedSilver = true;
-        achievedGold = false;
-        achievedBronze = false;
+
+        if (!achievedGold){
+            achievedSilver = true;
+            achievedBronze = false;
+        }
     }
 
     public void setBronzeAchievement(){
-        achievedBronze = true;
-        achievedGold = false;
-        achievedSilver = false;
+
+        if (!achievedGold && !achievedSilver){
+            achievedBronze = true;
+        }
+
     }
 
 
