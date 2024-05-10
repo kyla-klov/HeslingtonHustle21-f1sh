@@ -54,7 +54,6 @@ public class DuckGameScreen implements Screen, InputProcessor{
         this.game = game;
         String achievementDescription = "How fast can you click the ducks?";
         duckAchievement = game.achievementHandler.createAchievement("Duck duck go", achievementDescription);
-        System.out.println(duckAchievement.getName());
 
         displayText = new BitmapFont();
         title = new BitmapFont();
@@ -81,9 +80,11 @@ public class DuckGameScreen implements Screen, InputProcessor{
             long totalSeconds = duration.toSeconds();
             timeToComplete = totalSeconds % 60;
 
-            if (timeToComplete > 12 && timeToComplete <= 16){
+            if (timeToComplete == 18){
+                duckAchievement.setBronzeAchievement();
+            } else if (timeToComplete == 17){
                 duckAchievement.setSilverAchievement();
-            } else if (timeToComplete <= 12){
+            } else if (timeToComplete <= 16){
                 duckAchievement.setGoldAchievement();
             }
 
@@ -140,6 +141,8 @@ public class DuckGameScreen implements Screen, InputProcessor{
                 finalText = finalText + " Received Gold Achievement!";
             } else if (duckAchievement.isSilverAchieved()){
                 finalText = finalText + " Received Silver Achievement";
+            } else if (duckAchievement.isBronzeAchieved()){
+                finalText = finalText + " Received Bronze Achievement";
             }
 
             glyphLayout.setText(displayText, finalText);

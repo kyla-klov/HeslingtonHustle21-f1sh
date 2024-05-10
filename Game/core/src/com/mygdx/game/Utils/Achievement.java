@@ -5,6 +5,7 @@ public class Achievement {
     private String name;
     private boolean achievedGold = false;
     private boolean achievedSilver = false;
+    private boolean achievedBronze = false;
 
     public Achievement(String Name, String Description){
         this.description = Description;
@@ -14,17 +15,22 @@ public class Achievement {
     // If we have achieved silver then we switch to achieving gold (vice versa for setSilverAchievement)
     public void setGoldAchievement(){
         achievedGold = true;
-        if (achievedSilver){
-            achievedSilver = false;
-        }
+        achievedSilver = false;
+        achievedBronze = false;
     }
 
     public void setSilverAchievement(){
         achievedSilver = true;
-        if (achievedGold){
-            achievedGold = false;
-        }
+        achievedGold = false;
+        achievedBronze = false;
     }
+
+    public void setBronzeAchievement(){
+        achievedBronze = true;
+        achievedGold = false;
+        achievedSilver = false;
+    }
+
 
     public String getName(){
         return name;
@@ -40,5 +46,9 @@ public class Achievement {
 
     public boolean isSilverAchieved(){
         return achievedSilver;
+    }
+
+    public boolean isBronzeAchieved(){
+        return achievedBronze;
     }
 }
