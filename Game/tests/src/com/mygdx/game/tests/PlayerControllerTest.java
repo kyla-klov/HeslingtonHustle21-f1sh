@@ -9,6 +9,7 @@ import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
 import com.mygdx.game.Objects.Animation;
 import com.mygdx.game.Objects.PlayerController;
+import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.*;
 import org.junit.After;
 import org.junit.Before;
@@ -26,6 +27,7 @@ public class PlayerControllerTest {
     private AutoCloseable closeable;
 
     private final HesHustle mockedGame = mock(HesHustle.class);
+    private final GameScreen mockedGameScreen = mock(GameScreen.class);
     private final GameClock mockedClock = spy(GameClock.class);
 
     private final ScreenManager mockedSM = mock(ScreenManager.class);
@@ -45,7 +47,7 @@ public class PlayerControllerTest {
 
     @InjectMocks
     private EventManager mockedEM = mock(EventManager.class, withSettings()
-            .useConstructor(mockedGame, mockedClock)
+            .useConstructor(mockedGame, mockedGameScreen, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
     private final ResourceManager resourceManager = new ResourceManager() ;

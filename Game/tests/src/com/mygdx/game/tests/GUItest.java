@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
+import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.*;
 import com.badlogic.gdx.Gdx;
 import org.junit.After;
@@ -33,6 +34,7 @@ public class GUItest {
     private final Batch mockedBatch = mock(Batch.class);
 
     private final HesHustle mockedGame = mock(HesHustle.class);
+    private final GameScreen mockedGameScreen = mock(GameScreen.class);
     private final GameClock mockedClock = spy(GameClock.class);
 
     private final ScreenManager mockedSM = mock(ScreenManager.class);
@@ -44,14 +46,14 @@ public class GUItest {
             .useConstructor("Activitys/cs.png")
             .defaultAnswer(CALLS_REAL_METHODS));
 
-    @Spy private final Event PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
-    @Spy private final Event StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", mockedStudyImage);
-    @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
-    @Spy private final Event FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "",ScreenType.DUCK_GAME_SCREEN);
+    @Spy private final Event FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "",ScreenType.DUCK_GAME_SCREEN);
+    @Spy private final Event StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", mockedStudyImage);
+    @Spy private final Event PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
     @Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", mockedImage);
+    @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
 
     @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
-            .useConstructor(mockedGame, mockedClock)
+            .useConstructor(mockedGame, mockedGameScreen, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
     private final Skin skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
@@ -69,7 +71,7 @@ public class GUItest {
     @Spy private TextButton StudyButt  = new TextButton("StdyNo:",skin);
 
     @InjectMocks private GUI mockedGUI = mock(GUI.class, withSettings().
-            useConstructor(mockedBatch, mockedEM, mockedClock)
+            useConstructor(mockedBatch, mockedEM, mockedClock, mockedGameScreen)
             .defaultAnswer(CALLS_REAL_METHODS));
     private int rec=1,slp=1,eat=1,stdy=2;
     @Before
@@ -98,8 +100,12 @@ public class GUItest {
     }
     @Test
     public void testCountActivitys(){
-        assertEquals(new int[] {this.rec, this.slp, this.eat, this.stdy},
-                mockedGUI.countActivitys());
+        int[] activitys = mockedGUI.countActivitys();
+        assertEquals(4, activitys.length);
+        assertEquals(this.rec, activitys[0]);
+        assertEquals(this.slp, activitys[1]);
+        assertEquals(this.eat, activitys[2]);
+        assertEquals(this.stdy, activitys[3]);
     }
 
     public void testCreateDraws(){
