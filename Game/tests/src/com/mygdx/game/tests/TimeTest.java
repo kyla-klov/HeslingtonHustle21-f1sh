@@ -1,6 +1,7 @@
 package com.mygdx.game.tests;
 
 import com.mygdx.game.HesHustle;
+import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.GameClock;
 import org.junit.runner.RunWith;
 import org.junit.Test;
@@ -13,7 +14,9 @@ import static org.junit.Assert.assertTrue;
 public class TimeTest {
     @Test
     public void testUpdateTime(){
-        EventManager event = new EventManager(new HesHustle(), new GameClock());
+        HesHustle a = new HesHustle();
+        EventManager event = new EventManager(a, new GameScreen(a),new GameClock());
+        event.interact("Langwith");
         assertTrue("a", true);
     }
 }

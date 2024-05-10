@@ -2,6 +2,7 @@ package com.mygdx.game.tests;
 
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
+import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.*;
 import org.junit.After;
 import org.junit.Before;
@@ -19,6 +20,7 @@ import org.mockito.Spy;
 public class EventManagerTest {
     private AutoCloseable closeable;
     private final HesHustle mockedGame = mock(HesHustle.class);
+    private final GameScreen mockedGameScreen = mock(GameScreen.class);
     private final GameClock mockedClock = spy(GameClock.class);
 
     private final ScreenManager mockedSM = mock(ScreenManager.class);
@@ -37,7 +39,7 @@ public class EventManagerTest {
     @Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", mockedImage);
 
     @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
-            .useConstructor(mockedGame, mockedClock)
+            .useConstructor(mockedGame, mockedGameScreen, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
 

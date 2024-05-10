@@ -85,21 +85,36 @@ public class GUItest {
     @Test
     public void testUpdate(){
         mockedGUI.update((float) 1);
-        verify(ngrBar).setValue(mockedEM.getEnergy());
-        verify(ScoreButt).setText("Score: "+ mockedEM.getScore());
-        verify(DayButt).setText("Day: " + mockedClock.getDays());
-        verify(TimeButt).setText(mockedClock.getTime());
-//        assertEquals(5, TimeButt.getScaleY(), 0);
-        verify(mockedGUI).countActivitys();
-        verify(RecButt).setText("RecNo: " + this.rec);
-        verify(SleepButt).setText("SlpNo: " + this.slp);
-        verify(EatButt).setText("EatNo: " + this.eat);
-        verify(StudyButt).setText("StdyNo: " + this.stdy);
+        verify(ngrBar, times(1)).setValue(mockedEM.getEnergy());
+        verify(ScoreButt, times(1)).setText("Score: "+ mockedEM.getScore());
+        verify(DayButt, times(1)).setText("Day: " + mockedClock.getDays());
+        verify(TimeButt, times(1)).setText(mockedClock.getTime());
+        assertEquals(6, TimeButt.getScaleY(), 0);
+        verify(mockedGUI, times(1)).countActivitys();
+        verify(RecButt, times(1)).setText("RecNo: " + this.rec);
+        verify(SleepButt, times(1)).setText("SlpNo: " + this.slp);
+        verify(EatButt, times(1)).setText("EatNo: " + this.eat);
+        verify(StudyButt, times(1)).setText("StdyNo: " + this.stdy);
     }
     @Test
     public void testCountActivitys(){
         assertEquals(new int[] {this.rec, this.slp, this.eat, this.stdy},
                 mockedGUI.countActivitys());
+    }
+
+    public void testCreateDraws(){
+        // test left table
+        verify(leftTab, times(1)).add(ScoreButt);
+        verify(leftTab, times(1)).add(DayButt);
+        verify(leftTab, times(1)).add(TimeButt);
+        verify(leftTab, times(1)).row();
+
+        //test right table
+        verify(rightTab, times(1)).add(RecButt);
+        verify(rightTab, times(1)).add(SleepButt);
+        verify(rightTab, times(1)).add(EatButt);
+        verify(rightTab, times(1)).add(StudyButt);
+
     }
     @After
     public void releaseMocks() throws Exception {
