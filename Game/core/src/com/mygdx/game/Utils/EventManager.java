@@ -37,8 +37,7 @@ public class EventManager {
     private void generateEvents() {
         FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "", ScreenType.DUCK_GAME_SCREEN);
         StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
-        PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN
-        );
+        PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
         Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
     }
@@ -72,8 +71,11 @@ public class EventManager {
         assert curEvent != null;
         if (-curEvent.getEnergyCost() < energy) {
             playedEvents.add(curEvent);
-            frozen = true;
-            if (curEvent.getActivityImage() != null) curEvent.getActivityImage().setActive();
+            if (curEvent.getActivityImage() != null)
+            {
+                frozen = true;
+                curEvent.getActivityImage().setActive();
+            }
             else game.screenManager.setScreen(curEvent.getScreenType());
             gameScreen.setTotalStudyHours(gameScreen.getTotalStudyHours() + curEvent.getStudyTime());
             if (curEvent.getStudyTime() > 0){
