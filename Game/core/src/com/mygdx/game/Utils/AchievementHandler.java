@@ -1,6 +1,8 @@
 package com.mygdx.game.Utils;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /*
 Documentation on usage
@@ -18,6 +20,9 @@ if you want to set an achievement to golf if x == 3 else silver:
     } else {
         myAchievement.setSilverAchievement();
     }
+
+The prepareAchievementsForDisplay can be used in the end screen to obtain an achievements name
+and whether they got gold, silver or nothing. It returns a Mapping which you can loop over
  */
 
 
@@ -39,4 +44,17 @@ public class AchievementHandler {
         return achievements;
     }
 
+    public Map<String, String> prepareAchievementsForDisplay(){
+        Map<String, String> pair = new HashMap<>();
+        for (Achievement a : achievements){
+            if (a.isGoldAchieved()){
+                pair.put(a.getName(), "gold");
+            } else if (a.isSilverAchieved()){
+                pair.put(a.getName(), "silver");
+            } else {
+                pair.put(a.getName(), "no achievements");
+            }
+        }
+        return pair;
+    }
 }

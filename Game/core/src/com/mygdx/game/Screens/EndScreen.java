@@ -10,6 +10,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.HesHustle;
+import com.mygdx.game.Utils.Achievement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class EndScreen implements Screen{
@@ -80,6 +84,7 @@ public class EndScreen implements Screen{
         table.add(exitButton).pad(10);
 
     }
+
 
 
 
