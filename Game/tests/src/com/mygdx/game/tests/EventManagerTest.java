@@ -3,6 +3,7 @@ package com.mygdx.game.tests;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
 import com.mygdx.game.Utils.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,6 +17,7 @@ import org.mockito.Spy;
 
 @RunWith(GdxTestRunner.class)
 public class EventManagerTest {
+    private AutoCloseable closeable;
     private final HesHustle mockedGame = mock(HesHustle.class);
     private final GameClock mockedClock = spy(GameClock.class);
 
@@ -38,8 +40,9 @@ public class EventManagerTest {
             .useConstructor(mockedGame, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
+
     @Before public void setup(){
-        MockitoAnnotations.openMocks(this);
+        closeable = MockitoAnnotations.openMocks(this);
         mockedGame.screenManager = mockedSM;
     }
 
@@ -137,6 +140,10 @@ public class EventManagerTest {
         assertEquals(expectedScore, mockedEM.getScore(), 0);
     }
 
+    @After
+    public void releaseMocks() throws Exception {
+        closeable.close();
+    }
 //    @Test
 //    public void testUpdate() {
 //        // tests the case where TRaw + deltaTime is less than 0.5f

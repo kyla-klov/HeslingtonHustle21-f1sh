@@ -1,5 +1,6 @@
 package com.mygdx.game.Screens;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,7 +25,6 @@ public class EndScreen implements Screen{
         this.game = game;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-
         skin = new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"));
         playAgainButton = new TextButton("Play Again", skin);
         mainMenuButton = new TextButton("Main Menu", skin);
@@ -32,19 +32,24 @@ public class EndScreen implements Screen{
         setupUi();
     }
 
-    public TextButton getPlayAgainButton() {
-        return playAgainButton;
-    }
-
-    public TextButton getMainMenuButton() {
-        return mainMenuButton;
-    }
-
-    public TextButton getExitButton() {
-        return exitButton;
+    // Constructor for testing
+    public EndScreen(final HesHustle game,
+                     final Stage stage,
+                     final TextButton playAgainButton,
+                     final TextButton mainMenuButton,
+                     final TextButton exitButton) {
+        this.game = game;
+        this.stage = stage;
+        this.skin = null;
+        Gdx.input.setInputProcessor(stage);
+        this.playAgainButton = playAgainButton;
+        this.mainMenuButton = mainMenuButton;
+        this.exitButton = exitButton;
+        setupUi();
     }
 
     private void setupUi(){
+
         Table table = new Table ();
         table.setFillParent(true);
         stage.addActor(table);

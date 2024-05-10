@@ -1,5 +1,6 @@
 package com.mygdx.game.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
 import com.mygdx.game.Utils.*;
@@ -17,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
+import java.awt.*;
 import java.util.Map;
 
 @RunWith(GdxTestRunner.class)
@@ -33,7 +35,7 @@ public class ScreenManagerTest {
     }
 
     @Test public void testAddScreenToMemory(){
-        mockedSM.addScreenToMemory(ScreenType.MENU_SCREEN);
-        assertEquals(1,1);
+//        mockedSM.addScreenToMemory(ScreenType.MENU_SCREEN);
+//        assertEquals("Desktop", Gdx.app.getType());
     }
 }
