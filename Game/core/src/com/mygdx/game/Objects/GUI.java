@@ -98,7 +98,7 @@ public class GUI extends GameObject{
     }
     public int[] countActivitys(){
         int rec=0,slp=0,eat=0,stdy=0;
-        for (Event e : EM.playedEvents)
+        for (Event e : EM.getPlayedEvents())
         {
             switch (e.getEventType())
             {
