@@ -18,7 +18,7 @@ public class EventManager {
 
     Integer energy;
     boolean frozen = false;
-    public List<Event> playedEvents;
+    List<Event> playedEvents;
     private final ResourceManager resourceManager;
     private final HesHustle game;
     private final GameClock gameClock;
