@@ -2,6 +2,7 @@ package com.mygdx.game.Utils;
 
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
+import com.mygdx.game.Screens.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,12 @@ public class EventManager {
     public List<Event> playedEvents;
     private final ResourceManager resourceManager;
     private final HesHustle game;
+    private final GameScreen gameScreen;
     private final GameClock gameClock;
-    public EventManager(HesHustle game, GameClock gameClock) {
+    public EventManager(HesHustle game, GameScreen gameScreen, GameClock gameClock) {
         this.game = game;
         this.gameClock = gameClock;
+        this.gameScreen = gameScreen;
         resourceManager = new ResourceManager();
         playedEvents = new ArrayList<>();
         energy = 100;
@@ -32,9 +35,9 @@ public class EventManager {
     }
 
     private void generateEvents() {
-        FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/lakemap.png")));
-        StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, "", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
-        PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN
+        FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/lakemap.png")));
+        StudyCS = new Event(3, -20, 0, -10, Event.Type.STUDY, 15, "", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
+        PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN
         );
         Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
