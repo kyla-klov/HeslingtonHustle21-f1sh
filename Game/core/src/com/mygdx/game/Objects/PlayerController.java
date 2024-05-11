@@ -119,7 +119,7 @@ public class PlayerController extends GameObject implements InputProcessor {
      */
     public void update (float deltaTime) {
         //get texture region to draw
-        txr = getAnim(Pstate).GetFrame(deltaTime);
+        txr = getAnim(Pstate).getFrame(deltaTime);
         //update position using normalised direction vector using vector addition (delta time in scalar)
         if (!EM.isFrozen()){
             pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
