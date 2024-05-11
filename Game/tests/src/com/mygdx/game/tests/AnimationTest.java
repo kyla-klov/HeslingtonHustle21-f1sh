@@ -12,12 +12,12 @@ import static org.junit.Assert.assertSame;
 
 @RunWith(GdxTestRunner.class)
 public class AnimationTest {
-    Texture texture = new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png"));
-    int frameTot = 24;
-    int width = texture.getWidth() / frameTot;
-    int height = texture.getHeight();
-    TextureRegion textureRegion = new TextureRegion(texture, width*(12+0), 0, width, height);
-    Animation animation = new Animation(texture,12,17,frameTot,12);
+    private final Texture texture = new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png"));
+    private final int frameTot = 24;
+    private final int width = texture.getWidth() / frameTot;
+    private final int height = texture.getHeight();
+    private final TextureRegion textureRegion = new TextureRegion(texture, width*(12+0), 0, width, height);
+    private final Animation animation = new Animation(texture,12,17,frameTot,12);
     @Test
     public void testGetFrame(){
         TextureRegion textureRegion = animation.getFrame(2);
