@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
-import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.Event;
 import com.mygdx.game.Utils.EventManager;
 import com.mygdx.game.Utils.GameClock;
@@ -19,18 +18,16 @@ public class GUI extends GameObject{
     private final Table root;
     private final GameClock gameClock;
     private final EventManager EM;
-    private final GameScreen gameScreen;
     private final Stage stage;
     private Table leftTab, rightTab;
     private ProgressBar nrgBar;
     private TextButton TimeButt,ScoreButt,DayButt;
     private TextButton RecButt,EatButt,StudyButt,SleepButt;
 
-    public GUI(Batch batch, EventManager EM, GameClock gameClock, GameScreen gameScreen) {
+    public GUI(Batch batch, EventManager EM, GameClock gameClock) {
         super(0,0,0,0);
         this.EM = EM;
         this.gameClock = gameClock;
-        this.gameScreen = gameScreen;
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
         stage = new Stage(new ExtendViewport(400,400),batch);
         root = new Table();
@@ -85,7 +82,7 @@ public class GUI extends GameObject{
     }
     public void update(float deltaTime){
         nrgBar.setValue(EM.getEnergy());
-        ScoreButt.setText("Score: " + gameScreen.calcScore());
+        ScoreButt.setText("Score: " + EM.calcScore());
         DayButt.setText("Day: " + gameClock.getDays());
         TimeButt.setText(gameClock.getTime());
         TimeButt.scaleBy(5);

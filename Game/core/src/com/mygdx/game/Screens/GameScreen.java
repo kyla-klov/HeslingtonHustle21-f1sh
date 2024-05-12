@@ -101,7 +101,7 @@ public class GameScreen implements Screen {
 
         EventManager eventM = new EventManager(game, this, gameClock);
         Player = new PlayerController(1000,1000, eventM, collisionLayer);
-        gui = new GUI(game.batch, eventM, gameClock, this);
+        gui = new GUI(game.batch, eventM, gameClock);
         LC = new LightCycle();
 
         for (int i=0; i < eventM.listEvents().size(); i++) {
@@ -135,98 +135,7 @@ public class GameScreen implements Screen {
 
     }
 
-    public float calcScore(){
-        int s1, s2, s3, s4, s5;
 
-        int num0s = 0;
-        int num1s = 0;
-        for (int study : dailyStudy){
-            if (study == 0){
-                num0s++;
-            } else if (study == 1){
-                num1s++;
-            }
-        }
-        if (num0s == 0 || (num0s == 1 && num1s <= 5)){
-            s1 = 100;
-        } else if (num0s == 2 && num1s <= 4){
-            s1 = 60;
-        } else if (num0s < 7){
-            s1 = 40;
-        } else{
-            s1 = 0;
-        }
-
-        switch(placesStudied.size()){
-            case 0:
-                s2 = 0;
-                break;
-            case 1:
-                s2 = 60;
-                break;
-            case 2:
-                s2 = 80;
-                break;
-            default:
-                s2 = 100;
-                break;
-        }
-
-        s3 = (totalStudyHours >= 28 && totalStudyHours <= 35) ? 100 : (totalStudyHours * 100 / 28);
-
-        int notEaten = 0;
-        for (List<Integer> times : mealTimes){
-            if (times.size() < 3){
-                notEaten++;
-            }
-        }
-        notEaten = (notEaten + 1)/2;
-        switch (notEaten){
-            case 0:
-                s4 = 100;
-                break;
-            case 1:
-                s4 = 80;
-                break;
-            case 2:
-                s4 = 60;
-                break;
-            case 3:
-                s4 = 40;
-                break;
-            default:
-                s4 = 0;
-                break;
-        }
-
-        int numBad = 0;
-        for (int recreate : dailyRecreational){
-            if (recreate == 0 || recreate >= 3){
-                numBad++;
-            }
-        }
-
-        switch (numBad){
-            case 0:
-                s5 = 100;
-                break;
-            case 1:
-                s5 = 80;
-                break;
-            case 2:
-            case 3:
-                s5 = 60;
-                break;
-            case 4:
-            case 5:
-                s5 = 40;
-                break;
-            default:
-                s5 = 20;
-        }
-        return (s1 + s2 + s3 + s4 + s5) / 5f;
-
-    }
 
     @Override
     public void render(float delta) {
@@ -314,18 +223,34 @@ public class GameScreen implements Screen {
         this.totalStudyHours = totalStudyHours;
     }
 
+    public int[] getDailyRecreational(){
+        return dailyRecreational;
+    }
+
     public void addRecreational(){
         dailyRecreational[gameClock.getDays()-1]++;
+    }
+
+    public int[] getDailyStudy(){
+        return dailyStudy;
     }
 
     public void addStudy(){
         dailyStudy[gameClock.getDays()-1]++;
     }
 
+    public List<String> getPlacesStudied(){
+        return placesStudied;
+    }
+
     public void addStudyPlace(String studyPlace){
         if (!placesStudied.contains(studyPlace)){
             placesStudied.add(studyPlace);
         }
+    }
+
+    public List<List<Integer>> getMealTimes(){
+        return mealTimes;
     }
 
     public void addMeal(int time){

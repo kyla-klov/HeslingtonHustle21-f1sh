@@ -116,7 +116,7 @@ public class EventManager {
         } else {
             gameClock.setHours(gameClock.getHours() + (int) Math.floor(e.getTimeCost()));
             if (gameClock.getHours() >= 24) {
-                int day = (int) gameClock.getHours()/24;
+                int day = gameClock.getHours()/24;
                 gameClock.setHours(gameClock.getHours() - (24 * day));
                 gameClock.setDays(gameClock.getDays() + day);
             }
@@ -132,51 +132,102 @@ public class EventManager {
         return playedEvents;
     }
 
-    public int getScore() {
-        int score = 0;
-        int cumulativeEat = 1;
-        int cumulativeSleep = 1;
-        int studyCount = 0;
-        int studyTotal = 0;
-        int recCount = 0;
-        int recTotal = 0;
-        double studyDebuff = 1;
-        double recDebuff = 1;
-        //int fatigue = 0;
-        for (Event event : playedEvents) {
-            switch (event.getEventType()) {
-                case EAT:
-                    score += cumulativeEat;
-                    cumulativeEat += cumulativeEat;
-                    break;
-                case SLEEP:
-                    score += cumulativeSleep;
-                    cumulativeSleep += cumulativeSleep;
-                    break;
-                case RECREATIONAL:
-                    //score += event.getEnjoymentStudyLevel();
-                    recCount += 1;
-                    score += event.getFatigue();
-                    break;
-                case STUDY:
-                    //studyTotal += event.getEnjoymentStudyLevel();
-                    studyCount += 1;
-                    score += event.getFatigue();
-                    break;
-                default:
-                    score += 1;
-                    break;
+    public float calcScore(){
+        int s1, s2, s3, s4, s5;
 
+        int num0s = 0;
+        int num1s = 0;
+        for (int study : gameScreen.getDailyStudy()){
+            if (study == 0){
+                num0s++;
+            } else if (study == 1){
+                num1s++;
             }
-            studyDebuff = 0.15 * (-(studyCount * studyCount) + (28 * studyCount));
-            recDebuff = (double) 140 / (((recCount - 10) * (recCount - 10)) + 5);
+        }
+        if (num0s == 0 || (num0s == 1 && num1s <= 5)){
+            s1 = 100;
+        } else if (num0s == 2 && num1s <= 4){
+            s1 = 60;
+        } else if (num0s < 7){
+            s1 = 40;
+        } else{
+            s1 = 0;
         }
 
-        score += (int) Math.round(studyDebuff * studyTotal);
-        score += (int) Math.round(recDebuff * recTotal);
+        switch(gameScreen.getPlacesStudied().size()){
+            case 0:
+                s2 = 0;
+                break;
+            case 1:
+                s2 = 60;
+                break;
+            case 2:
+                s2 = 80;
+                break;
+            default:
+                s2 = 100;
+                break;
+        }
 
+        int totalStudyHours = gameScreen.getTotalStudyHours();
+        s3 = (totalStudyHours >= 28 && totalStudyHours <= 35) ? 100 : (totalStudyHours * 100 / 28);
 
-        return score;
+        int notEaten = 0;
+        for (List<Integer> times : gameScreen.getMealTimes()){
+            if (times.size() < 3){
+                notEaten++;
+            }
+        }
+        notEaten = (notEaten + 1)/2;
+        switch (notEaten){
+            case 0:
+                s4 = 100;
+                break;
+            case 1:
+                s4 = 80;
+                break;
+            case 2:
+                s4 = 60;
+                break;
+            case 3:
+                s4 = 40;
+                break;
+            default:
+                s4 = 0;
+                break;
+        }
+
+        int numBad = 0;
+        for (int recreate : gameScreen.getDailyRecreational()){
+            if (recreate == 0 || recreate >= 3){
+                numBad++;
+            }
+        }
+
+        switch (numBad){
+            case 0:
+                s5 = 100;
+                break;
+            case 1:
+                s5 = 80;
+                break;
+            case 2:
+            case 3:
+                s5 = 60;
+                break;
+            case 4:
+            case 5:
+                s5 = 40;
+                break;
+            case 6:
+                s5 = 20;
+                break;
+            default:
+                s5 = 0;
+                break;
+        }
+        return (s1 + s2 + s3 + s4 + s5) / 5f;
+
     }
 
     public boolean isFrozen() {
@@ -184,7 +235,7 @@ public class EventManager {
     }
 
     public ArrayList<Event> listEvents(){
-        ArrayList<Event> list = new ArrayList<Event>();
+        ArrayList<Event> list = new ArrayList<>();
         list.add(FeedDucks);
         list.add(Sleep);
         list.add(StudyCS);
