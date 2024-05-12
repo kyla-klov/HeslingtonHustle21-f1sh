@@ -73,6 +73,8 @@ public class PlayerController extends GameObject implements InputProcessor {
     public EventManager EM;
     /**Ref to nearest building (Activity) for interaction*/
     public Building nearBD;
+
+    private float distanceTravelled;
     /**Detects player collision
      *
      */
@@ -122,7 +124,11 @@ public class PlayerController extends GameObject implements InputProcessor {
         txr = getAnim(Pstate).GetFrame(deltaTime);
         //update position using normalised direction vector using vector addition (delta time in scalar)
         if (!EM.isFrozen()){
-            pos = pos.mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
+            Vector2 newPos = pos.cpy().mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
+            float distance = pos.cpy().sub(newPos).len();
+            distanceTravelled += distance;
+            pos = newPos;
+
         }
     }
     public Vector2 getPos() { return pos; }
@@ -301,6 +307,10 @@ public class PlayerController extends GameObject implements InputProcessor {
             }
         }
         return true;
+    }
+
+    public float getDistanceTravelled(){
+        return distanceTravelled;
     }
 
     @Override
