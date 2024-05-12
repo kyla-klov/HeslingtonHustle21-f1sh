@@ -43,6 +43,7 @@ public class GameScreen implements Screen {
     private final TiledMapRenderer TmRender;
     private final TiledMap tiledMap;
 
+    private EventManager eventM;
     private GUI gui;
     private LightCycle LC;
     private final Music BGmusic;
@@ -99,7 +100,7 @@ public class GameScreen implements Screen {
         buildings.add(langwith);
         buildings.add(piazza);
 
-        EventManager eventM = new EventManager(game, this, gameClock);
+        this.eventM = new EventManager(game, gameClock);
         Player = new PlayerController(1000,1000, eventM, collisionLayer);
         gui = new GUI(game.batch, eventM, gameClock);
         LC = new LightCycle();
@@ -228,7 +229,7 @@ public class GameScreen implements Screen {
     }
 
     public void addRecreational(){
-        dailyRecreational[gameClock.getDays()-1]++;
+        this.eventM.addRecreational();
     }
 
     public int[] getDailyStudy(){

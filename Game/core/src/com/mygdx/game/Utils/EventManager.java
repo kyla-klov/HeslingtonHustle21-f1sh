@@ -22,15 +22,31 @@ public class EventManager {
     List<Event> playedEvents;
     private final ResourceManager resourceManager;
     private final HesHustle game;
-    private final GameScreen gameScreen;
+//    private final GameScreen gameScreen;
     private final GameClock gameClock;
-    public EventManager(HesHustle game, GameScreen gameScreen, GameClock gameClock) {
+
+    //Game Score Data//
+    private final int[] dailyStudy;
+    private final int[] dailyRecreational;
+    private final List<List<Integer>> mealTimes;
+    private final List<String> placesStudied;
+    private int totalStudyHours;
+
+    public EventManager(HesHustle game, GameClock gameClock) {
         this.game = game;
         this.gameClock = gameClock;
-        this.gameScreen = gameScreen;
+//        this.gameScreen = gameScreen;
         resourceManager = new ResourceManager();
         playedEvents = new ArrayList<>();
         energy = 100;
+        dailyStudy = new int[7];
+        dailyRecreational = new int[7];
+        mealTimes = new ArrayList<>();
+        placesStudied = new ArrayList<>();
+        totalStudyHours = 0;
+        for (int i = 0; i < 7; i++) {
+            mealTimes.add(new ArrayList<>());
+        }
         generateEvents();
     }
 
@@ -77,12 +93,13 @@ public class EventManager {
                 curEvent.getActivityImage().setActive();
             }
             else game.screenManager.setScreen(curEvent.getScreenType());
-            gameScreen.setTotalStudyHours(gameScreen.getTotalStudyHours() + curEvent.getStudyTime());
+            this.totalStudyHours += curEvent.getStudyTime();
+//            gameScreen.setTotalStudyHours(gameScreen.getTotalStudyHours() + curEvent.getStudyTime());
             if (curEvent.getStudyTime() > 0){
-                gameScreen.addStudy();
-                gameScreen.addStudyPlace(curEvent.getDescription());
+                this.dailyStudy[gameClock.getDays()-1]++;
+                addStudyPlace(curEvent.getDescription());
             } else if (curEvent.getEventType() == Event.Type.EAT){
-                gameScreen.addMeal(gameClock.getHours());
+                addMeal(gameClock.getHours());
             }
 
             updateTime(curEvent);
@@ -137,7 +154,7 @@ public class EventManager {
 
         int num0s = 0;
         int num1s = 0;
-        for (int study : gameScreen.getDailyStudy()){
+        for (int study : this.dailyStudy){
             if (study == 0){
                 num0s++;
             } else if (study == 1){
@@ -154,7 +171,7 @@ public class EventManager {
             s1 = 0;
         }
 
-        switch(gameScreen.getPlacesStudied().size()){
+        switch(this.placesStudied.size()){
             case 0:
                 s2 = 0;
                 break;
@@ -169,11 +186,11 @@ public class EventManager {
                 break;
         }
 
-        int totalStudyHours = gameScreen.getTotalStudyHours();
-        s3 = (totalStudyHours >= 28 && totalStudyHours <= 35) ? 100 : (totalStudyHours * 100 / 28);
+//        int totalStudyHours = gameScreen.getTotalStudyHours();
+        s3 = (this.totalStudyHours >= 28 && this.totalStudyHours <= 35) ? 100 : (this.totalStudyHours * 100 / 28);
 
         int notEaten = 0;
-        for (List<Integer> times : gameScreen.getMealTimes()){
+        for (List<Integer> times : this.mealTimes){
             if (times.size() < 3){
                 notEaten++;
             }
@@ -198,7 +215,7 @@ public class EventManager {
         }
 
         int numBad = 0;
-        for (int recreate : gameScreen.getDailyRecreational()){
+        for (int recreate : this.dailyRecreational){
             if (recreate == 0 || recreate >= 3){
                 numBad++;
             }
@@ -242,5 +259,19 @@ public class EventManager {
         list.add(EatPiazza);
         list.add(PlayBBall);
         return list;
+    }
+
+    public void addRecreational(){
+        dailyRecreational[gameClock.getDays()-1]++;
+    }
+
+    public void addStudyPlace(String studyPlace){
+        if (!placesStudied.contains(studyPlace)){
+            placesStudied.add(studyPlace);
+        }
+    }
+
+    public void addMeal(int time){
+        mealTimes.get(gameClock.getDays()-1).add(time);
     }
 }

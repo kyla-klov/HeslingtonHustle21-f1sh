@@ -53,7 +53,7 @@ public class GUItest {
     @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
 
     @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
-            .useConstructor(mockedGame, mockedGameScreen, mockedClock)
+            .useConstructor(mockedGame, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
     private final Skin skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
@@ -71,7 +71,7 @@ public class GUItest {
     @Spy private TextButton StudyButt  = new TextButton("StdyNo:",skin);
 
     @InjectMocks private GUI mockedGUI = mock(GUI.class, withSettings().
-            useConstructor(mockedBatch, mockedEM, mockedClock, mockedGameScreen)
+            useConstructor(mockedBatch, mockedEM, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
     private int rec=1,slp=1,eat=1,stdy=2;
     @Before
@@ -88,7 +88,7 @@ public class GUItest {
     public void testUpdate(){
         mockedGUI.update((float) 1);
         verify(ngrBar, times(1)).setValue(mockedEM.getEnergy());
-        verify(ScoreButt, times(1)).setText("Score: "+ mockedEM.getScore());
+        verify(ScoreButt, times(1)).setText("Score: "+ mockedEM.calcScore());
         verify(DayButt, times(1)).setText("Day: " + mockedClock.getDays());
         verify(TimeButt, times(1)).setText(mockedClock.getTime());
         assertEquals(6, TimeButt.getScaleY(), 0);

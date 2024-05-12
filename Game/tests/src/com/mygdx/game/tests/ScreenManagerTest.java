@@ -35,7 +35,7 @@ public class ScreenManagerTest {
     }
 
     @Test public void testAddScreenToMemory(){
-//        mockedSM.addScreenToMemory(ScreenType.MENU_SCREEN);
-//        assertEquals("Desktop", Gdx.app.getType());
+        mockedSM.addScreenToMemory(ScreenType.MENU_SCREEN);
+        assertEquals("Desktop", Gdx.app.getType());
     }
 }

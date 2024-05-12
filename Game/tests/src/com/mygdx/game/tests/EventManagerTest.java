@@ -39,7 +39,7 @@ public class EventManagerTest {
     @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
 
     @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
-            .useConstructor(mockedGame, mockedGameScreen, mockedClock)
+            .useConstructor(mockedGame, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
 
@@ -139,7 +139,7 @@ public class EventManagerTest {
         mockedEM.interact("Computer\nScience\nDepartment");
         mockedEM.interact("Langwith");
         int expectedScore = 77;
-        assertEquals(expectedScore, mockedEM.getScore(), 0);
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
     }
 
     @After

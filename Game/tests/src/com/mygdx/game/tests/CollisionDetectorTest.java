@@ -47,7 +47,7 @@ public class CollisionDetectorTest {
 
     @InjectMocks
     private EventManager mockedEM = mock(EventManager.class, withSettings()
-            .useConstructor(mockedGame, mockedGameScreen, mockedClock)
+            .useConstructor(mockedGame, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
     private final ResourceManager resourceManager = new ResourceManager() ;
