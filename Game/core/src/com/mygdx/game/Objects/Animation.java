@@ -40,7 +40,7 @@ public class Animation {
      * @param deltaTime .
      * @return .
      */
-    public TextureRegion GetFrame(float deltaTime)
+    public TextureRegion getFrame(float deltaTime)
     {
         if (time > frameTime) {
             time = 0;

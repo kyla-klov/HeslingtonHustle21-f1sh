@@ -5,6 +5,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+
+import java.util.List;
 import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,6 +22,7 @@ import java.time.LocalDateTime;
 import java.time.Duration;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.mygdx.game.Utils.Achievement;
 import com.mygdx.game.Utils.ScreenType;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -45,9 +48,13 @@ public class DuckGameScreen implements Screen, InputProcessor{
     private final OrthographicCamera camera;
     private final Viewport vp;
     private GlyphLayout glyphLayout;
+    private Achievement duckAchievement;
 
     public DuckGameScreen(HesHustle game){
         this.game = game;
+        String achievementDescription = "How fast can you click the ducks?";
+        duckAchievement = game.achievementHandler.createAchievement("Duck duck go", achievementDescription);
+
         displayText = new BitmapFont();
         title = new BitmapFont();
         startTime = LocalDateTime.now();
@@ -72,6 +79,15 @@ public class DuckGameScreen implements Screen, InputProcessor{
             Duration duration = Duration.between(startTime, LocalDateTime.now());
             long totalSeconds = duration.toSeconds();
             timeToComplete = totalSeconds % 60;
+
+            if (timeToComplete == 18){
+                duckAchievement.setBronzeAchievement();
+            } else if (timeToComplete == 17){
+                duckAchievement.setSilverAchievement();
+            } else if (timeToComplete <= 16){
+                duckAchievement.setGoldAchievement();
+            }
+
             isEndGame = true;
             delay(2, this::endGame);
         }
@@ -79,6 +95,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
 
     public void endGame(){
         game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+
     }
 
     public void delay(float delaySeconds, Runnable runnable) {
@@ -118,8 +135,18 @@ public class DuckGameScreen implements Screen, InputProcessor{
         if (isDuckOnScreen){
             game.batch.draw(duck, duckX, duckY, duckWidth, duckHeight);
         } else if (isEndGame) {
-            glyphLayout.setText(displayText, "Completed in" + Long.toString(timeToComplete) + " seconds");
-            displayText.draw(game.batch, "Completed in " + Long.toString(timeToComplete) + " seconds", (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() / 2);
+            String finalText = "Completed in " + timeToComplete + " seconds!";
+
+            if (duckAchievement.isGoldAchieved()){
+                finalText = finalText + " Current Achievement: gold";
+            } else if (duckAchievement.isSilverAchieved()){
+                finalText = finalText + " Current Achievement: silver";
+            } else if (duckAchievement.isBronzeAchieved()){
+                finalText = finalText + " Current Achievement: bronze";
+            }
+
+            glyphLayout.setText(displayText, finalText);
+            displayText.draw(game.batch, finalText, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() / 2);
         }
 
 
