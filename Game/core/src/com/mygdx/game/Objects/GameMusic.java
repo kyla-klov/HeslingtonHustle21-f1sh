@@ -18,6 +18,10 @@ public class GameMusic {
      * Constructor for GameMusic. Initializes and starts playing the game's background music at the maximum volume level.
      */
     public GameMusic() {
+        setup();
+    }
+
+    private void setup(){
         audio = Gdx.audio.newMusic(Gdx.files.internal("music_loop/Ludum Dare 30 - 01.ogg"));
         audio.play();
         audio.setVolume(musicCap); // Set volume to 100%
@@ -32,6 +36,9 @@ public class GameMusic {
         return this.musicLevel;
     }
 
+    public Music getAudio() {
+        return audio;
+    }
 
     /**
      * Increments the music volume level by one, if it is not already at the maximum level. Adjusts the music playback volume accordingly.
