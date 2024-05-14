@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class GameScreen implements Screen {
 
-    private final ResourceManager resourceManager;
+    private final ResourceManager resourceManager = new ResourceManager();
     private final HesHustle game;
     private final ExtendViewport extendViewport;
     private final ShapeRenderer shape;
@@ -55,15 +55,22 @@ public class GameScreen implements Screen {
     private final List<String> placesStudied;
     private int totalStudyHours;
 
-
-    public GameScreen(final HesHustle game) {
+    public GameScreen(final HesHustle game, final GameClock gameClock,
+                      final ShapeRenderer shape, final TiledMap tiledMap,
+                      final TiledMapRenderer TmRender){
         this.game = game;
-        this.resourceManager = new ResourceManager();
         this.gameClock = new GameClock();
         extendViewport = new ExtendViewport(1600,900);
-        shape = resourceManager.addDisposable(new ShapeRenderer());
-        tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
-        TmRender = new OrthogonalTiledMapRenderer(tiledMap);
+        this.shape = resourceManager.addDisposable(shape);
+        if (tiledMap != null && TmRender != null){
+            this.tiledMap = resourceManager.addDisposable(tiledMap);
+            this.TmRender = TmRender;
+        }
+        else{
+            this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));;
+            this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap);
+
+        }
         dailyStudy = new int[7];
         dailyRecreational = new int[7];
         mealTimes = new ArrayList<>();
@@ -81,6 +88,31 @@ public class GameScreen implements Screen {
         BGmusic.setLooping(true);
 
         create();
+    }
+    public GameScreen(final HesHustle game) {
+        this(game, new GameClock(), new ShapeRenderer(), null, null);
+//        this.game = game;
+//        this.gameClock = new GameClock();
+//        extendViewport = new ExtendViewport(1600,900);
+//        shape = resourceManager.addDisposable(new ShapeRenderer());
+//        TmRender = new OrthogonalTiledMapRenderer(tiledMap);
+//        dailyStudy = new int[7];
+//        dailyRecreational = new int[7];
+//        mealTimes = new ArrayList<>();
+//        placesStudied = new ArrayList<>();
+//        totalStudyHours = 0;
+//        for (int i = 0; i < 7; i++) {
+//            mealTimes.add(new ArrayList<>());
+//        }
+//
+//        this.objects = new ArrayList<>();
+//        this.activityImages = new ArrayList<>();
+//        this.buildings = new ArrayList<>();
+//
+//        BGmusic = resourceManager.addDisposable(Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
+//        BGmusic.setLooping(true);
+//
+//        create();
 
     }
     public void create(){

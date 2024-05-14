@@ -55,6 +55,7 @@ public class GameMusicTest {
         //test whether volume is increased when musicLevel is smaller than 4
         mockedGameMusic.decrementVolume();
         mockedGameMusic.decrementVolume();
+        reset(audio);
         mockedGameMusic.incrementVolume();
         assertEquals(3, mockedGameMusic.getMusicLevel(), 0);
         verify(audio, times(1)).setVolume(0.075f);

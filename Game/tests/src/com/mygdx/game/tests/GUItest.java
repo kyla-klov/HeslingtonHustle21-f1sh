@@ -34,7 +34,6 @@ public class GUItest {
     private final Batch mockedBatch = mock(Batch.class);
 
     private final HesHustle mockedGame = mock(HesHustle.class);
-    private final GameScreen mockedGameScreen = mock(GameScreen.class);
     private final GameClock mockedClock = spy(GameClock.class);
 
     private final ScreenManager mockedSM = mock(ScreenManager.class);

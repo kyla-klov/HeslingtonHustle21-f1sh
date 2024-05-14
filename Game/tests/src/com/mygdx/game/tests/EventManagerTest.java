@@ -20,7 +20,6 @@ import org.mockito.Spy;
 public class EventManagerTest {
     private AutoCloseable closeable;
     private final HesHustle mockedGame = mock(HesHustle.class);
-    private final GameScreen mockedGameScreen = mock(GameScreen.class);
     private final GameClock mockedClock = spy(GameClock.class);
 
     private final ScreenManager mockedSM = mock(ScreenManager.class);
