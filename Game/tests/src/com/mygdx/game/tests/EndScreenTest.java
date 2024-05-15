@@ -60,9 +60,8 @@ public class EndScreenTest {
 
     // creates a mock instance of the end screen
     private final EndScreen mockedEndScreen = mock(EndScreen.class, withSettings()
-            .useConstructor(mockedGame, mockedStage,
-                    mockedPlayAgainButton, mockedMainMenuButton,
-                    mockedExitButton)
+            .useConstructor(mockedGame, mockedStage, mockedSkin,
+                    mockedPlayAgainButton, mockedMainMenuButton, mockedExitButton)
             .defaultAnswer(CALLS_REAL_METHODS));
 
     @Before
