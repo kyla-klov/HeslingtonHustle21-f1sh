@@ -15,10 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
-import com.mygdx.game.Utils.EventManager;
-import com.mygdx.game.Utils.GameClock;
-import com.mygdx.game.Utils.ResourceManager;
-import com.mygdx.game.Utils.ScreenType;
+import com.mygdx.game.Utils.*;
 
 
 import java.util.ArrayList;
@@ -39,27 +36,21 @@ public class GameScreen implements Screen {
     private final GameClock gameClock;
 
     //Game objects
-    private PlayerController Player;
+    private PlayerController player;
     private final TiledMapRenderer TmRender;
     private final TiledMap tiledMap;
 
-    private EventManager eventM;
     private GUI gui;
     private LightCycle LC;
     private final Music BGmusic;
 
-    //Game Score Data//
-    private final int[] dailyStudy;
-    private final int[] dailyRecreational;
-    private final List<List<Integer>> mealTimes;
-    private final List<String> placesStudied;
-    private int totalStudyHours;
+    Achievement.Type hiker = null;
 
     public GameScreen(final HesHustle game, final GameClock gameClock,
                       final ShapeRenderer shape, final TiledMap tiledMap,
                       final TiledMapRenderer TmRender){
         this.game = game;
-        this.gameClock = new GameClock();
+        this.gameClock = gameClock;
         extendViewport = new ExtendViewport(1600,900);
         this.shape = resourceManager.addDisposable(shape);
         if (tiledMap != null && TmRender != null){
@@ -67,17 +58,9 @@ public class GameScreen implements Screen {
             this.TmRender = TmRender;
         }
         else{
-            this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));;
+            this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
             this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap);
 
-        }
-        dailyStudy = new int[7];
-        dailyRecreational = new int[7];
-        mealTimes = new ArrayList<>();
-        placesStudied = new ArrayList<>();
-        totalStudyHours = 0;
-        for (int i = 0; i < 7; i++) {
-            mealTimes.add(new ArrayList<>());
         }
 
         this.objects = new ArrayList<>();
@@ -132,24 +115,18 @@ public class GameScreen implements Screen {
         buildings.add(langwith);
         buildings.add(piazza);
 
-        this.eventM = new EventManager(game, gameClock);
-        Player = new PlayerController(1000,1000, eventM, collisionLayer);
+        EventManager eventM = new EventManager(game, gameClock);
+        player = new PlayerController(1000,1000, eventM, collisionLayer);
         gui = new GUI(game.batch, eventM, gameClock);
         LC = new LightCycle();
 
-        for (int i=0; i < eventM.listEvents().size(); i++) {
+        for (int i = 0; i < eventM.listEvents().size(); i++) {
             activityImages.add(eventM.listEvents().get(i).getActivityImage());
         }
 
-        objects.add(Player);
+        objects.add(player);
 
-        objects.add(comSci);
-        objects.add(BBall);
-        objects.add(duck);
-        objects.add(langwith);
-        objects.add(piazza);
-
-        Gdx.input.setInputProcessor(Player);
+        Gdx.input.setInputProcessor(player);
     }
     public void update(float delta) {
         gameClock.update(delta);
@@ -157,7 +134,7 @@ public class GameScreen implements Screen {
             gameObject.update(delta);
         }
 
-        Player.setBD(getNearest());
+        player.setBD(getNearest());
 
         gui.update(delta);
 
@@ -165,7 +142,18 @@ public class GameScreen implements Screen {
             game.setScreen(new EndScreen(game)); // Switch to EndScreen
         }
 
-
+        int steps = (int) player.getDistanceTravelled() / 10;
+        if (steps >= 2500 && hiker == null){
+            System.out.println("YAY");
+            hiker = Achievement.Type.BRONZE;
+            game.achievementHandler.getAchievement("Hiker", Achievement.Type.BRONZE).unlock();
+        } else if (steps >= 5000 && hiker == Achievement.Type.BRONZE){
+            hiker = Achievement.Type.SILVER;
+            game.achievementHandler.getAchievement("Hiker", Achievement.Type.SILVER).unlock();
+        } else if (steps >= 10000 && hiker == Achievement.Type.SILVER){
+            hiker = Achievement.Type.GOLD;
+            game.achievementHandler.getAchievement("Hiker", Achievement.Type.GOLD).unlock();
+        }
     }
 
 
@@ -219,13 +207,13 @@ public class GameScreen implements Screen {
         float camWidth = (float) extendViewport.getScreenWidth() /2;
         float camHeight = (float) extendViewport.getScreenHeight() /2;
 
-        if (Player.pos.x > 2884 - camWidth*xConst) {
+        if (player.pos.x > 2884 - camWidth*xConst) {
             x = 2884- camWidth*xConst;
-        } else x = Math.max(Player.pos.x, camWidth * xConst);
+        } else x = Math.max(player.pos.x, camWidth * xConst);
 
-        if (Player.pos.y > 2238- camHeight*yConst) {
+        if (player.pos.y > 2238- camHeight*yConst) {
             y = 2238- camHeight*yConst;
-        } else y = Math.max(Player.pos.y, camHeight * yConst);
+        } else y = Math.max(player.pos.y, camHeight * yConst);
 
         extendViewport.getCamera().position.set(x,y,0);
     }
@@ -235,10 +223,10 @@ public class GameScreen implements Screen {
         Building closest = null;
         float closDis = 200f;
         for (Building bd : buildings) {
-            if (Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y)) < closDis)
+            if (Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.pos.x,bd.pos.y)) < closDis)
             {
                 closest = bd;
-                closDis = (float) Math.sqrt(Vector2.dst2(Player.pos.x,Player.pos.y,bd.pos.x,bd.pos.y));
+                closDis = (float) Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.pos.x,bd.pos.y));
             }
         }
         return closest;
@@ -246,48 +234,6 @@ public class GameScreen implements Screen {
 
     public GameClock getGameClock(){
         return gameClock;
-    }
-
-    public int getTotalStudyHours(){
-        return totalStudyHours;
-    }
-
-    public void setTotalStudyHours(int totalStudyHours){
-        this.totalStudyHours = totalStudyHours;
-    }
-
-    public int[] getDailyRecreational(){
-        return dailyRecreational;
-    }
-
-    public void addRecreational(){
-        this.eventM.addRecreational();
-    }
-
-    public int[] getDailyStudy(){
-        return dailyStudy;
-    }
-
-    public void addStudy(){
-        dailyStudy[gameClock.getDays()-1]++;
-    }
-
-    public List<String> getPlacesStudied(){
-        return placesStudied;
-    }
-
-    public void addStudyPlace(String studyPlace){
-        if (!placesStudied.contains(studyPlace)){
-            placesStudied.add(studyPlace);
-        }
-    }
-
-    public List<List<Integer>> getMealTimes(){
-        return mealTimes;
-    }
-
-    public void addMeal(int time){
-        mealTimes.get(gameClock.getDays()-1).add(time);
     }
 
     private boolean checkGameOverCondition(){
@@ -303,7 +249,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(Player);
+        Gdx.input.setInputProcessor(player);
         BGmusic.play();
     }
 

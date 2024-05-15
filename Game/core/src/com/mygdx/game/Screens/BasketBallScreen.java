@@ -57,11 +57,10 @@ public class BasketBallScreen implements Screen, InputProcessor {
         floor.addSurface(new Vector3(-200,0,1000), true);
         ballPhysics.addCollider(floor);
         ballPhysics.addCollider(ballHoop.getCollider());
-
-        ((GameScreen) game.screenManager.getScreen(ScreenType.GAME_SCREEN)).addRecreational();
     }
 
     public void update(float delta){
+        if (delta >= 0.1) return;
         camera.update();
         gameClock.update(delta);
         if (!goal && ballHoop.isGoal(ball, delta)){
@@ -80,7 +79,18 @@ public class BasketBallScreen implements Screen, InputProcessor {
     @Override
     public void show() {
         Gdx.input.setInputProcessor(this);
-        gameClock.addEvent(f -> game.screenManager.setScreen(ScreenType.GAME_SCREEN), 30f);
+        gameClock.addEvent(f -> {
+            if (score >= 8){
+                game.achievementHandler.getAchievement("Baller", Achievement.Type.BRONZE).unlock();
+            }
+            if (score >= 12){
+                game.achievementHandler.getAchievement("Baller", Achievement.Type.SILVER).unlock();
+            }
+            if (score >= 15){
+                game.achievementHandler.getAchievement("Baller", Achievement.Type.GOLD).unlock();
+            }
+            game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+        }, 30f);
     }
 
     @Override

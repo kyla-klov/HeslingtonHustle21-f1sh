@@ -6,58 +6,43 @@ import com.badlogic.gdx.Screen;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-import java.util.List;
 import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleSorter;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
-import java.time.LocalDateTime;
-import java.time.Duration;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.mygdx.game.Utils.Achievement;
+import com.mygdx.game.Utils.GameClock;
 import com.mygdx.game.Utils.ScreenType;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class DuckGameScreen implements Screen, InputProcessor{
-    private boolean isEndGame = false;
-    private BitmapFont displayText;
-    private BitmapFont title;
-    private float displayTextY, displayTextHeight;
-    private LocalDateTime startTime;
+    private float duckX;
+    private float duckY;
     private long timeToComplete;
-    private Random random;
-    private
-    final HesHustle game;
     int numberDucksClicked = 0;
     int numberRounds = 15;
     boolean isDuckOnScreen = false;
-    private Texture duck;
-    private float duckX;
-    private float duckY;
-    private int duckHeight = 100;
-    private int duckWidth = 100;
+    private boolean isEndGame = false;
+
+    private final BitmapFont displayText;
+    private final Random random;
+    private final GameClock gameClock;
+    private final HesHustle game;
+    private final Texture duck;
+    private final int duckHeight = 100;
+    private final int duckWidth = 100;
     private final OrthographicCamera camera;
     private final Viewport vp;
-    private GlyphLayout glyphLayout;
-    private Achievement duckAchievement;
+    private final GlyphLayout glyphLayout;
 
     public DuckGameScreen(HesHustle game){
         this.game = game;
-        String achievementDescription = "How fast can you click the ducks?";
-        duckAchievement = game.achievementHandler.createAchievement("Duck duck go", achievementDescription);
-
+        gameClock = new GameClock();
         displayText = new BitmapFont();
-        title = new BitmapFont();
-        startTime = LocalDateTime.now();
         glyphLayout = new GlyphLayout();
         random = new Random();
         camera = new OrthographicCamera();
@@ -66,45 +51,33 @@ public class DuckGameScreen implements Screen, InputProcessor{
         camera.update();
         // Update this
         duck = new Texture("Activitys/duck game/duck.png");
-        ((GameScreen) game.screenManager.getScreen(ScreenType.GAME_SCREEN)).addRecreational();
         spawnDuck();
     }
 
     public void spawnDuck(){
         if (numberDucksClicked < numberRounds){
             isDuckOnScreen = true;
-            this.duckX = random.nextFloat() * vp.getWorldWidth();
-            this.duckY = random.nextFloat() * vp.getWorldHeight();
+            this.duckX = random.nextFloat() * (vp.getWorldWidth() - duckWidth);
+            this.duckY = random.nextFloat() * (vp.getWorldHeight() - duckHeight);
         } else {
-            Duration duration = Duration.between(startTime, LocalDateTime.now());
-            long totalSeconds = duration.toSeconds();
-            timeToComplete = totalSeconds % 60;
+            timeToComplete = (int) gameClock.getRawTime();
 
-            if (timeToComplete == 18){
-                duckAchievement.setBronzeAchievement();
-            } else if (timeToComplete == 17){
-                duckAchievement.setSilverAchievement();
-            } else if (timeToComplete <= 16){
-                duckAchievement.setGoldAchievement();
+            if (timeToComplete <= 18){
+                game.achievementHandler.getAchievement("Duck Duck Go", Achievement.Type.BRONZE).unlock();
+            }
+            if (timeToComplete <= 17){
+                game.achievementHandler.getAchievement("Duck Duck Go", Achievement.Type.SILVER).unlock();
+            }
+            if (timeToComplete <= 16){
+                game.achievementHandler.getAchievement("Duck Duck Go", Achievement.Type.GOLD).unlock();
             }
 
             isEndGame = true;
-            delay(2, this::endGame);
         }
     }
 
     public void endGame(){
         game.screenManager.setScreen(ScreenType.GAME_SCREEN);
-
-    }
-
-    public void delay(float delaySeconds, Runnable runnable) {
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                runnable.run();
-            }
-        }, delaySeconds);
     }
 
 
@@ -121,7 +94,9 @@ public class DuckGameScreen implements Screen, InputProcessor{
 
     @Override
     public void render(float delta) {
+        gameClock.update(delta);
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
+        vp.apply();
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
@@ -136,17 +111,9 @@ public class DuckGameScreen implements Screen, InputProcessor{
             game.batch.draw(duck, duckX, duckY, duckWidth, duckHeight);
         } else if (isEndGame) {
             String finalText = "Completed in " + timeToComplete + " seconds!";
-
-            if (duckAchievement.isGoldAchieved()){
-                finalText = finalText + " Current Achievement: gold";
-            } else if (duckAchievement.isSilverAchieved()){
-                finalText = finalText + " Current Achievement: silver";
-            } else if (duckAchievement.isBronzeAchieved()){
-                finalText = finalText + " Current Achievement: bronze";
-            }
-
             glyphLayout.setText(displayText, finalText);
             displayText.draw(game.batch, finalText, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() / 2);
+            gameClock.addEvent(f -> endGame(), 2);
         }
 
 
@@ -176,7 +143,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
                 touchPoint.y >= duckY && touchPoint.y <= duckY + duckHeight) {
             // Duck has been successfully clicked
             isDuckOnScreen = false;
-            delay(0.4f, this::spawnDuck);
+            gameClock.addEvent(f -> spawnDuck(), 0.4f);
             numberDucksClicked = numberDucksClicked + 1;
         }
 

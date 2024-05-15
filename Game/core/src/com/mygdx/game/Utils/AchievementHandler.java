@@ -1,8 +1,6 @@
 package com.mygdx.game.Utils;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /*
 Documentation on usage
@@ -29,39 +27,32 @@ and whether they got gold, silver or nothing. It returns a Mapping which you can
 
 public class AchievementHandler {
 
-    private List<Achievement> achievements;
+    private final List<Achievement> achievements;
     public AchievementHandler(){
         achievements = new ArrayList<>();
+        generateAchievements();
     }
 
-    public Achievement createAchievement(String name, String description){
-
-        for (Achievement a : achievements){
-            if (a.getName().equals(name)){
-                return a;
+    public Achievement getAchievement(String name, Achievement.Type achievementType){
+        for (Achievement achievement : achievements){
+            if (name.equals(achievement.getName()) && achievementType == achievement.getAchievmentType()){
+                return achievement;
             }
         }
-
-        Achievement newAchievement = new Achievement(name, description);
-        achievements.add(newAchievement);
-        return newAchievement;
+        return null;
     }
 
-    public List<Achievement> getAchievements(){
-        return achievements;
-    }
+    private void generateAchievements(){
+        achievements.add(new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE));
+        achievements.add(new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.SILVER));
+        achievements.add(new Achievement("Baller", "Score at least 15 points in basketball", Achievement.Type.GOLD));
 
-    public Map<String, String> prepareAchievementsForDisplay(){
-        Map<String, String> pair = new HashMap<>();
-        for (Achievement a : achievements){
-            if (a.isGoldAchieved()){
-                pair.put(a.getName(), "gold");
-            } else if (a.isSilverAchieved()){
-                pair.put(a.getName(), "silver");
-            } else {
-                pair.put(a.getName(), "no achievements");
-            }
-        }
-        return pair;
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 20 seconds", Achievement.Type.BRONZE));
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER));
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD));
+
+        achievements.add(new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE));
+        achievements.add(new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER));
+        achievements.add(new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD));
     }
 }

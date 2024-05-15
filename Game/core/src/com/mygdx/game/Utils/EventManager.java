@@ -2,7 +2,6 @@ package com.mygdx.game.Utils;
 
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
-import com.mygdx.game.Screens.GameScreen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,6 @@ public class EventManager {
     List<Event> playedEvents;
     private final ResourceManager resourceManager;
     private final HesHustle game;
-//    private final GameScreen gameScreen;
     private final GameClock gameClock;
 
     //Game Score Data//
@@ -35,7 +33,6 @@ public class EventManager {
     public EventManager(HesHustle game, GameClock gameClock) {
         this.game = game;
         this.gameClock = gameClock;
-//        this.gameScreen = gameScreen;
         resourceManager = new ResourceManager();
         playedEvents = new ArrayList<>();
         energy = 100;
@@ -87,23 +84,27 @@ public class EventManager {
         assert curEvent != null;
         if (-curEvent.getEnergyCost() < energy) {
             playedEvents.add(curEvent);
+
+            this.totalStudyHours += curEvent.getStudyTime();
+            if (curEvent.getStudyTime() > 0){
+                this.dailyStudy[gameClock.getDays()-1]++;
+                totalStudyHours += curEvent.getStudyTime();
+                addStudyPlace(curEvent.getDescription());
+            } else if (curEvent.getEventType() == Event.Type.EAT){
+                addMeal(gameClock.getHours());
+            } else if (curEvent.getEventType() == Event.Type.RECREATIONAL){
+                dailyRecreational[gameClock.getDays()-1]++;
+            }
+
+            updateTime(curEvent);
+            updateEnergy(curEvent);
+
             if (curEvent.getActivityImage() != null)
             {
                 frozen = true;
                 curEvent.getActivityImage().setActive();
             }
             else game.screenManager.setScreen(curEvent.getScreenType());
-            this.totalStudyHours += curEvent.getStudyTime();
-//            gameScreen.setTotalStudyHours(gameScreen.getTotalStudyHours() + curEvent.getStudyTime());
-            if (curEvent.getStudyTime() > 0){
-                this.dailyStudy[gameClock.getDays()-1]++;
-                addStudyPlace(curEvent.getDescription());
-            } else if (curEvent.getEventType() == Event.Type.EAT){
-                addMeal(gameClock.getHours());
-            }
-
-            updateTime(curEvent);
-            updateEnergy(curEvent);
         }
         gameClock.addEvent(s -> {
             if (curEvent != null && curEvent.getActivityImage() != null) {
@@ -247,8 +248,8 @@ public class EventManager {
 
     }
 
-    public boolean isFrozen() {
-        return frozen;
+    public boolean notFrozen() {
+        return !frozen;
     }
 
     public ArrayList<Event> listEvents(){
@@ -259,10 +260,6 @@ public class EventManager {
         list.add(EatPiazza);
         list.add(PlayBBall);
         return list;
-    }
-
-    public void addRecreational(){
-        dailyRecreational[gameClock.getDays()-1]++;
     }
 
     public void addStudyPlace(String studyPlace){

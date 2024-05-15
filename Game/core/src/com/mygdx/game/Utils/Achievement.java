@@ -1,58 +1,42 @@
 package com.mygdx.game.Utils;
 
 public class Achievement {
-    private String description;
-    private String name;
-    private boolean achievedGold = false;
-    private boolean achievedSilver = false;
-    private boolean achievedBronze = false;
-
-    public Achievement(String Name, String Description){
-        this.description = Description;
-        this.name = Name;
+    public enum Type{
+        BRONZE, SILVER, GOLD
     }
 
-    // If we have achieved silver then we switch to achieving gold (vice versa for setSilverAchievement)
-    public void setGoldAchievement(){
-        achievedGold = true;
-        achievedSilver = false;
-        achievedBronze = false;
+    private final String description;
+    private final String name;
+    private final Type achievementType;
+
+    private boolean unlocked;
+
+    public Achievement(String name, String description, Type achievementType){
+        this.description = description;
+        this.name = name;
+        this.achievementType = achievementType;
+        unlocked = false;
     }
 
-    public void setSilverAchievement(){
-
-        if (!achievedGold){
-            achievedSilver = true;
-            achievedBronze = false;
-        }
+    public Type getAchievmentType(){
+        return achievementType;
     }
-
-    public void setBronzeAchievement(){
-
-        if (!achievedGold && !achievedSilver){
-            achievedBronze = true;
-        }
-
-    }
-
 
     public String getName(){
         return name;
     }
 
+    @SuppressWarnings("unused")
     public String getDescription(){
         return description;
     }
 
-    public boolean isGoldAchieved(){
-        return achievedGold;
+    public void unlock(){
+        unlocked = true;
     }
 
-    public boolean isSilverAchieved(){
-        return achievedSilver;
-    }
-
-    public boolean isBronzeAchieved(){
-        return achievedBronze;
+    @SuppressWarnings("unused")
+    public boolean isUnlocked(){
+        return unlocked;
     }
 }
