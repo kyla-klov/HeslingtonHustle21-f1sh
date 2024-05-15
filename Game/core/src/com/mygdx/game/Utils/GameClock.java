@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 public class GameClock {
     private float cappedTime;
+    private float rawTime;
     private int minutes;
     private int hours = 8;
     private int days = 1;
@@ -24,6 +25,7 @@ public class GameClock {
 
     private void updateTime(float deltaTime){
         cappedTime += deltaTime;
+        rawTime += deltaTime;
         if (cappedTime >= 0.5f) {
             minutes++;
             cappedTime = 0f;
@@ -76,6 +78,10 @@ public class GameClock {
 
     public void setDays(int days){
         this.days = days;
+    }
+
+    public float getRawTime(){
+        return rawTime;
     }
 
     public String getTime(){
