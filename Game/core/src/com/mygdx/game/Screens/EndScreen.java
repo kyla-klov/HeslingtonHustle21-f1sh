@@ -26,25 +26,33 @@ public class EndScreen implements Screen{
 
 
     public EndScreen(final HesHustle game) {
-        this.game = game;
-        stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage);
-        skin = new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"));
-        playAgainButton = new TextButton("Play Again", skin);
-        mainMenuButton = new TextButton("Main Menu", skin);
-        exitButton = new TextButton("Exit", skin);
-        setupUi();
+        this(game, new Stage(new ScreenViewport()),
+                new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json")));
+//        this.game = game;
+//        stage = new Stage(new ScreenViewport());
+//        Gdx.input.setInputProcessor(stage);
+//        skin = new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"));
+//        playAgainButton = new TextButton("Play Again", skin);
+//        mainMenuButton = new TextButton("Main Menu", skin);
+//        exitButton = new TextButton("Exit", skin);
+//        setupUi();
     }
 
-    // Constructor for testing
+    private EndScreen(final HesHustle game, final Stage stage, final Skin skin) {
+        this(game, stage, skin,
+                new TextButton("Play Again", skin),
+                new TextButton("Main Menu", skin),
+                new TextButton("Exit", skin));
+    }
     public EndScreen(final HesHustle game,
                      final Stage stage,
+                     final Skin skin,
                      final TextButton playAgainButton,
                      final TextButton mainMenuButton,
                      final TextButton exitButton) {
         this.game = game;
         this.stage = stage;
-        this.skin = null;
+        this.skin = skin;
         Gdx.input.setInputProcessor(stage);
         this.playAgainButton = playAgainButton;
         this.mainMenuButton = mainMenuButton;

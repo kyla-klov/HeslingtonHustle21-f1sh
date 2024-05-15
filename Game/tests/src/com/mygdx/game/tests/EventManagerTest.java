@@ -132,7 +132,7 @@ public class EventManagerTest {
         mockedEM.updateTime(Sleep);
     }
     @Test
-    public void testGetScore() {
+    public void testCalcScore() {
         // this one needs fixing because im not sure what the expected score is actually supposed to be
         mockedEM.interact("Ducks");
         mockedEM.interact("Computer\nScience\nDepartment");
