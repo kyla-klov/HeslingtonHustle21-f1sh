@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
 
     public GameScreen(final HesHustle game, final GameClock gameClock,
                       final ShapeRenderer shape, final TiledMap tiledMap,
-                      final TiledMapRenderer TmRender){
+                      final TiledMapRenderer TmRender, final Music BGmusic){
         this.game = game;
         this.gameClock = gameClock;
         extendViewport = new ExtendViewport(1600,900);
@@ -67,13 +67,13 @@ public class GameScreen implements Screen {
         this.activityImages = new ArrayList<>();
         this.buildings = new ArrayList<>();
 
-        BGmusic = resourceManager.addDisposable(Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
-        BGmusic.setLooping(true);
+        this.BGmusic = resourceManager.addDisposable(BGmusic);
+        this.BGmusic.setLooping(true);
 
         create();
     }
     public GameScreen(final HesHustle game) {
-        this(game, new GameClock(), new ShapeRenderer(), null, null);
+        this(game, new GameClock(), new ShapeRenderer(), null, null, Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
 //        this.game = game;
 //        this.gameClock = new GameClock();
 //        extendViewport = new ExtendViewport(1600,900);
@@ -234,6 +234,10 @@ public class GameScreen implements Screen {
 
     public GameClock getGameClock(){
         return gameClock;
+    }
+
+    public List<Building> getBuildings() {
+        return buildings;
     }
 
     private boolean checkGameOverCondition(){
