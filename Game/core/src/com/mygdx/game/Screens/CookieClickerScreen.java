@@ -71,6 +71,7 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
+        gameClock.update(delta);
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
