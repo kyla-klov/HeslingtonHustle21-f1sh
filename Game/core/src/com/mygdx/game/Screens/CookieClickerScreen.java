@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -13,14 +14,20 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.mygdx.game.Utils.ScreenType;
+import com.mygdx.game.Utils.GameClock;
 
 import java.util.Random;
 
 public class CookieClickerScreen extends InputAdapter implements Screen {
     public HesHustle game;
-    private boolean showCookie = true;
+    private int cookiesCollected = 0;
     private final OrthographicCamera camera;
     private final Viewport vp;
+    private BitmapFont cookiesCollectedText;
+    private final GameClock gameClock;
+    private final GlyphLayout glyphLayout;
     Texture plate;
     float plateX;
     float plateHeight = 100;
@@ -40,6 +47,9 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
     public CookieClickerScreen(HesHustle game){
         this.game = game;
         random = new Random();
+        glyphLayout = new GlyphLayout();
+        gameClock = new GameClock();
+        cookiesCollectedText = new BitmapFont();
         cookie = new Texture("Activitys/duck game/duck.png");
         plate = new Texture("Activitys/basketball/basketball.png");
         camera = new OrthographicCamera();
@@ -68,40 +78,62 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
         float deltaTime = Gdx.graphics.getDeltaTime();
         update(deltaTime);
 
-        isColliding();
+        boolean collision = isColliding();
+
+        if (collision) {
+            cookiesCollected = cookiesCollected + 1;
+            speed = speed + 10;
+            resetCookie();
+        }
+
 
         startingPosition.y -= speed * deltaTime;
 
         if (startingPosition.y + cookieHeight < 0 || startingPosition.x + cookieWidth < 0 || startingPosition.x > vp.getWorldWidth()) {
-            startingPosition.y = vp.getWorldHeight() + cookieHeight;
-            startingPosition.x = MathUtils.random(vp.getWorldWidth() - cookieWidth);
+            String gameOverText = "Game over. You collected " + cookiesCollected + " cookie(s)!";
+            glyphLayout.setText(cookiesCollectedText, gameOverText);
+            cookiesCollectedText.draw(game.batch, gameOverText, (vp.getWorldWidth() - glyphLayout.width) / 2, (vp.getWorldHeight() - glyphLayout.height) / 2);
+            gameClock.addEvent(f -> endGame(), 1f);
+            System.out.println("yes");
+        } else {
+            String text = "Collected " + cookiesCollected + " cookie(s)!";
+            glyphLayout.setText(cookiesCollectedText, text);
+            cookiesCollectedText.draw(game.batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);
+            game.batch.draw(cookie, startingPosition.x, startingPosition.y, cookieWidth, cookieHeight);
+            cookieX = startingPosition.x;
+            cookieY = startingPosition.y;
+            game.batch.draw(plate, plateX, (vp.getWorldHeight() - plateHeight) / 2 - 200, plateWidth, plateHeight);
         }
-
-        game.batch.draw(cookie, startingPosition.x, startingPosition.y, cookieWidth, cookieHeight);
-        game.batch.draw(plate, plateX, (vp.getWorldHeight() - plateHeight) / 2 - 200, plateWidth, plateHeight);
         game.batch.end();
+
     }
 
     public boolean isColliding() {
-        // Calculate cookie boundaries
-        float cookieRight = cookieX + cookieWidth;
-        float cookieTop = cookieY + cookieHeight;
+        float cookieXMax = cookieX + cookieWidth;
+        float cookieXMin = cookieX;
+        float cookieYMax = cookieY + cookieHeight;
+        float cookieYMin = cookieY;
+        float plateXMax = plateX + plateWidth;
+        float plateXMin = plateX;
+        float plateYMax = (vp.getWorldHeight() - plateHeight) / 2 - 200 + cookieHeight;
+        float plateYMin = (vp.getWorldHeight() - plateHeight) / 2 - 200;
 
-        // Calculate plate boundaries
-        float plateBottom = (vp.getWorldHeight() - plateHeight) / 2 + 200 + plateHeight; // Plate positioned 200 pixels under the center of the viewport
-        float plateRight = plateX + plateWidth;
-        float plateTop = plateBottom - plateHeight;
-
-        // Check for collision
-        boolean collisionX = cookieX < plateRight && cookieRight > plateX;
-        boolean collisionY = cookieY < plateBottom && cookieTop > plateTop;
-
-        if (collisionX && collisionY){
-            System.out.println("yes");
+        if ((cookieXMin <= plateXMax && cookieXMax >= plateXMin) &&
+            (cookieYMin <= plateYMax && cookieYMax >= plateYMin)){
+            return true;
         }
-
-        return collisionX && collisionY;
+        return false;
     }
+
+    public void resetCookie(){
+        startingPosition.y = vp.getWorldHeight() + cookieHeight;
+        startingPosition.x = MathUtils.random(vp.getWorldWidth() - cookieWidth);
+    }
+
+    public void endGame(){
+        game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+    }
+
 
     @Override
     public void resize(int width, int height) {
