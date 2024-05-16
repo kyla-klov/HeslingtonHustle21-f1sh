@@ -46,6 +46,8 @@ public class ScreenManager {
     @SuppressWarnings("unused")
     private Screen createScreen(ScreenType screenType, Object... args){
         switch (screenType){
+            case COOKIE_SCREEN:
+                return new CookieClickerScreen(game);
             case MENU_SCREEN:
                 return new MenuScreen(game);
             case GAME_SCREEN:

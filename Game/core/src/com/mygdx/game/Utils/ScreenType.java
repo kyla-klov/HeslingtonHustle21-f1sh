@@ -6,5 +6,6 @@ public enum ScreenType {
     PAUSE_SCREEN,
     END_SCREEN,
     BASKETBALL_SCREEN,
-    DUCK_GAME_SCREEN
+    DUCK_GAME_SCREEN,
+    COOKIE_SCREEN
 }
