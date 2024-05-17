@@ -66,7 +66,9 @@ public class PlayerControllerTest {
         mockedGame.screenManager = mockedSM;
     }
     @Test
-    public void test(){
+    public void testColCorrect(){
+        mockedPlayer.pos.x = 1;
+
 
     }
     @After

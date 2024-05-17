@@ -78,24 +78,6 @@ public class Event {
         return eventType;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null
-                || this.getClass() != obj.getClass())
-            return false;
-        Event e = (Event)obj;
-        return this.timeCost == e.getTimeCost()
-                && this.energyCost == e.getEnergyCost()
-                && this.studyTime == e.getStudyTime()
-                && this.fatigue == e.getFatigue()
-                && this.eventType == e.getEventType()
-                && this.moneyCost == e.getMoneyCost()
-                && this.description.equals(e.getDescription())
-                && this.activityImage == e.getActivityImage()
-                && this.screenType == e.getScreenType();
-    }
     @SuppressWarnings("unused")
     public int getMoneyCost() {
         return moneyCost;
