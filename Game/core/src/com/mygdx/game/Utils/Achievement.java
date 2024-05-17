@@ -1,5 +1,7 @@
 package com.mygdx.game.Utils;
 
+import java.util.Objects;
+
 public class Achievement {
     public enum Type{
         BRONZE, SILVER, GOLD
@@ -39,4 +41,13 @@ public class Achievement {
     public boolean isUnlocked(){
         return unlocked;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Achievement)) return false;
+        Achievement that = (Achievement) o;
+        return isUnlocked() == that.isUnlocked() && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getName(), that.getName()) && achievementType == that.achievementType;
+    }
+
 }
