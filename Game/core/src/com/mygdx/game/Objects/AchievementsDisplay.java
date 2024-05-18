@@ -132,6 +132,7 @@ public class AchievementsDisplay implements Disposable {
         scrolling = false;
     }
 
+    @SuppressWarnings("unused")
     public void show(){
         visible = true;
     }
