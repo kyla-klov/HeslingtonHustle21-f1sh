@@ -2,9 +2,11 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -12,7 +14,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.*;
@@ -24,16 +27,18 @@ import java.util.List;
 /**
  * Main game loop
  */
-public class GameScreen implements Screen {
+public class GameScreen implements Screen, InputProcessor {
 
     private final ResourceManager resourceManager = new ResourceManager();
     private final HesHustle game;
-    private final ExtendViewport extendViewport;
+    private AchievementsDisplay achievementsDisplay;
+    private final Viewport vp;
     private final ShapeRenderer shape;
     private final List<GameObject> objects;
     private final List<ActivityImage> activityImages;
     private final List<Building> buildings;
     private final GameClock gameClock;
+    private final OrthographicCamera camera;
 
     //Game objects
     private PlayerController player;
@@ -51,7 +56,8 @@ public class GameScreen implements Screen {
                       final TiledMapRenderer TmRender, final Music BGmusic){
         this.game = game;
         this.gameClock = gameClock;
-        extendViewport = new ExtendViewport(1600,900);
+        this.camera = new OrthographicCamera();
+        this.vp = new FitViewport(1600,900, camera);
         this.shape = resourceManager.addDisposable(shape);
         if (tiledMap != null && TmRender != null){
             this.tiledMap = resourceManager.addDisposable(tiledMap);
@@ -74,29 +80,6 @@ public class GameScreen implements Screen {
     }
     public GameScreen(final HesHustle game) {
         this(game, new GameClock(), new ShapeRenderer(), null, null, Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
-//        this.game = game;
-//        this.gameClock = new GameClock();
-//        extendViewport = new ExtendViewport(1600,900);
-//        shape = resourceManager.addDisposable(new ShapeRenderer());
-//        TmRender = new OrthogonalTiledMapRenderer(tiledMap);
-//        dailyStudy = new int[7];
-//        dailyRecreational = new int[7];
-//        mealTimes = new ArrayList<>();
-//        placesStudied = new ArrayList<>();
-//        totalStudyHours = 0;
-//        for (int i = 0; i < 7; i++) {
-//            mealTimes.add(new ArrayList<>());
-//        }
-//
-//        this.objects = new ArrayList<>();
-//        this.activityImages = new ArrayList<>();
-//        this.buildings = new ArrayList<>();
-//
-//        BGmusic = resourceManager.addDisposable(Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
-//        BGmusic.setLooping(true);
-//
-//        create();
-
     }
     public void create(){
 
@@ -126,7 +109,10 @@ public class GameScreen implements Screen {
 
         objects.add(player);
 
-        Gdx.input.setInputProcessor(player);
+        achievementsDisplay = new AchievementsDisplay(game.achievementHandler, 100, 100, vp);
+        achievementsDisplay.hide();
+
+        Gdx.input.setInputProcessor(this);
     }
     public void update(float delta) {
         gameClock.update(delta);
@@ -144,7 +130,6 @@ public class GameScreen implements Screen {
 
         int steps = (int) player.getDistanceTravelled() / 10;
         if (steps >= 2500 && hiker == null){
-            System.out.println("YAY");
             hiker = Achievement.Type.BRONZE;
             game.achievementHandler.getAchievement("Hiker", Achievement.Type.BRONZE).unlock();
         } else if (steps >= 5000 && hiker == Achievement.Type.BRONZE){
@@ -165,20 +150,21 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0f,0f,0f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        extendViewport.apply();
+        vp.apply();
+        camera.update();
         updateCamera();
-        game.batch.setProjectionMatrix(extendViewport.getCamera().combined);
+        game.batch.setProjectionMatrix(vp.getCamera().combined);
 
-        TmRender.setView(extendViewport.getCamera().combined, 0,0,2887,2242);
+        TmRender.setView(camera);
         TmRender.render();
 
 
         renderObjects();
-        LC.render(extendViewport.getCamera(),game,shape);//these could be in the objects list
-        gui.render(extendViewport.getCamera(),game,shape);
+        LC.render(vp.getCamera(),game,shape);//these could be in the objects list
+        gui.render(vp.getCamera(),game,shape);
         renderActivityImages();
-
-                                                            // position of the projection matrix and we need it for the event render
+        achievementsDisplay.render(game.batch);
+          // position of the projection matrix and we need it for the event render
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);
@@ -187,13 +173,13 @@ public class GameScreen implements Screen {
     public void renderObjects()
     {
         for (GameObject gameObject : objects) {
-            gameObject.render(extendViewport.getCamera(),game,shape);
+            gameObject.render(vp.getCamera(),game,shape);
         }
     }
 
     public void renderActivityImages(){
         for (ActivityImage activityImage : activityImages) {
-            if (activityImage != null) activityImage.render(extendViewport.getCamera(),game,shape);
+            if (activityImage != null) activityImage.render(vp.getCamera(),game,shape);
         }
     }
 
@@ -204,8 +190,8 @@ public class GameScreen implements Screen {
         float xConst = (float)1600/Gdx.graphics.getWidth(); // these constants are the ration of initial screen width to current
         float yConst = (float)900/Gdx.graphics.getHeight(); // if screen is half as wide it zooms out so its 2x smaller
 
-        float camWidth = (float) extendViewport.getScreenWidth() /2;
-        float camHeight = (float) extendViewport.getScreenHeight() /2;
+        float camWidth = (float) vp.getScreenWidth() /2;
+        float camHeight = (float) vp.getScreenHeight() /2;
 
         if (player.pos.x > 2884 - camWidth*xConst) {
             x = 2884- camWidth*xConst;
@@ -215,7 +201,7 @@ public class GameScreen implements Screen {
             y = 2238- camHeight*yConst;
         } else y = Math.max(player.pos.y, camHeight * yConst);
 
-        extendViewport.getCamera().position.set(x,y,0);
+        vp.getCamera().position.set(x,y,0);
     }
 
     public Building getNearest() //calculated the nearest building to the player rn
@@ -247,13 +233,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) { //This is important for the GUI class to stay in aspect
-        extendViewport.update(width,height);
-        gui.getStage().getViewport().update(extendViewport.getScreenWidth(), extendViewport.getScreenHeight(),true);
+        vp.update(width,height);
+        gui.getStage().getViewport().update(vp.getScreenWidth(), vp.getScreenHeight(),true);
     }
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(player);
+        Gdx.input.setInputProcessor(this);
         BGmusic.play();
     }
 
@@ -275,4 +261,52 @@ public class GameScreen implements Screen {
         resourceManager.disposeAll();
     }
 
+    @Override
+    public boolean keyDown(int keycode) {
+        player.keyDown(keycode);
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        player.keyUp(keycode);
+        return true;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        achievementsDisplay.touchDown(screenX, screenY);
+        return true;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        achievementsDisplay.touchUp();
+        return true;
+    }
+
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+        return false;
+    }
 }
