@@ -101,7 +101,7 @@ public class GameScreenTest {
         closeable = MockitoAnnotations.openMocks(this);
         mockedGame.screenManager = mockedSM;
     }
-    
+
     @Test
     public void testGetNearest(){
         assertNull(gameScreen.getNearest());

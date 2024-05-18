@@ -1,5 +1,7 @@
 package com.mygdx.game.Utils;
 
+import java.util.Objects;
+
 import com.badlogic.gdx.graphics.Texture;
 
 public class Achievement {
@@ -47,4 +49,13 @@ public class Achievement {
     public Texture getAchievementTexture(){
         return achievementTexture;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Achievement)) return false;
+        Achievement that = (Achievement) o;
+        return isUnlocked() == that.isUnlocked() && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getName(), that.getName()) && achievementType == that.achievementType;
+    }
+
 }

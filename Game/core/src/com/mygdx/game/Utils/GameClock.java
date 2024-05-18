@@ -92,4 +92,12 @@ public class GameClock {
         eventQueue.add(event);
         eventTimers.add(timer);
     }
+
+    public List<Consumer<String>> getEventQueue() {
+        return eventQueue;
+    }
+
+    public List<Float> getEventTimers() {
+        return eventTimers;
+    }
 }
