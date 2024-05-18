@@ -84,8 +84,18 @@ public class GameClock {
         return rawTime;
     }
 
+    // Cannot use String.format() method because GWT have no String Formatter
+    // It will cause error when running $gradlew build
+    // Issue was discussed in Google Groups: https://groups.google.com/g/google-web-toolkit/c/h93GJsNqoKg
     public String getTime(){
-        return String.format("Time: %02d:%02d", hours, minutes);
+        String hrs;
+        String mins;
+        if (hours < 10){hrs = 0 + Integer.toString(hours);}
+        else {hrs = Integer.toString(hours);}
+        if (minutes < 10){mins = 0 + Integer.toString(minutes);}
+        else {mins = Integer.toString(minutes);}
+        return "Time: " + hrs + ":" + mins;
+//        return String.format("Time: %02d:%02d", hours, minutes);
     }
 
     public void addEvent(Consumer<String> event, float timer) {
