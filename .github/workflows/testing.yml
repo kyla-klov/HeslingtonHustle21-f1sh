@@ -35,7 +35,7 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./Game/gradlew
     - name: Build with Gradle Wrapper
-      run: cd Game && ./gradlew :tests:test --tests "com.mygdx.game.tests.*"
+      run: cd Game && ./gradlew gradle build jacocoTestReport
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
