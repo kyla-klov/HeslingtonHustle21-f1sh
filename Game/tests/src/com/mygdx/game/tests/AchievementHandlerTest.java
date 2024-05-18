@@ -10,15 +10,15 @@ import static org.junit.Assert.*;
 @RunWith(GdxTestRunner.class)
 public class AchievementHandlerTest {
     private final AchievementHandler achievementHandler = new AchievementHandler();
-    Achievement bronzeBaller = new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE);
-    Achievement silverBaller = new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.SILVER);
-    Achievement goldBaller = new Achievement("Baller", "Score at least 15 points in basketball", Achievement.Type.GOLD);
-    Achievement bronzeDDG = new Achievement("Duck Duck Go", "Feed all of the ducks in under 20 seconds", Achievement.Type.BRONZE);
-    Achievement silverDDG = new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER);
-    Achievement goldDDG = new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD);
-    Achievement bronzeHiker = new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE);
-    Achievement silverHiker = new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER);
-    Achievement goldHiker = new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD);
+    Achievement bronzeBaller = new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE, "BallerAchievementBronze.png");
+    Achievement silverBaller = new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.SILVER, "BallerAchievementSilver.png");
+    Achievement goldBaller = new Achievement("Baller", "Score at least 15 points in basketball", Achievement.Type.GOLD, "BallerAchievementGold.png");
+    Achievement bronzeDDG = new Achievement("Duck Duck Go", "Feed all of the ducks in under 20 seconds", Achievement.Type.BRONZE, "DuckAchievementBronze.png");
+    Achievement silverDDG = new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER, "DuckAchievementSilver.png");
+    Achievement goldDDG = new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD, "DuckAchievementGold.png");
+    Achievement bronzeHiker = new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementPlaceHolder.png");
+    Achievement silverHiker = new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER,"AchievementPlaceHolder.png");
+    Achievement goldHiker = new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD, "AchievementPlaceHolder.png");
 
     @Test
     public void testGenerateAchievements(){
