@@ -39,7 +39,7 @@ jobs:
     - name: Make gradlew executable
       run: chmod +x ./Game/gradlew
     - name: Build with Gradle Wrapper
-      run: gradle build jacocoTestReport
+      run: cd Game && gradle build jacocoTestReport
       # run: cd Game && ./gradlew build --scan jacocoTestReport
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
