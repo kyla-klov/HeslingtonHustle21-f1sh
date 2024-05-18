@@ -67,7 +67,7 @@ jobs:
         java-version: '11'
         distribution: 'corretto'
     - name: Change Directory to Game
-    - run: cd Game
+      run: cd Game
     # Generates and submits a dependency graph, enabling Dependabot Alerts for all project dependencies.
     # See: https://github.com/gradle/actions/blob/main/dependency-submission/README.md
     - name: Generate and submit dependency graph
