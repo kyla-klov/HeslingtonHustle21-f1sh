@@ -58,4 +58,15 @@ public class GameClockTest {
         assertEquals(1, gameClock.getEventTimers().size(), 0);
         assertEquals(1, gameClock.getEventQueue().size(), 0);
     }
+
+    @Test
+    public void testGetTime(){
+        assertEquals("Time: 08:00",gameClock.getTime());
+        gameClock.setMinutes(11);
+        assertEquals("Time: 08:11",gameClock.getTime());
+        gameClock.setHours(11);
+        assertEquals("Time: 11:11",gameClock.getTime());
+        gameClock.setMinutes(9);
+        assertEquals("Time: 11:09",gameClock.getTime());
+    }
 }

@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
-import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.*;
 import com.badlogic.gdx.Gdx;
 import org.junit.After;
@@ -22,8 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.mockito.internal.matchers.Any;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import com.mygdx.game.Objects.GUI;
 import org.junit.runner.RunWith;

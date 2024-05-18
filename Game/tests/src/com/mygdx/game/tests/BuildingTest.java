@@ -29,8 +29,6 @@ public class BuildingTest {
         mockedGame.font = mock(BitmapFont.class, withSettings()
                 .useConstructor(Gdx.files.internal("font.fnt"))
                 .defaultAnswer(CALLS_REAL_METHODS));
-//        mockedGame.font = new BitmapFont(Gdx.files.internal("font.fnt"));
-
     }
 
     @Test

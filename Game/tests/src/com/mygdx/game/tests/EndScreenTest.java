@@ -28,18 +28,18 @@ public class EndScreenTest {
     private AutoCloseable closeable;
 
     // creates skins for buttons
-    Skin mockedSkin = mock(Skin.class, withSettings()
+    private final Skin mockedSkin = mock(Skin.class, withSettings()
         .useConstructor(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"))
         .defaultAnswer(CALLS_REAL_METHODS));
 
     // creates instances of each button
-    TextButton mockedPlayAgainButton = mock(TextButton.class, withSettings()
+    private final TextButton mockedPlayAgainButton = mock(TextButton.class, withSettings()
             .useConstructor("Play Again", mockedSkin)
             .defaultAnswer(CALLS_REAL_METHODS));
-    TextButton mockedMainMenuButton = mock(TextButton.class, withSettings()
+    private final TextButton mockedMainMenuButton = mock(TextButton.class, withSettings()
             .useConstructor("Main Menu", mockedSkin)
             .defaultAnswer(CALLS_REAL_METHODS));
-    TextButton mockedExitButton = mock(TextButton.class, withSettings()
+    private final TextButton mockedExitButton = mock(TextButton.class, withSettings()
             .useConstructor("Exit", mockedSkin)
             .defaultAnswer(CALLS_REAL_METHODS));
 
