@@ -21,11 +21,15 @@ public class MenuScreen implements Screen {
     private final Stage stage;
     private final ResourceManager resourceManager;
 
-    public MenuScreen(HesHustle game) {
+
+    public MenuScreen(HesHustle game, ResourceManager resourceManager, Stage stage){
         this.game = game;
-        this.resourceManager = new ResourceManager();
-        this.stage =  resourceManager.addDisposable(new Stage(new ScreenViewport()));
+        this.resourceManager = resourceManager;
+        this.stage =  this.resourceManager.addDisposable(stage);
         initialiseMenu();
+    }
+    public MenuScreen(HesHustle game) {
+        this(game, new ResourceManager(), new Stage(new ScreenViewport()));
     }
 
     private void initialiseMenu(){
