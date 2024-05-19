@@ -1,76 +1,78 @@
 package com.mygdx.game.tests;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.math.Interpolation;
-import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.LightCycle;
-import com.mygdx.game.Screens.GameScreen;
-import com.mygdx.game.Utils.GameClock;
-import com.mygdx.game.Utils.ScreenManager;
-import com.mygdx.game.Utils.ScreenType;
-import org.junit.Before;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-
 
 @RunWith(GdxTestRunner.class)
 public class LightCycleTest {
-    private final ScreenManager mockedSM = mock(ScreenManager.class);
-    private final GameScreen mockedGameScreen = mock(GameScreen.class);
-    private final GameClock mockedGameClock = spy(GameClock.class);
-    private final Camera mockedCamera = mock(Camera.class);
-    private final HesHustle mockedGame = mock(HesHustle.class);
+    private final String blackSquareFile = "BlankSquare.png";
     private final SpriteBatch mockedSpriteBatch = mock(SpriteBatch.class);
     private final Texture mockedTexture = mock(Texture.class);
-    private final LightCycle lightCycle = new LightCycle();
+    private final LightCycle mockedLightCycle = spy(LightCycle.class);
     private final float[] Col1 = new float[]{238/255f, 130/255f, 0, 0.2f}; //orange
     private final float[] Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};//blue
     private final float[] Col3 = new float[]{113/255f, 0/255f, 143/255f, 0.3f};
+    private InOrder inOrder = inOrder(mockedSpriteBatch);
+    private ArgumentCaptor<Texture> arg = ArgumentCaptor.forClass(Texture.class);
+    private final float x = 0f, y = 0f;
+    private final float size = mockedLightCycle.getSize();
 
-    @Before
-    public void setup(){
-        mockedGame.screenManager = mockedSM;
-        mockedGame.batch = mockedSpriteBatch;
-        when(mockedSM.getScreen(ScreenType.GAME_SCREEN)).thenReturn(mockedGameScreen);
-        when(mockedGameScreen.getGameClock()).thenReturn(mockedGameClock);
-    }
+    //test batch is set to right color at 8 A.M
     @Test
-    public void testRender(){
-        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
+    public void testRenderSeg1() {
+        mockedLightCycle.render(mockedSpriteBatch, 8, 0);
+        verify(mockedLightCycle).getTime(8, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col2, Col1, Interpolation.pow3Out));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+    }
 
-        //verify time data is acquired from gameClock of game
-        //verify(mockedGameScreen).getGameClock();
-        //verify(mockedGameClock).getHours();
-        //verify(mockedGameClock).getMinutes();
+    //test batch change to another color at 2 P.M
+    @Test
+    public void testRenderSeg2() {
+        mockedLightCycle.render(mockedSpriteBatch, 14, 0);
+        verify(mockedLightCycle).getTime(14, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col2, Interpolation.pow3In));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+    }
 
-        //verify shape is rendered correctly
-        verify(mockedGame.batch).setProjectionMatrix(mockedCamera.combined);
-        verify(mockedGame.batch).begin();
-        verify(mockedGame.batch).draw(mockedTexture, 0, 0,
-                lightCycle.getSize(), lightCycle.getSize());
-        verify(mockedGame.batch).end();
+    //test batch change to another color at 8 P.M
+    @Test
+    public void testRenderSeg3() {
+        mockedLightCycle.render(mockedSpriteBatch, 20, 0);
+        verify(mockedLightCycle).getTime(20, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col3, Col1, Interpolation.pow3Out));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+    }
 
-        //test shape is set to right color at 8 A.M
-        verify(mockedGame.batch).setColor(lightCycle.getColor(Col2, Col1, Interpolation.pow3Out));
-
-        //test shape is set to another color at 2 P.M
-        mockedGameClock.setHours(14);
-        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
-        verify(mockedGame.batch).setColor(lightCycle.getColor(Col1, Col2, Interpolation.pow3In));
-
-        //test shape is set to another color at 8 P.M
-        mockedGameClock.setHours(20);
-        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
-        verify(mockedGame.batch).setColor(lightCycle.getColor(Col3, Col1, Interpolation.pow3Out));
-
-        //test shape is set to another color at 3 A.M
-        mockedGameClock.setHours(3);
-        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
-        verify(mockedGame.batch).setColor(lightCycle.getColor(Col1, Col3, Interpolation.pow3In));
+    //test batch change to another color at 3 A.M
+    @Test
+    public void testRenderSeg0() {
+        mockedLightCycle.render(mockedSpriteBatch, 3, 0);
+        verify(mockedLightCycle).getTime(3, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
     }
 }
