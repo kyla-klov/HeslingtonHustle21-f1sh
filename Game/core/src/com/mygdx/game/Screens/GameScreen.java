@@ -31,10 +31,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     private final ResourceManager resourceManager = new ResourceManager();
     private final HesHustle game;
-    private AchievementsDisplay achievementsDisplay;
-    private final EnergyBar energyBar;
     private final Viewport vp;
-    private final ShapeRenderer shape;
     private final List<ActivityImage> activityImages;
     private final List<Building> buildings;
     private final GameClock gameClock;
@@ -60,7 +57,6 @@ public class GameScreen implements Screen, InputProcessor {
         this.gameClock = gameClock;
         this.camera = new OrthographicCamera();
         this.vp = new FitViewport(1600,900, camera);
-        this.shape = resourceManager.addDisposable(shape);
         if (tiledMap != null && TmRender != null){
             this.tiledMap = resourceManager.addDisposable(tiledMap);
             this.TmRender = TmRender;
@@ -76,8 +72,7 @@ public class GameScreen implements Screen, InputProcessor {
 
         this.BGmusic = resourceManager.addDisposable(BGmusic);
         this.BGmusic.setLooping(true);
-        uiElements = new UIElements(vp);
-        energyBar = new EnergyBar(uiElements, 700, 700, 270, 50, 27);
+        uiElements = new UIElements(vp, game.achievementHandler);
         create();
     }
     public GameScreen(final HesHustle game) {
@@ -110,9 +105,6 @@ public class GameScreen implements Screen, InputProcessor {
             activityImages.add(eventM.listEvents().get(i).getActivityImage());
         }
 
-        achievementsDisplay = new AchievementsDisplay(uiElements, game.achievementHandler, 100, 100);
-        achievementsDisplay.show();
-
         Gdx.input.setInputProcessor(this);
     }
     public void update(float delta) {
@@ -123,6 +115,8 @@ public class GameScreen implements Screen, InputProcessor {
         player.setBD(getNearest());
 
         gui.update(delta);
+
+        uiElements.update(delta);
 
         if (checkGameOverCondition()) {
             game.setScreen(new EndScreen(game)); // Switch to EndScreen
@@ -163,12 +157,11 @@ public class GameScreen implements Screen, InputProcessor {
 
         player.render(game.batch);
         LC.render(game.batch, gameClock.getHours(), gameClock.getMinutes());
+        uiElements.render(game.batch, gameClock.getTime(), gameClock.getDays(), eventM.getSleep(), eventM.getRec(), eventM.getEat(), eventM.getTotalStudyHours(), eventM.getEnergy(), eventM.calcScore());
         renderActivityImages();
-        //achievementsDisplay.render(game.batch);
-        //energyBar.render(game.batch, eventM.getEnergy());
 
         game.batch.end();
-        gui.render(vp.getCamera(),game,shape);
+        //gui.render(vp.getCamera(),game,shape);
           // position of the projection matrix and we need it for the event render
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -279,13 +272,13 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        achievementsDisplay.touchDown(screenX, screenY);
+        uiElements.touchDown(screenX, screenY);
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        achievementsDisplay.touchUp();
+        uiElements.touchUp();
         return true;
     }
 

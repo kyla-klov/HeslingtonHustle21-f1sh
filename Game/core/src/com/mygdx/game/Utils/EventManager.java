@@ -30,6 +30,8 @@ public class EventManager {
     private final List<String> placesStudied;
     private int totalStudyHours;
 
+    private int eat, sleep, rec;
+
     public EventManager(HesHustle game, GameClock gameClock) {
         this.game = game;
         this.gameClock = gameClock;
@@ -85,15 +87,18 @@ public class EventManager {
         if (-curEvent.getEnergyCost() < energy) {
             playedEvents.add(curEvent);
 
-            this.totalStudyHours += curEvent.getStudyTime();
             if (curEvent.getStudyTime() > 0){
                 this.dailyStudy[gameClock.getDays()-1]++;
                 totalStudyHours += curEvent.getStudyTime();
                 addStudyPlace(curEvent.getDescription());
             } else if (curEvent.getEventType() == Event.Type.EAT){
+                eat++;
                 addMeal(gameClock.getHours());
             } else if (curEvent.getEventType() == Event.Type.RECREATIONAL){
+                rec++;
                 dailyRecreational[gameClock.getDays()-1]++;
+            } else if (curEvent.getEventType() == Event.Type.SLEEP){
+                sleep++;
             }
 
             updateTime(curEvent);
@@ -246,6 +251,22 @@ public class EventManager {
         }
         return (s1 + s2 + s3 + s4 + s5) / 5f;
 
+    }
+
+    public int getTotalStudyHours(){
+        return totalStudyHours;
+    }
+
+    public int getEat(){
+        return eat;
+    }
+
+    public int getSleep(){
+        return sleep;
+    }
+
+    public int getRec(){
+        return rec;
     }
 
     public boolean notFrozen() {

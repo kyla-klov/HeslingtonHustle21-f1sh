@@ -43,6 +43,7 @@ public class AchievementsDisplay implements Disposable {
 
         resourceManager = new ResourceManager();
 
+        visible = false;
         unlocked = true;
         background = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/AchievementsBackground.png")));
         tick = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/check-mark.png")));
@@ -124,12 +125,13 @@ public class AchievementsDisplay implements Disposable {
 
     public void touchDown(int screenX, int screenY) {
         Vector2 gamePos = uiElements.screenToGame(screenX, screenY);
-        if (gamePos.x >= scrollX && gamePos.x <= scrollX + scrollWidth && gamePos.y >= scrollY && gamePos.y <= scrollY + scrollHeight){
+
+        if (uiElements.isPressed(gamePos.x, gamePos.y, scrollX, scrollY, scrollWidth, scrollHeight)){
             scrolling = true;
             relY = gamePos.y - scrollY;
-        } else if (gamePos.x >= tickX && gamePos.x <= tickX + selectWidth && gamePos.y >= selectY && gamePos.y <= selectY + selectHeight){
+        } else if (uiElements.isPressed(gamePos.x, gamePos.y, tickX, selectY, selectWidth, selectHeight)){
             unlocked = true;
-        } else if (gamePos.x >= padlockX && gamePos.x <= padlockX + selectWidth && gamePos.y >= selectY && gamePos.y <= selectY + selectHeight){
+        } else if (uiElements.isPressed(gamePos.x, gamePos.y, padlockX, selectY, selectWidth, selectHeight)){
             unlocked = false;
         }
     }
@@ -146,5 +148,9 @@ public class AchievementsDisplay implements Disposable {
     @SuppressWarnings("unused")
     public void hide(){
         visible = false;
+    }
+
+    public boolean isVisible(){
+        return visible;
     }
 }
