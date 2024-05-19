@@ -5,11 +5,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.Achievement;
 import com.mygdx.game.Utils.AchievementHandler;
+import com.mygdx.game.Utils.ResourceManager;
 
 import java.util.List;
 
@@ -18,13 +17,16 @@ public class AchievementsDisplay implements Disposable {
     final private Texture tick;
     final private Texture padlock;
     final private Texture scrollBar;
-    final private Texture highlightSelected;
-    final private Viewport vp;
+    final private Texture highlight;
+    final private UIElements uiElements;
     final private AchievementHandler achievementHandler;
+    final private ResourceManager resourceManager;
 
     private final float posX, posY, scrollX;
     private final float tickX, padlockX, selectY, selectWidth, selectHeight;
     private final float bgWidth, bgHeight, achievementWidth, achievementHeight, scrollWidth, scrollHeight;
+
+    private final float scale = 1f;
 
     private boolean scrolling;
     private boolean unlocked;
@@ -33,19 +35,21 @@ public class AchievementsDisplay implements Disposable {
     private float scrollY;
 
 
-    public AchievementsDisplay(AchievementHandler achievementHandler, float posX, float posY, Viewport vp){
+    public AchievementsDisplay(UIElements uiElements, AchievementHandler achievementHandler, float posX, float posY){
         this.achievementHandler = achievementHandler;
+        this.uiElements = uiElements;
         this.posX = posX;
         this.posY = posY;
-        this.vp = vp;
-        unlocked = true;
-        background = new Texture(Gdx.files.internal("AchievementsBackground.png"));
-        tick = new Texture(Gdx.files.internal("check-mark.png"));
-        padlock = new Texture(Gdx.files.internal("lock-padlock-symbol-for-security-interface.png"));
-        scrollBar = new Texture(Gdx.files.internal("ScrollBar2.png"));
-        highlightSelected = new Texture(Gdx.files.internal("HighlightSelected.png"));
 
-        float scale = 1f;
+        resourceManager = new ResourceManager();
+
+        unlocked = true;
+        background = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/AchievementsBackground.png")));
+        tick = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/check-mark.png")));
+        padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/lock-padlock-symbol-for-security-interface.png")));
+        scrollBar = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/ScrollBar2.png")));
+        highlight = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/HighlightSelected.png")));
+
         bgWidth = background.getWidth() * scale;
         bgHeight = background.getHeight() * scale;
         achievementWidth = 210f * scale;
@@ -63,61 +67,63 @@ public class AchievementsDisplay implements Disposable {
 
     public void render(SpriteBatch batch){
         if (!visible) return;
-        Vector2 pos = gameToWorld(posX, posY);
-        float worldX = pos.x;
-        float worldY = pos.y * 1.05f;
 
-        Vector3 screenCoordMin = vp.project(new Vector3(worldX, worldY, 0));
-        Vector3 screenCoordMax = vp.project(new Vector3(worldX + bgWidth, worldY + bgHeight * 0.77f, 0));
+        updateScroller();
 
-        int scissorX = (int) screenCoordMin.x;
-        int scissorY = (int) screenCoordMin.y;
-        int scissorWidth = (int) (screenCoordMax.x - screenCoordMin.x);
-        int scissorHeight = (int) (screenCoordMax.y - screenCoordMin.y);
+        uiElements.drawUI(batch, background, posX, posY, bgWidth, bgHeight);
+        uiElements.drawUI(batch, scrollBar, scrollX, scrollY, scrollWidth, scrollHeight);
+        if (unlocked) uiElements.drawUI(batch, highlight, tickX, selectY, selectWidth, selectHeight);
+        else uiElements.drawUI(batch, highlight, padlockX, selectY, selectWidth, selectHeight);
+        uiElements.drawUI(batch, tick, tickX, selectY, 25, 25);
+        uiElements.drawUI(batch, padlock, padlockX, selectY, 25, 25);
+        drawAchievements(batch);
+    }
 
-
-        batch.setProjectionMatrix(vp.getCamera().combined);
-        batch.begin();
-        drawUI(batch, background, posX, posY, bgWidth, bgHeight);
-        drawUI(batch, scrollBar, scrollX, scrollY, scrollWidth, scrollHeight);
-        if (unlocked) drawUI(batch, highlightSelected, tickX, selectY, selectWidth, selectHeight);
-        else drawUI(batch, highlightSelected, padlockX, selectY, selectWidth, selectHeight);
-
-        drawUI(batch, tick, tickX, selectY, 25, 25);
-        drawUI(batch, padlock, padlockX, selectY, 25, 25);
-        batch.end();
-
+    private void updateScroller(){
+        //Handle Scroll Logic
         if (scrolling){
-            scrollY = screenToGame(0, Gdx.input.getY()).y - relY;
+            scrollY = uiElements.screenToGame(0, Gdx.input.getY()).y - relY;
             if (scrollY < posY + bgHeight*0.17f){
                 scrollY = posY + bgHeight*0.17f;
             } else if (scrollY > posY + bgHeight*0.67f){
                 scrollY = posY + bgHeight*0.67f;
             }
         }
+    }
 
+    private void drawAchievements(SpriteBatch batch){
+        //Calculate the screen coords of scissor box
+        Vector2 blCorner = uiElements.toScreen(posX, posY + 25 * scale);
+        Vector2 trCorner = uiElements.toScreen(posX+bgWidth, posY+bgHeight - 55 * scale);
+
+        int scissorX = (int) blCorner.x;
+        int scissorY = (int) blCorner.y;
+        int scissorWidth = (int) (trCorner.x - blCorner.x);
+        int scissorHeight = (int) (trCorner.y - blCorner.y);
+
+        //Draw Achievements
+        batch.draw(highlight, 0, 0, 0, 0);
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
         Gdx.gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);
-        batch.begin();
         List<Achievement> achievements = achievementHandler.getAchievements();
         int c = 0;
         for (Achievement achievement : achievements){
             if (achievement.isUnlocked() == unlocked){
                 c++;
-                drawUI(batch, achievement.getAchievementTexture(), posX + (bgWidth - achievementWidth)/2f, posY + bgHeight * 0.95f + (bgHeight*0.67f + posY - scrollY)*3 - (bgHeight/10 + achievementHeight) * c, achievementWidth, achievementHeight);
+                uiElements.drawUI(batch, achievement.getAchievementTexture(), posX + (bgWidth - achievementWidth)/2f, posY + bgHeight * 0.95f + (bgHeight*0.67f + posY - scrollY)*3 - (bgHeight/10 + achievementHeight) * c, achievementWidth, achievementHeight);
             }
         }
-        batch.end();
+        batch.draw(highlight, 0, 0, 0, 0);
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
 
     @Override
     public void dispose() {
-        background.dispose();
+        resourceManager.disposeAll();
     }
 
     public void touchDown(int screenX, int screenY) {
-        Vector2 gamePos = screenToGame(screenX, screenY);
+        Vector2 gamePos = uiElements.screenToGame(screenX, screenY);
         if (gamePos.x >= scrollX && gamePos.x <= scrollX + scrollWidth && gamePos.y >= scrollY && gamePos.y <= scrollY + scrollHeight){
             scrolling = true;
             relY = gamePos.y - scrollY;
@@ -137,21 +143,8 @@ public class AchievementsDisplay implements Disposable {
         visible = true;
     }
 
+    @SuppressWarnings("unused")
     public void hide(){
         visible = false;
-    }
-
-    private void drawUI(SpriteBatch batch, Texture txt, float x, float y, float width, float height){
-        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);
-    }
-
-    private Vector2 gameToWorld(float x, float y){
-        return new Vector2(x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);
-    }
-
-    private Vector2 screenToGame (float screenX, float screenY){
-        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();
-        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();
-        return new Vector2(transX, transY);
     }
 }

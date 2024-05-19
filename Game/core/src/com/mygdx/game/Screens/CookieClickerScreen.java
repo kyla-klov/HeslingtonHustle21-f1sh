@@ -95,7 +95,6 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
             glyphLayout.setText(cookiesCollectedText, gameOverText);
             cookiesCollectedText.draw(game.batch, gameOverText, (vp.getWorldWidth() - glyphLayout.width) / 2, (vp.getWorldHeight() - glyphLayout.height) / 2);
             gameClock.addEvent(f -> endGame(), 1f);
-            System.out.println("yes");
         } else {
             String text = "Collected " + cookiesCollected + " cookie(s)!";
             glyphLayout.setText(cookiesCollectedText, text);

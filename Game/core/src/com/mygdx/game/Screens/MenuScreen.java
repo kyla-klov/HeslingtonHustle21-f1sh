@@ -40,7 +40,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.screenManager.setScreen(ScreenType.COOKIE_SCREEN);
+                game.screenManager.setScreen(ScreenType.GAME_SCREEN);
             }
         });
 

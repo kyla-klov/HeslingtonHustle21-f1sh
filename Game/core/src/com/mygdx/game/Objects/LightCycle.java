@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.mygdx.game.HesHustle;
@@ -11,7 +13,8 @@ import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.GameClock;
 import com.mygdx.game.Utils.ScreenType;
 
-public class LightCycle extends GameObject{
+public class LightCycle {
+    private final int size = 4000;
     Interpolation inter;
     float prog=0;
     float[] Col1,Col2,Col3;
@@ -22,7 +25,6 @@ public class LightCycle extends GameObject{
      * lookup the LibGDX interpolation site for help the 4 Interpolations I used basically simulate a big squished sine wave
      */
     public LightCycle() {
-        super(0, 0, 4000, 4000);
         Col1 = new float[]{238/255f, 130/255f, 0, 0.2f}; //orange
         Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};//blue
         Col3 = new float[]{113/255f, 0/255f, 143/255f, 0.3f};//purple
@@ -69,35 +71,35 @@ public class LightCycle extends GameObject{
         return new Color(fin[0],fin[1],fin[2],fin[3]);
     }
 
-    @Override
-    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
-        GameClock gameClock = ((GameScreen) game.screenManager.getScreen(ScreenType.GAME_SCREEN)).getGameClock();
-        getTime(gameClock.getHours(), gameClock.getMinutes());
-        shape.setProjectionMatrix(projection.combined);
-        shape.begin(ShapeRenderer.ShapeType.Filled);
+    public void render(SpriteBatch batch, int hours, int minutes) {
+        getTime(hours, minutes);
+
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         switch(segment){
             case 0:
                 inter = Interpolation.pow3Out;
-                shape.setColor(getColor(Col2,Col1,inter));
+                batch.setColor(getColor(Col2,Col1,inter));
                 break;
             case 1:
                 inter = Interpolation.pow3In;
-                shape.setColor(getColor(Col1,Col2,inter));
+                batch.setColor(getColor(Col1,Col2,inter));
                 break;
             case 2:
                 inter = Interpolation.pow3Out;
-                shape.setColor(getColor(Col3,Col1,inter));
+                batch.setColor(getColor(Col3,Col1,inter));
                 break;
             case 3:
                 inter = Interpolation.pow3In;
-                shape.setColor(getColor(Col1,Col3,inter));
+                batch.setColor(getColor(Col1,Col3,inter));
                 break;
         }
 
+        batch.draw(new Texture(Gdx.files.internal("BlankSquare.png")), 0, 0, size, size);
+        batch.setColor(1, 1, 1, 1);
+    }
 
-        shape.rect(pos.x, pos.y, bounds.width, bounds.height);
-        shape.end();
+    public int getSize(){
+        return size;
     }
 }

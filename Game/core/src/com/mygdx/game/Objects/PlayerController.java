@@ -2,15 +2,11 @@ package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.IntSet;
-import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.Utils.EventManager;
 import com.mygdx.game.Utils.CollisionDetector;
@@ -20,13 +16,15 @@ import java.util.Objects;
 /**Controller Class which the user interacts with the game through, has input processor which must be set active on each GameScreen
  *
  */
-public class PlayerController extends GameObject implements InputProcessor {
+public class PlayerController {
     /**Width of character sprite
      */
-    public static final float width = 32;
+    private final float width = 32;
     /**Height of character sprite
      */
-    public static final float height = 64;
+    private final float height = 64;
+
+    public Vector2 pos;
 
     /**Enum of states the player character can be in
      */
@@ -68,7 +66,7 @@ public class PlayerController extends GameObject implements InputProcessor {
     private final IntSet downKeys = new IntSet(20);
     /**Stores the Key values of the direction keys you want to use
      */
-    private final static int up=Input.Keys.W,down=Input.Keys.S,left=Input.Keys.A,right=Input.Keys.D;
+    private final int up=Input.Keys.W,down=Input.Keys.S,left=Input.Keys.A,right=Input.Keys.D;
     /**Event Manager used to interact with events*/
     public EventManager EM;
     /**Ref to nearest building (Activity) for interaction*/
@@ -88,7 +86,7 @@ public class PlayerController extends GameObject implements InputProcessor {
      * @param collisionLayer Collision Layer of the Tiled Map
      */
     public PlayerController(float xPos, float yPos, EventManager EM, TiledMapTileLayer collisionLayer) {
-        super(xPos,yPos,width,height);
+        pos = new Vector2(xPos,yPos);
         Pstate = state.IDLE_DOWN;
         loadAnims();
         panim = IDLE_DOWN;
@@ -133,8 +131,9 @@ public class PlayerController extends GameObject implements InputProcessor {
     }
     public Vector2 getPos() { return pos; }
 
-    public Rectangle getBounds() { return new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height); }
+    public float getWidth() { return width; }
 
+    public float getHeight() { return height; }
 
     public Vector2 getDir() {
         //find overall direction of inputs
@@ -216,14 +215,8 @@ public class PlayerController extends GameObject implements InputProcessor {
 
         return null;
     }
-    @Override
-    public void render(Camera projection, HesHustle game, ShapeRenderer shape){
-        game.batch.begin();
-        game.batch.draw(txr,pos.x, pos.y, bounds.width, bounds.height);
-        game.batch.end();
-
-
-
+    public void render(SpriteBatch batch){
+        batch.draw(txr,pos.x, pos.y, width, height);
     }
 
     /**
@@ -241,52 +234,39 @@ public class PlayerController extends GameObject implements InputProcessor {
 
     }
 
-    @Override
-    public boolean keyDown(int keycode) {
+    public void keyDown(int keycode) {
 
         downKeys.add(keycode);
         if (keycode == Input.Keys.SPACE){
             interact();
         }
         if (downKeys.size >= 2){
-
-            return onMultipleKeysDown(keycode);
+            onMultipleKeysDown(keycode);
         }
-        return true;
-
     }
 
     /**
      * When multiple keys pressed it cancels out opposing directions, added back on key up
      * @param keycode .
-     * @return .
      */
-    public boolean onMultipleKeysDown(int keycode){
+    public void onMultipleKeysDown(int keycode){
         if ((keycode==left && downKeys.contains(right)) || (keycode==right && downKeys.contains(left))) {
             downKeys.remove(left);
             downKeys.remove(right);
-
-            return true;
         }
         else if ((keycode==up && downKeys.contains(down)) || (keycode==down && downKeys.contains(up))) {
             downKeys.remove(up);
             downKeys.remove(down);
-
-            return true;
         } else {
             downKeys.add(keycode);
-
-            return true;
         }
 
     }
 
-    @Override
-    public boolean keyUp(int keycode) {
+    public void keyUp(int keycode) {
         if (downKeys.contains(keycode))
         {
             downKeys.remove(keycode);
-            return true;
         }
         else
         {
@@ -306,45 +286,10 @@ public class PlayerController extends GameObject implements InputProcessor {
                     break;
             }
         }
-        return true;
     }
 
     public float getDistanceTravelled(){
         return distanceTravelled;
     }
 
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
-    }
 }

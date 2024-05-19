@@ -1,4 +1,6 @@
 package com.mygdx.game.Utils;
+import com.badlogic.gdx.utils.Disposable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +27,7 @@ and whether they got gold, silver or nothing. It returns a Mapping which you can
 
 
 
-public class AchievementHandler {
+public class AchievementHandler implements Disposable {
 
     private final List<Achievement> achievements;
     public AchievementHandler(){
@@ -47,16 +49,23 @@ public class AchievementHandler {
     }
 
     private void generateAchievements(){
-        achievements.add(new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE, "BallerAchievementBronze.png"));
-        achievements.add(new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.SILVER, "BallerAchievementSilver.png"));
-        achievements.add(new Achievement("Baller", "Score at least 15 points in basketball", Achievement.Type.GOLD, "BallerAchievementGold.png"));
+        achievements.add(new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE, "AchievementsDisplay/BallerAchievementBronze.png"));
+        achievements.add(new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.SILVER, "AchievementsDisplay/BallerAchievementSilver.png"));
+        achievements.add(new Achievement("Baller", "Score at least 15 points in basketball", Achievement.Type.GOLD, "AchievementsDisplay/BallerAchievementGold.png"));
 
-        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 20 seconds", Achievement.Type.BRONZE, "DuckAchievementBronze.png"));
-        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER, "DuckAchievementSilver.png"));
-        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD, "DuckAchievementGold.png"));
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 20 seconds", Achievement.Type.BRONZE, "AchievementsDisplay/DuckAchievementBronze.png"));
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER, "AchievementsDisplay/DuckAchievementSilver.png"));
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD, "AchievementsDisplay/DuckAchievementGold.png"));
 
-        achievements.add(new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementPlaceHolder.png"));
-        achievements.add(new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER, "AchievementPlaceHolder.png"));
-        achievements.add(new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD, "AchievementPlaceHolder.png"));
+        achievements.add(new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementsDisplay/AchievementPlaceHolder.png"));
+        achievements.add(new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER, "AchievementsDisplay/AchievementPlaceHolder.png"));
+        achievements.add(new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD, "AchievementsDisplay/AchievementPlaceHolder.png"));
+    }
+
+    @Override
+    public void dispose() {
+        for (Achievement achievement : achievements){
+            achievement.dispose();
+        }
     }
 }

@@ -32,13 +32,15 @@ public class GameScreen implements Screen, InputProcessor {
     private final ResourceManager resourceManager = new ResourceManager();
     private final HesHustle game;
     private AchievementsDisplay achievementsDisplay;
+    private final EnergyBar energyBar;
     private final Viewport vp;
     private final ShapeRenderer shape;
-    private final List<GameObject> objects;
     private final List<ActivityImage> activityImages;
     private final List<Building> buildings;
     private final GameClock gameClock;
+    private final UIElements uiElements;
     private final OrthographicCamera camera;
+    private EventManager eventM;
 
     //Game objects
     private PlayerController player;
@@ -65,22 +67,23 @@ public class GameScreen implements Screen, InputProcessor {
         }
         else{
             this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
-            this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap);
+            this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap, game.batch);
 
         }
 
-        this.objects = new ArrayList<>();
         this.activityImages = new ArrayList<>();
         this.buildings = new ArrayList<>();
 
         this.BGmusic = resourceManager.addDisposable(BGmusic);
         this.BGmusic.setLooping(true);
-
+        uiElements = new UIElements(vp);
+        energyBar = new EnergyBar(uiElements, 700, 700, 270, 50, 27);
         create();
     }
     public GameScreen(final HesHustle game) {
         this(game, new GameClock(), new ShapeRenderer(), null, null, Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
     }
+
     public void create(){
 
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
@@ -98,7 +101,7 @@ public class GameScreen implements Screen, InputProcessor {
         buildings.add(langwith);
         buildings.add(piazza);
 
-        EventManager eventM = new EventManager(game, gameClock);
+        eventM = new EventManager(game, gameClock);
         player = new PlayerController(1000,1000, eventM, collisionLayer);
         gui = new GUI(game.batch, eventM, gameClock);
         LC = new LightCycle();
@@ -107,18 +110,15 @@ public class GameScreen implements Screen, InputProcessor {
             activityImages.add(eventM.listEvents().get(i).getActivityImage());
         }
 
-        objects.add(player);
-
-        achievementsDisplay = new AchievementsDisplay(game.achievementHandler, 100, 100, vp);
-        achievementsDisplay.hide();
+        achievementsDisplay = new AchievementsDisplay(uiElements, game.achievementHandler, 100, 100);
+        achievementsDisplay.show();
 
         Gdx.input.setInputProcessor(this);
     }
     public void update(float delta) {
         gameClock.update(delta);
-        for (GameObject gameObject : objects) {
-            gameObject.update(delta);
-        }
+
+        player.update(delta);
 
         player.setBD(getNearest());
 
@@ -150,36 +150,35 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0f,0f,0f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        updateCamera();
         vp.apply();
         camera.update();
-        updateCamera();
+
         game.batch.setProjectionMatrix(vp.getCamera().combined);
 
         TmRender.setView(camera);
         TmRender.render();
 
+        game.batch.begin();
 
-        renderObjects();
-        LC.render(vp.getCamera(),game,shape);//these could be in the objects list
-        gui.render(vp.getCamera(),game,shape);
+        player.render(game.batch);
+        LC.render(game.batch, gameClock.getHours(), gameClock.getMinutes());
         renderActivityImages();
-        achievementsDisplay.render(game.batch);
+        //achievementsDisplay.render(game.batch);
+        //energyBar.render(game.batch, eventM.getEnergy());
+
+        game.batch.end();
+        gui.render(vp.getCamera(),game,shape);
           // position of the projection matrix and we need it for the event render
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);
         }
     }
-    public void renderObjects()
-    {
-        for (GameObject gameObject : objects) {
-            gameObject.render(vp.getCamera(),game,shape);
-        }
-    }
 
     public void renderActivityImages(){
         for (ActivityImage activityImage : activityImages) {
-            if (activityImage != null) activityImage.render(vp.getCamera(),game,shape);
+            if (activityImage != null) activityImage.render(vp.getCamera(),game.batch);
         }
     }
 

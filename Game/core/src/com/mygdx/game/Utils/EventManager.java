@@ -16,7 +16,7 @@ public class EventManager {
 
     Event curEvent = null;
 
-    Integer energy;
+    private Integer energy;
     boolean frozen = false;
     List<Event> playedEvents;
     private final ResourceManager resourceManager;

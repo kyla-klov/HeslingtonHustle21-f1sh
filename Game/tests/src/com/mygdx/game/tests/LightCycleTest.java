@@ -1,8 +1,8 @@
 package com.mygdx.game.tests;
 
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.LightCycle;
@@ -25,7 +25,8 @@ public class LightCycleTest {
     private final GameClock mockedGameClock = spy(GameClock.class);
     private final Camera mockedCamera = mock(Camera.class);
     private final HesHustle mockedGame = mock(HesHustle.class);
-    private final ShapeRenderer mockedShapeRenderer = mock(ShapeRenderer.class);
+    private final SpriteBatch mockedSpriteBatch = mock(SpriteBatch.class);
+    private final Texture mockedTexture = mock(Texture.class);
     private final LightCycle lightCycle = new LightCycle();
     private final float[] Col1 = new float[]{238/255f, 130/255f, 0, 0.2f}; //orange
     private final float[] Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};//blue
@@ -34,41 +35,42 @@ public class LightCycleTest {
     @Before
     public void setup(){
         mockedGame.screenManager = mockedSM;
+        mockedGame.batch = mockedSpriteBatch;
         when(mockedSM.getScreen(ScreenType.GAME_SCREEN)).thenReturn(mockedGameScreen);
         when(mockedGameScreen.getGameClock()).thenReturn(mockedGameClock);
     }
     @Test
     public void testRender(){
-        lightCycle.render(mockedCamera, mockedGame, mockedShapeRenderer);
+        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
 
         //verify time data is acquired from gameClock of game
-        verify(mockedGameScreen).getGameClock();
-        verify(mockedGameClock).getHours();
-        verify(mockedGameClock).getMinutes();
+        //verify(mockedGameScreen).getGameClock();
+        //verify(mockedGameClock).getHours();
+        //verify(mockedGameClock).getMinutes();
 
         //verify shape is rendered correctly
-        verify(mockedShapeRenderer).setProjectionMatrix(mockedCamera.combined);
-        verify(mockedShapeRenderer).begin(ShapeRenderer.ShapeType.Filled);
-        verify(mockedShapeRenderer).rect(lightCycle.pos.x, lightCycle.pos.y,
-                lightCycle.bounds.width, lightCycle.bounds.height);
-        verify(mockedShapeRenderer).end();
+        verify(mockedGame.batch).setProjectionMatrix(mockedCamera.combined);
+        verify(mockedGame.batch).begin();
+        verify(mockedGame.batch).draw(mockedTexture, 0, 0,
+                lightCycle.getSize(), lightCycle.getSize());
+        verify(mockedGame.batch).end();
 
         //test shape is set to right color at 8 A.M
-        verify(mockedShapeRenderer).setColor(lightCycle.getColor(Col2, Col1, Interpolation.pow3Out));
+        verify(mockedGame.batch).setColor(lightCycle.getColor(Col2, Col1, Interpolation.pow3Out));
 
         //test shape is set to another color at 2 P.M
         mockedGameClock.setHours(14);
-        lightCycle.render(mockedCamera, mockedGame, mockedShapeRenderer);
-        verify(mockedShapeRenderer).setColor(lightCycle.getColor(Col1, Col2, Interpolation.pow3In));
+        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
+        verify(mockedGame.batch).setColor(lightCycle.getColor(Col1, Col2, Interpolation.pow3In));
 
         //test shape is set to another color at 8 P.M
         mockedGameClock.setHours(20);
-        lightCycle.render(mockedCamera, mockedGame, mockedShapeRenderer);
-        verify(mockedShapeRenderer).setColor(lightCycle.getColor(Col3, Col1, Interpolation.pow3Out));
+        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
+        verify(mockedGame.batch).setColor(lightCycle.getColor(Col3, Col1, Interpolation.pow3Out));
 
         //test shape is set to another color at 3 A.M
         mockedGameClock.setHours(3);
-        lightCycle.render(mockedCamera, mockedGame, mockedShapeRenderer);
-        verify(mockedShapeRenderer).setColor(lightCycle.getColor(Col1, Col3, Interpolation.pow3In));
+        lightCycle.render(mockedGame.batch, mockedGameClock.getHours(), mockedGameClock.getMinutes());
+        verify(mockedGame.batch).setColor(lightCycle.getColor(Col1, Col3, Interpolation.pow3In));
     }
 }

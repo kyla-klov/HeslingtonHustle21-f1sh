@@ -8,12 +8,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.Event;
 import com.mygdx.game.Utils.EventManager;
 import com.mygdx.game.Utils.GameClock;
 
-public class GUI extends GameObject{
+public class GUI {
     private final Skin skin;
     private final Table root;
     private final GameClock gameClock;
@@ -25,7 +26,6 @@ public class GUI extends GameObject{
     private TextButton RecButt,EatButt,StudyButt,SleepButt;
 
     public GUI(Batch batch, EventManager EM, GameClock gameClock) {
-        super(0,0,0,0);
         this.EM = EM;
         this.gameClock = gameClock;
         skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
@@ -116,7 +116,6 @@ public class GUI extends GameObject{
         return new int[] {rec,slp,eat,stdy};
     }
 
-    @Override
     public void render(Camera projection, HesHustle game, ShapeRenderer shape)
     {
         stage.act();

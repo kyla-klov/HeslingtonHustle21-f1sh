@@ -24,14 +24,6 @@ public class CollisionDetector {
         return player.getPos().y;
     }
 
-    public float getBoundsWidth() {
-        return player.getBounds().width;
-    }
-
-    public float getBoundsHeight() {
-        return 32; // Assuming default height
-    }
-
 
     private boolean isCellBlocked(float x, float y) {
         TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
@@ -39,8 +31,8 @@ public class CollisionDetector {
     }
 
     public boolean collidesRight() {
-        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
-            if (isCellBlocked(getX() + getBoundsWidth(), getY() + step)) {
+        for (float step = 4; step < player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+            if (isCellBlocked(getX() + player.getWidth(), getY() + step)) {
                 return true;
             }
         }
@@ -48,7 +40,7 @@ public class CollisionDetector {
     }
 
     public boolean collidesLeft() {
-        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+        for (float step = 4; step < player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
             if (isCellBlocked(getX(), getY() + step)) {
                 return true;
             }
@@ -57,8 +49,8 @@ public class CollisionDetector {
     }
 
     public boolean collidesUp() {
-        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
-            if (isCellBlocked(getX() + step, getY() + getBoundsHeight())) {
+        for (float step = 4; step < player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+            if (isCellBlocked(getX() + step, getY() + player.getHeight())) {
                 return true;
             }
         }
@@ -66,7 +58,7 @@ public class CollisionDetector {
     }
 
     public boolean collidesDown() {
-        for (float step = 4; step < getBoundsWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
+        for (float step = 4; step < player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {
             if (isCellBlocked(getX() + step, getY())) {
                 return true;
             }

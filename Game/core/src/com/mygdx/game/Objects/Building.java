@@ -18,21 +18,5 @@ public class Building extends GameObject{
         this.name = name;
     }
 
-    public void update(float delta)
-    {
-        super.update(delta);
-    }
 
-    @Override
-    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
-        shape.setProjectionMatrix(projection.combined);
-        shape.begin(ShapeRenderer.ShapeType.Filled);
-        shape.setColor(Color.RED);
-        shape.rect(pos.x, pos.y, 100, 100);
-        shape.end();
-
-        game.batch.begin();
-        game.font.draw(game.batch, name, pos.x+3, pos.y +bounds.height-3);
-        game.batch.end();
-    }
 }

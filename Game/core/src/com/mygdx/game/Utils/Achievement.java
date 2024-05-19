@@ -1,10 +1,10 @@
 package com.mygdx.game.Utils;
 
 import java.util.Objects;
-
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Achievement {
+public class Achievement implements Disposable {
     public enum Type{
         BRONZE, SILVER, GOLD
     }
@@ -12,7 +12,7 @@ public class Achievement {
     private final String description;
     private final String name;
     private final Type achievementType;
-    private Texture achievementTexture;
+    private final Texture achievementTexture;
 
     private boolean unlocked;
 
@@ -56,6 +56,11 @@ public class Achievement {
         if (!(o instanceof Achievement)) return false;
         Achievement that = (Achievement) o;
         return isUnlocked() == that.isUnlocked() && Objects.equals(getDescription(), that.getDescription()) && Objects.equals(getName(), that.getName()) && achievementType == that.achievementType;
+    }
+
+    @Override
+    public void dispose(){
+        achievementTexture.dispose();
     }
 
 }
