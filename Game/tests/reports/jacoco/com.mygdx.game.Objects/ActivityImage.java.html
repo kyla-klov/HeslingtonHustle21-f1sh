@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActivityImage.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">ActivityImage.java</span></div><h1>ActivityImage.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.Utils.ResourceManager;
+
+public class ActivityImage implements Disposable {
+    private final Texture txt;
+    private final ResourceManager resourceManager;
+    private boolean active;
+
+<span class="fc" id="L18">    public ActivityImage(String txt) {</span>
+<span class="fc" id="L19">        this.resourceManager = new ResourceManager();</span>
+<span class="fc" id="L20">        this.txt = resourceManager.addDisposable(new Texture(txt));</span>
+<span class="fc" id="L21">        this.active = false;</span>
+<span class="fc" id="L22">    }</span>
+
+    public void setActive(){
+<span class="fc" id="L25">        active = true;</span>
+<span class="fc" id="L26">    }</span>
+
+    public void setInactive(){
+<span class="nc" id="L29">        active = false;</span>
+<span class="nc" id="L30">    }</span>
+
+    @SuppressWarnings(&quot;unused&quot;)
+    public Texture getTxt() {
+<span class="nc" id="L34">        return txt;</span>
+    }
+
+    @SuppressWarnings(&quot;unused&quot;)
+    public ResourceManager getResourceManager() {
+<span class="nc" id="L39">        return resourceManager;</span>
+    }
+
+    @SuppressWarnings(&quot;unused&quot;)
+    public boolean isActive() {
+<span class="nc" id="L44">        return active;</span>
+    }
+
+    /*@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ActivityImage)) return false;
+        ActivityImage that = (ActivityImage) o;
+        return isActive() == that.isActive() &amp;&amp; Objects.equals(getTxt().hashCode(), that.getTxt().hashCode()) &amp;&amp; Objects.equals(getResourceManager(), that.getResourceManager());
+    }*/
+
+    public void render(Camera projection, SpriteBatch batch) {
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        if (!active) return;</span>
+        //batch.setProjectionMatrix(projection.combined);
+<span class="fc" id="L58">        Gdx.gl.glEnable(GL20.GL_BLEND); // ALLOWS TRANSPARENCY</span>
+<span class="fc" id="L59">        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);</span>
+        //Draw transparent background
+<span class="fc" id="L61">        batch.setColor(new Color(0,0,0.2f,0.7f));</span>
+<span class="fc" id="L62">        batch.draw(new Texture(Gdx.files.internal(&quot;BlankSquare.png&quot;)), (projection.position.x - projection.viewportWidth/2), (projection.position.y - projection.viewportHeight/2), projection.viewportWidth, projection.viewportHeight);</span>
+        //draw black outline
+<span class="fc" id="L64">        batch.setColor(Color.BLACK);</span>
+<span class="fc" id="L65">        batch.draw(new Texture(Gdx.files.internal(&quot;BlankSquare.png&quot;)), (projection.position.x - projection.viewportHeight*0.9f/2), (projection.position.y - projection.viewportHeight*0.9f/2), projection.viewportHeight*0.9f, projection.viewportHeight*0.9f);</span>
+
+<span class="fc" id="L67">        batch.setColor(1, 1, 1, 1);</span>
+<span class="fc" id="L68">        batch.draw(new TextureRegion(txt),(projection.position.x - (projection.viewportHeight*0.85f/2)),(projection.position.y - projection.viewportHeight*0.85f/2),0,0,projection.viewportHeight*0.85f,projection.viewportHeight*0.85f,1,1,0);</span>
+<span class="fc" id="L69">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L73">        resourceManager.disposeAll();</span>
+<span class="nc" id="L74">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

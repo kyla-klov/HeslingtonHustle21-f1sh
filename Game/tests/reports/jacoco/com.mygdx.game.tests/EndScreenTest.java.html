@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EndScreenTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">EndScreenTest.java</span></div><h1>EndScreenTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.graphics.Camera;
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Screens.EndScreen;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.runner.RunWith;
+import org.mockito.MockitoAnnotations;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L27">public class EndScreenTest {</span>
+    private AutoCloseable closeable;
+
+    // creates skins for buttons
+<span class="fc" id="L31">    private final Skin mockedSkin = mock(Skin.class, withSettings()</span>
+<span class="fc" id="L32">        .useConstructor(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;))</span>
+<span class="fc" id="L33">        .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+    // creates instances of each button
+<span class="fc" id="L36">    private final TextButton mockedPlayAgainButton = mock(TextButton.class, withSettings()</span>
+<span class="fc" id="L37">            .useConstructor(&quot;Play Again&quot;, mockedSkin)</span>
+<span class="fc" id="L38">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+<span class="fc" id="L39">    private final TextButton mockedMainMenuButton = mock(TextButton.class, withSettings()</span>
+<span class="fc" id="L40">            .useConstructor(&quot;Main Menu&quot;, mockedSkin)</span>
+<span class="fc" id="L41">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+<span class="fc" id="L42">    private final TextButton mockedExitButton = mock(TextButton.class, withSettings()</span>
+<span class="fc" id="L43">            .useConstructor(&quot;Exit&quot;, mockedSkin)</span>
+<span class="fc" id="L44">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+    // creates dependencies for mockedStage
+<span class="fc" id="L47">    private final HesHustle mockedGame = mock(HesHustle.class);</span>
+<span class="fc" id="L48">    private final Matrix4 mockedMatrix4 = spy(Matrix4.class);</span>
+<span class="fc" id="L49">    private final Color mockedColor = spy(Color.class);</span>
+<span class="fc" id="L50">    private final Batch mockedBatch = mock(Batch.class);</span>
+<span class="fc" id="L51">    private final Camera mockedCamera = spy(Camera.class);</span>
+<span class="fc" id="L52">    private final ScreenViewport mockedSV = mock(ScreenViewport.class, withSettings()</span>
+<span class="fc" id="L53">            .useConstructor(mockedCamera)</span>
+<span class="fc" id="L54">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+    // creates stage instance
+<span class="fc" id="L57">    private final Stage mockedStage = mock(Stage.class, withSettings()</span>
+<span class="fc" id="L58">            .useConstructor(mockedSV, mockedBatch)</span>
+<span class="fc" id="L59">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+    // creates a mock instance of the end screen
+<span class="fc" id="L62">    private final EndScreen mockedEndScreen = mock(EndScreen.class, withSettings()</span>
+<span class="fc" id="L63">            .useConstructor(mockedGame, mockedStage, mockedSkin,</span>
+                    mockedPlayAgainButton, mockedMainMenuButton, mockedExitButton)
+<span class="fc" id="L65">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+    @Before
+    public void setup(){
+<span class="fc" id="L69">        closeable = MockitoAnnotations.openMocks(this);</span>
+<span class="fc" id="L70">        when(mockedBatch.getTransformMatrix()).thenReturn(mockedMatrix4);</span>
+<span class="fc" id="L71">        when(mockedBatch.getColor()).thenReturn(mockedColor);</span>
+<span class="fc" id="L72">        mockedBatch.setTransformMatrix(mockedMatrix4);</span>
+<span class="fc" id="L73">    }</span>
+
+    @Test
+    public void testRender() {
+//        doReturn(1).when(mockedEndScreen).render(1.1).;
+<span class="fc" id="L78">        mockedEndScreen.render(2);</span>
+<span class="fc" id="L79">        verify(mockedStage, times(1)).act(1/30f);</span>
+<span class="fc" id="L80">        verify(mockedStage, times(1)).draw();</span>
+<span class="fc" id="L81">    }</span>
+
+    @Test
+    // tests that all buttons have been properly created with the correct text, skin and
+    // placed in the correct location.
+    public void textSetUpUI(){
+<span class="fc" id="L87">        assertEquals(1, mockedStage.getActors().size, 0);</span>
+<span class="fc" id="L88">        Table table = (Table) mockedStage.getActors().get(0);</span>
+<span class="fc" id="L89">        assertEquals(3, table.getCells().size);</span>
+
+<span class="fc" id="L91">        TextButton playAgainButton = (TextButton) ((Table) table).getCells().get(0).getActor();</span>
+<span class="fc" id="L92">        assertNotNull(playAgainButton);</span>
+<span class="fc" id="L93">        assertEquals(mockedPlayAgainButton, playAgainButton);</span>
+<span class="fc" id="L94">        assertEquals(20, playAgainButton.getPadY(), 0);</span>
+<span class="fc" id="L95">        verify(mockedPlayAgainButton).addListener(any(EventListener.class));</span>
+
+<span class="fc" id="L97">        TextButton mainMenuButton = (TextButton) ((Table) table).getCells().get(1).getActor();</span>
+<span class="fc" id="L98">        assertNotNull(mainMenuButton);</span>
+<span class="fc" id="L99">        assertEquals(mockedMainMenuButton, mainMenuButton);</span>
+<span class="fc" id="L100">        assertEquals(20, mainMenuButton.getPadY(), 0);</span>
+<span class="fc" id="L101">        verify(mockedMainMenuButton).addListener(any(EventListener.class));</span>
+
+<span class="fc" id="L103">        TextButton exitButton = (TextButton) ((Table) table).getCells().get(2).getActor();</span>
+<span class="fc" id="L104">        assertNotNull(exitButton);</span>
+<span class="fc" id="L105">        assertEquals(mockedExitButton, exitButton);</span>
+<span class="fc" id="L106">        assertEquals(20, exitButton.getPadY(), 0);</span>
+<span class="fc" id="L107">        verify(mockedExitButton).addListener(any(EventListener.class));</span>
+<span class="fc" id="L108">    }</span>
+
+    @After
+    public void releaseMocks() throws Exception {
+<span class="fc" id="L112">        closeable.close();</span>
+<span class="fc" id="L113">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

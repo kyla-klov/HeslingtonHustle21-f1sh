@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BallPhysics.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Utils</a> &gt; <span class="el_source">BallPhysics.java</span></div><h1>BallPhysics.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Utils;
+
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.Objects.Ball;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class BallPhysics {
+    private static class CollisionInfo {
+        private final float score;
+        private final Vector2 velocity;
+        private final Vector2 position;
+        private final String type;
+
+        //A class for storing information about a collision
+<span class="nc" id="L18">        public CollisionInfo(float score, Vector2 velocity, Vector2 position, String type) {</span>
+<span class="nc" id="L19">            this.score = score;</span>
+<span class="nc" id="L20">            this.velocity = velocity;</span>
+<span class="nc" id="L21">            this.position = position;</span>
+<span class="nc" id="L22">            this.type = type;</span>
+<span class="nc" id="L23">        }</span>
+    }
+<span class="nc" id="L25">    private final float reduction = .4f;</span>
+    private final List&lt;Collider&gt; colliders;
+    private final Ball ball;
+
+<span class="nc" id="L29">    public BallPhysics(Ball ball){</span>
+<span class="nc" id="L30">        this.colliders = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L31">        this.ball = ball;</span>
+<span class="nc" id="L32">        ball.setAcceleration(new Vector2(ball.getAcceleration().x, -2000));</span>
+<span class="nc" id="L33">    }</span>
+
+    public void addCollider(Collider collider){
+<span class="nc" id="L36">        colliders.add(collider);</span>
+<span class="nc" id="L37">    }</span>
+
+    public void adjustBall(float deltaTime){
+<span class="nc" id="L40">        Vector2 nextPos = ball.nextPosition(deltaTime);</span>
+
+        //Iterate until no collisions are detected
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        while (detectCollision(nextPos)){</span>
+<span class="nc" id="L44">            nextPos = ball.nextPosition(deltaTime);</span>
+        }
+<span class="nc" id="L46">    }</span>
+
+    private boolean detectCollision(Vector2 nextPos){
+<span class="nc" id="L49">        Vector2 dir = nextPos.cpy().sub(ball.getPosition()).nor(); //direction vector of ball's trajectory</span>
+<span class="nc" id="L50">        float grad = dir.y/dir.x; //gradient of ball's trajectory</span>
+
+<span class="nc" id="L52">        CollisionInfo closest = null;</span>
+        //Loops through all stored colliders and finds closest collision
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        for (Collider collider : colliders) {</span>
+            //checks for collisions with collider's horizontal surfaces
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            for (Vector3 surface : collider.getHorSurfs()) {</span>
+<span class="nc" id="L57">                CollisionInfo collision = horizontalCollision(surface, nextPos, grad);</span>
+<span class="nc bnc" id="L58" title="All 6 branches missed.">                if (closest == null || (collision != null &amp;&amp; collision.score &lt; closest.score)) {</span>
+<span class="nc" id="L59">                    closest = collision;</span>
+                }
+<span class="nc" id="L61">            }</span>
+
+            //checks for collisions with collider's vertical surfaces
+<span class="nc bnc" id="L64" title="All 2 branches missed.">            for (Vector3 surface : collider.getVerSurfs()) {</span>
+<span class="nc" id="L65">                CollisionInfo collision = verticalCollision(surface, nextPos, grad);</span>
+<span class="nc bnc" id="L66" title="All 6 branches missed.">                if (closest == null || (collision != null &amp;&amp; collision.score &lt; closest.score)) {</span>
+<span class="nc" id="L67">                    closest = collision;</span>
+                }
+<span class="nc" id="L69">            }</span>
+
+            //checks for collisions with collider's points
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            for (Vector2 point : collider.getPoints()) {</span>
+<span class="nc" id="L73">                CollisionInfo collision = pointCollision(point, nextPos, grad, false);</span>
+<span class="nc bnc" id="L74" title="All 6 branches missed.">                if (closest == null || (collision != null &amp;&amp; collision.score &lt; closest.score)) {</span>
+<span class="nc" id="L75">                    closest = collision;</span>
+                }
+<span class="nc" id="L77">            }</span>
+
+            //checks for collisions with collider's damped points
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            if (collider.isDampedPointsActive()) {</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                for (Vector2 point : collider.getDampedPoints()) {</span>
+<span class="nc" id="L82">                    CollisionInfo collision = pointCollision(point, nextPos, grad, true);</span>
+<span class="nc bnc" id="L83" title="All 6 branches missed.">                    if (closest == null || (collision != null &amp;&amp; collision.score &lt; closest.score)) {</span>
+<span class="nc" id="L84">                        closest = collision;</span>
+                    }
+<span class="nc" id="L86">                }</span>
+            }
+<span class="nc" id="L88">        }</span>
+
+        //If closest collision was found, update ball's data
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (closest != null){</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (closest.type.equals(&quot;point&quot;)){</span>
+<span class="nc" id="L93">                closest.position.sub(dir);</span>
+            }
+<span class="nc" id="L95">            ball.setPosition(closest.position);</span>
+<span class="nc" id="L96">            ball.setVelocity(closest.velocity);</span>
+<span class="nc" id="L97">            return true;</span>
+        }
+<span class="nc" id="L99">        return false;</span>
+    }
+
+    private CollisionInfo horizontalCollision(Vector3 surface, Vector2 nextPos, float grad){
+        //Calculates the offset, which is just the distance from the centre of the ball to the impact point
+        //Offset magnitude is always just the balls radius
+<span class="nc" id="L105">        float offset = ball.getRadius();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (ball.getVelocity().y &lt; 0){</span>
+<span class="nc" id="L107">            offset = -offset;</span>
+        }
+
+        //return null if ball does not pass the surfaces y position
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if ((ball.getPosition().y + offset - surface.y) * (nextPos.y + offset - surface.y) &gt; 0){</span>
+<span class="nc" id="L112">            return null;</span>
+        }
+
+        //Calculates the x coordinate of when the ball passes the surfaces y coordinate
+<span class="nc" id="L116">        float x = (surface.y - ball.getPosition().y - offset)/grad + ball.getPosition().x;</span>
+
+        //If the ball passes the wall and the y coordinate lies on the surface then there is a collision
+<span class="nc bnc" id="L119" title="All 4 branches missed.">        if (x &gt; surface.x &amp;&amp; x &lt; surface.x + surface.z){</span>
+<span class="nc" id="L120">            float score = Math.abs((surface.y - ball.getPosition().y - offset)/ball.getVelocity().y); //Score for determining priority</span>
+<span class="nc" id="L121">            Vector2 fixedPosition = new Vector2(x, surface.y - offset); //Repositions the ball at point of collision</span>
+<span class="nc" id="L122">            Vector2 velocity = ball.getVelocity().scl(1f, -reduction); //New velocity of the ball</span>
+<span class="nc" id="L123">            return new CollisionInfo(score, velocity, fixedPosition, &quot;horizontal&quot;);</span>
+        }
+<span class="nc" id="L125">        return null;</span>
+    }
+
+    private CollisionInfo verticalCollision(Vector3 surface, Vector2 nextPos, float grad){
+        //Calculates the offset, which is just the distance from the centre of the ball to the impact point
+        //Offset magnitude is always just the balls radius
+<span class="nc" id="L131">        float offset = ball.getRadius();</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">        if (ball.getVelocity().x &lt; 0){</span>
+<span class="nc" id="L133">            offset = -offset;</span>
+        }
+
+        //return null if ball does not pass the surfaces x position
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if ((ball.getPosition().x + offset - surface.x) * (nextPos.x + offset - surface.x) &gt; 0){</span>
+<span class="nc" id="L138">            return null;</span>
+        }
+
+        //Calculates the y coordinate of when the ball passes the surfaces x coordinate
+<span class="nc" id="L142">        float y = ball.getPosition().y + grad * (surface.x - ball.getPosition().x - offset);</span>
+
+        //If the ball passes the wall and the y coordinate lies on the surface then there is a collision
+<span class="nc bnc" id="L145" title="All 4 branches missed.">        if (y &gt; surface.y &amp;&amp; y &lt; surface.y + surface.z){</span>
+<span class="nc" id="L146">            float score = Math.abs((surface.x - ball.getPosition().x - offset)/ball.getVelocity().x); //Score for determining priority</span>
+<span class="nc" id="L147">            Vector2 fixedPosition = new Vector2(surface.x - offset, y); //Repositions the ball at point of collision</span>
+<span class="nc" id="L148">            Vector2 velocity = ball.getVelocity().scl(-reduction, 1f); //New velocity of the ball</span>
+<span class="nc" id="L149">            return new CollisionInfo(score, velocity, fixedPosition, &quot;vertical&quot;);</span>
+        }
+
+<span class="nc" id="L152">        return null;</span>
+    }
+
+
+    private CollisionInfo pointCollision(Vector2 point, Vector2 nextPos, float grad, boolean damped){
+        //Centre the ball at (0, 0)
+<span class="nc" id="L158">        Vector2 p = point.cpy().sub(ball.getPosition());</span>
+<span class="nc" id="L159">        Vector2 intercept = new Vector2();</span>
+
+        //Apply balls trajectory to the point p and calculate y-intercept
+<span class="nc" id="L162">        float c = p.y - grad * p.x;</span>
+
+        //Calculate the 2 x coordinate where this linear line intercepts the ball
+<span class="nc" id="L165">        float x1 = (float) (-grad * c + Math.sqrt((grad*grad + 1) * Math.pow(ball.getRadius(), 2) - c*c))/(grad*grad + 1);</span>
+<span class="nc" id="L166">        float x2 = (float) (-grad * c - Math.sqrt((grad*grad + 1) * Math.pow(ball.getRadius(), 2) - c*c))/(grad*grad + 1);</span>
+
+        //Calculate which intercept is closest to the point p
+<span class="nc" id="L169">        intercept.x = x1;</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (Math.abs(x1 - p.x) &gt; Math.abs(x2 - p.x)) intercept.x = x2;</span>
+<span class="nc" id="L171">        intercept.y = grad * intercept.x + c; //y coordinate of point of interception</span>
+
+        //Calculate the distance the ball would have to travel to collide with p
+<span class="nc" id="L174">        float dist = intercept.x - p.x;</span>
+        //Calculate the actual distance the ball has travelled
+<span class="nc" id="L176">        float distTravelled = ball.getPosition().x - nextPos.x;</span>
+
+        //If the ball has travelled at least dist, then they have collided
+<span class="nc bnc" id="L179" title="All 4 branches missed.">        if (dist * distTravelled &gt; 0 &amp;&amp; Math.abs(dist) &lt;= Math.abs(distTravelled)){</span>
+<span class="nc" id="L180">            float score = Math.abs(dist / ball.getVelocity().x); //Score for determining priority</span>
+<span class="nc" id="L181">            Vector2 fixedPosition = point.cpy().sub(intercept); //Repositions the ball at point of collision</span>
+<span class="nc" id="L182">            Vector2 velocity = bounce(-intercept.x/intercept.y, damped); //New velocity of the ball</span>
+<span class="nc" id="L183">            return new CollisionInfo(score, velocity, fixedPosition, &quot;point&quot;);</span>
+        }
+<span class="nc" id="L185">        return null;</span>
+    }
+
+    private Vector2 bounce(float grad, boolean damped) {
+<span class="nc" id="L189">        float reduction = this.reduction;</span>
+<span class="nc bnc" id="L190" title="All 2 branches missed.">        if (damped) {</span>
+<span class="nc" id="L191">            reduction /= 10; //Reduce reduction if the point is damped</span>
+        }
+
+        //Calculate the normal vector from the collision point
+<span class="nc" id="L195">        Vector2 n = new Vector2(grad, -1);</span>
+<span class="nc" id="L196">        n.nor(); //Normalise the vector</span>
+
+        //Calculate the tangent vector from the collision point
+<span class="nc" id="L199">        Vector2 t = new Vector2(1, grad);</span>
+<span class="nc" id="L200">        t.nor(); //Normalise the vector</span>
+
+        //Calculate the components of the velocity in the normal and tangent directions
+<span class="nc" id="L203">        float v_dot_n = ball.getVelocity().dot(n);</span>
+<span class="nc" id="L204">        float v_dot_t = ball.getVelocity().dot(t);</span>
+
+        //Apply the changes to these components and calculate new velocity
+<span class="nc" id="L207">        Vector2 newNormalComponent = n.scl(-v_dot_n * reduction);</span>
+<span class="nc" id="L208">        Vector2 newTangentialComponent = t.scl(v_dot_t);</span>
+
+        //Return the added components
+<span class="nc" id="L211">        return newNormalComponent.add(newTangentialComponent);</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

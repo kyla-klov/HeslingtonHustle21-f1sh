@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayerControllerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">PlayerControllerTest.java</span></div><h1>PlayerControllerTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Objects.ActivityImage;
+import com.mygdx.game.Objects.Animation;
+import com.mygdx.game.Objects.PlayerController;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.Utils.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L26">public class PlayerControllerTest {</span>
+    private AutoCloseable closeable;
+
+<span class="fc" id="L29">    private final HesHustle mockedGame = mock(HesHustle.class);</span>
+<span class="fc" id="L30">    private final GameScreen mockedGameScreen = mock(GameScreen.class);</span>
+<span class="fc" id="L31">    private final GameClock mockedClock = spy(GameClock.class);</span>
+
+<span class="fc" id="L33">    private final ScreenManager mockedSM = mock(ScreenManager.class);</span>
+<span class="fc" id="L34">    private final Event mockedEvent = mock(Event.class);</span>
+<span class="fc" id="L35">    private final ScreenType mockedST = mock(ScreenType.class);</span>
+
+<span class="fc" id="L37">    private final ActivityImage mockedImage = mock(ActivityImage.class);</span>
+<span class="fc" id="L38">    private final ActivityImage mockedStudyImage = mock(ActivityImage.class, withSettings()</span>
+<span class="fc" id="L39">            .useConstructor(&quot;Activitys/cs.png&quot;)</span>
+<span class="fc" id="L40">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+<span class="fc" id="L42">    @Spy private final Event PlayBBall = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, &quot;&quot;, ScreenType.BASKETBALL_SCREEN);</span>
+<span class="fc" id="L43">    @Spy private final Event StudyCS = new Event(3, -20, 20, -10, Event.Type.STUDY, 15, &quot;&quot;, mockedStudyImage);</span>
+<span class="fc" id="L44">    @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, &quot;&quot;, mockedImage);</span>
+<span class="fc" id="L45">    @Spy private final Event FeedDucks = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, &quot;&quot;, mockedImage);</span>
+<span class="fc" id="L46">    @Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, &quot;&quot;, mockedImage);</span>
+
+<span class="fc" id="L48">    @InjectMocks</span>
+<span class="fc" id="L49">    private EventManager mockedEM = mock(EventManager.class, withSettings()</span>
+<span class="fc" id="L50">            .useConstructor(mockedGame, mockedClock)</span>
+<span class="fc" id="L51">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+<span class="fc" id="L53">    private final ResourceManager resourceManager = new ResourceManager() ;</span>
+<span class="fc" id="L54">    TiledMap tiledMap = resourceManager.addDisposable(new TmxMapLoader().load(&quot;MAP/map1.tmx&quot;));</span>
+<span class="fc" id="L55">    TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get(&quot;collisionLayer&quot;);</span>
+
+<span class="fc" id="L57">    @Spy private final Animation IDLE_Left = new Animation(new Texture(Gdx.files.internal(&quot;Amelia_idle_anim_16x16.png&quot;)),12,17,24,12);</span>
+<span class="fc" id="L58">    @InjectMocks</span>
+<span class="fc" id="L59">    private PlayerController mockedPlayer = mock(PlayerController.class, withSettings()</span>
+<span class="fc" id="L60">            .useConstructor((float) 10, (float) 10, mockedEM, collisionLayer)</span>
+<span class="fc" id="L61">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+    @Before
+    public void setup(){
+<span class="fc" id="L65">        closeable = MockitoAnnotations.openMocks(this);</span>
+<span class="fc" id="L66">        mockedGame.screenManager = mockedSM;</span>
+<span class="fc" id="L67">    }</span>
+    @Test
+    public void testColCorrect(){
+<span class="fc" id="L70">        mockedPlayer.pos.x = 1;</span>
+
+
+<span class="fc" id="L73">    }</span>
+    @After
+    public void releaseMocks() throws Exception {
+<span class="fc" id="L76">        closeable.close();</span>
+<span class="fc" id="L77">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

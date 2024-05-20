@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameSound.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">GameSound.java</span></div><h1>GameSound.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+
+/**
+ * Manages game sound effects including sound level adjustments and playing specific sounds.
+ * It handles sound effects for increasing volume, decreasing volume, and button clicks.
+ */
+public class GameSound {
+    Music upSound;
+    Music downSound;
+    Music buttonClickedSound;
+    Music eatingSound;
+<span class="nc" id="L15">    private int soundLevel = 4;</span>
+
+    /**
+     * Initializes sound effects by loading the audio files.
+     */
+<span class="nc" id="L20">    public GameSound(){</span>
+<span class="nc" id="L21">        upSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/high_note.mp3&quot;));</span>
+<span class="nc" id="L22">        downSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/low_note.mp3&quot;));</span>
+<span class="nc" id="L23">        buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/button_press.mp3&quot;));</span>
+<span class="nc" id="L24">        eatingSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/eating_sound.wav&quot;));</span>
+<span class="nc" id="L25">    }</span>
+
+    /**
+     * Gets the current sound level.
+     *
+     * @return The current sound level.
+     */
+    public int getSoundLevel(){
+<span class="nc" id="L33">        return this.soundLevel;</span>
+    }
+
+    /**
+     * Plays the sound effect for increasing the volume. Stops the sound if it is already playing before restarting it.
+     */
+    public void upSoundActivate(){
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (upSound.isPlaying()){</span>
+<span class="nc" id="L41">            upSound.stop();</span>
+        }
+<span class="nc" id="L43">        upSound.play();</span>
+<span class="nc" id="L44">    }</span>
+
+    /**
+     * Plays the sound effect for decreasing the volume. Stops the sound if it is already playing before restarting it.
+     */
+    public void downSoundActivate(){
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (downSound.isPlaying()){</span>
+<span class="nc" id="L51">            downSound.stop();</span>
+<span class="nc" id="L52">            downSound.play();</span>
+        }
+<span class="nc" id="L54">        downSound.play();</span>
+<span class="nc" id="L55">    }</span>
+
+    /**
+     * Plays the sound effect for a button click. Stops the sound if it is already playing before restarting it.
+     */
+    public void buttonClickedSoundActivate(){
+<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (buttonClickedSound.isPlaying()){</span>
+<span class="nc" id="L62">            buttonClickedSound.stop();</span>
+        }
+<span class="nc" id="L64">        buttonClickedSound.play();</span>
+<span class="nc" id="L65">    }</span>
+
+    /**
+     * Plays the sound effect for increasing the volume. Stops the sound if it is already playing before restarting it.
+     */
+    public void eatingSoundActivate(){
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (eatingSound.isPlaying()){</span>
+<span class="nc" id="L72">            eatingSound.stop();</span>
+        }
+<span class="nc" id="L74">        eatingSound.play();</span>
+<span class="nc" id="L75">    }</span>
+
+    /**
+     * Increments the sound volume level by one step if not already at the maximum. Also adjusts the volume of all sound effects accordingly.
+     */
+    public void incrementVolume() {
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (soundLevel &lt;= 3){ // Check if volume is not already at maximum</span>
+<span class="nc" id="L82">            soundLevel = soundLevel + 1;</span>
+<span class="nc" id="L83">            float floatingMusicLevel = (float) soundLevel;</span>
+<span class="nc" id="L84">            upSound.setVolume(floatingMusicLevel*25/100);</span>
+<span class="nc" id="L85">            downSound.setVolume(floatingMusicLevel*25/100);</span>
+<span class="nc" id="L86">            buttonClickedSound.setVolume(floatingMusicLevel*25/100);</span>
+<span class="nc" id="L87">            eatingSound.setVolume(floatingMusicLevel*25/100);</span>
+        }
+<span class="nc" id="L89">    }</span>
+
+    /**
+     * Decrements the music volume level by one, if it is not already at the minimum level. Adjusts the music playback volume accordingly.
+     */
+    public void decrementVolume() {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (this.soundLevel &gt;= 1) { // Check if volume is not already at minimum</span>
+<span class="nc" id="L96">            soundLevel = soundLevel - 1;</span>
+<span class="nc" id="L97">            float floatingMusicLevel = (float) soundLevel;</span>
+<span class="nc" id="L98">            upSound.setVolume(floatingMusicLevel*25/100);</span>
+<span class="nc" id="L99">            downSound.setVolume(floatingMusicLevel*25/100);</span>
+<span class="nc" id="L100">            buttonClickedSound.setVolume(floatingMusicLevel*25/100);</span>
+        }
+<span class="nc" id="L102">    }</span>
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

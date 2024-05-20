@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameClock.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Utils</a> &gt; <span class="el_source">GameClock.java</span></div><h1>GameClock.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Utils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+public class GameClock {
+    private float cappedTime;
+    private float rawTime;
+    private int minutes;
+<span class="fc" id="L11">    private int hours = 8;</span>
+<span class="fc" id="L12">    private int days = 1;</span>
+    private final List&lt;Consumer&lt;String&gt;&gt; eventQueue;
+    private final List&lt;Float&gt; eventTimers;
+
+<span class="fc" id="L16">    public GameClock() {</span>
+<span class="fc" id="L17">        eventQueue = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L18">        eventTimers = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L19">    }</span>
+
+    public void update(float deltaTime) {
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        if (deltaTime &lt; 0){</span>
+<span class="fc" id="L23">            return;</span>
+        }
+<span class="fc" id="L25">        updateTime(deltaTime);</span>
+<span class="fc" id="L26">        executeEvents(deltaTime);</span>
+<span class="fc" id="L27">    }</span>
+
+    private void updateTime(float deltaTime){
+<span class="fc" id="L30">        cappedTime += deltaTime;</span>
+<span class="fc" id="L31">        rawTime += deltaTime;</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        if (cappedTime &gt;= 0.5f) {</span>
+<span class="fc" id="L33">            minutes++;</span>
+<span class="fc" id="L34">            cappedTime = 0f;</span>
+        }
+<span class="fc bfc" id="L36" title="All 2 branches covered.">        if (minutes &gt;= 60) {</span>
+<span class="fc" id="L37">            minutes = 0;</span>
+<span class="fc" id="L38">            hours++;</span>
+        }
+<span class="fc bfc" id="L40" title="All 2 branches covered.">        if (hours &gt;= 24) {</span>
+<span class="fc" id="L41">            hours -= 24;</span>
+<span class="fc" id="L42">            days++;</span>
+        }
+<span class="fc" id="L44">    }</span>
+
+    private void executeEvents(float deltaTime) {
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for (int i = 0; i &lt; eventTimers.size(); i++) {</span>
+<span class="fc" id="L48">            eventTimers.set(i, eventTimers.get(i) - deltaTime);</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">            if (eventTimers.get(i) &lt;= 0) {</span>
+<span class="fc" id="L50">                eventQueue.get(i).accept(null);</span>
+<span class="fc" id="L51">                eventQueue.set(i, null);</span>
+<span class="fc" id="L52">                eventTimers.set(i, null);</span>
+            }
+        }
+
+<span class="fc bfc" id="L56" title="All 2 branches covered.">        while (eventTimers.contains(null)){</span>
+<span class="fc" id="L57">            eventTimers.remove(null);</span>
+<span class="fc" id="L58">            eventQueue.remove(null);</span>
+        }
+<span class="fc" id="L60">    }</span>
+
+    public int getMinutes() {
+<span class="fc" id="L63">        return minutes;</span>
+    }
+
+    public int getHours(){
+<span class="fc" id="L67">        return hours;</span>
+    }
+
+    public int getDays(){
+<span class="fc" id="L71">        return days;</span>
+    }
+
+    public void setMinutes(int minutes){
+<span class="fc" id="L75">        this.minutes = minutes;</span>
+<span class="fc" id="L76">    }</span>
+
+    public void setHours(int hours){
+<span class="fc" id="L79">        this.hours = hours;</span>
+<span class="fc" id="L80">    }</span>
+
+    public void setDays(int days){
+<span class="fc" id="L83">        this.days = days;</span>
+<span class="fc" id="L84">    }</span>
+
+    public float getRawTime(){
+<span class="nc" id="L87">        return rawTime;</span>
+    }
+
+    // Cannot use String.format() method because GWT have no String Formatter
+    // It will cause error when running $gradlew build
+    // Issue was discussed in Google Groups: https://groups.google.com/g/google-web-toolkit/c/h93GJsNqoKg
+    public String getTime(){
+        String hrs;
+        String mins;
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (hours &lt; 10){hrs = 0 + Integer.toString(hours);}</span>
+<span class="fc" id="L97">        else {hrs = Integer.toString(hours);}</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        if (minutes &lt; 10){mins = 0 + Integer.toString(minutes);}</span>
+<span class="fc" id="L99">        else {mins = Integer.toString(minutes);}</span>
+<span class="fc" id="L100">        return &quot;Time: &quot; + hrs + &quot;:&quot; + mins;</span>
+//        return String.format(&quot;Time: %02d:%02d&quot;, hours, minutes);
+    }
+
+    public void addEvent(Consumer&lt;String&gt; event, float timer) {
+<span class="fc" id="L105">        eventQueue.add(event);</span>
+<span class="fc" id="L106">        eventTimers.add(timer);</span>
+<span class="fc" id="L107">    }</span>
+
+    public List&lt;Consumer&lt;String&gt;&gt; getEventQueue() {
+<span class="fc" id="L110">        return eventQueue;</span>
+    }
+
+    public List&lt;Float&gt; getEventTimers() {
+<span class="fc" id="L114">        return eventTimers;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
