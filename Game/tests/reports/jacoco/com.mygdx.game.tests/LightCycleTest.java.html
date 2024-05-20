@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LightCycleTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">LightCycleTest.java</span></div><h1>LightCycleTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
+
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FileTextureData;
+import com.badlogic.gdx.math.Interpolation;
+import com.mygdx.game.Objects.LightCycle;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InOrder;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L18">public class LightCycleTest {</span>
+<span class="fc" id="L19">    private final String blackSquareFile = &quot;BlankSquare.png&quot;;</span>
+<span class="fc" id="L20">    private final SpriteBatch mockedSpriteBatch = mock(SpriteBatch.class);</span>
+<span class="fc" id="L21">    private final Texture mockedTexture = mock(Texture.class);</span>
+<span class="fc" id="L22">    private final LightCycle mockedLightCycle = spy(LightCycle.class);</span>
+<span class="fc" id="L23">    private final float[] Col1 = new float[]{238/255f, 130/255f, 0, 0.2f}; //orange</span>
+<span class="fc" id="L24">    private final float[] Col2 = new float[]{163/255f, 190/255f, 242/255f, 0.1f};//blue</span>
+<span class="fc" id="L25">    private final float[] Col3 = new float[]{113/255f, 0/255f, 143/255f, 0.3f};</span>
+<span class="fc" id="L26">    private InOrder inOrder = inOrder(mockedSpriteBatch);</span>
+<span class="fc" id="L27">    private ArgumentCaptor&lt;Texture&gt; arg = ArgumentCaptor.forClass(Texture.class);</span>
+<span class="fc" id="L28">    private final float x = 0f, y = 0f;</span>
+<span class="fc" id="L29">    private final float size = mockedLightCycle.getSize();</span>
+
+    //test batch color at noon and 5 P.M.
+    @Test
+    public void testRenderSeg1() {
+<span class="fc" id="L34">        mockedLightCycle.render(mockedSpriteBatch, 12, 0);</span>
+<span class="fc" id="L35">        verify(mockedLightCycle).getTime(12, 0);</span>
+<span class="fc" id="L36">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col2, Interpolation.pow3In));</span>
+<span class="fc" id="L37">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L38">                eq(size), eq(size));</span>
+<span class="fc" id="L39">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L40">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+
+<span class="fc" id="L42">        mockedLightCycle.render(mockedSpriteBatch, 17, 0);</span>
+<span class="fc" id="L43">        verify(mockedLightCycle).getTime(17, 0);</span>
+<span class="fc" id="L44">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col2, Interpolation.pow3In));</span>
+<span class="fc" id="L45">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L46">                eq(size), eq(size));</span>
+<span class="fc" id="L47">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L48">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+<span class="fc" id="L49">    }</span>
+
+    //test batch color at 6 P.M. and 11 P.M.
+    @Test
+    public void testRenderSeg2() {
+<span class="fc" id="L54">        mockedLightCycle.render(mockedSpriteBatch, 18, 0);</span>
+<span class="fc" id="L55">        verify(mockedLightCycle).getTime(18, 0);</span>
+<span class="fc" id="L56">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col3, Col1, Interpolation.pow3Out));</span>
+<span class="fc" id="L57">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L58">                eq(size), eq(size));</span>
+<span class="fc" id="L59">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L60">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+
+<span class="fc" id="L62">        mockedLightCycle.render(mockedSpriteBatch, 23, 0);</span>
+<span class="fc" id="L63">        verify(mockedLightCycle).getTime(23, 0);</span>
+<span class="fc" id="L64">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col3, Col1, Interpolation.pow3Out));</span>
+<span class="fc" id="L65">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L66">                eq(size), eq(size));</span>
+<span class="fc" id="L67">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L68">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+<span class="fc" id="L69">    }</span>
+
+    //test batch color at midnight and 5 A.M.
+    @Test
+    public void testRenderSeg3() {
+<span class="fc" id="L74">        mockedLightCycle.render(mockedSpriteBatch, 24, 0);</span>
+<span class="fc" id="L75">        verify(mockedLightCycle).getTime(24, 0);</span>
+<span class="fc" id="L76">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));</span>
+<span class="fc" id="L77">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L78">                eq(size), eq(size));</span>
+<span class="fc" id="L79">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L80">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+
+<span class="fc" id="L82">        mockedLightCycle.render(mockedSpriteBatch, 0, 0);</span>
+<span class="fc" id="L83">        verify(mockedLightCycle).getTime(0, 0);</span>
+<span class="fc" id="L84">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));</span>
+<span class="fc" id="L85">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L86">                eq(size), eq(size));</span>
+<span class="fc" id="L87">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L88">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+
+<span class="fc" id="L90">        mockedLightCycle.render(mockedSpriteBatch, 5, 0);</span>
+<span class="fc" id="L91">        verify(mockedLightCycle).getTime(5, 0);</span>
+<span class="fc" id="L92">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));</span>
+<span class="fc" id="L93">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L94">                eq(size), eq(size));</span>
+<span class="fc" id="L95">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L96">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+<span class="fc" id="L97">    }</span>
+
+    //test batch color at 6 A.M. and 11 A.M.
+    @Test
+    public void testRenderSeg0() {
+<span class="fc" id="L102">        mockedLightCycle.render(mockedSpriteBatch, 6, 0);</span>
+<span class="fc" id="L103">        verify(mockedLightCycle).getTime(6, 0);</span>
+<span class="fc" id="L104">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col2, Col1, Interpolation.pow3Out));</span>
+<span class="fc" id="L105">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L106">                eq(size), eq(size));</span>
+<span class="fc" id="L107">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L108">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+
+<span class="fc" id="L110">        mockedLightCycle.render(mockedSpriteBatch, 11, 0);</span>
+<span class="fc" id="L111">        verify(mockedLightCycle).getTime(11, 0);</span>
+<span class="fc" id="L112">        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col2, Col1, Interpolation.pow3Out));</span>
+<span class="fc" id="L113">        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),</span>
+<span class="fc" id="L114">                eq(size), eq(size));</span>
+<span class="fc" id="L115">        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());</span>
+<span class="fc" id="L116">        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);</span>
+<span class="fc" id="L117">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

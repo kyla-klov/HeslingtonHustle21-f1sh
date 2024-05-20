@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GUI.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">GUI.java</span></div><h1>GUI.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Utils.Event;
+import com.mygdx.game.Utils.EventManager;
+import com.mygdx.game.Utils.GameClock;
+
+public class GUI {
+    private final Skin skin;
+    private final Table root;
+    private final GameClock gameClock;
+    private final EventManager EM;
+    private final Stage stage;
+    private Table leftTab, rightTab;
+    private ProgressBar nrgBar;
+    private TextButton TimeButt,ScoreButt,DayButt;
+    private TextButton RecButt,EatButt,StudyButt,SleepButt;
+
+<span class="fc" id="L28">    public GUI(Batch batch, EventManager EM, GameClock gameClock) {</span>
+<span class="fc" id="L29">        this.EM = EM;</span>
+<span class="fc" id="L30">        this.gameClock = gameClock;</span>
+<span class="fc" id="L31">        skin = new Skin(Gdx.files.internal(&quot;metalui/metal-ui.json&quot;));</span>
+<span class="fc" id="L32">        stage = new Stage(new ExtendViewport(400,400),batch);</span>
+<span class="fc" id="L33">        root = new Table();</span>
+<span class="fc" id="L34">        root.setFillParent(true);</span>
+<span class="fc" id="L35">        stage.addActor(root);</span>
+        //stage.setDebugAll(true);
+<span class="fc" id="L37">        createTables();</span>
+<span class="fc" id="L38">        createDraws();</span>
+<span class="fc" id="L39">        formatTables();</span>
+
+<span class="fc" id="L41">    }</span>
+
+    private void createTables() {
+<span class="fc" id="L44">        leftTab = new Table();</span>
+<span class="fc" id="L45">        rightTab = new Table();</span>
+<span class="fc" id="L46">    }</span>
+    private void formatTables(){
+<span class="fc" id="L48">        root.add(leftTab).left().grow();</span>
+<span class="fc" id="L49">        root.add(rightTab).grow();</span>
+<span class="fc" id="L50">        root.row();</span>
+<span class="fc" id="L51">    }</span>
+
+    public Stage getStage(){
+<span class="nc" id="L54">        return stage;</span>
+    }
+
+    public void createDraws(){
+<span class="fc" id="L58">        ScoreButt = new TextButton(&quot;Score&quot;,skin);</span>
+<span class="fc" id="L59">        DayButt = new TextButton(&quot;Day&quot;,skin);</span>
+<span class="fc" id="L60">        TimeButt = new TextButton(&quot;Time&quot;,skin);</span>
+<span class="fc" id="L61">        leftTab.add(ScoreButt).pad(4).row();</span>
+<span class="fc" id="L62">        leftTab.add(DayButt).pad(4).row();</span>
+<span class="fc" id="L63">        leftTab.add(TimeButt).pad(4);</span>
+<span class="fc" id="L64">        TextButton txtbutt = new TextButton(&quot;Energy&quot;,skin);</span>
+<span class="fc" id="L65">        leftTab.row();</span>
+<span class="fc" id="L66">        leftTab.add(txtbutt).pad(4);</span>
+<span class="fc" id="L67">        nrgBar = new ProgressBar(0,100,2,false,skin);</span>
+<span class="fc" id="L68">        leftTab.add(nrgBar).pad(2);</span>
+<span class="fc" id="L69">        leftTab.pad(25);</span>
+<span class="fc" id="L70">        leftTab.align(Align.topLeft);</span>
+
+<span class="fc" id="L72">        RecButt  = new TextButton(&quot;RecNo:&quot;,skin);</span>
+<span class="fc" id="L73">        SleepButt  = new TextButton(&quot;SlpNo:&quot;,skin);</span>
+<span class="fc" id="L74">        EatButt  = new TextButton(&quot;EatNo:&quot;,skin);</span>
+<span class="fc" id="L75">        StudyButt  = new TextButton(&quot;StdyNo:&quot;,skin);</span>
+<span class="fc" id="L76">        rightTab.add(RecButt);</span>
+<span class="fc" id="L77">        rightTab.add(SleepButt);</span>
+<span class="fc" id="L78">        rightTab.add(EatButt);</span>
+<span class="fc" id="L79">        rightTab.add(StudyButt);</span>
+<span class="fc" id="L80">        rightTab.align(Align.top);</span>
+
+<span class="fc" id="L82">    }</span>
+    public void update(float deltaTime){
+<span class="fc" id="L84">        nrgBar.setValue(EM.getEnergy());</span>
+<span class="fc" id="L85">        ScoreButt.setText(&quot;Score: &quot; + EM.calcScore());</span>
+<span class="fc" id="L86">        DayButt.setText(&quot;Day: &quot; + gameClock.getDays());</span>
+<span class="fc" id="L87">        TimeButt.setText(gameClock.getTime());</span>
+<span class="fc" id="L88">        TimeButt.scaleBy(5);</span>
+<span class="fc" id="L89">        int [] count = countActivitys();</span>
+<span class="fc" id="L90">        RecButt.setText(&quot;RecNo: &quot; + count[0]);</span>
+<span class="fc" id="L91">        SleepButt.setText(&quot;SlpNo: &quot; + count[1]);</span>
+<span class="fc" id="L92">        EatButt.setText(&quot;EatNo: &quot; + count[2]);</span>
+<span class="fc" id="L93">        StudyButt.setText(&quot;StdyNo: &quot; + count[3]);</span>
+
+<span class="fc" id="L95">    }</span>
+    public int[] countActivitys(){
+<span class="fc" id="L97">        int rec=0,slp=0,eat=0,stdy=0;</span>
+<span class="fc bfc" id="L98" title="All 2 branches covered.">        for (Event e : EM.getPlayedEvents())</span>
+        {
+<span class="pc bpc" id="L100" title="1 of 5 branches missed.">            switch (e.getEventType())</span>
+            {
+                case EAT:
+<span class="fc" id="L103">                    eat++;</span>
+<span class="fc" id="L104">                    break;</span>
+                case SLEEP:
+<span class="fc" id="L106">                    slp++;</span>
+<span class="fc" id="L107">                    break;</span>
+                case STUDY:
+<span class="fc" id="L109">                    stdy++;</span>
+<span class="fc" id="L110">                    break;</span>
+                case RECREATIONAL:
+<span class="fc" id="L112">                    rec++;</span>
+                    break;
+            }
+<span class="fc" id="L115">        }</span>
+<span class="fc" id="L116">        return new int[] {rec,slp,eat,stdy};</span>
+    }
+
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape)
+    {
+<span class="nc" id="L121">        stage.act();</span>
+<span class="nc" id="L122">        stage.draw();</span>
+<span class="nc" id="L123">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

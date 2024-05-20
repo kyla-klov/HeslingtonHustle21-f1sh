@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AchievementHandlerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">AchievementHandlerTest.java</span></div><h1>AchievementHandlerTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
+
+import com.mygdx.game.Utils.Achievement;
+import com.mygdx.game.Utils.AchievementHandler;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import static org.junit.Assert.*;
+
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L11">public class AchievementHandlerTest {</span>
+<span class="fc" id="L12">    private final AchievementHandler achievementHandler = new AchievementHandler();</span>
+<span class="fc" id="L13">    Achievement bronzeBaller = new Achievement(&quot;Baller&quot;, &quot;Score at least 8 points in basketball&quot;, Achievement.Type.BRONZE, &quot;AchievementsDisplay/BallerAchievementBronze.png&quot;);</span>
+<span class="fc" id="L14">    Achievement silverBaller = new Achievement(&quot;Baller&quot;, &quot;Score at least 12 points in basketball&quot;, Achievement.Type.SILVER, &quot;AchievementsDisplay/BallerAchievementSilver.png&quot;);</span>
+<span class="fc" id="L15">    Achievement goldBaller = new Achievement(&quot;Baller&quot;, &quot;Score at least 15 points in basketball&quot;, Achievement.Type.GOLD, &quot;AchievementsDisplay/BallerAchievementGold.png&quot;);</span>
+<span class="fc" id="L16">    Achievement bronzeDDG = new Achievement(&quot;Duck Duck Go&quot;, &quot;Feed all of the ducks in under 20 seconds&quot;, Achievement.Type.BRONZE, &quot;AchievementsDisplay/DuckAchievementBronze.png&quot;);</span>
+<span class="fc" id="L17">    Achievement silverDDG = new Achievement(&quot;Duck Duck Go&quot;, &quot;Feed all of the ducks in under 16 seconds&quot;, Achievement.Type.SILVER, &quot;AchievementsDisplay/DuckAchievementSilver.png&quot;);</span>
+<span class="fc" id="L18">    Achievement goldDDG = new Achievement(&quot;Duck Duck Go&quot;, &quot;Feed all of the ducks in under 12 seconds&quot;, Achievement.Type.GOLD, &quot;AchievementsDisplay/DuckAchievementGold.png&quot;);</span>
+<span class="fc" id="L19">    Achievement bronzeHiker = new Achievement(&quot;Hiker&quot;, &quot;Walk at least 2500 steps&quot;, Achievement.Type.BRONZE, &quot;AchievementsDisplay/AchievementPlaceHolder.png&quot;);</span>
+<span class="fc" id="L20">    Achievement silverHiker = new Achievement(&quot;Hiker&quot;, &quot;Walk at least 5000 steps&quot;, Achievement.Type.SILVER,&quot;AchievementsDisplay/AchievementPlaceHolder.png&quot;);</span>
+<span class="fc" id="L21">    Achievement goldHiker = new Achievement(&quot;Hiker&quot;, &quot;Walk at least 10000 steps&quot;, Achievement.Type.GOLD, &quot;AchievementsDisplay/AchievementPlaceHolder.png&quot;);</span>
+
+    @Test
+    public void testGenerateAchievements(){
+<span class="fc" id="L25">        assertEquals(bronzeBaller, achievementHandler.getAchievement(&quot;Baller&quot;, Achievement.Type.BRONZE));</span>
+<span class="fc" id="L26">        assertEquals(silverBaller, achievementHandler.getAchievement(&quot;Baller&quot;, Achievement.Type.SILVER));</span>
+<span class="fc" id="L27">        assertEquals(goldBaller, achievementHandler.getAchievement(&quot;Baller&quot;, Achievement.Type.GOLD));</span>
+<span class="fc" id="L28">        assertEquals(bronzeDDG, achievementHandler.getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.BRONZE));</span>
+<span class="fc" id="L29">        assertEquals(silverDDG, achievementHandler.getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.SILVER));</span>
+<span class="fc" id="L30">        assertEquals(goldDDG, achievementHandler.getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.GOLD));</span>
+<span class="fc" id="L31">        assertEquals(bronzeHiker, achievementHandler.getAchievement(&quot;Hiker&quot;, Achievement.Type.BRONZE));</span>
+<span class="fc" id="L32">        assertEquals(silverHiker, achievementHandler.getAchievement(&quot;Hiker&quot;, Achievement.Type.SILVER));</span>
+<span class="fc" id="L33">        assertEquals(goldHiker, achievementHandler.getAchievement(&quot;Hiker&quot;, Achievement.Type.GOLD));</span>
+<span class="fc" id="L34">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
