@@ -1,6 +1,7 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,6 +21,7 @@ public class UIElements {
     private float curX, curY;
     private float progress;
     private boolean tapActive;
+    private boolean buttonPressed;
 
     public UIElements(Viewport vp, AchievementHandler achievementHandler) {
         this.vp = vp;
@@ -34,6 +36,14 @@ public class UIElements {
     }
 
     public void update(float deltaTime){
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            buttonPressed = true;
+            touchDown(Gdx.input.getX(), Gdx.input.getY());
+        }
+        if (buttonPressed && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            buttonPressed = false;
+            touchUp();
+        }
         if (!tapActive) return;
         float duration = 1.0f; // Duration of the glide in seconds
         float easingFactor = deltaTime / duration; // Adjust this value to control the speed
@@ -92,7 +102,6 @@ public class UIElements {
     }
 
     public void touchDown(int screenX, int screenY){
-        achievementsDisplay.touchDown(screenX, screenY);
         Vector2 gamePos = screenToGame(screenX, screenY);
         if (isPressed(gamePos.x, gamePos.y, 1450, 800, 50, 50)){
             tapActive = false;
@@ -105,6 +114,5 @@ public class UIElements {
     }
 
     public void touchUp(){
-        achievementsDisplay.touchUp();
     }
 }
