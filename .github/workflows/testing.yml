@@ -39,18 +39,21 @@ jobs:
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
-    - name: Make gradlew executable
-      run: chmod +x ./gradlew
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
-    - name: Generate reports
-      run: |
-        ./gradlew build jacocoTestReport 
-        ./gradlew build jacocoTestCoverageVerification
-        cp -r tests/build/reports/tests/test/* tests/reports/test
-        cp -r tests/build/reports/jacoco/test/* tests/reports/jacoco
+    # - name: Make gradlew executable
+      # run: chmod +x ./gradlew
+    # - name: Build with Gradle Wrapper
+      # run: ./gradlew build
+    # - name: Generate reports
+      # run: |
+        # ./gradlew build jacocoTestReport 
+        # ./gradlew build jacocoTestCoverageVerification
+        # cp -r tests/build/reports/tests/test/* tests/reports/test
+        # cp -r tests/build/reports/jacoco/test/* tests/reports/jacoco
     - uses: actions/checkout@v4
     - run: |
+        chmod +x ./gradlew
+        ./gradlew build jacocoTestReport
+        ./gradlew build jacocoTestCoverageVerification
         cp -r tests/build/reports/tests/test/* tests/reports/test
         cp -r tests/build/reports/jacoco/test/* tests/reports/jacoco
         echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
