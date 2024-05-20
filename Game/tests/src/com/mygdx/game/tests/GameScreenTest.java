@@ -1,8 +1,6 @@
 package com.mygdx.game.tests;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -90,7 +88,7 @@ public class GameScreenTest {
             mockedEM, (TiledMapTileLayer) mockedTiledMap.getLayers().get("collisionLayer"));
     @InjectMocks
     private GameScreen gameScreen = new GameScreen(mockedGame, mockedClock,
-            mockedShapeRenderer, mockedTiledMap, mockedTiledMapRender, mockedMusic);
+            mockedTiledMap, mockedTiledMapRender, mockedMusic);
 
     @BeforeClass
     public static void setBatch(){

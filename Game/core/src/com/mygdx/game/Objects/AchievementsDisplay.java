@@ -1,6 +1,7 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,6 +32,7 @@ public class AchievementsDisplay implements Disposable {
     private boolean scrolling;
     private boolean unlocked;
     private boolean visible;
+    private boolean buttonPressed;
     private float relY;
     private float scrollY;
 
@@ -45,6 +47,7 @@ public class AchievementsDisplay implements Disposable {
 
         visible = false;
         unlocked = true;
+        buttonPressed = false;
         background = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/AchievementsBackground.png")));
         tick = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/check-mark.png")));
         padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/lock-padlock-symbol-for-security-interface.png")));
@@ -68,6 +71,14 @@ public class AchievementsDisplay implements Disposable {
 
     public void render(SpriteBatch batch){
         if (!visible) return;
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
+            buttonPressed = true;
+            touchDown(Gdx.input.getX(), Gdx.input.getY());
+        }
+        if (buttonPressed && !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+            buttonPressed = false;
+            touchUp();
+        }
 
         updateScroller();
 

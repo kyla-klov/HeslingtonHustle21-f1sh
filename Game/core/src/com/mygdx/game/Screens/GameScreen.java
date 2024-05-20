@@ -2,12 +2,11 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -21,13 +20,16 @@ import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.*;
 
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Main game loop
  */
-public class GameScreen implements Screen, InputProcessor {
+public class GameScreen implements Screen {
 
     private final ResourceManager resourceManager = new ResourceManager();
     private final HesHustle game;
@@ -49,11 +51,9 @@ public class GameScreen implements Screen, InputProcessor {
     private LightCycle LC;
     private final Music BGmusic;
 
-
     Achievement.Type hiker = null;
 
-    public GameScreen(final HesHustle game, final GameClock gameClock,
-                      final ShapeRenderer shape, final TiledMap tiledMap,
+    public GameScreen(final HesHustle game, final GameClock gameClock, final TiledMap tiledMap,
                       final TiledMapRenderer TmRender, final Music BGmusic){
         this.game = game;
         this.gameClock = gameClock;
@@ -66,7 +66,6 @@ public class GameScreen implements Screen, InputProcessor {
         else{
             this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
             this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap, game.batch);
-
         }
 
         this.activityImages = new ArrayList<>();
@@ -79,7 +78,7 @@ public class GameScreen implements Screen, InputProcessor {
         create();
     }
     public GameScreen(final HesHustle game) {
-        this(game, new GameClock(), new ShapeRenderer(), null, null, Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
+        this(game, new GameClock(), null, null, Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
     }
 
     public void create(){
@@ -107,8 +106,6 @@ public class GameScreen implements Screen, InputProcessor {
         for (int i = 0; i < eventM.listEvents().size(); i++) {
             activityImages.add(eventM.listEvents().get(i).getActivityImage());
         }
-
-        Gdx.input.setInputProcessor(this);
     }
     public void update(float delta) {
         gameClock.update(delta);
@@ -122,6 +119,7 @@ public class GameScreen implements Screen, InputProcessor {
         uiElements.update(delta);
 
         if (checkGameOverCondition()) {
+            writeToFile();
             game.setScreen(new EndScreen(game)); // Switch to EndScreen
         }
 
@@ -224,7 +222,23 @@ public class GameScreen implements Screen, InputProcessor {
 
     private boolean checkGameOverCondition(){
         return gameClock.getDays() > 7;
+    }
 
+    public void writeToFile() {
+        String data = nameTextField.getValue() +  "," + eventM.calcScore();
+        // Get the file handle for local storage
+        FileHandle file = Gdx.files.local("storage/PlayerData.txt");
+
+        // Log the file path for debugging purposes
+        Gdx.app.log("File Path", file.file().getAbsolutePath());
+
+        // Write data to the file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file.file(), true))) {
+            writer.write(data);
+            writer.newLine();  // To ensure each new data entry is on a new line
+        } catch (IOException e) {
+            System.out.println("Exception while writing to file");
+        }
     }
 
     @Override
@@ -235,7 +249,6 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        Gdx.input.setInputProcessor(this);
         BGmusic.play();
     }
 
@@ -250,57 +263,11 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void dispose() {
         resourceManager.disposeAll();
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        return true;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return true;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        uiElements.touchDown(screenX, screenY);
-        return true;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        uiElements.touchUp();
-        return true;
-    }
-
-    @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(float amountX, float amountY) {
-        return false;
     }
 }

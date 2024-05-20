@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.HesHustle;
+import com.mygdx.game.Objects.LeaderBoard;
 import com.mygdx.game.Utils.Achievement;
 
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class EndScreen implements Screen{
         this.playAgainButton = playAgainButton;
         this.mainMenuButton = mainMenuButton;
         this.exitButton = exitButton;
+        //LeaderBoard lb = new LeaderBoard();
         setupUi();
     }
 
