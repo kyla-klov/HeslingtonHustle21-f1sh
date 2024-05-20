@@ -62,11 +62,11 @@ public class LeaderBoard implements Disposable {
         uiElements.drawUI(batch, leaderBoardTexture, x, y, 301, 377);
         uiElements.drawUI(batch, upArrowTexture, x+250, y+300, 32, 32);
         uiElements.drawUI(batch, downArrowTexture, x+250, y+32, 32, 32);
-        uiElements.drawFont(font, batch, "Leaderboard", x+60, y+350);
+        uiElements.drawFont(font, batch, "Leader board", x+60, y+350);
         int c = topFive ? 0 : 5;
         for (int i = c; i < data.size(); i++) {
             Data d = data.get(i);
-            uiElements.drawFont(font, batch, d.name, x + 50, y + 300 - i*50);
+            uiElements.drawFont(font, batch, (i+1) + ". " + d.name, x + 50, y + 300 - i*50);
             uiElements.drawFont(font, batch, Float.toString(d.score), x + 170, y + 300 - i*50);
         }
     }
