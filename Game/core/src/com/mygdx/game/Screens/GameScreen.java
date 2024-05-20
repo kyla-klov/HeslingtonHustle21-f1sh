@@ -221,7 +221,7 @@ public class GameScreen implements Screen {
     }
 
     private boolean checkGameOverCondition(){
-        return gameClock.getDays() > 2;
+        return gameClock.getDays() > 7;
     }
 
     public void writeToFile() {
