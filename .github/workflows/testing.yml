@@ -41,8 +41,8 @@ jobs:
       run: chmod +x ./gradlew
     - name: Generate and upload reports
       run: |
-        ./gradlew build jacocoTestReport
-        ./gradlew build jacocoTestCoverageVerification
+        ./gradlew build -x html jacocoTestReport
+        ./gradlew build -x html jacocoTestCoverageVerification
         cp -r tests/build/reports/tests/test/* tests/reports/test
         cp -r tests/build/reports/jacoco/test/html/* tests/reports/jacoco
         git config --global user.name 'github-actions[bot]'
