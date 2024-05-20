@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UIElements.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">UIElements.java</span></div><h1>UIElements.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Utils.AchievementHandler;
+
+public class UIElements {
+    private final Viewport vp;
+    private final BitmapFont font;
+    private final Texture achievementsButton;
+    private final Texture tap;
+    private final EnergyBar energyBar;
+    private final AchievementsDisplay achievementsDisplay;
+
+    private final float startX, startY, endX, endY;
+    private float curX, curY;
+    private float progress;
+    private boolean tapActive;
+
+<span class="fc" id="L24">    public UIElements(Viewport vp, AchievementHandler achievementHandler) {</span>
+<span class="fc" id="L25">        this.vp = vp;</span>
+<span class="fc" id="L26">        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));</span>
+<span class="fc" id="L27">        achievementsButton  = new Texture(Gdx.files.internal(&quot;badge.png&quot;));</span>
+<span class="fc" id="L28">        tap = new Texture(Gdx.files.internal(&quot;tap.png&quot;));</span>
+<span class="fc" id="L29">        energyBar = new EnergyBar(this, 80, 600, 270, 50, 27);</span>
+<span class="fc" id="L30">        achievementsDisplay = new AchievementsDisplay(this, achievementHandler, 1200, 370);</span>
+<span class="fc" id="L31">        startX = 1490; startY = 750;</span>
+<span class="fc" id="L32">        endX = 1475; endY = 775;</span>
+<span class="fc" id="L33">        tapActive = true;</span>
+<span class="fc" id="L34">    }</span>
+
+    public void update(float deltaTime){
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (!tapActive) return;</span>
+<span class="nc" id="L38">        float duration = 1.0f; // Duration of the glide in seconds</span>
+<span class="nc" id="L39">        float easingFactor = deltaTime / duration; // Adjust this value to control the speed</span>
+<span class="nc" id="L40">        progress += easingFactor;</span>
+
+        // Quadratic easing out: f(t) = -t*(t-2)
+<span class="nc" id="L43">        float easedProgress = -progress * (progress - 2);</span>
+
+        // Update current position based on eased progress
+<span class="nc" id="L46">        curX = startX + (endX - startX) * easedProgress;</span>
+<span class="nc" id="L47">        curY = startY + (endY - startY) * easedProgress;</span>
+
+<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (progress &gt;= 2f){</span>
+<span class="nc" id="L50">            progress = 0.0f;</span>
+<span class="nc" id="L51">            curX = startX;</span>
+<span class="nc" id="L52">            curY = startY;</span>
+        }
+<span class="nc" id="L54">    }</span>
+
+    public void render(SpriteBatch batch, String time, int day, int sleep, int rec, int eat, int study, float energy, float score){
+<span class="nc" id="L57">        energyBar.render(batch, energy);</span>
+<span class="nc" id="L58">        achievementsDisplay.render(batch);</span>
+<span class="nc" id="L59">        drawUI(batch, achievementsButton, 1450, 800, 50, 50);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (tapActive) drawUI(batch, tap, curX, curY, 50, 50);</span>
+<span class="nc" id="L61">        font.getData().setScale(1.4f);</span>
+<span class="nc" id="L62">        drawFont(font, batch, &quot;Score: &quot; + score, 100, 825);</span>
+<span class="nc" id="L63">        font.getData().setScale(1f);</span>
+<span class="nc" id="L64">        drawFont(font, batch, time, 1200, 840);</span>
+<span class="nc" id="L65">        drawFont(font, batch, &quot;Day: &quot; + day, 1050, 840);</span>
+<span class="nc" id="L66">        drawFont(font, batch, &quot;Sleep Count: &quot; + sleep, 100, 780);</span>
+<span class="nc" id="L67">        drawFont(font, batch, &quot;Rec Count: &quot; + rec, 100, 750);</span>
+<span class="nc" id="L68">        drawFont(font, batch, &quot;Eat Count: &quot; + eat, 100, 720);</span>
+<span class="nc" id="L69">        drawFont(font, batch, &quot;Study Hours: &quot; + study, 100, 690);</span>
+<span class="nc" id="L70">    }</span>
+
+    public void drawUI(SpriteBatch batch, Texture txt, float x, float y, float width, float height){
+<span class="nc" id="L73">        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);</span>
+<span class="nc" id="L74">    }</span>
+
+    public void drawFont(BitmapFont font, SpriteBatch batch, String text, float x, float y){
+<span class="nc" id="L77">        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);</span>
+<span class="nc" id="L78">    }</span>
+
+    public Vector2 toScreen(float x, float y){
+<span class="nc" id="L81">        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);</span>
+    }
+
+    public Vector2 screenToGame (float screenX, float screenY){
+<span class="nc" id="L85">        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();</span>
+<span class="nc" id="L86">        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();</span>
+<span class="nc" id="L87">        return new Vector2(transX, transY);</span>
+    }
+
+    public boolean isPressed(float touchX, float touchY, float x, float y, float width, float height) {
+<span class="nc bnc" id="L91" title="All 8 branches missed.">        return (touchX &gt; x &amp;&amp; touchX &lt; x + width &amp;&amp; touchY &gt; y &amp;&amp; touchY &lt; y + height);</span>
+    }
+
+    public void touchDown(int screenX, int screenY){
+<span class="nc" id="L95">        achievementsDisplay.touchDown(screenX, screenY);</span>
+<span class="nc" id="L96">        Vector2 gamePos = screenToGame(screenX, screenY);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">        if (isPressed(gamePos.x, gamePos.y, 1450, 800, 50, 50)){</span>
+<span class="nc" id="L98">            tapActive = false;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            if (achievementsDisplay.isVisible()){</span>
+<span class="nc" id="L100">                achievementsDisplay.hide();</span>
+            } else{
+<span class="nc" id="L102">                achievementsDisplay.show();</span>
+            }
+        }
+<span class="nc" id="L105">    }</span>
+
+    public void touchUp(){
+<span class="nc" id="L108">        achievementsDisplay.touchUp();</span>
+<span class="nc" id="L109">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

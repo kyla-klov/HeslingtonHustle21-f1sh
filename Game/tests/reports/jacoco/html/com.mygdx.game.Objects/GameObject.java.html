@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameObject.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">GameObject.java</span></div><h1>GameObject.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.HesHustle;
+
+/** Base Class for most objects, Allows render and update to be inherited so in the main game objects can be looped through in a list
+
+ */
+public class GameObject implements Disposable {
+    /**Vector2 storing x,y position of all GameObject
+     */
+    public Vector2 pos;
+    /**Rectangle storing width and height of GameObject
+     */
+    public final Rectangle bounds;
+
+    /**
+     * Constructor of GameObject
+     * @param x starting x position
+     * @param y starting y position
+     * @param width width of object
+     * @param height height of object
+     */
+<span class="fc" id="L28">    public GameObject (float x, float y, float width, float height) {</span>
+<span class="fc" id="L29">        this.pos = new Vector2(x, y);</span>
+<span class="fc" id="L30">        this.bounds = new Rectangle(10000+x - width / 2, y - height / 2, width, height);</span>
+<span class="fc" id="L31">    }</span>
+
+    /**
+     * Update GameObject before rendering.
+     * @param delta deltaTime
+     */
+    public void update(float delta){
+
+<span class="nc" id="L39">    }</span>
+
+    /**
+     * Render object
+     * @param projection Projection matrix of the viewport
+     * @param game to access spritebatch and fonts
+     * @param shape ShapeRenderer for debug rectangles and such
+     */
+    public void render(Camera projection, HesHustle game, ShapeRenderer shape) {
+
+<span class="nc" id="L49">    }</span>
+    @Override
+    public void dispose(){
+
+<span class="nc" id="L53">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

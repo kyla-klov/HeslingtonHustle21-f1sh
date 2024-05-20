@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EnergyBar.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">EnergyBar.java</span></div><h1>EnergyBar.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.Utils.ResourceManager;
+
+public class EnergyBar implements Disposable {
+    private final Texture centre;
+    private final Texture leftEdge;
+    private final Texture rightEdge;
+    private final Texture holderCentre;
+    private final Texture holderLeft;
+    private final Texture holderRight;
+
+    private final ResourceManager resourceManager;
+    private final UIElements uiElements;
+
+    private final float x, y, width, height, edgeWidth;
+
+<span class="fc" id="L24">    public EnergyBar(UIElements uiElements, float x, float y, float width, float height, float edgeWidth){</span>
+<span class="fc" id="L25">        this.uiElements = uiElements;</span>
+<span class="fc" id="L26">        this.x = x;</span>
+<span class="fc" id="L27">        this.y = y;</span>
+<span class="fc" id="L28">        this.width = width;</span>
+<span class="fc" id="L29">        this.height = height;</span>
+<span class="fc" id="L30">        this.edgeWidth = edgeWidth;</span>
+<span class="fc" id="L31">        resourceManager = new ResourceManager();</span>
+<span class="fc" id="L32">        centre = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_center-repeating_blue.png&quot;));</span>
+<span class="fc" id="L33">        leftEdge = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_left_edge_blue.png&quot;));</span>
+<span class="fc" id="L34">        rightEdge = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_right_edge_blue.png&quot;));</span>
+<span class="fc" id="L35">        holderCentre = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_center-repeating_blue.png&quot;));</span>
+<span class="fc" id="L36">        holderLeft = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_left_edge_blue.png&quot;));</span>
+<span class="fc" id="L37">        holderRight = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_right_edge_blue.png&quot;));</span>
+<span class="fc" id="L38">    }</span>
+
+    public void render(SpriteBatch batch, float energy){
+<span class="nc" id="L41">        uiElements.drawUI(batch, holderLeft, x, y, edgeWidth, height);</span>
+<span class="nc" id="L42">        uiElements.drawUI(batch, holderCentre, x+edgeWidth, y, width-edgeWidth*2, height);</span>
+<span class="nc" id="L43">        uiElements.drawUI(batch, holderRight, x+width-edgeWidth, y, edgeWidth, height);</span>
+
+<span class="nc" id="L45">        Vector2 blCorner = uiElements.toScreen(x + edgeWidth * 0.41f, y);</span>
+<span class="nc" id="L46">        Vector2 trCorner = uiElements.toScreen(x + width - edgeWidth * 0.41f, y + height);</span>
+<span class="nc" id="L47">        int scissorX = (int) blCorner.x;</span>
+<span class="nc" id="L48">        int scissorY = (int) blCorner.y;</span>
+<span class="nc" id="L49">        int scissorWidth = (int) ((trCorner.x - blCorner.x) * energy/100f);</span>
+<span class="nc" id="L50">        int scissorHeight = (int) (trCorner.y - blCorner.y);</span>
+
+<span class="nc" id="L52">        batch.draw(centre, 0, 0, 0, 0);</span>
+<span class="nc" id="L53">        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);</span>
+<span class="nc" id="L54">        Gdx.gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);</span>
+<span class="nc" id="L55">        uiElements.drawUI(batch, leftEdge, x, y, edgeWidth, height);</span>
+<span class="nc" id="L56">        uiElements.drawUI(batch, centre, x+edgeWidth, y, width-edgeWidth*2, height);</span>
+<span class="nc" id="L57">        uiElements.drawUI(batch, rightEdge, x+width-edgeWidth, y, edgeWidth, height);</span>
+<span class="nc" id="L58">        batch.draw(centre, 0, 0, 0, 0);</span>
+<span class="nc" id="L59">        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);</span>
+<span class="nc" id="L60">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L64">        resourceManager.disposeAll();</span>
+<span class="nc" id="L65">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
