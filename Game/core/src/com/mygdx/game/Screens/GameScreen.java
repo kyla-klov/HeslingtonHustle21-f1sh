@@ -38,6 +38,7 @@ public class GameScreen implements Screen, InputProcessor {
     private final UIElements uiElements;
     private final OrthographicCamera camera;
     private EventManager eventM;
+    private final NameTextField nameTextField;
 
     //Game objects
     private PlayerController player;
@@ -47,6 +48,7 @@ public class GameScreen implements Screen, InputProcessor {
     private GUI gui;
     private LightCycle LC;
     private final Music BGmusic;
+
 
     Achievement.Type hiker = null;
 
@@ -73,6 +75,7 @@ public class GameScreen implements Screen, InputProcessor {
         this.BGmusic = resourceManager.addDisposable(BGmusic);
         this.BGmusic.setLooping(true);
         uiElements = new UIElements(vp, game.achievementHandler);
+        nameTextField = new NameTextField(uiElements);
         create();
     }
     public GameScreen(final HesHustle game) {
@@ -139,7 +142,8 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void render(float delta) {
-        update(delta);
+
+        if (nameTextField.textEntered()) update(delta);
 
         Gdx.gl.glClearColor(0f,0f,0f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -155,14 +159,18 @@ public class GameScreen implements Screen, InputProcessor {
 
         game.batch.begin();
 
-        player.render(game.batch);
-        LC.render(game.batch, gameClock.getHours(), gameClock.getMinutes());
+        if (nameTextField.textEntered()){
+            player.render(game.batch);
+            LC.render(game.batch, gameClock.getHours(), gameClock.getMinutes());
+        }
+
         uiElements.render(game.batch, gameClock.getTime(), gameClock.getDays(), eventM.getSleep(), eventM.getRec(), eventM.getEat(), eventM.getTotalStudyHours(), eventM.getEnergy(), eventM.calcScore());
         renderActivityImages();
+        nameTextField.render(game.batch);
 
         game.batch.end();
         //gui.render(vp.getCamera(),game,shape);
-          // position of the projection matrix and we need it for the event render
+          // position of the projection matrix, and we need it for the event render
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);
@@ -208,10 +216,6 @@ public class GameScreen implements Screen, InputProcessor {
             }
         }
         return closest;
-    }
-
-    public GameClock getGameClock(){
-        return gameClock;
     }
 
     public List<Building> getBuildings() {
