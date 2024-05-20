@@ -51,6 +51,7 @@ jobs:
       run: |
         cp -r tests/build/reports/tests/test/* tests/reports/test
         cp -r tests/build/reports/jacoco/test/* tests/reports/jacoco
+        echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
         git config --global user.name 'github-actions[bot]'
         git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
         git add tests/reports/*
