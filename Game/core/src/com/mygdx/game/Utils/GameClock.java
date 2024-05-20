@@ -19,6 +19,9 @@ public class GameClock {
     }
 
     public void update(float deltaTime) {
+        if (deltaTime < 0){
+            return;
+        }
         updateTime(deltaTime);
         executeEvents(deltaTime);
     }

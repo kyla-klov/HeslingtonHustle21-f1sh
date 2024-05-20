@@ -30,6 +30,15 @@ public class GameClockTest {
         assertEquals(1, gameClock.getEventTimers().size(), 0);
         assertEquals(1, gameClock.getEventQueue().size(), 0);
 
+        gameClock.update(-0.1f);
+        assertEquals(0, gameClock.getMinutes(), 0);
+        assertEquals(8, gameClock.getHours(), 0);
+        assertEquals(1, gameClock.getDays(), 0);
+        assertEquals(0.5f - 0.49f, gameClock.getEventTimers().get(0), 0);
+        assertEquals(event, gameClock.getEventQueue().get(0));
+        assertEquals(1, gameClock.getEventTimers().size(), 0);
+        assertEquals(1, gameClock.getEventQueue().size(), 0);
+
         gameClock.update(0.1f);
         assertEquals(1, gameClock.getMinutes(), 0);
         assertEquals(8, gameClock.getHours(), 0);

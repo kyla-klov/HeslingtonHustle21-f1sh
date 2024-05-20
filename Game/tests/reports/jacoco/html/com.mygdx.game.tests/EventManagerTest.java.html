@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventManagerTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">EventManagerTest.java</span></div><h1>EventManagerTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
+
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Objects.ActivityImage;
+import com.mygdx.game.Screens.GameScreen;
+import com.mygdx.game.Utils.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
+
+@RunWith(GdxTestRunner.class)
+<span class="fc" id="L20">public class EventManagerTest {</span>
+    private AutoCloseable closeable;
+<span class="fc" id="L22">    private final HesHustle mockedGame = mock(HesHustle.class);</span>
+<span class="fc" id="L23">    private final GameClock mockedClock = spy(GameClock.class);</span>
+
+<span class="fc" id="L25">    private final ScreenManager mockedSM = mock(ScreenManager.class);</span>
+<span class="fc" id="L26">    private final Event mockedEvent = mock(Event.class);</span>
+<span class="fc" id="L27">    private final ScreenType mockedST = mock(ScreenType.class);</span>
+
+<span class="fc" id="L29">    private final ActivityImage mockedImage = mock(ActivityImage.class);</span>
+<span class="fc" id="L30">    private final ActivityImage mockedStudyImage = mock(ActivityImage.class, withSettings()</span>
+<span class="fc" id="L31">            .useConstructor(&quot;Activitys/cs.png&quot;)</span>
+<span class="fc" id="L32">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+<span class="fc" id="L34">    @Spy private final Event FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, &quot;&quot;,ScreenType.DUCK_GAME_SCREEN);</span>
+<span class="fc" id="L35">    @Spy private final Event StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, &quot;CSBuildingStudy&quot;, mockedStudyImage);</span>
+<span class="fc" id="L36">    @Spy private final Event PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, &quot;&quot;, ScreenType.BASKETBALL_SCREEN);</span>
+<span class="fc" id="L37">    @Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, &quot;&quot;, mockedImage);</span>
+<span class="fc" id="L38">    @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, &quot;&quot;, mockedImage);</span>
+
+<span class="fc" id="L40">    @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()</span>
+<span class="fc" id="L41">            .useConstructor(mockedGame, mockedClock)</span>
+<span class="fc" id="L42">            .defaultAnswer(CALLS_REAL_METHODS));</span>
+
+
+    @Before public void setup(){
+<span class="fc" id="L46">        closeable = MockitoAnnotations.openMocks(this);</span>
+<span class="fc" id="L47">        mockedGame.screenManager = mockedSM;</span>
+<span class="fc" id="L48">    }</span>
+
+/*    @Test
+    // Tests that all the Event objects are correctly created.
+    public void testGenerateEvents() {
+        assertNotNull(eventManager.FeedDucks);
+        assertNotNull(eventManager.StudyCS);
+        assertNotNull(eventManager.PlayBBall);
+        assertNotNull(eventManager.Sleep);
+        assertNotNull(eventManager.EatPiazza);
+    }*/
+
+    @Test
+    // tests that interacting with something correctly edits the energy value, time, playedEvents and set correct Image/Screen
+    public void testInteract() {
+        //check interact with non-existent event
+<span class="pc" id="L64">        assertThrows(AssertionError.class, () -&gt; mockedEM.interact(&quot;&quot;));</span>
+<span class="fc" id="L65">        assertEquals(100, mockedEM.getEnergy(), 0);</span>
+<span class="fc" id="L66">        assertNull(mockedEM.getCurEvent());</span>
+<span class="fc" id="L67">        assertTrue(mockedEM.getPlayedEvents().isEmpty());</span>
+<span class="fc" id="L68">        verify(mockedEM, times(0)).updateEnergy(mockedEvent);</span>
+<span class="fc" id="L69">        verify(mockedEM, times(0)).updateTime(mockedEvent);</span>
+
+        // checks that recreation decreases energy by 30 and takes 2 hours
+<span class="fc" id="L72">        mockedEM.interact(&quot;BasketBall&quot;);</span>
+//        assertEquals(70, mockedEM.getEnergy(), 0);
+<span class="fc" id="L74">        assertEquals(1, mockedClock.getDays(), 0);</span>
+<span class="fc" id="L75">        assertEquals(10, mockedClock.getHours(), 0);</span>
+<span class="fc" id="L76">        assertEquals(0, mockedClock.getMinutes(), 0);</span>
+<span class="fc" id="L77">        assertEquals(PlayBBall, mockedEM.getPlayedEvents().get(0));</span>
+<span class="fc" id="L78">        assertEquals(PlayBBall, mockedEM.getCurEvent());</span>
+<span class="fc" id="L79">        verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType());</span>
+<span class="fc" id="L80">        verify(PlayBBall, times(1)).getActivityImage();</span>
+//        verify(mockedClock, times(1)).addEvent(s -&gt; {}, 4f);;
+
+        // checks that study decrease energy by 20 and takes 3 hours
+<span class="fc" id="L84">        mockedEM.interact(&quot;Computer\nScience\nDepartment&quot;);</span>
+<span class="fc" id="L85">        assertEquals(50, mockedEM.getEnergy(), 0);</span>
+<span class="fc" id="L86">        assertEquals(1, mockedClock.getDays(), 0);</span>
+<span class="fc" id="L87">        assertEquals(13, mockedClock.getHours(), 0);</span>
+<span class="fc" id="L88">        assertEquals(0, mockedClock.getMinutes(), 0);</span>
+<span class="fc" id="L89">        assertEquals(StudyCS, mockedEM.getCurEvent());</span>
+<span class="fc" id="L90">        assertEquals(StudyCS, mockedEM.getPlayedEvents().get(1));</span>
+<span class="fc" id="L91">        verify(StudyCS,times(2)).getActivityImage();</span>
+<span class="fc" id="L92">        verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType());</span>
+<span class="fc" id="L93">        verify(mockedSM, times(0)).setScreen(mockedST);</span>
+<span class="fc" id="L94">        verify(mockedStudyImage, times(1)).setActive();</span>
+//        verify(mockedClock, times(1)).addEvent(s -&gt; {}, 4f);
+
+<span class="fc" id="L97">    }</span>
+
+    @Test
+    public void testUpdateEnergy(){
+        // Basic deduction check
+<span class="fc" id="L102">        mockedEM.updateEnergy(StudyCS);</span>
+<span class="fc" id="L103">        assertEquals(80, mockedEM.getEnergy(), 0);</span>
+
+        // checks that recreation will not decrease energy if there is not enough energy available
+<span class="fc" id="L106">        mockedEM.updateEnergy(PlayBBall);</span>
+<span class="fc" id="L107">        mockedEM.updateEnergy(PlayBBall);</span>
+<span class="fc" id="L108">        mockedEM.updateEnergy(PlayBBall);</span>
+<span class="fc" id="L109">        assertEquals(0, mockedEM.getEnergy(), 0);</span>
+
+        // sleeping adds 90 energy
+<span class="fc" id="L112">        mockedEM.updateEnergy(Sleep);</span>
+<span class="fc" id="L113">        assertEquals(90, mockedEM.getEnergy(), 0);</span>
+
+        // checks that sleeping will not increase energy above 100
+<span class="fc" id="L116">        mockedEM.updateEnergy(Sleep);</span>
+<span class="fc" id="L117">        assertEquals(100, mockedEM.getEnergy(), 0);</span>
+
+<span class="fc" id="L119">    }</span>
+
+    @Test
+    public void testUpdateTime(){
+<span class="fc" id="L123">        Event bigtime1 = new Event(24, 2, 10, -5, Event.Type.RECREATIONAL, 0, &quot;&quot;, mockedImage);</span>
+<span class="fc" id="L124">        mockedEM.updateTime(bigtime1);</span>
+<span class="fc" id="L125">        assertEquals(2, mockedClock.getDays(),0);</span>
+<span class="fc" id="L126">        assertEquals(8, mockedClock.getHours(), 0);</span>
+
+<span class="fc" id="L128">        Event bigtime2 = new Event(49, 2, 10, -5, Event.Type.RECREATIONAL, 0, &quot;&quot;, mockedImage);</span>
+<span class="fc" id="L129">        mockedEM.updateTime(bigtime2);</span>
+<span class="fc" id="L130">        assertEquals(4, mockedClock.getDays(),0);</span>
+<span class="fc" id="L131">        assertEquals(9, mockedClock.getHours(), 0);</span>
+<span class="fc" id="L132">        mockedEM.updateTime(Sleep);</span>
+<span class="fc" id="L133">    }</span>
+    @Test
+    public void testCalcScore() {
+        // this one needs fixing because im not sure what the expected score is actually supposed to be
+<span class="fc" id="L137">        mockedEM.interact(&quot;Ducks&quot;);</span>
+<span class="fc" id="L138">        mockedEM.interact(&quot;Computer\nScience\nDepartment&quot;);</span>
+<span class="fc" id="L139">        mockedEM.interact(&quot;Langwith&quot;);</span>
+<span class="fc" id="L140">        int expectedScore = 77;</span>
+//        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+<span class="fc" id="L142">    }</span>
+
+    @After
+    public void releaseMocks() throws Exception {
+<span class="fc" id="L146">        closeable.close();</span>
+<span class="fc" id="L147">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

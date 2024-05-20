@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Event.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Utils</a> &gt; <span class="el_source">Event.java</span></div><h1>Event.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Utils;
+
+import com.mygdx.game.Objects.ActivityImage;
+
+public class Event {
+    private final double timeCost;
+    private final int energyCost;
+    private final int studyTime;
+    private final int fatigue;
+    private final int moneyCost;
+    private final String description;
+    private final ActivityImage activityImage;
+    private final ScreenType screenType;
+<span class="fc" id="L14">    public enum Type {</span>
+<span class="fc" id="L15">        EAT,</span>
+<span class="fc" id="L16">        SLEEP,</span>
+<span class="fc" id="L17">        STUDY,</span>
+<span class="fc" id="L18">        RECREATIONAL</span>
+    }
+    private final Type eventType;
+
+    /**
+     * generates a new instance of an event, representing the possible activities a player can undertake
+     *
+     * @param studyTime      The relative value for how good an activity is for enjoyment / study as an integer
+     * @param description              A description of the event
+     * @param energy                   The amoount of energy an event requires
+     * @param time                     The time required for an event as a double
+     * @param eventType                the type of event (sleep, eaty, study, recreational)
+     * @param fatigue                  The amount of fatigue a player has after an event
+     */
+
+<span class="fc" id="L33">    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ActivityImage activityImage) {</span>
+<span class="fc" id="L34">        this.timeCost = time;</span>
+<span class="fc" id="L35">        this.energyCost = energy;</span>
+<span class="fc" id="L36">        this.studyTime = studyTime;</span>
+<span class="fc" id="L37">        this.fatigue = fatigue;</span>
+<span class="fc" id="L38">        this.eventType = eventType;</span>
+<span class="fc" id="L39">        this.moneyCost = moneyCost;</span>
+<span class="fc" id="L40">        this.description = description;</span>
+<span class="fc" id="L41">        this.activityImage = activityImage;</span>
+<span class="fc" id="L42">        this.screenType = null;</span>
+<span class="fc" id="L43">    }</span>
+
+<span class="fc" id="L45">    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ScreenType screenType) {</span>
+<span class="fc" id="L46">        this.timeCost = time;</span>
+<span class="fc" id="L47">        this.energyCost = energy;</span>
+<span class="fc" id="L48">        this.studyTime = studyTime;</span>
+<span class="fc" id="L49">        this.fatigue = fatigue;</span>
+<span class="fc" id="L50">        this.eventType = eventType;</span>
+<span class="fc" id="L51">        this.moneyCost = moneyCost;</span>
+<span class="fc" id="L52">        this.description = description;</span>
+<span class="fc" id="L53">        this.activityImage = null;</span>
+<span class="fc" id="L54">        this.screenType = screenType;</span>
+<span class="fc" id="L55">    }</span>
+
+<span class="fc" id="L57">    public ActivityImage getActivityImage() { return activityImage; }</span>
+
+<span class="fc" id="L59">    public ScreenType getScreenType() { return screenType; }</span>
+
+    public int getEnergyCost() {
+<span class="fc" id="L62">        return energyCost;</span>
+    }
+
+    public double getTimeCost() {
+<span class="fc" id="L66">        return timeCost;</span>
+    }
+
+    public int getStudyTime() {
+<span class="fc" id="L70">        return studyTime;</span>
+    }
+
+    public int getFatigue() {
+<span class="fc" id="L74">        return fatigue;</span>
+    }
+
+    public Type getEventType() {
+<span class="fc" id="L78">        return eventType;</span>
+    }
+
+    @SuppressWarnings(&quot;unused&quot;)
+    public int getMoneyCost() {
+<span class="fc" id="L83">        return moneyCost;</span>
+    }
+
+    @SuppressWarnings(&quot;unused&quot;)
+    public String getDescription() {
+<span class="fc" id="L88">        return description;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

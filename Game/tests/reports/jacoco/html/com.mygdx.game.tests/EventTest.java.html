@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EventTest.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.tests</a> &gt; <span class="el_source">EventTest.java</span></div><h1>EventTest.java</h1><pre class="source lang-java linenums">package com.mygdx.game.tests;
+
+import com.mygdx.game.Objects.ActivityImage;
+import com.mygdx.game.Utils.Event;
+import com.mygdx.game.Utils.ScreenType;
+
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+import static org.mockito.Mockito.mock;
+
+<span class="fc" id="L12">public class EventTest {</span>
+    @Test
+    public void testConstructor(){
+<span class="fc" id="L15">        ActivityImage mockedActivityImage = mock(ActivityImage.class);</span>
+<span class="fc" id="L16">        Event event1 = new Event(1, 2, 10, -5, Event.Type.RECREATIONAL, 0, &quot;&quot;, mockedActivityImage);</span>
+<span class="fc" id="L17">        assertEquals(1, event1.getTimeCost(), 0);</span>
+<span class="fc" id="L18">        assertEquals(2, event1.getEnergyCost(), 0);</span>
+<span class="fc" id="L19">        assertEquals(10, event1.getStudyTime(), 0);</span>
+<span class="fc" id="L20">        assertEquals(-5, event1.getFatigue(), 0);</span>
+<span class="fc" id="L21">        assertEquals(Event.Type.RECREATIONAL, event1.getEventType());</span>
+<span class="fc" id="L22">        assertEquals(0, event1.getMoneyCost());</span>
+<span class="fc" id="L23">        assertEquals(&quot;&quot;, event1.getDescription());</span>
+<span class="fc" id="L24">        assertEquals(mockedActivityImage, event1.getActivityImage());</span>
+<span class="fc" id="L25">        assertNull(event1.getScreenType());</span>
+
+<span class="fc" id="L27">        ScreenType mockedST = mock(ScreenType.class);</span>
+<span class="fc" id="L28">        Event event2 = new Event(2, -30, 50, 10, Event.Type.RECREATIONAL, 25, &quot;&quot;, mockedST);</span>
+<span class="fc" id="L29">        assertEquals(2, event2.getTimeCost(), 0);</span>
+<span class="fc" id="L30">        assertEquals(-30, event2.getEnergyCost(), 0);</span>
+<span class="fc" id="L31">        assertEquals(50, event2.getStudyTime(), 0);</span>
+<span class="fc" id="L32">        assertEquals(10, event2.getFatigue(), 0);</span>
+<span class="fc" id="L33">        assertEquals(Event.Type.RECREATIONAL, event2.getEventType());</span>
+<span class="fc" id="L34">        assertEquals(25, event2.getMoneyCost());</span>
+<span class="fc" id="L35">        assertEquals(&quot;&quot;, event2.getDescription());</span>
+<span class="fc" id="L36">        assertNull(event2.getActivityImage());</span>
+<span class="fc" id="L37">        assertEquals(mockedST, event2.getScreenType());</span>
+<span class="fc" id="L38">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
