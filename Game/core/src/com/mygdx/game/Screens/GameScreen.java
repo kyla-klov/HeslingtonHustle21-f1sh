@@ -19,10 +19,6 @@ import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
 import com.mygdx.game.Utils.*;
 
-
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,11 +161,9 @@ public class GameScreen implements Screen {
         uiElements.render(game.batch, gameClock.getTime(), gameClock.getDays(), eventM.getSleep(), eventM.getRec(), eventM.getEat(), eventM.getTotalStudyHours(), eventM.getEnergy(), eventM.calcScore());
         renderActivityImages();
         nameTextField.render(game.batch);
-
         game.batch.end();
         //gui.render(vp.getCamera(),game,shape);
           // position of the projection matrix, and we need it for the event render
-
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);
         }
@@ -225,20 +219,9 @@ public class GameScreen implements Screen {
     }
 
     public void writeToFile() {
-        String data = nameTextField.getValue() +  "," + eventM.calcScore();
-        // Get the file handle for local storage
+        String data = nameTextField.getValue() +  "," + eventM.calcScore() + "\n";
         FileHandle file = Gdx.files.local("storage/PlayerData.txt");
-
-        // Log the file path for debugging purposes
-        Gdx.app.log("File Path", file.file().getAbsolutePath());
-
-        // Write data to the file
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file.file(), true))) {
-            writer.write(data);
-            writer.newLine();  // To ensure each new data entry is on a new line
-        } catch (IOException e) {
-            System.out.println("Exception while writing to file");
-        }
+        file.writeString(data, true);
     }
 
     @Override
