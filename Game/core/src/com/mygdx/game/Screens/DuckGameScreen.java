@@ -43,6 +43,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
         this.game = game;
         gameClock = new GameClock();
         displayText = new BitmapFont();
+        displayText.getData().setScale(2.0f);
         glyphLayout = new GlyphLayout();
         random = new Random();
         camera = new OrthographicCamera();
@@ -102,7 +103,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
         game.batch.begin();
 
         if (!isEndGame){
-            String text = "Click the ducks in as little time as possble!";
+            String text = "Click on the 15 ducks as quickly as you can!";
             glyphLayout.setText(displayText, text);
             displayText.draw(game.batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);
         }

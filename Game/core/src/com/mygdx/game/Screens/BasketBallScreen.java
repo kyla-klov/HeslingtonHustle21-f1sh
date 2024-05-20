@@ -122,6 +122,10 @@ public class BasketBallScreen implements Screen, InputProcessor {
 
         game.batch.draw(hoopTexture, 0, 0, 800, 600);
 
+        font.draw(game.batch, "Press SPACE to bounce the ball into the hoop.", 100, 580);
+        font.draw(game.batch, "You have 30 seconds!", 270, 540);
+
+
         font.draw(game.batch, "Score: " + score, 350, 500);
 
         game.batch.end();
