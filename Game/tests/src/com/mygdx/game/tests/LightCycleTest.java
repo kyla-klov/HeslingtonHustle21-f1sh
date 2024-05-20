@@ -28,23 +28,19 @@ public class LightCycleTest {
     private final float x = 0f, y = 0f;
     private final float size = mockedLightCycle.getSize();
 
-    //test batch is set to right color at 8 A.M
+    //test batch color at noon and 5 P.M.
     @Test
     public void testRenderSeg1() {
-        mockedLightCycle.render(mockedSpriteBatch, 8, 0);
-        verify(mockedLightCycle).getTime(8, 0);
-        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col2, Col1, Interpolation.pow3Out));
+        mockedLightCycle.render(mockedSpriteBatch, 12, 0);
+        verify(mockedLightCycle).getTime(12, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col2, Interpolation.pow3In));
         inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
                 eq(size), eq(size));
         assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
         inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
-    }
 
-    //test batch change to another color at 2 P.M
-    @Test
-    public void testRenderSeg2() {
-        mockedLightCycle.render(mockedSpriteBatch, 14, 0);
-        verify(mockedLightCycle).getTime(14, 0);
+        mockedLightCycle.render(mockedSpriteBatch, 17, 0);
+        verify(mockedLightCycle).getTime(17, 0);
         inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col2, Interpolation.pow3In));
         inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
                 eq(size), eq(size));
@@ -52,11 +48,19 @@ public class LightCycleTest {
         inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
     }
 
-    //test batch change to another color at 8 P.M
+    //test batch color at 6 P.M. and 11 P.M.
     @Test
-    public void testRenderSeg3() {
-        mockedLightCycle.render(mockedSpriteBatch, 20, 0);
-        verify(mockedLightCycle).getTime(20, 0);
+    public void testRenderSeg2() {
+        mockedLightCycle.render(mockedSpriteBatch, 18, 0);
+        verify(mockedLightCycle).getTime(18, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col3, Col1, Interpolation.pow3Out));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+
+        mockedLightCycle.render(mockedSpriteBatch, 23, 0);
+        verify(mockedLightCycle).getTime(23, 0);
         inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col3, Col1, Interpolation.pow3Out));
         inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
                 eq(size), eq(size));
@@ -64,12 +68,48 @@ public class LightCycleTest {
         inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
     }
 
-    //test batch change to another color at 3 A.M
+    //test batch color at midnight and 5 A.M.
+    @Test
+    public void testRenderSeg3() {
+        mockedLightCycle.render(mockedSpriteBatch, 24, 0);
+        verify(mockedLightCycle).getTime(24, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+
+        mockedLightCycle.render(mockedSpriteBatch, 0, 0);
+        verify(mockedLightCycle).getTime(0, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+
+        mockedLightCycle.render(mockedSpriteBatch, 5, 0);
+        verify(mockedLightCycle).getTime(5, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+    }
+
+    //test batch color at 6 A.M. and 11 A.M.
     @Test
     public void testRenderSeg0() {
-        mockedLightCycle.render(mockedSpriteBatch, 3, 0);
-        verify(mockedLightCycle).getTime(3, 0);
-        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col1, Col3, Interpolation.pow3In));
+        mockedLightCycle.render(mockedSpriteBatch, 6, 0);
+        verify(mockedLightCycle).getTime(6, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col2, Col1, Interpolation.pow3Out));
+        inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
+                eq(size), eq(size));
+        assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
+        inOrder.verify(mockedSpriteBatch).setColor(1, 1, 1, 1);
+
+        mockedLightCycle.render(mockedSpriteBatch, 11, 0);
+        verify(mockedLightCycle).getTime(11, 0);
+        inOrder.verify(mockedSpriteBatch).setColor(mockedLightCycle.getColor(Col2, Col1, Interpolation.pow3Out));
         inOrder.verify(mockedSpriteBatch).draw(arg.capture(), eq(x), eq(y),
                 eq(size), eq(size));
         assertEquals(blackSquareFile, ((FileTextureData) arg.getValue().getTextureData()).getFileHandle().path());
