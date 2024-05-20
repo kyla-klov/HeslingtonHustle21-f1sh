@@ -108,16 +108,19 @@ public class EventManager {
             {
                 frozen = true;
                 curEvent.getActivityImage().setActive();
+                gameClock.addEvent(s -> {
+                    if (curEvent != null && curEvent.getActivityImage() != null) {
+                        curEvent.getActivityImage().setInactive();
+                        curEvent = null;
+                    }
+                    frozen = false;
+                }, 4f);
             }
-            else game.screenManager.setScreen(curEvent.getScreenType());
+            else {
+                game.screenManager.setScreen(curEvent.getScreenType());
+            }
         }
-        gameClock.addEvent(s -> {
-            if (curEvent != null && curEvent.getActivityImage() != null) {
-                curEvent.getActivityImage().setInactive();
-                curEvent = null;
-            }
-            frozen = false;
-        }, 4f);
+
     }
 
     public void updateEnergy(Event e) {

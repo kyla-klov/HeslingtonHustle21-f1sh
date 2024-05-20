@@ -259,13 +259,11 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        player.keyDown(keycode);
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        player.keyUp(keycode);
         return true;
     }
 

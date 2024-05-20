@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.IntSet;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.Utils.EventManager;
 import com.mygdx.game.Utils.CollisionDetector;
@@ -60,13 +59,7 @@ public class PlayerController {
      *
      */
     TextureRegion txr;
-    /**IntSet storing the key values of every key being pressed
-     * (Still has trouble with more than 3 inputs)
-     */
-    private final IntSet downKeys = new IntSet(20);
-    /**Stores the Key values of the direction keys you want to use
-     */
-    private final int up=Input.Keys.W,down=Input.Keys.S,left=Input.Keys.A,right=Input.Keys.D;
+
     /**Event Manager used to interact with events*/
     public EventManager EM;
     /**Ref to nearest building (Activity) for interaction*/
@@ -120,6 +113,9 @@ public class PlayerController {
     public void update (float deltaTime) {
         //get texture region to draw
         txr = getAnim(Pstate).getFrame(deltaTime);
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            interact();
+        }
         //update position using normalised direction vector using vector addition (delta time in scalar)
         if (EM.notFrozen()){
             Vector2 newPos = pos.cpy().mulAdd(colCorrect(getDir()).nor(),deltaTime*300);
@@ -138,21 +134,17 @@ public class PlayerController {
     public Vector2 getDir() {
         //find overall direction of inputs
         Vector2 dir = new Vector2(0,0);
-        if (downKeys.contains(up)){
-            dir.y = 1;
-            Pstate = state.WALK_UP;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            dir.y++;
         }
-        if (downKeys.contains(down)){
-            dir.y = -1;
-            Pstate = state.WALK_DOWN;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)){
+            dir.y--;
         }
-        if (downKeys.contains(left)){
-            dir.x = -1;
-            Pstate = state.WALK_LEFT;
+        if (Gdx.input.isKeyPressed(Input.Keys.A)){
+            dir.x--;
         }
-        if (downKeys.contains(right)){
-            dir.x = 1;
-            Pstate = state.WALK_RIGHT;
+        if (Gdx.input.isKeyPressed(Input.Keys.D)){
+            dir.x++;
         }
         return dir;
     }
@@ -232,60 +224,6 @@ public class PlayerController {
             EM.interact(nearBD.name);
         }
 
-    }
-
-    public void keyDown(int keycode) {
-
-        downKeys.add(keycode);
-        if (keycode == Input.Keys.SPACE){
-            interact();
-        }
-        if (downKeys.size >= 2){
-            onMultipleKeysDown(keycode);
-        }
-    }
-
-    /**
-     * When multiple keys pressed it cancels out opposing directions, added back on key up
-     * @param keycode .
-     */
-    public void onMultipleKeysDown(int keycode){
-        if ((keycode==left && downKeys.contains(right)) || (keycode==right && downKeys.contains(left))) {
-            downKeys.remove(left);
-            downKeys.remove(right);
-        }
-        else if ((keycode==up && downKeys.contains(down)) || (keycode==down && downKeys.contains(up))) {
-            downKeys.remove(up);
-            downKeys.remove(down);
-        } else {
-            downKeys.add(keycode);
-        }
-
-    }
-
-    public void keyUp(int keycode) {
-        if (downKeys.contains(keycode))
-        {
-            downKeys.remove(keycode);
-        }
-        else
-        {
-            switch(keycode)
-            {
-                case up:
-                    downKeys.add(down);
-                    break;
-                case down:
-                    downKeys.add(up);
-                    break;
-                case left:
-                    downKeys.add(right);
-                    break;
-                case right:
-                    downKeys.add(left);
-                    break;
-            }
-        }
     }
 
     public float getDistanceTravelled(){
