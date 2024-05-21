@@ -36,30 +36,31 @@ public class GameMusic {
 <span class="fc" id="L36">        return this.musicLevel;</span>
     }
 
+    @SuppressWarnings(&quot;unused&quot;)
     public Music getAudio() {
-<span class="nc" id="L40">        return audio;</span>
+<span class="nc" id="L41">        return audio;</span>
     }
 
     /**
      * Increments the music volume level by one, if it is not already at the maximum level. Adjusts the music playback volume accordingly.
      */
     public void incrementVolume() {
-<span class="fc bfc" id="L47" title="All 2 branches covered.">        if (musicLevel &lt;= 3){ // Check if volume is not already at maximum</span>
-<span class="fc" id="L48">            musicLevel = musicLevel + 1;</span>
-<span class="fc" id="L49">            float floatingMusicLevel = (float) musicLevel;</span>
-<span class="fc" id="L50">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
+<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (musicLevel &lt;= 3){ // Check if volume is not already at maximum</span>
+<span class="fc" id="L49">            musicLevel = musicLevel + 1;</span>
+<span class="fc" id="L50">            float floatingMusicLevel = (float) musicLevel;</span>
+<span class="fc" id="L51">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
         }
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * Decrements the music volume level by one, if it is not already at the minimum level. Adjusts the music playback volume accordingly.
      */
     public void decrementVolume() {
-<span class="fc bfc" id="L58" title="All 2 branches covered.">        if (this.musicLevel &gt;= 1){ // Check if volume is not already at minimum</span>
-<span class="fc" id="L59">            musicLevel = musicLevel - 1;</span>
-<span class="fc" id="L60">            float floatingMusicLevel = (float) musicLevel;</span>
-<span class="fc" id="L61">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (this.musicLevel &gt;= 1){ // Check if volume is not already at minimum</span>
+<span class="fc" id="L60">            musicLevel = musicLevel - 1;</span>
+<span class="fc" id="L61">            float floatingMusicLevel = (float) musicLevel;</span>
+<span class="fc" id="L62">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
         }
-<span class="fc" id="L63">    }</span>
+<span class="fc" id="L64">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

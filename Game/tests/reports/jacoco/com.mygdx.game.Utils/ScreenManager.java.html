@@ -38,30 +38,28 @@ public class ScreenManager {
 <span class="nc" id="L38">        game.setScreen(curScreen);</span>
 <span class="nc" id="L39">    }</span>
 
-    public Screen getScreen(ScreenType screenType){
-<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (curScreenType == screenType) return curScreen;</span>
-<span class="nc" id="L43">        return screensInMemory.get(screenType);</span>
-    }
-
-    @SuppressWarnings(&quot;unused&quot;)
     private Screen createScreen(ScreenType screenType, Object... args){
-<span class="nc bnc" id="L48" title="All 8 branches missed.">        switch (screenType){</span>
+<span class="nc bnc" id="L42" title="All 10 branches missed.">        switch (screenType){</span>
             case COOKIE_SCREEN:
-<span class="nc" id="L50">                return new CookieClickerScreen(game);</span>
+<span class="nc" id="L44">                return new CookieClickerScreen(game);</span>
             case MENU_SCREEN:
-<span class="nc" id="L52">                return new MenuScreen(game);</span>
+<span class="nc" id="L46">                return new MenuScreen(game);</span>
             case GAME_SCREEN:
-<span class="nc" id="L54">                return new GameScreen(game);</span>
+<span class="nc" id="L48">                return new GameScreen(game);</span>
             case PAUSE_SCREEN:
-<span class="nc" id="L56">                return new PauseScreen(game);</span>
+<span class="nc" id="L50">                return new PauseScreen(game);</span>
             case END_SCREEN:
-<span class="nc" id="L58">                return new EndScreen(game);</span>
+<span class="nc" id="L52">                return new EndScreen(game, (float) args[0]);</span>
             case BASKETBALL_SCREEN:
-<span class="nc" id="L60">                return new BasketBallScreen(game);</span>
+<span class="nc" id="L54">                return new BasketBallScreen(game);</span>
             case DUCK_GAME_SCREEN:
-<span class="nc" id="L62">                return new DuckGameScreen(game);</span>
+<span class="nc" id="L56">                return new DuckGameScreen(game);</span>
+            case LEADERBOARD_SCREEN:
+<span class="nc" id="L58">                return new LeaderBoardScreen(game);</span>
+            case CHECKIN_CODE_SCREEN:
+<span class="nc" id="L60">                return new CheckinGameScreen(game, (EventManager) args[0]);</span>
             default:
-<span class="nc" id="L64">                return null;</span>
+<span class="nc" id="L62">                return null;</span>
         }
     }
 }

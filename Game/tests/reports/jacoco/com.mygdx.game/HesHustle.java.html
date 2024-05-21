@@ -3,40 +3,60 @@
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Screens.BasketBallScreen;
-import com.mygdx.game.Screens.DuckGameScreen;
-import com.mygdx.game.Screens.MenuScreen;
+import com.mygdx.game.Screens.CheckinGameScreen;
 import com.mygdx.game.Utils.AchievementHandler;
 import com.mygdx.game.Utils.ScreenManager;
 import com.mygdx.game.Utils.ScreenType;
 
-<span class="nc" id="L16">public class HesHustle extends Game {</span>
-	public SpriteBatch batch;
-	public BitmapFont font;
-	public ScreenManager screenManager;
-	public AchievementHandler achievementHandler;
+<span class="nc" id="L13">public class HesHustle extends Game {</span>
+	private SpriteBatch batch;
+	private ScreenManager screenManager;
+	private AchievementHandler achievementHandler;
 
 	@Override
 	public void create () {
-<span class="nc" id="L24">		batch = new SpriteBatch();</span>
-<span class="nc" id="L25">		font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));</span>
-<span class="nc" id="L26">		screenManager = new ScreenManager(this);</span>
-<span class="nc" id="L27">		achievementHandler = new AchievementHandler();</span>
-<span class="nc" id="L28">		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L29">		screenManager.setScreen(ScreenType.MENU_SCREEN);</span>
-<span class="nc" id="L30">	}</span>
+<span class="nc" id="L20">        batch = new SpriteBatch();</span>
+<span class="nc" id="L21">		screenManager = new ScreenManager(this);</span>
+<span class="nc" id="L22">		achievementHandler = new AchievementHandler();</span>
+<span class="nc" id="L23">		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L24">		screenManager.setScreen(ScreenType.MENU_SCREEN);</span>
+<span class="nc" id="L25">	}</span>
+
+	public ScreenManager getScreenManager() {
+<span class="nc" id="L28">		return screenManager;</span>
+	}
+
+	public AchievementHandler getAchievementHandler() {
+<span class="nc" id="L32">		return achievementHandler;</span>
+	}
+
+	public SpriteBatch getBatch() {
+<span class="nc" id="L36">		return batch;</span>
+	}
+
+	//For tests
+	public void setScreenManager(ScreenManager screenManager) {
+<span class="nc" id="L41">		this.screenManager = screenManager;</span>
+<span class="nc" id="L42">	}</span>
+
+	//For tests
+	public void setBatch(SpriteBatch batch) {
+<span class="nc" id="L46">		this.batch = batch;</span>
+<span class="nc" id="L47">	}</span>
+
+
 
 	@Override
 	public void render () {
-<span class="nc" id="L34">		super.render();</span>
-<span class="nc" id="L35">	}</span>
+<span class="nc" id="L53">		super.render();</span>
+<span class="nc" id="L54">	}</span>
 	
 	@Override
 	public void dispose () {
-<span class="nc" id="L39">		batch.dispose();</span>
-<span class="nc" id="L40">	}</span>
+<span class="nc" id="L58">		batch.dispose();</span>
+<span class="nc" id="L59">	}</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
