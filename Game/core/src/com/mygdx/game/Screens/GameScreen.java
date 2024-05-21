@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.*;
+import com.mygdx.game.Server;
 import com.mygdx.game.Utils.*;
 
 import java.util.ArrayList;
@@ -223,7 +224,11 @@ public class GameScreen implements Screen {
     }
 
     public void writeToFile() {
-        String data = nameTextField.getValue() +  "," + eventM.calcScore() + "\n";
+        String player = nameTextField.getValue();
+        float score = eventM.calcScore();
+        boolean success = Server.submitScore(player, (int) score);
+        int status = success ? 1 : 0;
+        String data = nameTextField.getValue() +  "," + eventM.calcScore() + "," + status + "\n";
         FileHandle file = Gdx.files.local("storage/PlayerData.txt");
         file.writeString(data, true);
     }

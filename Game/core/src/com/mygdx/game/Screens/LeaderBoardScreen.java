@@ -27,6 +27,7 @@ public class LeaderBoardScreen implements Screen {
     private final Texture backButton;
     private final SpriteBatch batch;
 
+
     public LeaderBoardScreen(HesHustle game) {
         this.game = game;
         batch = game.getBatch();

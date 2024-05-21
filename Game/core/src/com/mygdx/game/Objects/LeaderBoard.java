@@ -9,27 +9,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Server;
+import com.mygdx.game.Server.Data;
 import com.mygdx.game.Utils.ViewportAdapter;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class LeaderBoard implements Disposable {
-    private static class Data implements Comparable<Data>{
-        private final float score;
-        private final String name;
-
-        public Data(String name, float score){
-            this.name = name;
-            this.score = score;
-        }
-
-        @Override
-        public int compareTo(Data o) {
-            return Float.compare(score, o.score);
-        }
-    }
-
     private static final String FILE_PATH = "storage/PlayerData.txt";
 
     private final Texture leaderBoardTexture;
@@ -40,8 +26,8 @@ public class LeaderBoard implements Disposable {
     private final float x, y, width, height;
 
     private ArrayList<Data> data;
-    private boolean topFive;
     private int page;
+
 
     public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
         this.vp = vp;
@@ -49,7 +35,6 @@ public class LeaderBoard implements Disposable {
         this.y = y;
         this.width = width;
         this.height = height;
-        topFive = true;
         page = 0;
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         data = readPlayerData();
@@ -75,8 +60,8 @@ public class LeaderBoard implements Disposable {
         }
         for (int i = c; i < upper; i++) {
             Data d = data.get(i);
-            String name = d.name;
-            String score = Float.toString(d.score);
+            String name = d.getPlayer();
+            String score = Float.toString(d.getScore());
 
             if (name.length() >= 5){
                 name = name.substring(0, 5);
@@ -95,24 +80,26 @@ public class LeaderBoard implements Disposable {
             String[] lines = file.readString().split("\n");
             for (String line : lines) {
                 String[] parts = line.split(",");
-                if (parts.length == 2) {
+                if (parts.length == 3) {
                     String name = parts[0];
                     float score = Float.parseFloat(parts[1]);
-                    data.add(new Data(name, score));
+                    int status = Integer.parseInt(parts[2]);
+                    data.add(new Data(name, score, status));
                 }
             }
         }
+
+        Server.fetchScores(data);
+
         return data;
     }
 
     public void touchDown(int screenX, int screenY) {
         Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);
         if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 300*height/377f, 32*width/301f, 32*height/377f)){
-            topFive = true;
             if (page > 0) page--;
         }
         if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 32*height/377f, 32*width/301f, 32*height/377f)){
-            topFive = false;
             if (page < data.size()/5) page++;
         }
     }
