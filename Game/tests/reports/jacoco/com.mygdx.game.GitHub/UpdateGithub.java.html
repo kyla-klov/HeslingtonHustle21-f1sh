@@ -15,76 +15,75 @@ import java.util.Map;
     private static final String REPO_OWNER = &quot;kyla-klov&quot;; // Repository owner's username
     private static final String REPO_NAME = &quot;HeslingtonHustle21-f1sh&quot;;
     private static final String FILE_PATH = &quot;Game/storage/PlayerData.txt&quot;;
-    private static final String ACCESS_TOKEN_ENCRYPTED = &quot;Z2hwX2U1NU9RZzRIdXFLZGhwM2VjbHVFUkZQcFQzaUNRSTRaWXVHbg==&quot;;
     private static final String BRANCH = &quot;main&quot;; // Branch name
     private static final String URL = &quot;https://api.github.com/repos/&quot; + REPO_OWNER + &quot;/&quot; + REPO_NAME + &quot;/contents/&quot; + FILE_PATH;
 
-    private static String decryptToken(String encryptedToken) {
-        // For simplicity, we're using Base64 decoding as our &quot;decryption&quot;
-<span class="nc" id="L24">        byte[] decodedBytes = Base64.getDecoder().decode(encryptedToken);</span>
-<span class="nc" id="L25">        return new String(decodedBytes);</span>
-    }
-
     public static void updateFileOnGitHub(String localFilePath) throws IOException {
-<span class="nc" id="L29">        String accessToken = decryptToken(ACCESS_TOKEN_ENCRYPTED);</span>
+<span class="nc" id="L22">        String accessToken = System.getenv(&quot;GH_TOKEN&quot;);</span>
+<span class="nc bnc" id="L23" title="All 4 branches missed.">        if (accessToken == null || accessToken.isEmpty()) {</span>
+<span class="nc" id="L24">            System.err.println(&quot;Error: GitHub access token is not set.&quot;);</span>
+<span class="nc" id="L25">            return;</span>
+        }
 
-<span class="nc" id="L31">        OkHttpClient client = new OkHttpClient();</span>
+<span class="nc" id="L28">        OkHttpClient client = new OkHttpClient();</span>
 
         // Fetch the current file data from GitHub
-<span class="nc" id="L34">        Request getRequest = new Request.Builder()</span>
-<span class="nc" id="L35">                .url(URL + &quot;?ref=&quot; + BRANCH)</span>
-<span class="nc" id="L36">                .header(&quot;Authorization&quot;, &quot;token &quot; + accessToken)</span>
-<span class="nc" id="L37">                .build();</span>
+<span class="nc" id="L31">        Request getRequest = new Request.Builder()</span>
+<span class="nc" id="L32">                .url(URL + &quot;?ref=&quot; + BRANCH)</span>
+<span class="nc" id="L33">                .header(&quot;Authorization&quot;, &quot;token &quot; + accessToken)</span>
+<span class="nc" id="L34">                .build();</span>
 
-<span class="nc" id="L39">        Response getResponse = client.newCall(getRequest).execute();</span>
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (!getResponse.isSuccessful()) {</span>
-<span class="nc" id="L41">            System.err.println(&quot;Error fetching file info: &quot; + getResponse.message());</span>
-<span class="nc" id="L42">            return;</span>
+<span class="nc" id="L36">        Response getResponse = client.newCall(getRequest).execute();</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (!getResponse.isSuccessful()) {</span>
+<span class="nc" id="L38">            System.err.println(&quot;Error fetching file info: &quot; + getResponse.message());</span>
+<span class="nc" id="L39">            return;</span>
         }
 
-<span class="nc" id="L45">        String responseBody = getResponse.body().string();</span>
-<span class="nc" id="L46">        Gson gson = new Gson();</span>
-<span class="nc" id="L47">        Map&lt;String, Object&gt; map = gson.fromJson(responseBody, Map.class);</span>
-<span class="nc" id="L48">        String sha = (String) map.get(&quot;sha&quot;);</span>
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        assert getResponse.body() != null;</span>
+<span class="nc" id="L43">        String responseBody = getResponse.body().string();</span>
+<span class="nc" id="L44">        Gson gson = new Gson();</span>
+<span class="nc" id="L45">        Map&lt;String, Object&gt; map = gson.fromJson(responseBody, Map.class);</span>
+<span class="nc" id="L46">        String sha = (String) map.get(&quot;sha&quot;);</span>
 
         // Read the local text file using Gdx.files.internal
-<span class="nc" id="L51">        FileHandle fileHandle = Gdx.files.internal(localFilePath);</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (!fileHandle.exists()) {</span>
-<span class="nc" id="L53">            System.err.println(&quot;Error: File &quot; + localFilePath + &quot; does not exist.&quot;);</span>
-<span class="nc" id="L54">            return;</span>
+<span class="nc" id="L49">        FileHandle fileHandle = Gdx.files.internal(localFilePath);</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (!fileHandle.exists()) {</span>
+<span class="nc" id="L51">            System.err.println(&quot;Error: File &quot; + localFilePath + &quot; does not exist.&quot;);</span>
+<span class="nc" id="L52">            return;</span>
         }
 
-<span class="nc" id="L57">        byte[] contentBytes = fileHandle.readBytes();</span>
-<span class="nc" id="L58">        String content = Base64.getEncoder().encodeToString(contentBytes);</span>
+<span class="nc" id="L55">        byte[] contentBytes = fileHandle.readBytes();</span>
+<span class="nc" id="L56">        String content = Base64.getEncoder().encodeToString(contentBytes);</span>
 
         // Create JSON payload
-<span class="nc" id="L61">        Map&lt;String, String&gt; jsonMap = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L62">        jsonMap.put(&quot;message&quot;, &quot;Updating &quot; + FILE_PATH);</span>
-<span class="nc" id="L63">        jsonMap.put(&quot;content&quot;, content);</span>
-<span class="nc" id="L64">        jsonMap.put(&quot;sha&quot;, sha);</span>
+<span class="nc" id="L59">        Map&lt;String, String&gt; jsonMap = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L60">        jsonMap.put(&quot;message&quot;, &quot;Updating &quot; + FILE_PATH);</span>
+<span class="nc" id="L61">        jsonMap.put(&quot;content&quot;, content);</span>
+<span class="nc" id="L62">        jsonMap.put(&quot;sha&quot;, sha);</span>
 
         // Convert map to JSON string
-<span class="nc" id="L67">        String jsonPayload = gson.toJson(jsonMap);</span>
+<span class="nc" id="L65">        String jsonPayload = gson.toJson(jsonMap);</span>
 
         // Create a PUT request to update the file
-<span class="nc" id="L70">        RequestBody body = RequestBody.create(</span>
+<span class="nc" id="L68">        RequestBody body = RequestBody.create(</span>
                 jsonPayload,
-<span class="nc" id="L72">                MediaType.parse(&quot;application/json&quot;)</span>
+<span class="nc" id="L70">                MediaType.parse(&quot;application/json&quot;)</span>
         );
 
-<span class="nc" id="L75">        Request request = new Request.Builder()</span>
-<span class="nc" id="L76">                .url(URL)</span>
-<span class="nc" id="L77">                .put(body)</span>
-<span class="nc" id="L78">                .header(&quot;Authorization&quot;, &quot;token &quot; + accessToken)</span>
-<span class="nc" id="L79">                .build();</span>
+<span class="nc" id="L73">        Request request = new Request.Builder()</span>
+<span class="nc" id="L74">                .url(URL)</span>
+<span class="nc" id="L75">                .put(body)</span>
+<span class="nc" id="L76">                .header(&quot;Authorization&quot;, &quot;token &quot; + accessToken)</span>
+<span class="nc" id="L77">                .build();</span>
 
-<span class="nc" id="L81">        Response response = client.newCall(request).execute();</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (!response.isSuccessful()) {</span>
-<span class="nc" id="L83">            System.err.println(&quot;Failed to update file: &quot; + response.message());</span>
-<span class="nc" id="L84">            return;</span>
+<span class="nc" id="L79">        Response response = client.newCall(request).execute();</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">        if (!response.isSuccessful()) {</span>
+<span class="nc" id="L81">            System.err.println(&quot;Failed to update file: &quot; + response.message());</span>
+<span class="nc" id="L82">            return;</span>
         }
 
-<span class="nc" id="L87">        System.out.println(&quot;File updated successfully: &quot; + response.body().string());</span>
-<span class="nc" id="L88">    }</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        assert response.body() != null;</span>
+<span class="nc" id="L86">        System.out.println(&quot;File updated successfully: &quot; + response.body().string());</span>
+<span class="nc" id="L87">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
