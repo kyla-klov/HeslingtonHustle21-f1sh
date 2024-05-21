@@ -41,6 +41,7 @@ jobs:
       run: chmod +x ./gradlew
     - name: Generate and upload reports
       run: |
+        ./gradlew build -x :html:compileGwt
         ./gradlew build -x :html:compileGwt jacocoTestReport
         ./gradlew build -x :html:compileGwt jacocoTestCoverageVerification
         cp -r tests/build/reports/tests/test/* tests/reports/test
