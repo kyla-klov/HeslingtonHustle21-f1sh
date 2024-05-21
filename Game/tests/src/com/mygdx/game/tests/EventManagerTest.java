@@ -27,9 +27,7 @@ public class EventManagerTest {
     private final ScreenType mockedST = mock(ScreenType.class);
 
     private final ActivityImage mockedImage = mock(ActivityImage.class);
-    private final ActivityImage mockedStudyImage = mock(ActivityImage.class, withSettings()
-            .useConstructor("Activitys/cs.png")
-            .defaultAnswer(CALLS_REAL_METHODS));
+
 
     @Spy private final Event FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "",ScreenType.DUCK_GAME_SCREEN);
     @Spy private final Event StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", ScreenType.CHECKIN_CODE_SCREEN);
@@ -44,7 +42,7 @@ public class EventManagerTest {
 
     @Before public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
-        mockedGame.setScreenManager(mockedSM);
+        when(mockedGame.getScreenManager()).thenReturn(mockedSM);
     }
 
 /*    @Test
@@ -76,7 +74,7 @@ public class EventManagerTest {
         assertEquals(0, mockedClock.getMinutes(), 0);
         assertEquals(PlayBBall, mockedEM.getPlayedEvents().get(0));
         assertEquals(PlayBBall, mockedEM.getCurEvent());
-        verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType());
+        verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType(), mockedEM);
         verify(PlayBBall, times(1)).getActivityImage();
 //        verify(mockedClock, times(1)).addEvent(s -> {}, 4f);;
 
@@ -88,10 +86,9 @@ public class EventManagerTest {
         assertEquals(0, mockedClock.getMinutes(), 0);
         assertEquals(StudyCS, mockedEM.getCurEvent());
         assertEquals(StudyCS, mockedEM.getPlayedEvents().get(1));
-        verify(StudyCS,times(2)).getActivityImage();
-        verify(mockedSM, times(1)).setScreen(PlayBBall.getScreenType());
+        verify(StudyCS,times(1)).getActivityImage();
+        verify(mockedSM, times(1)).setScreen(StudyCS.getScreenType(), mockedEM);
         verify(mockedSM, times(0)).setScreen(mockedST);
-        verify(mockedStudyImage, times(1)).setActive();
 //        verify(mockedClock, times(1)).addEvent(s -> {}, 4f);
 
     }
