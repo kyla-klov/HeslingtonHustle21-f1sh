@@ -24,8 +24,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
     private float duckX;
     private float duckY;
     private long timeToComplete;
-    int numberDucksClicked = 0;
-    int numberRounds = 15;
+    private int numberDucksClicked = 0;
     boolean isDuckOnScreen = false;
     private boolean isEndGame = false;
 
@@ -59,6 +58,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
     }
 
     public void spawnDuck(){
+        int numberRounds = 15;
         if (numberDucksClicked < numberRounds){
             isDuckOnScreen = true;
             this.duckX = random.nextFloat() * (vp.getWorldWidth() - duckWidth);

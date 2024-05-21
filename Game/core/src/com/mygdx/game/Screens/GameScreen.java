@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
     private LightCycle LC;
     private final Music BGmusic;
 
-    Achievement.Type hiker = null;
+    private Achievement.Type hiker = null;
 
     public GameScreen(final HesHustle game, final GameClock gameClock, final TiledMap tiledMap,
                       final TiledMapRenderer TmRender, final Music BGmusic){

@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.mygdx.game.Utils.EventManager;
 import com.mygdx.game.Utils.CollisionDetector;
+import com.mygdx.game.Utils.ResourceManager;
 
 import java.util.Objects;
 
@@ -24,6 +25,8 @@ public class PlayerController {
     private final float height = 64;
 
     private Vector2 pos;
+
+    private final ResourceManager resourceManager;
 
     /**Enum of states the player character can be in
      */
@@ -41,7 +44,7 @@ public class PlayerController {
     /**
      * Animation for each state
      */
-    Animation IDLE_LEFT,
+    private Animation IDLE_LEFT,
             IDLE_UP,
             IDLE_RIGHT,
             IDLE_DOWN,
@@ -51,19 +54,16 @@ public class PlayerController {
             WALK_DOWN;
     /**Current state of player
      */
-    public state Pstate;
-    /**Current player animation
-     */
-    public Animation panim;
+    private final state Pstate;
     /**Stores current texture region to be rendered
      *
      */
-    TextureRegion txr;
+    private TextureRegion txr;
 
     /**Event Manager used to interact with events*/
-    public EventManager EM;
+    private final EventManager EM;
     /**Ref to nearest building (Activity) for interaction*/
-    public Building nearBD;
+    private Building nearBD;
 
     private float distanceTravelled;
     /**Detects player collision
@@ -79,10 +79,11 @@ public class PlayerController {
      * @param collisionLayer Collision Layer of the Tiled Map
      */
     public PlayerController(float xPos, float yPos, EventManager EM, TiledMapTileLayer collisionLayer) {
+        resourceManager = new ResourceManager();
         pos = new Vector2(xPos,yPos);
         Pstate = state.IDLE_DOWN;
         loadAnims();
-        panim = IDLE_DOWN;
+
         this.EM = EM;
         nearBD = null;
 
@@ -96,14 +97,14 @@ public class PlayerController {
      * Function to generate all the Animations from the sprite sheets
      */
     private void loadAnims() {
-        IDLE_LEFT = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),12,17,24,12);
-        IDLE_UP = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),6,11,24,12);
-        IDLE_RIGHT = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),0,5,24,12);
-        IDLE_DOWN = new Animation(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png")),18,23,24,12);
-        WALK_LEFT = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),12,17,24,12);
-        WALK_UP = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),6,11,24,12);
-        WALK_RIGHT = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),0,5,24,12);
-        WALK_DOWN = new Animation(new Texture(Gdx.files.internal("Amelia_run_16x16.png")),18,23,24,12);
+        IDLE_LEFT = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png"))),12,17,24,12);
+        IDLE_UP = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png"))),6,11,24,12);
+        IDLE_RIGHT = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png"))),0,5,24,12);
+        IDLE_DOWN = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_idle_anim_16x16.png"))),18,23,24,12);
+        WALK_LEFT = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_run_16x16.png"))),12,17,24,12);
+        WALK_UP = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_run_16x16.png"))),6,11,24,12);
+        WALK_RIGHT = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_run_16x16.png"))),0,5,24,12);
+        WALK_DOWN = new Animation(resourceManager.addDisposable(new Texture(Gdx.files.internal("Amelia_run_16x16.png"))),18,23,24,12);
     }
 
     /**
