@@ -3,5 +3,3 @@ Josh,0.0
 John,21.4
 Ben,0.0
 Ben,0.0
-Ben,0.0
-Ben,0.0
