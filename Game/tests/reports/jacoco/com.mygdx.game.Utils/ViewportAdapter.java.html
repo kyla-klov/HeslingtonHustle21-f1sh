@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ViewportAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Utils</a> &gt; <span class="el_source">ViewportAdapter.java</span></div><h1>ViewportAdapter.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Utils;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.viewport.Viewport;
+
+<span class="nc" id="L11">public class ViewportAdapter {</span>
+    public static void drawUI(Viewport vp, SpriteBatch batch, Texture txt, float x, float y, float width, float height){
+<span class="fc" id="L13">        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);</span>
+<span class="fc" id="L14">    }</span>
+
+    public static void drawFont(Viewport vp, BitmapFont font, SpriteBatch batch, String text, float x, float y){
+<span class="fc" id="L17">        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);</span>
+<span class="fc" id="L18">    }</span>
+
+    public static Vector2 toScreen(Viewport vp, float x, float y){
+<span class="fc" id="L21">        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);</span>
+    }
+
+    public static Vector2 screenToGame (Viewport vp, float screenX, float screenY){
+<span class="fc" id="L25">        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();</span>
+<span class="fc" id="L26">        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();</span>
+<span class="fc" id="L27">        return new Vector2(transX, transY);</span>
+    }
+
+    public static boolean isOver(float touchX, float touchY, float x, float y, float width, float height) {
+<span class="fc bfc" id="L31" title="All 8 branches covered.">        return (touchX &gt; x &amp;&amp; touchX &lt; x + width &amp;&amp; touchY &gt; y &amp;&amp; touchY &lt; y + height);</span>
+    }
+
+    public static boolean isOver(float touchX, float touchY, Rectangle rect) {
+<span class="fc bfc" id="L35" title="All 8 branches covered.">        return (touchX &gt; rect.x &amp;&amp; touchX &lt; rect.x + rect.width &amp;&amp; touchY &gt; rect.y &amp;&amp; touchY &lt; rect.y + rect.height);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

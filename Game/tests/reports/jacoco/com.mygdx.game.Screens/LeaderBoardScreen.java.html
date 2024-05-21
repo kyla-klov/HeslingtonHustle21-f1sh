@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeaderBoardScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Screens</a> &gt; <span class="el_source">LeaderBoardScreen.java</span></div><h1>LeaderBoardScreen.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Objects.LeaderBoard;
+import com.badlogic.gdx.graphics.GL20;
+import com.mygdx.game.Utils.ResourceManager;
+import com.mygdx.game.Utils.ScreenType;
+import com.mygdx.game.Utils.ViewportAdapter;
+
+
+public class LeaderBoardScreen implements Screen {
+    private final Viewport vp;
+    private final LeaderBoard leaderBoard;
+    private final HesHustle game;
+    private final OrthographicCamera camera;
+    private final ResourceManager resourceManager;
+    private final Texture backButton;
+    private final SpriteBatch batch;
+
+<span class="nc" id="L30">    public LeaderBoardScreen(HesHustle game) {</span>
+<span class="nc" id="L31">        this.game = game;</span>
+<span class="nc" id="L32">        batch = game.getBatch();</span>
+<span class="nc" id="L33">        resourceManager = new ResourceManager();</span>
+
+<span class="nc" id="L35">        backButton = new Texture(Gdx.files.internal(&quot;turn-back.png&quot;));</span>
+
+<span class="nc" id="L37">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L38">        vp = new FitViewport(1600, 900, camera);</span>
+<span class="nc" id="L39">        vp.apply();</span>
+<span class="nc" id="L40">        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);</span>
+<span class="nc" id="L41">        leaderBoard = new LeaderBoard(vp, 800 - 301/2f, 450 - 377/2f, 301, 377);</span>
+<span class="nc" id="L42">    }</span>
+
+    @Override
+    public void show() {
+
+<span class="nc" id="L47">    }</span>
+
+    @Override
+    public void render(float delta) {
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L52">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
+        }
+
+<span class="nc" id="L55">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L56">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+
+<span class="nc" id="L58">        camera.update();</span>
+<span class="nc" id="L59">        batch.setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L60">        vp.apply();</span>
+<span class="nc" id="L61">        batch.begin();</span>
+<span class="nc" id="L62">        leaderBoard.render(batch);</span>
+<span class="nc" id="L63">        batch.draw(backButton,30, 30, 64, 64);</span>
+<span class="nc" id="L64">        batch.end();</span>
+<span class="nc" id="L65">    }</span>
+
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L69">        vp.update(width, height);</span>
+<span class="nc" id="L70">        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);</span>
+<span class="nc" id="L71">    }</span>
+
+
+    @Override
+    public void pause() {
+
+<span class="nc" id="L77">    }</span>
+
+    @Override
+    public void resume() {
+
+<span class="nc" id="L82">    }</span>
+
+    @Override
+    public void hide() {
+
+<span class="nc" id="L87">    }</span>
+
+    public void touchDown(float screenX, float screenY){
+<span class="nc" id="L90">        Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){</span>
+<span class="nc" id="L92">            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
+        }
+<span class="nc" id="L94">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L98">        resourceManager.disposeAll();</span>
+<span class="nc" id="L99">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

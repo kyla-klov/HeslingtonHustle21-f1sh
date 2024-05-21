@@ -4,12 +4,14 @@ import com.mygdx.game.Utils.Achievement;
 import com.mygdx.game.Utils.AchievementHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.junit.Assert.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(GdxTestRunner.class)
 public class AchievementHandlerTest {
-    private final AchievementHandler achievementHandler = new AchievementHandler();
     Achievement bronzeBaller = new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE, "AchievementsDisplay/BallerAchievementBronze.png");
     Achievement silverBaller = new Achievement("Baller", "Score at least 10 points in basketball", Achievement.Type.SILVER, "AchievementsDisplay/BallerAchievementSilver.png");
     Achievement goldBaller = new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.GOLD, "AchievementsDisplay/BallerAchievementGold.png");
@@ -22,6 +24,8 @@ public class AchievementHandlerTest {
     Achievement bronzeHiker = new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementsDisplay/AchievementPlaceHolder.png");
     Achievement silverHiker = new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER,"AchievementsDisplay/AchievementPlaceHolder.png");
     Achievement goldHiker = new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD, "AchievementsDisplay/AchievementPlaceHolder.png");
+    @InjectMocks
+    private final AchievementHandler achievementHandler = new AchievementHandler();
 
     @Test
     public void testGenerateAchievements(){
@@ -38,4 +42,11 @@ public class AchievementHandlerTest {
         assertEquals(silverHiker, achievementHandler.getAchievement("Hiker", Achievement.Type.SILVER));
         assertEquals(goldHiker, achievementHandler.getAchievement("Hiker", Achievement.Type.GOLD));
     }
+
+    //test getting achievement that does not exist
+    @Test
+    public void testGetAchievements(){
+        assertNull(achievementHandler.getAchievement("Bad Batch", null));
+    }
+
 }

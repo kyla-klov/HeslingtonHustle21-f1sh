@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import java.util.Random;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -23,8 +24,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
     private float duckX;
     private float duckY;
     private long timeToComplete;
-<span class="nc" id="L26">    int numberDucksClicked = 0;</span>
-<span class="nc" id="L27">    int numberRounds = 15;</span>
+<span class="nc" id="L27">    private int numberDucksClicked = 0;</span>
 <span class="nc" id="L28">    boolean isDuckOnScreen = false;</span>
 <span class="nc" id="L29">    private boolean isEndGame = false;</span>
 
@@ -38,164 +38,167 @@ public class DuckGameScreen implements Screen, InputProcessor{
     private final OrthographicCamera camera;
     private final Viewport vp;
     private final GlyphLayout glyphLayout;
+    private final SpriteBatch batch;
 
-<span class="nc" id="L42">    public DuckGameScreen(HesHustle game){</span>
-<span class="nc" id="L43">        this.game = game;</span>
-<span class="nc" id="L44">        gameClock = new GameClock();</span>
-<span class="nc" id="L45">        displayText = new BitmapFont();</span>
-<span class="nc" id="L46">        displayText.getData().setScale(2.0f);</span>
-<span class="nc" id="L47">        glyphLayout = new GlyphLayout();</span>
-<span class="nc" id="L48">        random = new Random();</span>
-<span class="nc" id="L49">        camera = new OrthographicCamera();</span>
-<span class="nc" id="L50">        vp = new FitViewport(Gdx.graphics.getWidth()-250, Gdx.graphics.getHeight()-250, camera);</span>
-<span class="nc" id="L51">        camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);</span>
-<span class="nc" id="L52">        camera.update();</span>
+<span class="nc" id="L43">    public DuckGameScreen(HesHustle game){</span>
+<span class="nc" id="L44">        this.game = game;</span>
+<span class="nc" id="L45">        batch = game.getBatch();</span>
+<span class="nc" id="L46">        gameClock = new GameClock();</span>
+<span class="nc" id="L47">        displayText = new BitmapFont();</span>
+<span class="nc" id="L48">        displayText.getData().setScale(2.0f);</span>
+<span class="nc" id="L49">        glyphLayout = new GlyphLayout();</span>
+<span class="nc" id="L50">        random = new Random();</span>
+<span class="nc" id="L51">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L52">        vp = new FitViewport(Gdx.graphics.getWidth()-250, Gdx.graphics.getHeight()-250, camera);</span>
+<span class="nc" id="L53">        camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);</span>
+<span class="nc" id="L54">        camera.update();</span>
         // Update this
-<span class="nc" id="L54">        duck = new Texture(&quot;Activitys/duck game/duck.png&quot;);</span>
-<span class="nc" id="L55">        spawnDuck();</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L56">        duck = new Texture(&quot;Activitys/duck game/duck.png&quot;);</span>
+<span class="nc" id="L57">        spawnDuck();</span>
+<span class="nc" id="L58">    }</span>
 
     public void spawnDuck(){
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (numberDucksClicked &lt; numberRounds){</span>
-<span class="nc" id="L60">            isDuckOnScreen = true;</span>
-<span class="nc" id="L61">            this.duckX = random.nextFloat() * (vp.getWorldWidth() - duckWidth);</span>
-<span class="nc" id="L62">            this.duckY = random.nextFloat() * (vp.getWorldHeight() - duckHeight);</span>
+<span class="nc" id="L61">        int numberRounds = 15;</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (numberDucksClicked &lt; numberRounds){</span>
+<span class="nc" id="L63">            isDuckOnScreen = true;</span>
+<span class="nc" id="L64">            this.duckX = random.nextFloat() * (vp.getWorldWidth() - duckWidth);</span>
+<span class="nc" id="L65">            this.duckY = random.nextFloat() * (vp.getWorldHeight() - duckHeight);</span>
         } else {
-<span class="nc" id="L64">            timeToComplete = (int) gameClock.getRawTime();</span>
+<span class="nc" id="L67">            timeToComplete = (int) gameClock.getRawTime();</span>
 
-<span class="nc bnc" id="L66" title="All 2 branches missed.">            if (timeToComplete &lt;= 18){</span>
-<span class="nc" id="L67">                game.achievementHandler.getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.BRONZE).unlock();</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (timeToComplete &lt;= 18){</span>
+<span class="nc" id="L70">                game.getAchievementHandler().getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.BRONZE).unlock();</span>
             }
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (timeToComplete &lt;= 17){</span>
-<span class="nc" id="L70">                game.achievementHandler.getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.SILVER).unlock();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (timeToComplete &lt;= 17){</span>
+<span class="nc" id="L73">                game.getAchievementHandler().getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.SILVER).unlock();</span>
             }
-<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (timeToComplete &lt;= 16){</span>
-<span class="nc" id="L73">                game.achievementHandler.getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.GOLD).unlock();</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (timeToComplete &lt;= 16){</span>
+<span class="nc" id="L76">                game.getAchievementHandler().getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.GOLD).unlock();</span>
             }
 
-<span class="nc" id="L76">            isEndGame = true;</span>
+<span class="nc" id="L79">            isEndGame = true;</span>
         }
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L81">    }</span>
 
     public void endGame(){
-<span class="nc" id="L81">        game.screenManager.setScreen(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L84">        game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L85">    }</span>
 
 
     @Override
     public void show() {
-<span class="nc" id="L87">        Gdx.input.setInputProcessor(this);</span>
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L90">        Gdx.input.setInputProcessor(this);</span>
+<span class="nc" id="L91">    }</span>
 
     @Override
     public void resize(int width, int height) {
         // Update the viewport dimensions when the screen is resized
-<span class="nc" id="L93">        vp.update(width, height, true);</span>
-<span class="nc" id="L94">    }</span>
+<span class="nc" id="L96">        vp.update(width, height, true);</span>
+<span class="nc" id="L97">    }</span>
 
     @Override
     public void render(float delta) {
-<span class="nc" id="L98">        gameClock.update(delta);</span>
-<span class="nc" id="L99">        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);</span>
-<span class="nc" id="L100">        vp.apply();</span>
-<span class="nc" id="L101">        camera.update();</span>
-<span class="nc" id="L102">        game.batch.setProjectionMatrix(camera.combined);</span>
-<span class="nc" id="L103">        game.batch.begin();</span>
+<span class="nc" id="L101">        gameClock.update(delta);</span>
+<span class="nc" id="L102">        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);</span>
+<span class="nc" id="L103">        vp.apply();</span>
+<span class="nc" id="L104">        camera.update();</span>
+<span class="nc" id="L105">        batch.setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L106">        batch.begin();</span>
 
-<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (!isEndGame){</span>
-<span class="nc" id="L106">            String text = &quot;Click on the 15 ducks as quickly as you can!&quot;;</span>
-<span class="nc" id="L107">            glyphLayout.setText(displayText, text);</span>
-<span class="nc" id="L108">            displayText.draw(game.batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        if (!isEndGame){</span>
+<span class="nc" id="L109">            String text = &quot;Click on the 15 ducks as quickly as you can!&quot;;</span>
+<span class="nc" id="L110">            glyphLayout.setText(displayText, text);</span>
+<span class="nc" id="L111">            displayText.draw(batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);</span>
         }
 
-<span class="nc bnc" id="L111" title="All 2 branches missed.">        if (isDuckOnScreen){</span>
-<span class="nc" id="L112">            game.batch.draw(duck, duckX, duckY, duckWidth, duckHeight);</span>
-<span class="nc bnc" id="L113" title="All 2 branches missed.">        } else if (isEndGame) {</span>
-<span class="nc" id="L114">            String finalText = &quot;Completed in &quot; + timeToComplete + &quot; seconds!&quot;;</span>
-<span class="nc" id="L115">            glyphLayout.setText(displayText, finalText);</span>
-<span class="nc" id="L116">            displayText.draw(game.batch, finalText, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() / 2);</span>
-<span class="nc" id="L117">            gameClock.addEvent(f -&gt; endGame(), 2);</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">        if (isDuckOnScreen){</span>
+<span class="nc" id="L115">            batch.draw(duck, duckX, duckY, duckWidth, duckHeight);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">        } else if (isEndGame) {</span>
+<span class="nc" id="L117">            String finalText = &quot;Completed in &quot; + timeToComplete + &quot; seconds!&quot;;</span>
+<span class="nc" id="L118">            glyphLayout.setText(displayText, finalText);</span>
+<span class="nc" id="L119">            displayText.draw(batch, finalText, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() / 2);</span>
+<span class="nc" id="L120">            gameClock.addEvent(f -&gt; endGame(), 2);</span>
         }
 
 
-<span class="nc" id="L121">        game.batch.end();</span>
-<span class="nc" id="L122">    }</span>
+<span class="nc" id="L124">        batch.end();</span>
+<span class="nc" id="L125">    }</span>
 
     @Override
     public boolean keyDown(int keycode) {
-<span class="nc" id="L126">        return false;</span>
+<span class="nc" id="L129">        return false;</span>
     }
 
     @Override
     public boolean keyUp(int keycode) {
-<span class="nc" id="L131">        return false;</span>
+<span class="nc" id="L134">        return false;</span>
     }
 
     @Override
     public boolean keyTyped(char character) {
-<span class="nc" id="L136">        return false;</span>
+<span class="nc" id="L139">        return false;</span>
     }
 
     @Override
     public boolean touchDown(int worldX, int worldY, int pointer, int button) {
-<span class="nc" id="L141">        Vector2 touchPoint = vp.unproject(new Vector2(worldX, worldY));</span>
+<span class="nc" id="L144">        Vector2 touchPoint = vp.unproject(new Vector2(worldX, worldY));</span>
 
-<span class="nc bnc" id="L143" title="All 8 branches missed.">        if (touchPoint.x &gt;= duckX &amp;&amp; touchPoint.x &lt;= duckX + duckWidth &amp;&amp;</span>
+<span class="nc bnc" id="L146" title="All 8 branches missed.">        if (touchPoint.x &gt;= duckX &amp;&amp; touchPoint.x &lt;= duckX + duckWidth &amp;&amp;</span>
                 touchPoint.y &gt;= duckY &amp;&amp; touchPoint.y &lt;= duckY + duckHeight) {
             // Duck has been successfully clicked
-<span class="nc" id="L146">            isDuckOnScreen = false;</span>
-<span class="nc" id="L147">            gameClock.addEvent(f -&gt; spawnDuck(), 0.4f);</span>
-<span class="nc" id="L148">            numberDucksClicked = numberDucksClicked + 1;</span>
+<span class="nc" id="L149">            isDuckOnScreen = false;</span>
+<span class="nc" id="L150">            gameClock.addEvent(f -&gt; spawnDuck(), 0.4f);</span>
+<span class="nc" id="L151">            numberDucksClicked = numberDucksClicked + 1;</span>
         }
 
-<span class="nc" id="L151">        return false;</span>
+<span class="nc" id="L154">        return false;</span>
 
 
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-<span class="nc" id="L158">        return false;</span>
+<span class="nc" id="L161">        return false;</span>
     }
 
     @Override
     public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
-<span class="nc" id="L163">        return false;</span>
+<span class="nc" id="L166">        return false;</span>
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-<span class="nc" id="L168">        return false;</span>
+<span class="nc" id="L171">        return false;</span>
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-<span class="nc" id="L173">        return false;</span>
+<span class="nc" id="L176">        return false;</span>
     }
 
     @Override
     public boolean scrolled(float amountX, float amountY) {
-<span class="nc" id="L178">        return false;</span>
+<span class="nc" id="L181">        return false;</span>
     }
 
     @Override
     public void pause() {
 
-<span class="nc" id="L184">    }</span>
+<span class="nc" id="L187">    }</span>
 
     @Override
     public void resume() {
 
-<span class="nc" id="L189">    }</span>
+<span class="nc" id="L192">    }</span>
 
     @Override
     public void hide() {
 
-<span class="nc" id="L194">    }</span>
+<span class="nc" id="L197">    }</span>
 
     @Override
     public void dispose() {
 
-<span class="nc" id="L199">    }</span>
+<span class="nc" id="L202">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

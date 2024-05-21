@@ -19,7 +19,10 @@ public class ResourceManager {
         }
     }
 
-/*    @Override
+    public ArrayList<Disposable> getDisposables() {
+        return disposables;
+    }
+    /*    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof ResourceManager)) return false;

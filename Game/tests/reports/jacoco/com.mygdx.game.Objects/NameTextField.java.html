@@ -5,77 +5,79 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Utils.ViewportAdapter;
 
 public class NameTextField {
     private final StringBuilder inputText;
     private final BitmapFont font;
     private final Texture textField;
-    private final UIElements uiElements;
+    private final Viewport vp;
 
     private String value;
     private boolean capsLockOn;
     private boolean active;
 
-<span class="fc" id="L19">    public NameTextField(UIElements uiElements) {</span>
-<span class="fc" id="L20">        this.uiElements = uiElements;</span>
-<span class="fc" id="L21">        inputText = new StringBuilder();</span>
-<span class="fc" id="L22">        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));</span>
-<span class="fc" id="L23">        textField = new Texture(Gdx.files.internal(&quot;NameTextField.png&quot;));</span>
-<span class="fc" id="L24">        active = true;</span>
-<span class="fc" id="L25">    }</span>
+<span class="nc" id="L21">    public NameTextField(Viewport vp) {</span>
+<span class="nc" id="L22">        this.vp = vp;</span>
+<span class="nc" id="L23">        inputText = new StringBuilder();</span>
+<span class="nc" id="L24">        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));</span>
+<span class="nc" id="L25">        textField = new Texture(Gdx.files.internal(&quot;NameTextField.png&quot;));</span>
+<span class="nc" id="L26">        active = true;</span>
+<span class="nc" id="L27">    }</span>
 
     public void render(SpriteBatch batch){
-<span class="nc bnc" id="L28" title="All 2 branches missed.">        if (!active) return;</span>
-<span class="nc" id="L29">        handleInput();</span>
-<span class="nc" id="L30">        float x = 800 - 338/2f;</span>
-<span class="nc" id="L31">        float y = 450 - 157/2f;</span>
-<span class="nc" id="L32">        uiElements.drawUI(batch, textField, x, y, 338, 157);</span>
-<span class="nc" id="L33">        uiElements.drawFont(font, batch, inputText.toString(), x+70, y+68);</span>
-<span class="nc" id="L34">    }</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (!active) return;</span>
+<span class="nc" id="L31">        handleInput();</span>
+<span class="nc" id="L32">        float x = 800 - 338/2f;</span>
+<span class="nc" id="L33">        float y = 450 - 157/2f;</span>
+<span class="nc" id="L34">        ViewportAdapter.drawUI(vp, batch, textField, x, y, 338, 157);</span>
+<span class="nc" id="L35">        ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), x+70, y+68);</span>
+<span class="nc" id="L36">    }</span>
 
     private void handleInput() {
-<span class="nc bnc" id="L37" title="All 4 branches missed.">        boolean shiftPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.CAPS_LOCK)){</span>
-<span class="nc bnc" id="L39" title="All 2 branches missed.">            capsLockOn = !capsLockOn;</span>
+<span class="nc bnc" id="L39" title="All 4 branches missed.">        boolean shiftPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.CAPS_LOCK)){</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">            capsLockOn = !capsLockOn;</span>
         }
 
-<span class="nc bnc" id="L42" title="All 4 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) &amp;&amp; inputText.length() &gt; 0) {</span>
-<span class="nc" id="L43">            inputText.setLength(inputText.length() - 1);</span>
+<span class="nc bnc" id="L44" title="All 4 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) &amp;&amp; inputText.length() &gt; 0) {</span>
+<span class="nc" id="L45">            inputText.setLength(inputText.length() - 1);</span>
         }
 
-<span class="nc bnc" id="L46" title="All 2 branches missed.">        for (int i = Input.Keys.A; i &lt;= Input.Keys.Z; i++) {</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
-<span class="nc" id="L48">                char character = Input.Keys.toString(i).charAt(0);</span>
-<span class="nc bnc" id="L49" title="All 8 branches missed.">                if ((shiftPressed &amp;&amp; !capsLockOn) || (!shiftPressed &amp;&amp; capsLockOn)) {</span>
-<span class="nc" id="L50">                    inputText.append(Character.toUpperCase(character));</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        for (int i = Input.Keys.A; i &lt;= Input.Keys.Z; i++) {</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
+<span class="nc" id="L50">                char character = Input.Keys.toString(i).charAt(0);</span>
+<span class="nc bnc" id="L51" title="All 8 branches missed.">                if ((shiftPressed &amp;&amp; !capsLockOn) || (!shiftPressed &amp;&amp; capsLockOn)) {</span>
+<span class="nc" id="L52">                    inputText.append(Character.toUpperCase(character));</span>
                 } else {
-<span class="nc" id="L52">                    inputText.append(Character.toLowerCase(character));</span>
+<span class="nc" id="L54">                    inputText.append(Character.toLowerCase(character));</span>
                 }
             }
         }
 
-<span class="nc bnc" id="L57" title="All 2 branches missed.">        for (int i = Input.Keys.NUM_0; i &lt;= Input.Keys.NUM_9; i++) {</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
-<span class="nc" id="L59">                inputText.append(Input.Keys.toString(i));</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        for (int i = Input.Keys.NUM_0; i &lt;= Input.Keys.NUM_9; i++) {</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
+<span class="nc" id="L61">                inputText.append(Input.Keys.toString(i));</span>
             }
         }
 
-<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {</span>
-<span class="nc" id="L64">            inputText.append(&quot; &quot;);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {</span>
+<span class="nc" id="L66">            inputText.append(&quot; &quot;);</span>
         }
 
-<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {</span>
-<span class="nc" id="L68">            value = inputText.toString();</span>
-<span class="nc" id="L69">            active = false;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {</span>
+<span class="nc" id="L70">            value = inputText.toString();</span>
+<span class="nc" id="L71">            active = false;</span>
         }
-<span class="nc" id="L71">    }</span>
+<span class="nc" id="L73">    }</span>
 
     public boolean textEntered() {
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        return !active;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        return !active;</span>
     }
 
     public String getValue() {
-<span class="nc" id="L78">        return value;</span>
+<span class="nc" id="L80">        return value;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
