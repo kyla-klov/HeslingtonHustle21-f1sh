@@ -46,7 +46,6 @@ public class GameScreen implements Screen {
     private final TiledMapRenderer TmRender;
     private final TiledMap tiledMap;
 
-    private GUI gui;
     private LightCycle LC;
     private final Music BGmusic;
 
@@ -100,7 +99,6 @@ public class GameScreen implements Screen {
 
         eventM = new EventManager(game, gameClock);
         player = new PlayerController(1000,1000, eventM, collisionLayer);
-        gui = new GUI(batch, eventM, gameClock);
         LC = new LightCycle();
 
         for (int i = 0; i < eventM.listEvents().size(); i++) {
@@ -113,8 +111,6 @@ public class GameScreen implements Screen {
         player.update(delta);
 
         player.setBD(getNearest());
-
-        gui.update(delta);
 
         uiElements.update(delta);
 
@@ -193,13 +189,13 @@ public class GameScreen implements Screen {
         float camWidth = (float) vp.getScreenWidth() /2;
         float camHeight = (float) vp.getScreenHeight() /2;
 
-        if (player.pos.x > 2884 - camWidth*xConst) {
+        if (player.getPos().x > 2884 - camWidth*xConst) {
             x = 2884- camWidth*xConst;
-        } else x = Math.max(player.pos.x, camWidth * xConst);
+        } else x = Math.max(player.getPos().x, camWidth * xConst);
 
-        if (player.pos.y > 2238- camHeight*yConst) {
+        if (player.getPos().y > 2238- camHeight*yConst) {
             y = 2238- camHeight*yConst;
-        } else y = Math.max(player.pos.y, camHeight * yConst);
+        } else y = Math.max(player.getPos().y, camHeight * yConst);
 
         vp.getCamera().position.set(x,y,0);
     }
@@ -209,10 +205,10 @@ public class GameScreen implements Screen {
         Building closest = null;
         float closDis = 200f;
         for (Building bd : buildings) {
-            if (Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.getPos().x,bd.getPos().y)) < closDis)
+            if (Math.sqrt(Vector2.dst2(player.getPos().x,player.getPos().y,bd.getPos().x,bd.getPos().y)) < closDis)
             {
                 closest = bd;
-                closDis = (float) Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.getPos().x,bd.getPos().y));
+                closDis = (float) Math.sqrt(Vector2.dst2(player.getPos().x,player.getPos().y,bd.getPos().x,bd.getPos().y));
             }
         }
         return closest;
@@ -235,7 +231,6 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) { //This is important for the GUI class to stay in aspect
         vp.update(width,height);
-        gui.getStage().getViewport().update(vp.getScreenWidth(), vp.getScreenHeight(),true);
     }
 
     @Override

@@ -63,11 +63,11 @@ public class PlayerControllerTest {
     @Before
     public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
-        mockedGame.screenManager = mockedSM;
+        mockedGame.setScreenManager(mockedSM);
     }
     @Test
     public void testColCorrect(){
-        mockedPlayer.pos.x = 1;
+        mockedPlayer.getPos().x = 1;
 
 
     }

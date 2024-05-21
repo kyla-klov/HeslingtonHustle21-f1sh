@@ -36,6 +36,18 @@ public class HesHustle extends Game {
 		return batch;
 	}
 
+	//For tests
+	public void setScreenManager(ScreenManager screenManager) {
+		this.screenManager = screenManager;
+	}
+
+	//For tests
+	public void setBatch(SpriteBatch batch) {
+		this.batch = batch;
+	}
+
+
+
 	@Override
 	public void render () {
 		super.render();

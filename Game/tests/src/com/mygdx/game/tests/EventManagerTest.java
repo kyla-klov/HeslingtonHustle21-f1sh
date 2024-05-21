@@ -32,7 +32,7 @@ public class EventManagerTest {
             .defaultAnswer(CALLS_REAL_METHODS));
 
     @Spy private final Event FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "",ScreenType.DUCK_GAME_SCREEN);
-    @Spy private final Event StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", mockedStudyImage);
+    @Spy private final Event StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", ScreenType.CHECKIN_CODE_SCREEN);
     @Spy private final Event PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
     @Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", mockedImage);
     @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
@@ -44,7 +44,7 @@ public class EventManagerTest {
 
     @Before public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
-        mockedGame.screenManager = mockedSM;
+        mockedGame.setScreenManager(mockedSM);
     }
 
 /*    @Test

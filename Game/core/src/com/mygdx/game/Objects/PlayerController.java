@@ -23,7 +23,7 @@ public class PlayerController {
      */
     private final float height = 64;
 
-    public Vector2 pos;
+    private Vector2 pos;
 
     /**Enum of states the player character can be in
      */

@@ -7,11 +7,15 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  * Class to generate animation based off spritesheet
  */
 public class Animation {
-    int curFrame=0;
+    private int curFrame=0;
+    private double time;
+
     private final Texture SprSheet;
     private final int frameNo;
-    double time,frameTime;
-    int frameStart,width,height;
+    private final double frameTime;
+    private final int frameStart;
+    private final int width;
+    private final int height;
 
     /**
      * Remember 1st frame is frame 0

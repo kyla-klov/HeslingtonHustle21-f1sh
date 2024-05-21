@@ -9,10 +9,10 @@ import com.badlogic.gdx.math.Interpolation;
 
 public class LightCycle {
     private final int size = 4000;
-    Interpolation inter;
-    float prog=0;
-    float[] Col1,Col2,Col3;
-    int segment = 0;
+    private final float[] Col1, Col2, Col3;
+
+    private float prog=0;
+    private int segment = 0;
 
     /**
      * 2 Gradients orange->blue and orange->purple just flipped on some of them
@@ -70,22 +70,23 @@ public class LightCycle {
 
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Interpolation inter;
         switch(segment){
             case 0:
                 inter = Interpolation.pow3Out;
-                batch.setColor(getColor(Col2,Col1,inter));
+                batch.setColor(getColor(Col2,Col1, inter));
                 break;
             case 1:
                 inter = Interpolation.pow3In;
-                batch.setColor(getColor(Col1,Col2,inter));
+                batch.setColor(getColor(Col1,Col2, inter));
                 break;
             case 2:
                 inter = Interpolation.pow3Out;
-                batch.setColor(getColor(Col3,Col1,inter));
+                batch.setColor(getColor(Col3,Col1, inter));
                 break;
             case 3:
                 inter = Interpolation.pow3In;
-                batch.setColor(getColor(Col1,Col3,inter));
+                batch.setColor(getColor(Col1,Col3, inter));
                 break;
         }
 

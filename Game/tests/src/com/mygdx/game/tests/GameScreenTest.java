@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
-import com.mygdx.game.Objects.GUI;
 import com.mygdx.game.Objects.PlayerController;
 import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.*;
@@ -76,9 +75,6 @@ public class GameScreenTest {
     @Spy private TextButton EatButt  = new TextButton("EatNo:",skin);
     @Spy private TextButton StudyButt  = new TextButton("StdyNo:",skin);
 
-    @Spy @InjectMocks private GUI mockedGUI = mock(GUI.class, withSettings().
-            useConstructor(mockedBatch, mockedEM, mockedClock)
-            .defaultAnswer(CALLS_REAL_METHODS));
 
     private final ShapeRenderer mockedShapeRenderer = mock(ShapeRenderer.class);
     private final TiledMap mockedTiledMap = spy(new TmxMapLoader().load("MAP/map1.tmx"));
@@ -92,19 +88,19 @@ public class GameScreenTest {
 
     @BeforeClass
     public static void setBatch(){
-        mockedGame.batch = mockedSpeiteBatch;
+        mockedGame.setBatch(mockedSpeiteBatch);
     }
     @Before
     public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
-        mockedGame.screenManager = mockedSM;
+        mockedGame.setScreenManager(mockedSM);
     }
 
     @Test
     public void testGetNearest(){
         assertNull(gameScreen.getNearest());
-        player.pos.x = 500;
-        player.pos.y = 300;
+        player.getPos().x = 500;
+        player.getPos().y = 300;
         assertEquals(gameScreen.getBuildings().get(0), gameScreen.getNearest());
     }
 
