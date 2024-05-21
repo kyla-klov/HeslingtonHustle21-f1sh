@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
 import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.CALLS_REAL_METHODS;
 
 @RunWith(GdxTestRunner.class)
@@ -63,7 +64,7 @@ public class PlayerControllerTest {
     @Before
     public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
-        mockedGame.setScreenManager(mockedSM);
+        when(mockedGame.getScreenManager()).thenReturn(mockedSM);
     }
     @Test
     public void testColCorrect(){

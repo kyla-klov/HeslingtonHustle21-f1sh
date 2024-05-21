@@ -94,7 +94,7 @@ public class GameScreenTest {
     @Before
     public void setup(){
         closeable = MockitoAnnotations.openMocks(this);
-        mockedGame.setScreenManager(mockedSM);
+        when(mockedGame.getScreenManager()).thenReturn(mockedSM);
     }
 
     @Test

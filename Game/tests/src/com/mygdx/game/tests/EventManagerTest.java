@@ -2,7 +2,6 @@ package com.mygdx.game.tests;
 
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
-import com.mygdx.game.Screens.GameScreen;
 import com.mygdx.game.Utils.*;
 import org.junit.After;
 import org.junit.Before;
