@@ -10,29 +10,29 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 <span class="nc" id="L11">public class ViewportAdapter {</span>
     public static void drawUI(Viewport vp, SpriteBatch batch, Texture txt, float x, float y, float width, float height){
-<span class="nc" id="L13">        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);</span>
-<span class="nc" id="L14">    }</span>
+<span class="fc" id="L13">        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);</span>
+<span class="fc" id="L14">    }</span>
 
     public static void drawFont(Viewport vp, BitmapFont font, SpriteBatch batch, String text, float x, float y){
-<span class="nc" id="L17">        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);</span>
-<span class="nc" id="L18">    }</span>
+<span class="fc" id="L17">        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);</span>
+<span class="fc" id="L18">    }</span>
 
     public static Vector2 toScreen(Viewport vp, float x, float y){
-<span class="nc" id="L21">        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);</span>
+<span class="fc" id="L21">        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);</span>
     }
 
     public static Vector2 screenToGame (Viewport vp, float screenX, float screenY){
-<span class="nc" id="L25">        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();</span>
-<span class="nc" id="L26">        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();</span>
-<span class="nc" id="L27">        return new Vector2(transX, transY);</span>
+<span class="fc" id="L25">        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();</span>
+<span class="fc" id="L26">        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();</span>
+<span class="fc" id="L27">        return new Vector2(transX, transY);</span>
     }
 
     public static boolean isOver(float touchX, float touchY, float x, float y, float width, float height) {
-<span class="nc bnc" id="L31" title="All 8 branches missed.">        return (touchX &gt; x &amp;&amp; touchX &lt; x + width &amp;&amp; touchY &gt; y &amp;&amp; touchY &lt; y + height);</span>
+<span class="pc bpc" id="L31" title="5 of 8 branches missed.">        return (touchX &gt; x &amp;&amp; touchX &lt; x + width &amp;&amp; touchY &gt; y &amp;&amp; touchY &lt; y + height);</span>
     }
 
     public static boolean isOver(float touchX, float touchY, Rectangle rect) {
-<span class="nc bnc" id="L35" title="All 8 branches missed.">        return (touchX &gt; rect.x &amp;&amp; touchX &lt; rect.x + rect.width &amp;&amp; touchY &gt; rect.y &amp;&amp; touchY &lt; rect.y + rect.height);</span>
+<span class="pc bpc" id="L35" title="5 of 8 branches missed.">        return (touchX &gt; rect.x &amp;&amp; touchX &lt; rect.x + rect.width &amp;&amp; touchY &gt; rect.y &amp;&amp; touchY &lt; rect.y + rect.height);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
