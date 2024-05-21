@@ -49,17 +49,19 @@ public class ViewportAdapterTest {
 
     @Test
     public void testIsOver(){
-        assertFalse(ViewportAdapter.isOver(2, 2, 1, 1, 1, 1));
-        assertFalse(ViewportAdapter.isOver(0, 2, 1, 1, 1, 1));
-        assertFalse(ViewportAdapter.isOver(3, 2, 1, 1, 1, 1));
-        assertFalse(ViewportAdapter.isOver(2, 0, 1, 1, 1, 1));
-        assertFalse(ViewportAdapter.isOver(2, 3, 1, 1, 1, 1));
+        assertTrue(ViewportAdapter.isOver(2, 2, 1, 1, 2, 2));
+        assertFalse(ViewportAdapter.isOver(0, 2, 1, 1, 2, 2));
+        assertFalse(ViewportAdapter.isOver(3, 2, 1, 1, 2, 2));
+        assertFalse(ViewportAdapter.isOver(2, 0, 1, 1, 2, 2));
+        assertFalse(ViewportAdapter.isOver(2, 3, 1, 1, 2, 2));
+
+
     }
 
     @Test
     public void testIsOverRect(){
-        Rectangle rect = new Rectangle(1, 1, 1, 1);
-        assertFalse(ViewportAdapter.isOver(2, 2, rect));
+        Rectangle rect = new Rectangle(1, 1, 2, 2);
+        assertTrue(ViewportAdapter.isOver(2, 2, rect));
         assertFalse(ViewportAdapter.isOver(0, 2, rect));
         assertFalse(ViewportAdapter.isOver(3, 2, rect));
         assertFalse(ViewportAdapter.isOver(2, 0, rect));
