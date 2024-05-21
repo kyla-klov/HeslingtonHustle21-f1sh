@@ -7,6 +7,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -37,6 +39,7 @@ public class GameScreen implements Screen {
     private final OrthographicCamera camera;
     private EventManager eventM;
     private final NameTextField nameTextField;
+    private final SpriteBatch batch;
 
     //Game objects
     private PlayerController player;
@@ -52,6 +55,7 @@ public class GameScreen implements Screen {
     public GameScreen(final HesHustle game, final GameClock gameClock, final TiledMap tiledMap,
                       final TiledMapRenderer TmRender, final Music BGmusic){
         this.game = game;
+        this.batch = game.getBatch();
         this.gameClock = gameClock;
         this.camera = new OrthographicCamera();
         this.vp = new FitViewport(1600,900, camera);
@@ -61,7 +65,7 @@ public class GameScreen implements Screen {
         }
         else{
             this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load("MAP/map1.tmx"));
-            this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap, game.batch);
+            this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap, batch);
         }
 
         this.activityImages = new ArrayList<>();
@@ -69,7 +73,7 @@ public class GameScreen implements Screen {
 
         this.BGmusic = resourceManager.addDisposable(BGmusic);
         this.BGmusic.setLooping(true);
-        uiElements = new UIElements(vp, game.achievementHandler);
+        uiElements = new UIElements(vp, game.getAchievementHandler());
         nameTextField = new NameTextField(vp);
         create();
     }
@@ -82,11 +86,11 @@ public class GameScreen implements Screen {
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
         collisionLayer.setVisible(false);
-        Building comSci = new Building(530, 380,"Computer\nScience\nDepartment");
-        Building BBall = new Building(1450, 2000, "BasketBall");
-        Building duck = new Building(2112, 360, "Ducks");
-        Building langwith = new Building(1360, 1375, "Langwith");
-        Building piazza = new Building(2550, 1380, "Piazza");
+        Building comSci = new Building(530, 380,"Computer\nScience\nDepartment", resourceManager.addDisposable(new Texture(Gdx.files.internal("book.png"))));
+        Building BBall = new Building(1450, 2000, "BasketBall", resourceManager.addDisposable(new Texture(Gdx.files.internal("ball-of-basketball.png"))));
+        Building duck = new Building(2112, 360, "Ducks", resourceManager.addDisposable(new Texture(Gdx.files.internal("duck_icon.png"))));
+        Building langwith = new Building(1360, 1375, "Langwith", resourceManager.addDisposable(new Texture(Gdx.files.internal("sleep.png"))));
+        Building piazza = new Building(2550, 1380, "Piazza", resourceManager.addDisposable(new Texture(Gdx.files.internal("restaurant.png"))));
 
         buildings.add(comSci);//separate building list to cycle through to find closest to player
         buildings.add(BBall);
@@ -96,7 +100,7 @@ public class GameScreen implements Screen {
 
         eventM = new EventManager(game, gameClock);
         player = new PlayerController(1000,1000, eventM, collisionLayer);
-        gui = new GUI(game.batch, eventM, gameClock);
+        gui = new GUI(batch, eventM, gameClock);
         LC = new LightCycle();
 
         for (int i = 0; i < eventM.listEvents().size(); i++) {
@@ -116,19 +120,19 @@ public class GameScreen implements Screen {
 
         if (checkGameOverCondition()) {
             writeToFile();
-            game.screenManager.setScreen(ScreenType.END_SCREEN, eventM.calcScore()); // Switch to EndScreen
+            game.getScreenManager().setScreen(ScreenType.END_SCREEN, eventM.calcScore()); // Switch to EndScreen
         }
 
         int steps = (int) (player.getDistanceTravelled() / 7.5);
         if (steps >= 2500 && hiker == null){
             hiker = Achievement.Type.BRONZE;
-            game.achievementHandler.getAchievement("Hiker", Achievement.Type.BRONZE).unlock();
+            game.getAchievementHandler().getAchievement("Hiker", Achievement.Type.BRONZE).unlock();
         } else if (steps >= 5000 && hiker == Achievement.Type.BRONZE){
             hiker = Achievement.Type.SILVER;
-            game.achievementHandler.getAchievement("Hiker", Achievement.Type.SILVER).unlock();
+            game.getAchievementHandler().getAchievement("Hiker", Achievement.Type.SILVER).unlock();
         } else if (steps >= 10000 && hiker == Achievement.Type.SILVER){
             hiker = Achievement.Type.GOLD;
-            game.achievementHandler.getAchievement("Hiker", Achievement.Type.GOLD).unlock();
+            game.getAchievementHandler().getAchievement("Hiker", Achievement.Type.GOLD).unlock();
         }
     }
 
@@ -146,32 +150,36 @@ public class GameScreen implements Screen {
         vp.apply();
         camera.update();
 
-        game.batch.setProjectionMatrix(vp.getCamera().combined);
+        batch.setProjectionMatrix(vp.getCamera().combined);
 
         TmRender.setView(camera);
         TmRender.render();
 
-        game.batch.begin();
+        batch.begin();
 
-        if (nameTextField.textEntered()){
-            player.render(game.batch);
-            LC.render(game.batch, gameClock.getHours(), gameClock.getMinutes());
+        for (Building building : buildings) {
+            building.render(batch);
         }
 
-        uiElements.render(game.batch, gameClock.getTime(), gameClock.getDays(), eventM.getSleep(), eventM.getRec(), eventM.getEat(), eventM.getTotalStudyHours(), eventM.getEnergy(), eventM.calcScore());
+        if (nameTextField.textEntered()){
+            player.render(batch);
+            LC.render(batch, gameClock.getHours(), gameClock.getMinutes());
+        }
+
+        uiElements.render(batch, gameClock.getTime(), gameClock.getDays(), eventM.getSleep(), eventM.getRec(), eventM.getEat(), eventM.getTotalStudyHours(), eventM.getEnergy(), eventM.calcScore());
         renderActivityImages();
-        nameTextField.render(game.batch);
-        game.batch.end();
+        nameTextField.render(batch);
+        batch.end();
         //gui.render(vp.getCamera(),game,shape);
           // position of the projection matrix, and we need it for the event render
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            game.screenManager.setScreen(ScreenType.PAUSE_SCREEN);
+            game.getScreenManager().setScreen(ScreenType.PAUSE_SCREEN);
         }
     }
 
     public void renderActivityImages(){
         for (ActivityImage activityImage : activityImages) {
-            if (activityImage != null) activityImage.render(vp.getCamera(),game.batch);
+            if (activityImage != null) activityImage.render(vp.getCamera(),batch);
         }
     }
 

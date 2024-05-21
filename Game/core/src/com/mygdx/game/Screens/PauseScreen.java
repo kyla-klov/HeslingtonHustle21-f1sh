@@ -39,13 +39,13 @@ public class PauseScreen implements Screen {
         resumeButton.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 // Ensure this transitions back to your game screen, adjusting as necessary
-                game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+                game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
             }
         });
         mainMenuButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.screenManager.setScreen(ScreenType.MENU_SCREEN);
+                game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);
             }
         });
         table.add(resumeButton).pad(10).row();

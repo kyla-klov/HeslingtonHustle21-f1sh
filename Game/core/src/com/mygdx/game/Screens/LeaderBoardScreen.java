@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -24,9 +25,11 @@ public class LeaderBoardScreen implements Screen {
     private final OrthographicCamera camera;
     private final ResourceManager resourceManager;
     private final Texture backButton;
+    private final SpriteBatch batch;
 
     public LeaderBoardScreen(HesHustle game) {
         this.game = game;
+        batch = game.getBatch();
         resourceManager = new ResourceManager();
 
         backButton = new Texture(Gdx.files.internal("turn-back.png"));
@@ -53,12 +56,12 @@ public class LeaderBoardScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        batch.setProjectionMatrix(camera.combined);
         vp.apply();
-        game.batch.begin();
-        leaderBoard.render(game.batch);
-        game.batch.draw(backButton,30, 30, 64, 64);
-        game.batch.end();
+        batch.begin();
+        leaderBoard.render(batch);
+        batch.draw(backButton,30, 30, 64, 64);
+        batch.end();
     }
 
     @Override
@@ -86,7 +89,7 @@ public class LeaderBoardScreen implements Screen {
     public void touchDown(float screenX, float screenY){
         Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);
         if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){
-            game.screenManager.setScreen(ScreenType.MENU_SCREEN);
+            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);
         }
     }
 

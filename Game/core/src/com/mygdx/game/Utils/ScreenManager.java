@@ -56,6 +56,8 @@ public class ScreenManager {
                 return new DuckGameScreen(game);
             case LEADERBOARD_SCREEN:
                 return new LeaderBoardScreen(game);
+            case CHECKIN_CODE_SCREEN:
+                return new CheckinGameScreen(game, (EventManager) args[0]);
             default:
                 return null;
         }

@@ -1,5 +1,7 @@
 package com.mygdx.game.Objects;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -9,11 +11,13 @@ import com.badlogic.gdx.math.Vector2;
 public class Building {
     private final String name;
     private final Vector2 pos;
+    private final Texture txt;
 
 
-    public Building(float x, float y, String name) {
+    public Building(float x, float y, String name, Texture txt) {
         pos = new Vector2(x, y);
         this.name = name;
+        this.txt = txt;
     }
 
     public Vector2 getPos(){
@@ -22,6 +26,10 @@ public class Building {
 
     public String getName() {
         return name;
+    }
+
+    public void render(SpriteBatch batch) {
+        batch.draw(txt, pos.x, pos.y, 64, 64);
     }
 
 }

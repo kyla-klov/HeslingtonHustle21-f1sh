@@ -51,7 +51,7 @@ public class EventManager {
 
     private void generateEvents() {
         FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "", ScreenType.DUCK_GAME_SCREEN);
-        StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", resourceManager.addDisposable(new ActivityImage("Activitys/cs.png")));
+        StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", ScreenType.CHECKIN_CODE_SCREEN);
         PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
         Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
@@ -60,13 +60,13 @@ public class EventManager {
     private void updateMealAchievement(){
         int mealsEaten = mealTimes.get(gameClock.getDays()-1).size();
         if (mealsEaten >= 3){
-            game.achievementHandler.getAchievement("Feast to Fullest", Achievement.Type.BRONZE).unlock();
+            game.getAchievementHandler().getAchievement("Feast to Fullest", Achievement.Type.BRONZE).unlock();
         }
         if (mealsEaten >= 4){
-            game.achievementHandler.getAchievement("Feast to Fullest", Achievement.Type.SILVER).unlock();
+            game.getAchievementHandler().getAchievement("Feast to Fullest", Achievement.Type.SILVER).unlock();
         }
         if (mealsEaten >= 5){
-            game.achievementHandler.getAchievement("Feast to Fullest", Achievement.Type.GOLD).unlock();
+            game.getAchievementHandler().getAchievement("Feast to Fullest", Achievement.Type.GOLD).unlock();
         }
     }
 
@@ -102,7 +102,6 @@ public class EventManager {
 
             if (curEvent.getStudyTime() > 0){
                 this.dailyStudy[gameClock.getDays()-1]++;
-                totalStudyHours += curEvent.getStudyTime();
                 addStudyPlace(curEvent.getDescription());
             } else if (curEvent.getEventType() == Event.Type.EAT){
                 eat++;
@@ -131,10 +130,14 @@ public class EventManager {
                 }, 4f);
             }
             else {
-                game.screenManager.setScreen(curEvent.getScreenType());
+                game.getScreenManager().setScreen(curEvent.getScreenType(), this);
             }
         }
 
+    }
+
+    public void addStudyHours(int h){
+        totalStudyHours += h;
     }
 
     public void updateEnergy(Event e) {
@@ -173,7 +176,7 @@ public class EventManager {
     }
 
     public float calcScore(){
-        int s1, s2, s3, s4, s5;
+        int s1, s3, s4, s5;
 
         int num0s = 0;
         int num1s = 0;
@@ -192,21 +195,6 @@ public class EventManager {
             s1 = 40;
         } else{
             s1 = 0;
-        }
-
-        switch(this.placesStudied.size()){
-            case 0:
-                s2 = 0;
-                break;
-            case 1:
-                s2 = 60;
-                break;
-            case 2:
-                s2 = 80;
-                break;
-            default:
-                s2 = 100;
-                break;
         }
 
 //        int totalStudyHours = gameScreen.getTotalStudyHours();
@@ -266,7 +254,7 @@ public class EventManager {
                 s5 = 0;
                 break;
         }
-        return (s1 + s2 + s3 + s4 + s5) / 5f;
+        return (s1 + s3 + s4 + s5) / 5f;
 
     }
 

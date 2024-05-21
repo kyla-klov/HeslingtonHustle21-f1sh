@@ -83,16 +83,16 @@ public class BasketBallScreen implements Screen, InputProcessor {
         Gdx.input.setInputProcessor(this);
         gameClock.addEvent(f -> {
             if (score >= 8){
-                game.achievementHandler.getAchievement("Baller", Achievement.Type.BRONZE).unlock();
+                game.getAchievementHandler().getAchievement("Baller", Achievement.Type.BRONZE).unlock();
             }
             if (score >= 10){
-                game.achievementHandler.getAchievement("Baller", Achievement.Type.SILVER).unlock();
+                game.getAchievementHandler().getAchievement("Baller", Achievement.Type.SILVER).unlock();
             }
             if (score >= 12){
-                game.achievementHandler.getAchievement("Baller", Achievement.Type.GOLD).unlock();
+                game.getAchievementHandler().getAchievement("Baller", Achievement.Type.GOLD).unlock();
             }
             gameOver = true;
-            gameClock.addEvent(g -> game.screenManager.setScreen(ScreenType.GAME_SCREEN), 4f);
+            gameClock.addEvent(g -> game.getScreenManager().setScreen(ScreenType.GAME_SCREEN), 4f);
 
         }, 30f);
     }
@@ -117,27 +117,27 @@ public class BasketBallScreen implements Screen, InputProcessor {
 
         camera.update();
 
-        game.batch.setProjectionMatrix(camera.combined);
+        game.getBatch().setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        game.batch.draw(backgroundTexture, 0, 0, 800, 600);
+        game.getBatch().begin();
+        game.getBatch().draw(backgroundTexture, 0, 0, 800, 600);
 
-        ball.render(game.batch);
+        ball.render(game.getBatch());
 
-        game.batch.draw(hoopTexture, 0, 0, 800, 600);
+        game.getBatch().draw(hoopTexture, 0, 0, 800, 600);
 
         if (gameOver){
-            font.draw(game.batch, "Times Up!", 100, 580);
+            font.draw(game.getBatch(), "Times Up!", 100, 580);
         }
         else {
-            font.draw(game.batch, "Press SPACE to bounce the ball into the hoop.", 100, 580);
-            font.draw(game.batch, "You have 30 seconds!", 270, 540);
+            font.draw(game.getBatch(), "Press SPACE to bounce the ball into the hoop.", 100, 580);
+            font.draw(game.getBatch(), "You have 30 seconds!", 270, 540);
         }
 
 
-        font.draw(game.batch, "Score: " + score, 350, 500);
+        font.draw(game.getBatch(), "Score: " + score, 350, 500);
 
-        game.batch.end();
+        game.getBatch().end();
     }
 
     @Override

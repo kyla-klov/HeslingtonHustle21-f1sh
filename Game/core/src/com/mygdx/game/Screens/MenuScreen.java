@@ -53,7 +53,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+                game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
             }
         });
 
@@ -61,7 +61,7 @@ public class MenuScreen implements Screen {
         leaderBoardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.screenManager.setScreen(ScreenType.LEADERBOARD_SCREEN);
+                game.getScreenManager().setScreen(ScreenType.LEADERBOARD_SCREEN);
             }
         });
 

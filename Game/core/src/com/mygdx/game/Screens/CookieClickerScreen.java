@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -28,6 +29,7 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
     private BitmapFont cookiesCollectedText;
     private final GameClock gameClock;
     private final GlyphLayout glyphLayout;
+    private final SpriteBatch batch;
     Texture plate;
     float plateX;
     float plateHeight = 100;
@@ -46,6 +48,7 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
 
     public CookieClickerScreen(HesHustle game){
         this.game = game;
+        batch = game.getBatch();
         random = new Random();
         glyphLayout = new GlyphLayout();
         gameClock = new GameClock();
@@ -74,8 +77,8 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
         gameClock.update(delta);
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-        game.batch.begin();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
         float deltaTime = Gdx.graphics.getDeltaTime();
         update(deltaTime);
 
@@ -93,18 +96,18 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
         if (startingPosition.y + cookieHeight < 0 || startingPosition.x + cookieWidth < 0 || startingPosition.x > vp.getWorldWidth()) {
             String gameOverText = "Game over. You collected " + cookiesCollected + " cookie(s)!";
             glyphLayout.setText(cookiesCollectedText, gameOverText);
-            cookiesCollectedText.draw(game.batch, gameOverText, (vp.getWorldWidth() - glyphLayout.width) / 2, (vp.getWorldHeight() - glyphLayout.height) / 2);
+            cookiesCollectedText.draw(batch, gameOverText, (vp.getWorldWidth() - glyphLayout.width) / 2, (vp.getWorldHeight() - glyphLayout.height) / 2);
             gameClock.addEvent(f -> endGame(), 1f);
         } else {
             String text = "Collected " + cookiesCollected + " cookie(s)!";
             glyphLayout.setText(cookiesCollectedText, text);
-            cookiesCollectedText.draw(game.batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);
-            game.batch.draw(cookie, startingPosition.x, startingPosition.y, cookieWidth, cookieHeight);
+            cookiesCollectedText.draw(batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);
+            batch.draw(cookie, startingPosition.x, startingPosition.y, cookieWidth, cookieHeight);
             cookieX = startingPosition.x;
             cookieY = startingPosition.y;
-            game.batch.draw(plate, plateX, (vp.getWorldHeight() - plateHeight) / 2 - 200, plateWidth, plateHeight);
+            batch.draw(plate, plateX, (vp.getWorldHeight() - plateHeight) / 2 - 200, plateWidth, plateHeight);
         }
-        game.batch.end();
+        batch.end();
 
     }
 
@@ -131,7 +134,7 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
     }
 
     public void endGame(){
-        game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+        game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
     }
 
 
