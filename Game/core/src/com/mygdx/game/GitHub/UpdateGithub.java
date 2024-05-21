@@ -15,18 +15,15 @@ public class UpdateGithub {
     private static final String REPO_OWNER = "kyla-klov"; // Repository owner's username
     private static final String REPO_NAME = "HeslingtonHustle21-f1sh";
     private static final String FILE_PATH = "Game/storage/PlayerData.txt";
-    private static final String ACCESS_TOKEN_ENCRYPTED = "Z2hwX2U1NU9RZzRIdXFLZGhwM2VjbHVFUkZQcFQzaUNRSTRaWXVHbg==";
     private static final String BRANCH = "main"; // Branch name
     private static final String URL = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/contents/" + FILE_PATH;
 
-    private static String decryptToken(String encryptedToken) {
-        // For simplicity, we're using Base64 decoding as our "decryption"
-        byte[] decodedBytes = Base64.getDecoder().decode(encryptedToken);
-        return new String(decodedBytes);
-    }
-
     public static void updateFileOnGitHub(String localFilePath) throws IOException {
-        String accessToken = decryptToken(ACCESS_TOKEN_ENCRYPTED);
+        String accessToken = System.getenv("GH_TOKEN");
+        if (accessToken == null || accessToken.isEmpty()) {
+            System.err.println("Error: GitHub access token is not set.");
+            return;
+        }
 
         OkHttpClient client = new OkHttpClient();
 
@@ -42,6 +39,7 @@ public class UpdateGithub {
             return;
         }
 
+        assert getResponse.body() != null;
         String responseBody = getResponse.body().string();
         Gson gson = new Gson();
         Map<String, Object> map = gson.fromJson(responseBody, Map.class);
@@ -84,6 +82,7 @@ public class UpdateGithub {
             return;
         }
 
+        assert response.body() != null;
         System.out.println("File updated successfully: " + response.body().string());
     }
 }
