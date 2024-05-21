@@ -21,7 +21,6 @@ import org.mockito.Spy;
 
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
 
 @RunWith(GdxTestRunner.class)
 public class PlayerControllerTest {
