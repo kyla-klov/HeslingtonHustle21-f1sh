@@ -1,19 +1,13 @@
 package com.mygdx.game.tests;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.Utils.ResourceManager;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Spy;
-
-import java.util.ArrayList;
 
 @RunWith(GdxTestRunner.class)
 public class ResourceManagerTest {
