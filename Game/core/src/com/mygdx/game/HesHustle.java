@@ -3,12 +3,8 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.Screens.BasketBallScreen;
-import com.mygdx.game.Screens.DuckGameScreen;
-import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Utils.AchievementHandler;
 import com.mygdx.game.Utils.ScreenManager;
 import com.mygdx.game.Utils.ScreenType;
@@ -21,7 +17,7 @@ public class HesHustle extends Game {
 
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
+        batch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("font.fnt"));
 		screenManager = new ScreenManager(this);
 		achievementHandler = new AchievementHandler();

@@ -70,7 +70,7 @@ public class GameScreen implements Screen {
         this.BGmusic = resourceManager.addDisposable(BGmusic);
         this.BGmusic.setLooping(true);
         uiElements = new UIElements(vp, game.achievementHandler);
-        nameTextField = new NameTextField(uiElements);
+        nameTextField = new NameTextField(vp);
         create();
     }
     public GameScreen(final HesHustle game) {
@@ -82,11 +82,11 @@ public class GameScreen implements Screen {
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
         TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get("collisionLayer");
         collisionLayer.setVisible(false);
-        Building comSci = new Building(530, 380, 100, 100, "Computer\nScience\nDepartment");
-        Building BBall = new Building(1450, 2000, 100, 100, "BasketBall");
-        Building duck = new Building(2112, 360, 100, 100, "Ducks");
-        Building langwith = new Building(1360, 1375, 100, 100, "Langwith");
-        Building piazza = new Building(2550, 1380, 100, 100, "Piazza");
+        Building comSci = new Building(530, 380,"Computer\nScience\nDepartment");
+        Building BBall = new Building(1450, 2000, "BasketBall");
+        Building duck = new Building(2112, 360, "Ducks");
+        Building langwith = new Building(1360, 1375, "Langwith");
+        Building piazza = new Building(2550, 1380, "Piazza");
 
         buildings.add(comSci);//separate building list to cycle through to find closest to player
         buildings.add(BBall);
@@ -116,10 +116,10 @@ public class GameScreen implements Screen {
 
         if (checkGameOverCondition()) {
             writeToFile();
-            game.setScreen(new EndScreen(game)); // Switch to EndScreen
+            game.screenManager.setScreen(ScreenType.END_SCREEN, eventM.calcScore()); // Switch to EndScreen
         }
 
-        int steps = (int) player.getDistanceTravelled() / 10;
+        int steps = (int) (player.getDistanceTravelled() / 7.5);
         if (steps >= 2500 && hiker == null){
             hiker = Achievement.Type.BRONZE;
             game.achievementHandler.getAchievement("Hiker", Achievement.Type.BRONZE).unlock();
@@ -201,10 +201,10 @@ public class GameScreen implements Screen {
         Building closest = null;
         float closDis = 200f;
         for (Building bd : buildings) {
-            if (Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.pos.x,bd.pos.y)) < closDis)
+            if (Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.getPos().x,bd.getPos().y)) < closDis)
             {
                 closest = bd;
-                closDis = (float) Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.pos.x,bd.pos.y));
+                closDis = (float) Math.sqrt(Vector2.dst2(player.pos.x,player.pos.y,bd.getPos().x,bd.getPos().y));
             }
         }
         return closest;

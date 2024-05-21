@@ -1,17 +1,11 @@
 package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
-import com.mygdx.game.HesHustle;
-import com.mygdx.game.Screens.GameScreen;
-import com.mygdx.game.Utils.GameClock;
-import com.mygdx.game.Utils.ScreenType;
 
 public class LightCycle {
     private final int size = 4000;

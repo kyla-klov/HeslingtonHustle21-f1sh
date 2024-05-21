@@ -2,13 +2,15 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,16 +22,23 @@ public class MenuScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final ResourceManager resourceManager;
+    private final OrthographicCamera camera;
 
 
     public MenuScreen(HesHustle game, ResourceManager resourceManager, Stage stage){
         this.game = game;
         this.resourceManager = resourceManager;
-        this.stage =  this.resourceManager.addDisposable(stage);
+        this.stage = stage;
+
+        camera = new OrthographicCamera();
+        Viewport vp = new FitViewport(1600, 900, camera);
+        vp.apply();
+
+        stage.setViewport(vp);
         initialiseMenu();
     }
     public MenuScreen(HesHustle game) {
-        this(game, new ResourceManager(), new Stage(new ScreenViewport()));
+        this(game, new ResourceManager(), new Stage());
     }
 
     private void initialiseMenu(){
@@ -48,6 +57,14 @@ public class MenuScreen implements Screen {
             }
         });
 
+        TextButton leaderBoardButton = new TextButton("Leader Board", skin);
+        leaderBoardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                game.screenManager.setScreen(ScreenType.LEADERBOARD_SCREEN);
+            }
+        });
+
 
         TextButton exitButton = new TextButton("Exit", skin);
         exitButton.addListener(new ClickListener() {
@@ -60,7 +77,8 @@ public class MenuScreen implements Screen {
         Table table = new Table();
         table.setFillParent(true);
         table.add(titleLabel).padBottom(50).row(); // Add the title label and move to the next row
-        table.add(playButton).pad(10).row(); // Add the play button and move to the next row
+        table.add(playButton).pad(10).row();
+        table.add(leaderBoardButton).pad(10).row();// Add the play button and move to the next row
         table.add(exitButton).pad(10); // Add the exit button
 
         stage.addActor(table);
@@ -81,6 +99,7 @@ public class MenuScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
     }
 
     @Override
@@ -93,6 +112,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void hide() {
+        Gdx.input.setInputProcessor(null);
     }
 
     @Override

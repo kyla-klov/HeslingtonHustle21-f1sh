@@ -50,12 +50,16 @@ public class AchievementHandler implements Disposable {
 
     private void generateAchievements(){
         achievements.add(new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE, "AchievementsDisplay/BallerAchievementBronze.png"));
-        achievements.add(new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.SILVER, "AchievementsDisplay/BallerAchievementSilver.png"));
-        achievements.add(new Achievement("Baller", "Score at least 15 points in basketball", Achievement.Type.GOLD, "AchievementsDisplay/BallerAchievementGold.png"));
+        achievements.add(new Achievement("Baller", "Score at least 10 points in basketball", Achievement.Type.SILVER, "AchievementsDisplay/BallerAchievementSilver.png"));
+        achievements.add(new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.GOLD, "AchievementsDisplay/BallerAchievementGold.png"));
 
         achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 20 seconds", Achievement.Type.BRONZE, "AchievementsDisplay/DuckAchievementBronze.png"));
         achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER, "AchievementsDisplay/DuckAchievementSilver.png"));
         achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD, "AchievementsDisplay/DuckAchievementGold.png"));
+
+        achievements.add(new Achievement("Feast to Fullest", "Eat 3 times in a day", Achievement.Type.BRONZE, "AchievementsDisplay/AchievementPlaceHolder.png"));
+        achievements.add(new Achievement("Feast to Fullest", "Eat 4 times in a day", Achievement.Type.SILVER, "AchievementsDisplay/AchievementPlaceHolder.png"));
+        achievements.add(new Achievement("Feast to Fullest", "Eat 5 times in a day", Achievement.Type.GOLD, "AchievementsDisplay/AchievementPlaceHolder.png"));
 
         achievements.add(new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementsDisplay/AchievementPlaceHolder.png"));
         achievements.add(new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER, "AchievementsDisplay/AchievementPlaceHolder.png"));

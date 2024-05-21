@@ -36,6 +36,7 @@ public class GameMusic {
         return this.musicLevel;
     }
 
+    @SuppressWarnings("unused")
     public Music getAudio() {
         return audio;
     }

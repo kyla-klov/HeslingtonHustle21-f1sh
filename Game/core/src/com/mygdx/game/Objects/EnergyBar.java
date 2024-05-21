@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.ResourceManager;
+import com.mygdx.game.Utils.ViewportAdapter;
 
 public class EnergyBar implements Disposable {
     private final Texture centre;
@@ -17,12 +19,12 @@ public class EnergyBar implements Disposable {
     private final Texture holderRight;
 
     private final ResourceManager resourceManager;
-    private final UIElements uiElements;
+    private final Viewport vp;
 
     private final float x, y, width, height, edgeWidth;
 
-    public EnergyBar(UIElements uiElements, float x, float y, float width, float height, float edgeWidth){
-        this.uiElements = uiElements;
+    public EnergyBar(Viewport vp, float x, float y, float width, float height, float edgeWidth){
+        this.vp = vp;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -38,12 +40,12 @@ public class EnergyBar implements Disposable {
     }
 
     public void render(SpriteBatch batch, float energy){
-        uiElements.drawUI(batch, holderLeft, x, y, edgeWidth, height);
-        uiElements.drawUI(batch, holderCentre, x+edgeWidth, y, width-edgeWidth*2, height);
-        uiElements.drawUI(batch, holderRight, x+width-edgeWidth, y, edgeWidth, height);
+        ViewportAdapter.drawUI(vp, batch, holderLeft, x, y, edgeWidth, height);
+        ViewportAdapter.drawUI(vp, batch, holderCentre, x+edgeWidth, y, width-edgeWidth*2, height);
+        ViewportAdapter.drawUI(vp, batch, holderRight, x+width-edgeWidth, y, edgeWidth, height);
 
-        Vector2 blCorner = uiElements.toScreen(x + edgeWidth * 0.41f, y);
-        Vector2 trCorner = uiElements.toScreen(x + width - edgeWidth * 0.41f, y + height);
+        Vector2 blCorner = ViewportAdapter.toScreen(vp, x + edgeWidth * 0.41f, y);
+        Vector2 trCorner = ViewportAdapter.toScreen(vp, x + width - edgeWidth * 0.41f, y + height);
         int scissorX = (int) blCorner.x;
         int scissorY = (int) blCorner.y;
         int scissorWidth = (int) ((trCorner.x - blCorner.x) * energy/100f);
@@ -52,9 +54,9 @@ public class EnergyBar implements Disposable {
         batch.draw(centre, 0, 0, 0, 0);
         Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);
         Gdx.gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);
-        uiElements.drawUI(batch, leftEdge, x, y, edgeWidth, height);
-        uiElements.drawUI(batch, centre, x+edgeWidth, y, width-edgeWidth*2, height);
-        uiElements.drawUI(batch, rightEdge, x+width-edgeWidth, y, edgeWidth, height);
+        ViewportAdapter.drawUI(vp, batch, leftEdge, x, y, edgeWidth, height);
+        ViewportAdapter.drawUI(vp, batch, centre, x+edgeWidth, y, width-edgeWidth*2, height);
+        ViewportAdapter.drawUI(vp, batch, rightEdge, x+width-edgeWidth, y, edgeWidth, height);
         batch.draw(centre, 0, 0, 0, 0);
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }

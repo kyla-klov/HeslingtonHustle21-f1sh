@@ -38,12 +38,6 @@ public class ScreenManager {
         game.setScreen(curScreen);
     }
 
-    public Screen getScreen(ScreenType screenType){
-        if (curScreenType == screenType) return curScreen;
-        return screensInMemory.get(screenType);
-    }
-
-    @SuppressWarnings("unused")
     private Screen createScreen(ScreenType screenType, Object... args){
         switch (screenType){
             case COOKIE_SCREEN:
@@ -55,11 +49,13 @@ public class ScreenManager {
             case PAUSE_SCREEN:
                 return new PauseScreen(game);
             case END_SCREEN:
-                return new EndScreen(game);
+                return new EndScreen(game, (float) args[0]);
             case BASKETBALL_SCREEN:
                 return new BasketBallScreen(game);
             case DUCK_GAME_SCREEN:
                 return new DuckGameScreen(game);
+            case LEADERBOARD_SCREEN:
+                return new LeaderBoardScreen(game);
             default:
                 return null;
         }

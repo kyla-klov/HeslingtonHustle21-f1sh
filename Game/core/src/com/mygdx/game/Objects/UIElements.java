@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.AchievementHandler;
+import com.mygdx.game.Utils.ViewportAdapter;
 
 public class UIElements {
     private final Viewport vp;
@@ -28,8 +29,8 @@ public class UIElements {
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         achievementsButton  = new Texture(Gdx.files.internal("badge.png"));
         tap = new Texture(Gdx.files.internal("tap.png"));
-        energyBar = new EnergyBar(this, 80, 600, 270, 50, 27);
-        achievementsDisplay = new AchievementsDisplay(this, achievementHandler, 1200, 370);
+        energyBar = new EnergyBar(vp, 80, 600, 270, 50, 27);
+        achievementsDisplay = new AchievementsDisplay(vp, achievementHandler, 1200, 370);
         startX = 1490; startY = 750;
         endX = 1475; endY = 775;
         tapActive = true;
@@ -66,44 +67,22 @@ public class UIElements {
     public void render(SpriteBatch batch, String time, int day, int sleep, int rec, int eat, int study, float energy, float score){
         energyBar.render(batch, energy);
         achievementsDisplay.render(batch);
-        drawUI(batch, achievementsButton, 1450, 800, 50, 50);
-        if (tapActive) drawUI(batch, tap, curX, curY, 50, 50);
+        ViewportAdapter.drawUI(vp, batch, achievementsButton, 1450, 800, 50, 50);
+        if (tapActive) ViewportAdapter.drawUI(vp, batch, tap, curX, curY, 50, 50);
         font.getData().setScale(1.4f);
-        drawFont(font, batch, "Score: " + score, 100, 825);
+        ViewportAdapter.drawFont(vp, font, batch, "Score: " + score, 100, 825);
         font.getData().setScale(1f);
-        drawFont(font, batch, time, 1200, 840);
-        drawFont(font, batch, "Day: " + day, 1050, 840);
-        drawFont(font, batch, "Sleep Count: " + sleep, 100, 780);
-        drawFont(font, batch, "Rec Count: " + rec, 100, 750);
-        drawFont(font, batch, "Eat Count: " + eat, 100, 720);
-        drawFont(font, batch, "Study Hours: " + study, 100, 690);
-    }
-
-    public void drawUI(SpriteBatch batch, Texture txt, float x, float y, float width, float height){
-        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);
-    }
-
-    public void drawFont(BitmapFont font, SpriteBatch batch, String text, float x, float y){
-        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);
-    }
-
-    public Vector2 toScreen(float x, float y){
-        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);
-    }
-
-    public Vector2 screenToGame (float screenX, float screenY){
-        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();
-        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();
-        return new Vector2(transX, transY);
-    }
-
-    public boolean isPressed(float touchX, float touchY, float x, float y, float width, float height) {
-        return (touchX > x && touchX < x + width && touchY > y && touchY < y + height);
+        ViewportAdapter.drawFont(vp, font, batch, time, 1200, 840);
+        ViewportAdapter.drawFont(vp, font, batch, "Day: " + day, 1050, 840);
+        ViewportAdapter.drawFont(vp, font, batch, "Sleep Count: " + sleep, 100, 780);
+        ViewportAdapter.drawFont(vp, font, batch, "Rec Count: " + rec, 100, 750);
+        ViewportAdapter.drawFont(vp, font, batch, "Eat Count: " + eat, 100, 720);
+        ViewportAdapter.drawFont(vp, font, batch, "Study Hours: " + study, 100, 690);
     }
 
     public void touchDown(int screenX, int screenY){
-        Vector2 gamePos = screenToGame(screenX, screenY);
-        if (isPressed(gamePos.x, gamePos.y, 1450, 800, 50, 50)){
+        Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);
+        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, 1450, 800, 50, 50)){
             tapActive = false;
             if (achievementsDisplay.isVisible()){
                 achievementsDisplay.hide();

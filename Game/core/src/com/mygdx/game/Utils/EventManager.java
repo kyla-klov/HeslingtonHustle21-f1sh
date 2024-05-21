@@ -17,8 +17,8 @@ public class EventManager {
     Event curEvent = null;
 
     private Integer energy;
-    boolean frozen = false;
-    List<Event> playedEvents;
+    private boolean frozen = false;
+    private final List<Event> playedEvents;
     private final ResourceManager resourceManager;
     private final HesHustle game;
     private final GameClock gameClock;
@@ -55,6 +55,19 @@ public class EventManager {
         PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
         Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/langwith.png")));
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", resourceManager.addDisposable(new ActivityImage("Activitys/piazza.png")));
+    }
+
+    private void updateMealAchievement(){
+        int mealsEaten = mealTimes.get(gameClock.getDays()-1).size();
+        if (mealsEaten >= 3){
+            game.achievementHandler.getAchievement("Feast to Fullest", Achievement.Type.BRONZE).unlock();
+        }
+        if (mealsEaten >= 4){
+            game.achievementHandler.getAchievement("Feast to Fullest", Achievement.Type.SILVER).unlock();
+        }
+        if (mealsEaten >= 5){
+            game.achievementHandler.getAchievement("Feast to Fullest", Achievement.Type.GOLD).unlock();
+        }
     }
 
     public Event getCurEvent() {
@@ -94,6 +107,7 @@ public class EventManager {
             } else if (curEvent.getEventType() == Event.Type.EAT){
                 eat++;
                 addMeal(gameClock.getHours());
+                updateMealAchievement();
             } else if (curEvent.getEventType() == Event.Type.RECREATIONAL){
                 rec++;
                 dailyRecreational[gameClock.getDays()-1]++;

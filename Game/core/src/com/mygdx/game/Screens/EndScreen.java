@@ -1,21 +1,15 @@
 package com.mygdx.game.Screens;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mygdx.game.HesHustle;
-import com.mygdx.game.Objects.LeaderBoard;
-import com.mygdx.game.Utils.Achievement;
-
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class EndScreen implements Screen{
     private final HesHustle game;
@@ -24,10 +18,11 @@ public class EndScreen implements Screen{
     private final TextButton playAgainButton;
     private final TextButton mainMenuButton;
     private final TextButton exitButton;
+    private final float score;
 
 
-    public EndScreen(final HesHustle game) {
-        this(game, new Stage(new ScreenViewport()),
+    public EndScreen(final HesHustle game, final float score) {
+        this(game, score, new Stage(new ScreenViewport()),
                 new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json")));
 //        this.game = game;
 //        stage = new Stage(new ScreenViewport());
@@ -39,19 +34,20 @@ public class EndScreen implements Screen{
 //        setupUi();
     }
 
-    private EndScreen(final HesHustle game, final Stage stage, final Skin skin) {
-        this(game, stage, skin,
+    private EndScreen(final HesHustle game, final float score, final Stage stage, final Skin skin) {
+        this(game, score, stage, skin,
                 new TextButton("Play Again", skin),
                 new TextButton("Main Menu", skin),
                 new TextButton("Exit", skin));
     }
-    public EndScreen(final HesHustle game,
+    public EndScreen(final HesHustle game, final float score,
                      final Stage stage,
                      final Skin skin,
                      final TextButton playAgainButton,
                      final TextButton mainMenuButton,
                      final TextButton exitButton) {
         this.game = game;
+        this.score = score;
         this.stage = stage;
         this.skin = skin;
         Gdx.input.setInputProcessor(stage);
@@ -68,6 +64,11 @@ public class EndScreen implements Screen{
         table.setFillParent(true);
         stage.addActor(table);
 
+        Label endLabel = new Label((score >= 40f) ? "Congratulations!":"Unlucky!", skin, "default");
+        endLabel.setFontScale(2.0f);
+
+        Label scoreLabel = new Label("Score: " + score, skin, "default");
+        scoreLabel.setFontScale(1.0f);
 
         // Add functionality to buttons
         playAgainButton.addListener(event -> {
@@ -89,6 +90,8 @@ public class EndScreen implements Screen{
         });
 
         // Layout the buttons in the table
+        table.add(endLabel).pad(10).row();
+        table.add(scoreLabel).pad(10).row();
         table.add(playAgainButton).pad(10).row();
         table.add(mainMenuButton).pad(10).row();
         table.add(exitButton).pad(10);

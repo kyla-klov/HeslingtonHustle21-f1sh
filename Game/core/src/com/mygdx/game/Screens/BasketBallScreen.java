@@ -30,8 +30,9 @@ public class BasketBallScreen implements Screen, InputProcessor {
     private final Texture hoopTexture;
     private final Texture backgroundTexture;
     private final Vector2 startingPos;
-    BitmapFont font;
+    private final BitmapFont font;
     private boolean goal;
+    private boolean gameOver;
     private int score;
 
     @SuppressWarnings("unused")
@@ -63,6 +64,7 @@ public class BasketBallScreen implements Screen, InputProcessor {
         if (delta >= 0.1) return;
         camera.update();
         gameClock.update(delta);
+        if (gameOver) return;
         if (!goal && ballHoop.isGoal(ball, delta)){
             goal = true;
             gameClock.addEvent(f -> {
@@ -83,13 +85,15 @@ public class BasketBallScreen implements Screen, InputProcessor {
             if (score >= 8){
                 game.achievementHandler.getAchievement("Baller", Achievement.Type.BRONZE).unlock();
             }
-            if (score >= 12){
+            if (score >= 10){
                 game.achievementHandler.getAchievement("Baller", Achievement.Type.SILVER).unlock();
             }
-            if (score >= 15){
+            if (score >= 12){
                 game.achievementHandler.getAchievement("Baller", Achievement.Type.GOLD).unlock();
             }
-            game.screenManager.setScreen(ScreenType.GAME_SCREEN);
+            gameOver = true;
+            gameClock.addEvent(g -> game.screenManager.setScreen(ScreenType.GAME_SCREEN), 4f);
+
         }, 30f);
     }
 
@@ -122,8 +126,13 @@ public class BasketBallScreen implements Screen, InputProcessor {
 
         game.batch.draw(hoopTexture, 0, 0, 800, 600);
 
-        font.draw(game.batch, "Press SPACE to bounce the ball into the hoop.", 100, 580);
-        font.draw(game.batch, "You have 30 seconds!", 270, 540);
+        if (gameOver){
+            font.draw(game.batch, "Times Up!", 100, 580);
+        }
+        else {
+            font.draw(game.batch, "Press SPACE to bounce the ball into the hoop.", 100, 580);
+            font.draw(game.batch, "You have 30 seconds!", 270, 540);
+        }
 
 
         font.draw(game.batch, "Score: " + score, 350, 500);

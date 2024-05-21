@@ -221,7 +221,7 @@ public class PlayerController {
     public void interact(){
         if (nearBD!=null && EM.notFrozen())
         {
-            EM.interact(nearBD.name);
+            EM.interact(nearBD.getName());
         }
 
     }

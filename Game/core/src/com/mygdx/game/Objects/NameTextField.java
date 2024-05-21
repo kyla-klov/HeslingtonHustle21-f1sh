@@ -5,19 +5,21 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Utils.ViewportAdapter;
 
 public class NameTextField {
     private final StringBuilder inputText;
     private final BitmapFont font;
     private final Texture textField;
-    private final UIElements uiElements;
+    private final Viewport vp;
 
     private String value;
     private boolean capsLockOn;
     private boolean active;
 
-    public NameTextField(UIElements uiElements) {
-        this.uiElements = uiElements;
+    public NameTextField(Viewport vp) {
+        this.vp = vp;
         inputText = new StringBuilder();
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         textField = new Texture(Gdx.files.internal("NameTextField.png"));
@@ -29,8 +31,8 @@ public class NameTextField {
         handleInput();
         float x = 800 - 338/2f;
         float y = 450 - 157/2f;
-        uiElements.drawUI(batch, textField, x, y, 338, 157);
-        uiElements.drawFont(font, batch, inputText.toString(), x+70, y+68);
+        ViewportAdapter.drawUI(vp, batch, textField, x, y, 338, 157);
+        ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), x+70, y+68);
     }
 
     private void handleInput() {

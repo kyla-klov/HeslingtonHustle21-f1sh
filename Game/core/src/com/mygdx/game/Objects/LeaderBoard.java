@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Utils.ViewportAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,18 +36,21 @@ public class LeaderBoard implements Disposable {
     private final Texture upArrowTexture;
     private final Texture downArrowTexture;
     private final BitmapFont font;
-    private final float x, y;
+    private final Viewport vp;
+    private final float x, y, width, height;
 
     private ArrayList<Data> data;
     private boolean topFive;
+    private int page;
 
-    UIElements uiElements;
-
-    public LeaderBoard(UIElements uiElements, float x, float y) {
-        this.uiElements = uiElements;
+    public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
+        this.vp = vp;
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
         topFive = true;
+        page = 0;
         font = new BitmapFont(Gdx.files.internal("font.fnt"));
         data = readPlayerData();
         Collections.sort(data);
@@ -59,15 +64,27 @@ public class LeaderBoard implements Disposable {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             touchDown(Gdx.input.getX(), Gdx.input.getY());
         }
-        uiElements.drawUI(batch, leaderBoardTexture, x, y, 301, 377);
-        uiElements.drawUI(batch, upArrowTexture, x+250, y+300, 32, 32);
-        uiElements.drawUI(batch, downArrowTexture, x+250, y+32, 32, 32);
-        uiElements.drawFont(font, batch, "Leader board", x+60, y+350);
-        int c = topFive ? 0 : 5;
-        for (int i = c; i < data.size(); i++) {
+        ViewportAdapter.drawUI(vp, batch, leaderBoardTexture, x, y, width, height);
+        ViewportAdapter.drawUI(vp, batch, upArrowTexture, x+250*width/301f, y+300*height/377f, 32*width/301f, 32*height/377f);
+        ViewportAdapter.drawUI(vp, batch, downArrowTexture, x+250*width/301f, y+32*height/377f, 32*width/301f, 32*height/377f);
+        ViewportAdapter.drawFont(vp, font, batch, "Leader board", x+60*width/301f, y+350*height/377f);
+        int c = page * 5;
+        int upper = c+5;
+        if (data.size() < upper){
+            upper = data.size();
+        }
+        for (int i = c; i < upper; i++) {
             Data d = data.get(i);
-            uiElements.drawFont(font, batch, (i+1) + ". " + d.name, x + 50, y + 300 - i*50);
-            uiElements.drawFont(font, batch, Float.toString(d.score), x + 170, y + 300 - i*50);
+            String name = d.name;
+            String score = Float.toString(d.score);
+
+            if (name.length() >= 5){
+                name = name.substring(0, 5);
+                score = " " + score;
+            }
+            float h = y + (300 - (i-c)*50)*height/377f;
+            ViewportAdapter.drawFont(vp, font, batch, (i+1) + ". " + name, x + 50*width/301f, h);
+            ViewportAdapter.drawFont(vp, font, batch, score, x + 170*width/301f, h);
         }
     }
 
@@ -89,12 +106,14 @@ public class LeaderBoard implements Disposable {
     }
 
     public void touchDown(int screenX, int screenY) {
-        Vector2 gamePos = uiElements.screenToGame(screenX, screenY);
-        if (uiElements.isPressed(gamePos.x, gamePos.y, x + 250, y + 300, 32, 32)){
+        Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);
+        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 300*height/377f, 32*width/301f, 32*height/377f)){
             topFive = true;
+            if (page > 0) page--;
         }
-        if (uiElements.isPressed(gamePos.x, gamePos.y, x + 250, y + 32, 32, 32)){
+        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 32*height/377f, 32*width/301f, 32*height/377f)){
             topFive = false;
+            if (page < data.size()/5) page++;
         }
     }
 
