@@ -77,6 +77,7 @@ public class CheckinGameScreen implements Screen {
             gameOver();
         }
 
+        //Activates timer on phases 1 and 4
         if (phase == 1) {
             timer += delta;
             if (timer >= 4f) {
@@ -100,23 +101,34 @@ public class CheckinGameScreen implements Screen {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         vp.apply();
+
         batch.begin();
+
+        //Phase 0, asks for study duration
         if (phase == 0) {
             ViewportAdapter.drawFont(vp, font, batch, "Enter study duration", 650, 500);
             ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), 775, 450);
             ViewportAdapter.drawFont(vp, font, batch, message, 500, 350);
+
+        //Phase 1, displays check-in code
         } else if (phase == 1) {
             ViewportAdapter.drawFont(vp, font, batch, "Remember the Check-in code!", 650, 500);
             ViewportAdapter.drawFont(vp, font, batch, answer, 775, 450);
+
+        //Phase 2, user types in check-in code
         } else if (phase == 2) {
             ViewportAdapter.drawFont(vp, font, batch, "Enter the Check-in code", 650, 500);
             ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), 775, 450);
+
+        //Phase 3, processes answer
         } else if (phase == 3) {
             if (!answer.equals(guess)) {
-                gameOver();
+                gameOver(); //Ends game early if incorrect
             }
             phase++;
             round++;
+
+        //Phase 4, displays result if correct
         } else if (phase == 4) {
             ViewportAdapter.drawFont(vp, font, batch, "Correct!", 750, 500);
         }
@@ -131,21 +143,23 @@ public class CheckinGameScreen implements Screen {
             inputText.setLength(inputText.length() - 1);
         }
 
+        //Processes number key input on phases 0 and 2
         for (int i = Input.Keys.NUM_0; i <= Input.Keys.NUM_9; i++) {
             if (Gdx.input.isKeyJustPressed(i) && (phase == 0 || phase == 2)) {
                 inputText.append(Input.Keys.toString(i));
             }
         }
 
+        //Processes enter key presses on phases 0 and 2
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (phase == 2) {
                 phase++;
                 guess = inputText.toString();
                 inputText.setLength(0);
-            } else {
+            } else if (phase == 0){
                 int value = 0;
                 if (inputText.length() > 0) value = Integer.parseInt(inputText.toString());
-                if (value == 0 || value >= 5) {
+                if (value == 0 || value > 5) {
                     message = "Please enter a number between 1 and 5";
                 } else {
                     phase++;
@@ -177,7 +191,7 @@ public class CheckinGameScreen implements Screen {
      * Handles the end of the game and transitions to another screen.
      */
     private void gameOver() {
-        eventManager.addStudyHours(round );
+        eventManager.addStudyHours(round);
         game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
     }
 

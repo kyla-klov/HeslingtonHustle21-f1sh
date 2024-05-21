@@ -254,7 +254,7 @@ public class EventManager {
                 s5 = 0;
                 break;
         }
-        return (s1 + s3 + s4 + s5) / 5f;
+        return (s1 + s3 + s4 + s5) / 4f;
 
     }
 
