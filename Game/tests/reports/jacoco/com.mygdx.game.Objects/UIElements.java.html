@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.AchievementHandler;
+import com.mygdx.game.Utils.ViewportAdapter;
 
 public class UIElements {
     private final Viewport vp;
@@ -23,97 +24,75 @@ public class UIElements {
     private boolean tapActive;
     private boolean buttonPressed;
 
-<span class="fc" id="L26">    public UIElements(Viewport vp, AchievementHandler achievementHandler) {</span>
-<span class="fc" id="L27">        this.vp = vp;</span>
-<span class="fc" id="L28">        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));</span>
-<span class="fc" id="L29">        achievementsButton  = new Texture(Gdx.files.internal(&quot;badge.png&quot;));</span>
-<span class="fc" id="L30">        tap = new Texture(Gdx.files.internal(&quot;tap.png&quot;));</span>
-<span class="fc" id="L31">        energyBar = new EnergyBar(this, 80, 600, 270, 50, 27);</span>
-<span class="fc" id="L32">        achievementsDisplay = new AchievementsDisplay(this, achievementHandler, 1200, 370);</span>
-<span class="fc" id="L33">        startX = 1490; startY = 750;</span>
-<span class="fc" id="L34">        endX = 1475; endY = 775;</span>
-<span class="fc" id="L35">        tapActive = true;</span>
-<span class="fc" id="L36">    }</span>
+<span class="nc" id="L27">    public UIElements(Viewport vp, AchievementHandler achievementHandler) {</span>
+<span class="nc" id="L28">        this.vp = vp;</span>
+<span class="nc" id="L29">        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));</span>
+<span class="nc" id="L30">        achievementsButton  = new Texture(Gdx.files.internal(&quot;badge.png&quot;));</span>
+<span class="nc" id="L31">        tap = new Texture(Gdx.files.internal(&quot;tap.png&quot;));</span>
+<span class="nc" id="L32">        energyBar = new EnergyBar(vp, 80, 600, 270, 50, 27);</span>
+<span class="nc" id="L33">        achievementsDisplay = new AchievementsDisplay(vp, achievementHandler, 1200, 370);</span>
+<span class="nc" id="L34">        startX = 1490; startY = 750;</span>
+<span class="nc" id="L35">        endX = 1475; endY = 775;</span>
+<span class="nc" id="L36">        tapActive = true;</span>
+<span class="nc" id="L37">    }</span>
 
     public void update(float deltaTime){
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L40">            buttonPressed = true;</span>
-<span class="nc" id="L41">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L41">            buttonPressed = true;</span>
+<span class="nc" id="L42">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
         }
-<span class="nc bnc" id="L43" title="All 4 branches missed.">        if (buttonPressed &amp;&amp; !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L44">            buttonPressed = false;</span>
-<span class="nc" id="L45">            touchUp();</span>
+<span class="nc bnc" id="L44" title="All 4 branches missed.">        if (buttonPressed &amp;&amp; !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L45">            buttonPressed = false;</span>
+<span class="nc" id="L46">            touchUp();</span>
         }
-<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (!tapActive) return;</span>
-<span class="nc" id="L48">        float duration = 1.0f; // Duration of the glide in seconds</span>
-<span class="nc" id="L49">        float easingFactor = deltaTime / duration; // Adjust this value to control the speed</span>
-<span class="nc" id="L50">        progress += easingFactor;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (!tapActive) return;</span>
+<span class="nc" id="L49">        float duration = 1.0f; // Duration of the glide in seconds</span>
+<span class="nc" id="L50">        float easingFactor = deltaTime / duration; // Adjust this value to control the speed</span>
+<span class="nc" id="L51">        progress += easingFactor;</span>
 
         // Quadratic easing out: f(t) = -t*(t-2)
-<span class="nc" id="L53">        float easedProgress = -progress * (progress - 2);</span>
+<span class="nc" id="L54">        float easedProgress = -progress * (progress - 2);</span>
 
         // Update current position based on eased progress
-<span class="nc" id="L56">        curX = startX + (endX - startX) * easedProgress;</span>
-<span class="nc" id="L57">        curY = startY + (endY - startY) * easedProgress;</span>
+<span class="nc" id="L57">        curX = startX + (endX - startX) * easedProgress;</span>
+<span class="nc" id="L58">        curY = startY + (endY - startY) * easedProgress;</span>
 
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (progress &gt;= 2f){</span>
-<span class="nc" id="L60">            progress = 0.0f;</span>
-<span class="nc" id="L61">            curX = startX;</span>
-<span class="nc" id="L62">            curY = startY;</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">        if (progress &gt;= 2f){</span>
+<span class="nc" id="L61">            progress = 0.0f;</span>
+<span class="nc" id="L62">            curX = startX;</span>
+<span class="nc" id="L63">            curY = startY;</span>
         }
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L65">    }</span>
 
     public void render(SpriteBatch batch, String time, int day, int sleep, int rec, int eat, int study, float energy, float score){
-<span class="nc" id="L67">        energyBar.render(batch, energy);</span>
-<span class="nc" id="L68">        achievementsDisplay.render(batch);</span>
-<span class="nc" id="L69">        drawUI(batch, achievementsButton, 1450, 800, 50, 50);</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (tapActive) drawUI(batch, tap, curX, curY, 50, 50);</span>
-<span class="nc" id="L71">        font.getData().setScale(1.4f);</span>
-<span class="nc" id="L72">        drawFont(font, batch, &quot;Score: &quot; + score, 100, 825);</span>
-<span class="nc" id="L73">        font.getData().setScale(1f);</span>
-<span class="nc" id="L74">        drawFont(font, batch, time, 1200, 840);</span>
-<span class="nc" id="L75">        drawFont(font, batch, &quot;Day: &quot; + day, 1050, 840);</span>
-<span class="nc" id="L76">        drawFont(font, batch, &quot;Sleep Count: &quot; + sleep, 100, 780);</span>
-<span class="nc" id="L77">        drawFont(font, batch, &quot;Rec Count: &quot; + rec, 100, 750);</span>
-<span class="nc" id="L78">        drawFont(font, batch, &quot;Eat Count: &quot; + eat, 100, 720);</span>
-<span class="nc" id="L79">        drawFont(font, batch, &quot;Study Hours: &quot; + study, 100, 690);</span>
-<span class="nc" id="L80">    }</span>
-
-    public void drawUI(SpriteBatch batch, Texture txt, float x, float y, float width, float height){
-<span class="nc" id="L83">        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);</span>
-<span class="nc" id="L84">    }</span>
-
-    public void drawFont(BitmapFont font, SpriteBatch batch, String text, float x, float y){
-<span class="nc" id="L87">        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);</span>
-<span class="nc" id="L88">    }</span>
-
-    public Vector2 toScreen(float x, float y){
-<span class="nc" id="L91">        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);</span>
-    }
-
-    public Vector2 screenToGame (float screenX, float screenY){
-<span class="nc" id="L95">        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();</span>
-<span class="nc" id="L96">        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();</span>
-<span class="nc" id="L97">        return new Vector2(transX, transY);</span>
-    }
-
-    public boolean isPressed(float touchX, float touchY, float x, float y, float width, float height) {
-<span class="nc bnc" id="L101" title="All 8 branches missed.">        return (touchX &gt; x &amp;&amp; touchX &lt; x + width &amp;&amp; touchY &gt; y &amp;&amp; touchY &lt; y + height);</span>
-    }
+<span class="nc" id="L68">        energyBar.render(batch, energy);</span>
+<span class="nc" id="L69">        achievementsDisplay.render(batch);</span>
+<span class="nc" id="L70">        ViewportAdapter.drawUI(vp, batch, achievementsButton, 1450, 800, 50, 50);</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (tapActive) ViewportAdapter.drawUI(vp, batch, tap, curX, curY, 50, 50);</span>
+<span class="nc" id="L72">        font.getData().setScale(1.4f);</span>
+<span class="nc" id="L73">        ViewportAdapter.drawFont(vp, font, batch, &quot;Score: &quot; + score, 100, 825);</span>
+<span class="nc" id="L74">        font.getData().setScale(1f);</span>
+<span class="nc" id="L75">        ViewportAdapter.drawFont(vp, font, batch, time, 1200, 840);</span>
+<span class="nc" id="L76">        ViewportAdapter.drawFont(vp, font, batch, &quot;Day: &quot; + day, 1050, 840);</span>
+<span class="nc" id="L77">        ViewportAdapter.drawFont(vp, font, batch, &quot;Sleep Count: &quot; + sleep, 100, 780);</span>
+<span class="nc" id="L78">        ViewportAdapter.drawFont(vp, font, batch, &quot;Rec Count: &quot; + rec, 100, 750);</span>
+<span class="nc" id="L79">        ViewportAdapter.drawFont(vp, font, batch, &quot;Eat Count: &quot; + eat, 100, 720);</span>
+<span class="nc" id="L80">        ViewportAdapter.drawFont(vp, font, batch, &quot;Study Hours: &quot; + study, 100, 690);</span>
+<span class="nc" id="L81">    }</span>
 
     public void touchDown(int screenX, int screenY){
-<span class="nc" id="L105">        Vector2 gamePos = screenToGame(screenX, screenY);</span>
-<span class="nc bnc" id="L106" title="All 2 branches missed.">        if (isPressed(gamePos.x, gamePos.y, 1450, 800, 50, 50)){</span>
-<span class="nc" id="L107">            tapActive = false;</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">            if (achievementsDisplay.isVisible()){</span>
-<span class="nc" id="L109">                achievementsDisplay.hide();</span>
+<span class="nc" id="L84">        Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, 1450, 800, 50, 50)){</span>
+<span class="nc" id="L86">            tapActive = false;</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            if (achievementsDisplay.isVisible()){</span>
+<span class="nc" id="L88">                achievementsDisplay.hide();</span>
             } else{
-<span class="nc" id="L111">                achievementsDisplay.show();</span>
+<span class="nc" id="L90">                achievementsDisplay.show();</span>
             }
         }
-<span class="nc" id="L114">    }</span>
+<span class="nc" id="L93">    }</span>
 
     public void touchUp(){
-<span class="nc" id="L117">    }</span>
+<span class="nc" id="L96">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
