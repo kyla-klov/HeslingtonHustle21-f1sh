@@ -44,7 +44,7 @@ public class PlayerController {
     /**
      * Animation for each state
      */
-    private Animation IDLE_LEFT,
+    public Animation IDLE_LEFT,
             IDLE_UP,
             IDLE_RIGHT,
             IDLE_DOWN,
@@ -69,7 +69,7 @@ public class PlayerController {
     /**Detects player collision
      *
      */
-    CollisionDetector collisionDetector;
+    private final CollisionDetector collisionDetector;
 
     /**
      * Constructor of PlayerController
@@ -113,19 +113,19 @@ public class PlayerController {
      */
     public void update (float deltaTime) {
         //get texture region to draw
-<span class="nc" id="L116">        txr = getAnim(Pstate).getFrame(deltaTime);</span>
-<span class="nc bnc" id="L117" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){</span>
-<span class="nc" id="L118">            interact();</span>
+<span class="fc" id="L116">        txr = getAnim(Pstate).getFrame(deltaTime);</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){</span>
+<span class="fc" id="L118">            interact();</span>
         }
         //update position using normalised direction vector using vector addition (delta time in scalar)
-<span class="nc bnc" id="L121" title="All 2 branches missed.">        if (EM.notFrozen()){</span>
-<span class="nc" id="L122">            Vector2 newPos = pos.cpy().mulAdd(colCorrect(getDir()).nor(),deltaTime*300);</span>
-<span class="nc" id="L123">            float distance = pos.cpy().sub(newPos).len();</span>
-<span class="nc" id="L124">            distanceTravelled += distance;</span>
-<span class="nc" id="L125">            pos = newPos;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">        if (EM.notFrozen()){</span>
+<span class="fc" id="L122">            Vector2 newPos = pos.cpy().mulAdd(colCorrect(getDir()).nor(),deltaTime*300);</span>
+<span class="fc" id="L123">            float distance = pos.cpy().sub(newPos).len();</span>
+<span class="fc" id="L124">            distanceTravelled += distance;</span>
+<span class="fc" id="L125">            pos = newPos;</span>
 
         }
-<span class="nc" id="L128">    }</span>
+<span class="fc" id="L128">    }</span>
 <span class="fc" id="L129">    public Vector2 getPos() { return pos; }</span>
 
 <span class="fc" id="L131">    public float getWidth() { return width; }</span>
@@ -134,20 +134,20 @@ public class PlayerController {
 
     public Vector2 getDir() {
         //find overall direction of inputs
-<span class="nc" id="L137">        Vector2 dir = new Vector2(0,0);</span>
-<span class="nc bnc" id="L138" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.W)){</span>
-<span class="nc" id="L139">            dir.y++;</span>
+<span class="fc" id="L137">        Vector2 dir = new Vector2(0,0);</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (Gdx.input.isKeyPressed(Input.Keys.W)){</span>
+<span class="fc" id="L139">            dir.y++;</span>
         }
-<span class="nc bnc" id="L141" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.S)){</span>
-<span class="nc" id="L142">            dir.y--;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        if (Gdx.input.isKeyPressed(Input.Keys.S)){</span>
+<span class="fc" id="L142">            dir.y--;</span>
         }
-<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.A)){</span>
-<span class="nc" id="L145">            dir.x--;</span>
+<span class="fc bfc" id="L144" title="All 2 branches covered.">        if (Gdx.input.isKeyPressed(Input.Keys.A)){</span>
+<span class="fc" id="L145">            dir.x--;</span>
         }
-<span class="nc bnc" id="L147" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.D)){</span>
-<span class="nc" id="L148">            dir.x++;</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">        if (Gdx.input.isKeyPressed(Input.Keys.D)){</span>
+<span class="fc" id="L148">            dir.x++;</span>
         }
-<span class="nc" id="L150">        return dir;</span>
+<span class="fc" id="L150">        return dir;</span>
     }
 
     /**
@@ -157,12 +157,13 @@ public class PlayerController {
      */
     public Vector2 colCorrect(Vector2 dir)
     {
-<span class="nc" id="L160">        Vector2 colDir = new Vector2(dir.x,dir.y);</span>
-<span class="nc bnc" id="L161" title="All 4 branches missed.">        if ((dir.x==1) &amp;&amp; collisionDetector.collidesRight()){colDir.x=0;}</span>
-<span class="nc bnc" id="L162" title="All 4 branches missed.">        if ((dir.x==-1) &amp;&amp; collisionDetector.collidesLeft()){colDir.x=0;}</span>
-<span class="nc bnc" id="L163" title="All 4 branches missed.">        if ((dir.y==1) &amp;&amp; collisionDetector.collidesUp()){colDir.y=0;}</span>
-<span class="nc bnc" id="L164" title="All 4 branches missed.">        if ((dir.y==-1) &amp;&amp; collisionDetector.collidesDown()){colDir.y=0;}</span>
-<span class="nc" id="L165">        return colDir;</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (dir == null) return null;</span>
+<span class="fc" id="L161">        Vector2 colDir = new Vector2(dir.x,dir.y);</span>
+<span class="fc bfc" id="L162" title="All 4 branches covered.">        if ((dir.x==1) &amp;&amp; collisionDetector.collidesRight()){colDir.x=0;}</span>
+<span class="pc bpc" id="L163" title="1 of 4 branches missed.">        if ((dir.x==-1) &amp;&amp; collisionDetector.collidesLeft()){colDir.x=0;}</span>
+<span class="fc bfc" id="L164" title="All 4 branches covered.">        if ((dir.y==1) &amp;&amp; collisionDetector.collidesUp()){colDir.y=0;}</span>
+<span class="pc bpc" id="L165" title="1 of 4 branches missed.">        if ((dir.y==-1) &amp;&amp; collisionDetector.collidesDown()){colDir.y=0;}</span>
+<span class="fc" id="L166">        return colDir;</span>
     }
 
     /**
@@ -172,63 +173,62 @@ public class PlayerController {
      */
     public Animation getAnim(state Pstate)
     {
-<span class="nc" id="L175">        Vector2 dir = getDir();</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">        if (Objects.equals(dir, new Vector2(0, 0)))</span>
+<span class="fc" id="L176">        Vector2 dir = getDir();</span>
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (Objects.equals(dir, new Vector2(0, 0)))</span>
         {
-<span class="nc bnc" id="L178" title="All 5 branches missed.">            switch (Pstate)</span>
+<span class="pc bpc" id="L179" title="1 of 5 branches missed.">            switch (Pstate)</span>
             {
                 case WALK_UP:
                 case IDLE_UP:
-<span class="nc" id="L182">                    return IDLE_UP;</span>
+<span class="fc" id="L183">                    return IDLE_UP;</span>
                 case WALK_DOWN:
                 case IDLE_DOWN:
-<span class="nc" id="L185">                    return IDLE_DOWN;</span>
+<span class="fc" id="L186">                    return IDLE_DOWN;</span>
                 case WALK_RIGHT:
                 case IDLE_RIGHT:
-<span class="nc" id="L188">                    return IDLE_RIGHT;</span>
+<span class="fc" id="L189">                    return IDLE_RIGHT;</span>
                 case WALK_LEFT:
                 case IDLE_LEFT:
-<span class="nc" id="L191">                    return IDLE_LEFT;</span>
+<span class="pc" id="L192">                    return IDLE_LEFT;</span>
             }
         }
         else
         {
-<span class="nc bnc" id="L196" title="All 2 branches missed.">            if (dir.x == 1){</span>
-<span class="nc" id="L197">                return WALK_RIGHT;</span>
-<span class="nc bnc" id="L198" title="All 2 branches missed.">            } else if (dir.x == -1){</span>
-<span class="nc" id="L199">                return WALK_LEFT;</span>
+<span class="fc bfc" id="L197" title="All 2 branches covered.">            if (dir.x == 1){</span>
+<span class="fc" id="L198">                return WALK_RIGHT;</span>
+<span class="fc bfc" id="L199" title="All 2 branches covered.">            } else if (dir.x == -1){</span>
+<span class="fc" id="L200">                return WALK_LEFT;</span>
             }
-<span class="nc bnc" id="L201" title="All 2 branches missed.">            if (dir.y == 1){</span>
-<span class="nc" id="L202">                return WALK_UP;</span>
-<span class="nc bnc" id="L203" title="All 2 branches missed.">            } else if (dir.y == -1){</span>
-<span class="nc" id="L204">                return WALK_DOWN;</span>
+<span class="fc bfc" id="L202" title="All 2 branches covered.">            if (dir.y == 1){</span>
+<span class="fc" id="L203">                return WALK_UP;</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">            } else if (dir.y == -1){</span>
+<span class="fc" id="L205">                return WALK_DOWN;</span>
             }
 
         }
 
-<span class="nc" id="L209">        return null;</span>
+<span class="fc" id="L210">        return null;</span>
     }
     public void render(SpriteBatch batch){
-<span class="nc" id="L212">        batch.draw(txr,pos.x, pos.y, width, height);</span>
-<span class="nc" id="L213">    }</span>
+<span class="fc" id="L213">        batch.draw(txr,pos.x, pos.y, width, height);</span>
+<span class="fc" id="L214">    }</span>
 
     /**
      * sets the nearest builiding value
      * @param BD .
      */
     public void setBD(Building BD){
-<span class="nc" id="L220">        nearBD = BD;</span>
-<span class="nc" id="L221">    }</span>
+<span class="nc" id="L221">        nearBD = BD;</span>
+<span class="nc" id="L222">    }</span>
     public void interact(){
-<span class="nc bnc" id="L223" title="All 4 branches missed.">        if (nearBD!=null &amp;&amp; EM.notFrozen())</span>
+<span class="pc bpc" id="L224" title="3 of 4 branches missed.">        if (nearBD!=null &amp;&amp; EM.notFrozen())</span>
         {
-<span class="nc" id="L225">            EM.interact(nearBD.getName());</span>
+<span class="nc" id="L226">            EM.interact(nearBD.getName());</span>
         }
-
-<span class="nc" id="L228">    }</span>
+<span class="fc" id="L228">    }</span>
 
     public float getDistanceTravelled(){
-<span class="nc" id="L231">        return distanceTravelled;</span>
+<span class="fc" id="L231">        return distanceTravelled;</span>
     }
 
 }
