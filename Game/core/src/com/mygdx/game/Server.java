@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Application;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import okhttp3.*;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +16,9 @@ public class Server {
     private static final OkHttpClient client = new OkHttpClient();
 
     public static boolean submitScore(String player, float score) {
+        if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){
+            return false;
+        }
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
         String json = String.format("{\"player\": \"%s\", \"score\": %f}", player, score);
         RequestBody body = RequestBody.create(json, JSON);
@@ -57,6 +62,9 @@ public class Server {
         return result.getResult();
     }
     public static void fetchScores(List<Data> result) {
+        if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){
+            return;
+        }
         Request request = new Request.Builder()
                 .url("https://score-board-afe96bddb988.herokuapp.com/get_scores")
                 .build();
