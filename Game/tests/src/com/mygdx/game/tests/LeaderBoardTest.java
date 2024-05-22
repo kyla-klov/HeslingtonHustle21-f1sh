@@ -41,9 +41,9 @@ public class LeaderBoardTest {
         assertEquals("R. Hemlock", leaderBoard.getData().get(1).getPlayer());
         assertEquals(29.6f, leaderBoard.getData().get(1).getScore(), 0);
         assertEquals(1, leaderBoard.getData().get(1).getStatus(), 0);
-        assertEquals("Darth Jar Jar", leaderBoard.getData().get(1).getPlayer());
-        assertEquals(28.0f, leaderBoard.getData().get(1).getScore(), 0);
-        assertEquals(3, leaderBoard.getData().get(1).getStatus(), 0);
+        assertEquals("Darth Jar Jar", leaderBoard.getData().get(2).getPlayer());
+        assertEquals(28.0f, leaderBoard.getData().get(2).getScore(), 0);
+        assertEquals(3, leaderBoard.getData().get(2).getStatus(), 0);
     }
 
     @Test
