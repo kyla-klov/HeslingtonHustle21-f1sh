@@ -25,7 +25,7 @@ public class CollisionDetector {
     }
 
 
-    private boolean isCellBlocked(float x, float y) {
+    public boolean isCellBlocked(float x, float y) {
         TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));
         return cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey("blocked");
     }
