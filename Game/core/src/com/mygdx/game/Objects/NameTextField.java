@@ -18,12 +18,21 @@ public class NameTextField {
     private boolean capsLockOn;
     private boolean active;
 
-    public NameTextField(Viewport vp) {
+    public NameTextField(Viewport vp, BitmapFont font, Texture textField, boolean active){
         this.vp = vp;
+        this.font = font;
+        this.textField = textField;
+        this.active = active;
         inputText = new StringBuilder();
-        font = new BitmapFont(Gdx.files.internal("font.fnt"));
-        textField = new Texture(Gdx.files.internal("NameTextField.png"));
-        active = true;
+    }
+    public NameTextField(Viewport vp) {
+        this(vp, new BitmapFont(Gdx.files.internal("font.fnt")),
+                new Texture(Gdx.files.internal("NameTextField.png")), true);
+//        this.vp = vp;
+//        inputText = new StringBuilder();
+//        font = new BitmapFont(Gdx.files.internal("font.fnt"));
+//        textField = new Texture(Gdx.files.internal("NameTextField.png"));
+//        active = true;
     }
 
     public void render(SpriteBatch batch){

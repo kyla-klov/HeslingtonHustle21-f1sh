@@ -61,7 +61,6 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
         camera.update();
 
         plateX = (vp.getWorldWidth() - plateWidth) / 2f;
-        System.out.println(plateX);
         startingPosition = new Vector2(cookieX, vp.getWorldHeight() - 50);
         endPosition = new Vector2(cookieX, 0);
     }

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Server.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game</a> &gt; <span class="el_source">Server.java</span></div><h1>Server.java</h1><pre class="source lang-java linenums">package com.mygdx.game;
+
+import com.badlogic.gdx.utils.Json;
+import okhttp3.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+
+<span class="nc" id="L13">public class Server {</span>
+<span class="nc" id="L14">    private static final OkHttpClient client = new OkHttpClient();</span>
+
+    public static boolean submitScore(String player, float score) {
+<span class="nc" id="L17">        MediaType JSON = MediaType.get(&quot;application/json; charset=utf-8&quot;);</span>
+<span class="nc" id="L18">        String json = String.format(&quot;{\&quot;player\&quot;: \&quot;%s\&quot;, \&quot;score\&quot;: %f}&quot;, player, score);</span>
+<span class="nc" id="L19">        RequestBody body = RequestBody.create(json, JSON);</span>
+<span class="nc" id="L20">        Request request = new Request.Builder()</span>
+<span class="nc" id="L21">                .url(&quot;https://score-board-afe96bddb988.herokuapp.com/submit_score&quot;)</span>
+<span class="nc" id="L22">                .post(body)</span>
+<span class="nc" id="L23">                .build();</span>
+
+<span class="nc" id="L25">        CountDownLatch latch = new CountDownLatch(1);</span>
+
+<span class="nc" id="L27">        Result result = new Result();</span>
+
+<span class="nc" id="L29">        client.newCall(request).enqueue(new Callback() {</span>
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+<span class="nc" id="L32">                System.out.println(&quot;Failed to submit score&quot;);</span>
+<span class="nc" id="L33">                result.fail();</span>
+<span class="nc" id="L34">                latch.countDown();</span>
+<span class="nc" id="L35">            }</span>
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+<span class="nc bnc" id="L39" title="All 2 branches missed.">                if (response.isSuccessful()) {</span>
+<span class="nc" id="L40">                    result.successful();</span>
+                } else {
+<span class="nc" id="L42">                    System.out.println(&quot;Unexpected code &quot; + response);</span>
+<span class="nc" id="L43">                    result.fail();</span>
+                }
+<span class="nc" id="L45">                response.close();</span>
+<span class="nc" id="L46">                latch.countDown();</span>
+<span class="nc" id="L47">            }</span>
+        });
+
+        try {
+<span class="nc" id="L51">            latch.await(); // Wait for the callback to count down</span>
+<span class="nc" id="L52">        } catch (InterruptedException e) {</span>
+<span class="nc" id="L53">            Thread.currentThread().interrupt();</span>
+<span class="nc" id="L54">            System.out.println(&quot;Thread was interrupted&quot;);</span>
+<span class="nc" id="L55">        }</span>
+
+<span class="nc" id="L57">        return result.getResult();</span>
+    }
+    public static void fetchScores(List&lt;Data&gt; result) {
+<span class="nc" id="L60">        Request request = new Request.Builder()</span>
+<span class="nc" id="L61">                .url(&quot;https://score-board-afe96bddb988.herokuapp.com/get_scores&quot;)</span>
+<span class="nc" id="L62">                .build();</span>
+
+<span class="nc" id="L64">        client.newCall(request).enqueue(new Callback() {</span>
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+<span class="nc" id="L67">                System.out.println(&quot;HTTP Request&quot; + &quot;Failed to fetch scores&quot;);</span>
+<span class="nc" id="L68">            }</span>
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                if (response.isSuccessful()) {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                    assert response.body() != null;</span>
+<span class="nc" id="L74">                    String responseBody = response.body().string();</span>
+<span class="nc" id="L75">                    Json json = new Json();</span>
+<span class="nc" id="L76">                    List&lt;Data&gt; scores = Arrays.asList(json.fromJson(Data[].class, responseBody));</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">                    result.removeIf(data -&gt; data.getStatus() == 1);</span>
+<span class="nc" id="L78">                    result.addAll(scores);</span>
+<span class="nc" id="L79">                    Collections.sort(result);</span>
+<span class="nc" id="L80">                    Collections.reverse(result);</span>
+
+<span class="nc" id="L82">                } else {</span>
+<span class="nc" id="L83">                    System.out.println(&quot;Unexpected code&quot; + response);</span>
+                }
+
+<span class="nc" id="L86">            }</span>
+        });
+<span class="nc" id="L88">    }</span>
+
+    public static class Data implements Comparable&lt;Data&gt;{
+        private String player;
+        private float score;
+        private final int status;
+
+        @SuppressWarnings(&quot;unused&quot;)
+<span class="nc" id="L96">        public Data(){</span>
+<span class="nc" id="L97">            status = 1;</span>
+<span class="nc" id="L98">        }</span>
+
+<span class="nc" id="L100">        public Data(String player, float score, int status){</span>
+<span class="nc" id="L101">            this.player = player;</span>
+<span class="nc" id="L102">            this.score = score;</span>
+<span class="nc" id="L103">            this.status = status;</span>
+<span class="nc" id="L104">        }</span>
+
+        public String getPlayer(){
+<span class="nc" id="L107">            return player;</span>
+        }
+
+        public float getScore(){
+<span class="nc" id="L111">            return score;</span>
+        }
+
+        public int getStatus(){
+<span class="nc" id="L115">            return status;</span>
+        }
+
+        @Override
+        public int compareTo(Data o) {
+<span class="nc" id="L120">            return Float.compare(score, o.score);</span>
+        }
+    }
+
+    private static class Result{
+        private boolean result;
+        public void successful(){
+<span class="nc" id="L127">            result = true;</span>
+<span class="nc" id="L128">        }</span>
+        public void fail(){
+<span class="nc" id="L130">            result = false;</span>
+<span class="nc" id="L131">        }</span>
+        public boolean getResult(){
+<span class="nc" id="L133">            return result;</span>
+        }
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
