@@ -44,7 +44,7 @@ public class PlayerController {
     /**
      * Animation for each state
      */
-    private Animation IDLE_LEFT,
+    public Animation IDLE_LEFT,
             IDLE_UP,
             IDLE_RIGHT,
             IDLE_DOWN,
@@ -69,7 +69,7 @@ public class PlayerController {
     /**Detects player collision
      *
      */
-    CollisionDetector collisionDetector;
+    private final CollisionDetector collisionDetector;
 
     /**
      * Constructor of PlayerController
@@ -157,6 +157,7 @@ public class PlayerController {
      */
     public Vector2 colCorrect(Vector2 dir)
     {
+        if (dir == null) return null;
         Vector2 colDir = new Vector2(dir.x,dir.y);
         if ((dir.x==1) && collisionDetector.collidesRight()){colDir.x=0;}
         if ((dir.x==-1) && collisionDetector.collidesLeft()){colDir.x=0;}
@@ -224,7 +225,6 @@ public class PlayerController {
         {
             EM.interact(nearBD.getName());
         }
-
     }
 
     public float getDistanceTravelled(){
