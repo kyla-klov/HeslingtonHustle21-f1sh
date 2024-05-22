@@ -1,66 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameMusic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Objects</a> &gt; <span class="el_source">GameMusic.java</span></div><h1>GameMusic.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Objects;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
-/**
- * The GameMusic class manages game music, including playback and volume level adjustments.
- * Initializes the game's background music and allows for dynamic volume control.
- */
-public class GameMusic {
+public class GameMusic implements Disposable {
+    private Music music;
+    private float volume;
 
-    Music audio;
-    // Music levels is quarters
-<span class="fc" id="L14">    private int musicLevel = 4;</span>
+    public GameMusic() {
+<span class="nc" id="L13">        this(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;);</span>
+        // Load your music file
 
-<span class="fc" id="L16">    private final float musicCap = 0.1f;</span>
-    /**
-     * Constructor for GameMusic. Initializes and starts playing the game's background music at the maximum volume level.
-     */
-<span class="fc" id="L20">    public GameMusic() {</span>
-<span class="fc" id="L21">        setup();</span>
-<span class="fc" id="L22">    }</span>
+//        music = Gdx.audio.newMusic(Gdx.files.internal(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;));
+//        music.setLooping(true);  // If you want the music to loop
+//        volume = 0.5f;  // Default volume
+//        music.setVolume(volume);
+//        music.play();
+<span class="nc" id="L21">    }</span>
 
-    private void setup(){
-<span class="fc" id="L25">        audio = Gdx.audio.newMusic(Gdx.files.internal(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;));</span>
-<span class="fc" id="L26">        audio.play();</span>
-<span class="fc" id="L27">        audio.setVolume(musicCap); // Set volume to 100%</span>
-<span class="fc" id="L28">        audio.setLooping(true);</span>
-<span class="fc" id="L29">    }</span>
+<span class="nc" id="L23">    public GameMusic(String filePath){</span>
+        // Load your music file
+<span class="nc" id="L25">        music = Gdx.audio.newMusic(Gdx.files.internal(filePath));</span>
+<span class="nc" id="L26">        music.setLooping(true);  // If you want the music to loop</span>
+<span class="nc" id="L27">        volume = 0.5f;  // Default volume</span>
+<span class="nc" id="L28">        music.setVolume(volume);</span>
+<span class="nc" id="L29">        music.play();</span>
+<span class="nc" id="L30">    }</span>
+    public void setVolume(float volume) {
+<span class="nc" id="L32">        this.volume = volume;</span>
+<span class="nc" id="L33">        music.setVolume(volume);</span>
+<span class="nc" id="L34">    }</span>
 
-    /**
-     * Returns the current music volume level.
-     * @return The current music volume level.
-     */
-    public int getMusicLevel(){
-<span class="fc" id="L36">        return this.musicLevel;</span>
+    public float getVolume() {
+<span class="nc" id="L37">        return volume;</span>
     }
 
-    @SuppressWarnings(&quot;unused&quot;)
-    public Music getAudio() {
-<span class="nc" id="L41">        return audio;</span>
-    }
-
-    /**
-     * Increments the music volume level by one, if it is not already at the maximum level. Adjusts the music playback volume accordingly.
-     */
-    public void incrementVolume() {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">        if (musicLevel &lt;= 3){ // Check if volume is not already at maximum</span>
-<span class="fc" id="L49">            musicLevel = musicLevel + 1;</span>
-<span class="fc" id="L50">            float floatingMusicLevel = (float) musicLevel;</span>
-<span class="fc" id="L51">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
+    public void play() {
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (!music.isPlaying()) {</span>
+<span class="nc" id="L42">            music.play();</span>
         }
-<span class="fc" id="L53">    }</span>
+<span class="nc" id="L44">    }</span>
 
-    /**
-     * Decrements the music volume level by one, if it is not already at the minimum level. Adjusts the music playback volume accordingly.
-     */
-    public void decrementVolume() {
-<span class="fc bfc" id="L59" title="All 2 branches covered.">        if (this.musicLevel &gt;= 1){ // Check if volume is not already at minimum</span>
-<span class="fc" id="L60">            musicLevel = musicLevel - 1;</span>
-<span class="fc" id="L61">            float floatingMusicLevel = (float) musicLevel;</span>
-<span class="fc" id="L62">            audio.setVolume(floatingMusicLevel*25/100*musicCap);</span>
-        }
-<span class="fc" id="L64">    }</span>
+    public void pause() {
+<span class="nc" id="L47">        music.pause();</span>
+<span class="nc" id="L48">    }</span>
+
+    public void stop() {
+<span class="nc" id="L51">        music.stop();</span>
+<span class="nc" id="L52">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L56">        music.dispose();</span>
+<span class="nc" id="L57">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

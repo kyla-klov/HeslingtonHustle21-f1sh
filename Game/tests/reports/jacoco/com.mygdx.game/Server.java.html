@@ -20,7 +20,7 @@ import java.util.concurrent.CountDownLatch;
 <span class="nc" id="L20">            return false;</span>
         }
 <span class="nc" id="L22">        MediaType JSON = MediaType.get(&quot;application/json; charset=utf-8&quot;);</span>
-<span class="nc" id="L23">        String json = String.format(&quot;{\&quot;player\&quot;: \&quot;%s\&quot;, \&quot;score\&quot;: %f}&quot;, player, score);</span>
+<span class="nc" id="L23">        String json = &quot;{\&quot;player\&quot;: \&quot;&quot; + player + &quot;\&quot;, \&quot;score\&quot;: &quot; + score + &quot;}&quot;;</span>
 <span class="nc" id="L24">        RequestBody body = RequestBody.create(json, JSON);</span>
 <span class="nc" id="L25">        Request request = new Request.Builder()</span>
 <span class="nc" id="L26">                .url(&quot;https://score-board-afe96bddb988.herokuapp.com/submit_score&quot;)</span>
@@ -55,7 +55,7 @@ import java.util.concurrent.CountDownLatch;
         try {
 <span class="nc" id="L56">            latch.await(); // Wait for the callback to count down</span>
 <span class="nc" id="L57">        } catch (InterruptedException e) {</span>
-<span class="nc" id="L58">            Thread.currentThread().interrupt();</span>
+            //Thread.currentThread().interrupt();
 <span class="nc" id="L59">            System.out.println(&quot;Thread was interrupted&quot;);</span>
 <span class="nc" id="L60">        }</span>
 
@@ -90,10 +90,9 @@ import java.util.concurrent.CountDownLatch;
 <span class="nc" id="L90">                } else {</span>
 <span class="nc" id="L91">                    System.out.println(&quot;Unexpected code&quot; + response);</span>
                 }
-
-<span class="nc" id="L94">            }</span>
+<span class="nc" id="L93">            }</span>
         });
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L95">    }</span>
 
     public static class Data implements Comparable&lt;Data&gt;{
         private String player;
@@ -101,44 +100,44 @@ import java.util.concurrent.CountDownLatch;
         private final int status;
 
         @SuppressWarnings(&quot;unused&quot;)
-<span class="nc" id="L104">        public Data(){</span>
-<span class="nc" id="L105">            status = 1;</span>
-<span class="nc" id="L106">        }</span>
+<span class="nc" id="L103">        public Data(){</span>
+<span class="nc" id="L104">            status = 1;</span>
+<span class="nc" id="L105">        }</span>
 
-<span class="nc" id="L108">        public Data(String player, float score, int status){</span>
-<span class="nc" id="L109">            this.player = player;</span>
-<span class="nc" id="L110">            this.score = score;</span>
-<span class="nc" id="L111">            this.status = status;</span>
-<span class="nc" id="L112">        }</span>
+<span class="fc" id="L107">        public Data(String player, float score, int status){</span>
+<span class="fc" id="L108">            this.player = player;</span>
+<span class="fc" id="L109">            this.score = score;</span>
+<span class="fc" id="L110">            this.status = status;</span>
+<span class="fc" id="L111">        }</span>
 
         public String getPlayer(){
-<span class="nc" id="L115">            return player;</span>
+<span class="fc" id="L114">            return player;</span>
         }
 
         public float getScore(){
-<span class="nc" id="L119">            return score;</span>
+<span class="fc" id="L118">            return score;</span>
         }
 
         public int getStatus(){
-<span class="nc" id="L123">            return status;</span>
+<span class="fc" id="L122">            return status;</span>
         }
 
         @Override
         public int compareTo(Data o) {
-<span class="nc" id="L128">            return Float.compare(score, o.score);</span>
+<span class="fc" id="L127">            return Float.compare(score, o.score);</span>
         }
     }
 
     private static class Result{
         private boolean result;
         public void successful(){
-<span class="nc" id="L135">            result = true;</span>
-<span class="nc" id="L136">        }</span>
+<span class="nc" id="L134">            result = true;</span>
+<span class="nc" id="L135">        }</span>
         public void fail(){
-<span class="nc" id="L138">            result = false;</span>
-<span class="nc" id="L139">        }</span>
+<span class="nc" id="L137">            result = false;</span>
+<span class="nc" id="L138">        }</span>
         public boolean getResult(){
-<span class="nc" id="L141">            return result;</span>
+<span class="nc" id="L140">            return result;</span>
         }
     }
 

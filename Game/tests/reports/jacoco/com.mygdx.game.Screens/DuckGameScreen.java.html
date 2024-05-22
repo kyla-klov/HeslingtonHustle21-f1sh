@@ -66,13 +66,13 @@ public class DuckGameScreen implements Screen, InputProcessor{
         } else {
 <span class="nc" id="L67">            timeToComplete = (int) gameClock.getRawTime();</span>
 
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (timeToComplete &lt;= 18){</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (timeToComplete &lt;= 17){</span>
 <span class="nc" id="L70">                game.getAchievementHandler().getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.BRONZE).unlock();</span>
             }
-<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (timeToComplete &lt;= 17){</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">            if (timeToComplete &lt;= 16){</span>
 <span class="nc" id="L73">                game.getAchievementHandler().getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.SILVER).unlock();</span>
             }
-<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (timeToComplete &lt;= 16){</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">            if (timeToComplete &lt;= 15){</span>
 <span class="nc" id="L76">                game.getAchievementHandler().getAchievement(&quot;Duck Duck Go&quot;, Achievement.Type.GOLD).unlock();</span>
             }
 
@@ -143,8 +143,8 @@ public class DuckGameScreen implements Screen, InputProcessor{
     public boolean touchDown(int worldX, int worldY, int pointer, int button) {
 <span class="nc" id="L144">        Vector2 touchPoint = vp.unproject(new Vector2(worldX, worldY));</span>
 
-<span class="nc bnc" id="L146" title="All 8 branches missed.">        if (touchPoint.x &gt;= duckX &amp;&amp; touchPoint.x &lt;= duckX + duckWidth &amp;&amp;</span>
-                touchPoint.y &gt;= duckY &amp;&amp; touchPoint.y &lt;= duckY + duckHeight) {
+<span class="nc bnc" id="L146" title="All 10 branches missed.">        if (touchPoint.x &gt;= duckX &amp;&amp; touchPoint.x &lt;= duckX + duckWidth &amp;&amp;</span>
+                touchPoint.y &gt;= duckY &amp;&amp; touchPoint.y &lt;= duckY + duckHeight &amp;&amp; isDuckOnScreen) {
             // Duck has been successfully clicked
 <span class="nc" id="L149">            isDuckOnScreen = false;</span>
 <span class="nc" id="L150">            gameClock.addEvent(f -&gt; spawnDuck(), 0.4f);</span>
