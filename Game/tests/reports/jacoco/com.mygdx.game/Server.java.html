@@ -12,24 +12,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-<span class="nc" id="L15">public class Server {</span>
-<span class="fc" id="L16">    private static final OkHttpClient client = new OkHttpClient();</span>
+public class Server {
+    private static final OkHttpClient client = new OkHttpClient();
 
     public static boolean submitScore(String player, float score) {
-<span class="nc bnc" id="L19" title="All 2 branches missed.">        if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){</span>
-<span class="nc" id="L20">            return false;</span>
+        if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){
+            return false;
         }
-<span class="nc" id="L22">        MediaType JSON = MediaType.get(&quot;application/json; charset=utf-8&quot;);</span>
-<span class="nc" id="L23">        String json = &quot;{\&quot;player\&quot;: \&quot;&quot; + player + &quot;\&quot;, \&quot;score\&quot;: &quot; + score + &quot;}&quot;;</span>
-<span class="nc" id="L24">        RequestBody body = RequestBody.create(json, JSON);</span>
-<span class="nc" id="L25">        Request request = new Request.Builder()</span>
-<span class="nc" id="L26">                .url(&quot;https://score-board-afe96bddb988.herokuapp.com/submit_score&quot;)</span>
-<span class="nc" id="L27">                .post(body)</span>
-<span class="nc" id="L28">                .build();</span>
+        MediaType JSON = MediaType.get(&quot;application/json; charset=utf-8&quot;);
+        String json = &quot;{\&quot;player\&quot;: \&quot;&quot; + player + &quot;\&quot;, \&quot;score\&quot;: &quot; + score + &quot;}&quot;;
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder()
+                .url(&quot;https://score-board-afe96bddb988.herokuapp.com/submit_score&quot;)
+                .post(body)
+                .build();
 
-<span class="nc" id="L30">        CountDownLatch latch = new CountDownLatch(1);</span>
+        CountDownLatch latch = new CountDownLatch(1);
 
-<span class="nc" id="L32">        Result result = new Result();</span>
+        Result result = new Result();
 
 <span class="nc" id="L34">        client.newCall(request).enqueue(new Callback() {</span>
             @Override
@@ -53,21 +53,21 @@ import java.util.concurrent.CountDownLatch;
         });
 
         try {
-<span class="nc" id="L56">            latch.await(); // Wait for the callback to count down</span>
-<span class="nc" id="L57">        } catch (InterruptedException e) {</span>
+            latch.await(); // Wait for the callback to count down
+        } catch (InterruptedException e) {
             //Thread.currentThread().interrupt();
-<span class="nc" id="L59">            System.out.println(&quot;Thread was interrupted&quot;);</span>
-<span class="nc" id="L60">        }</span>
+            System.out.println(&quot;Thread was interrupted&quot;);
+        }
 
-<span class="nc" id="L62">        return result.getResult();</span>
+        return result.getResult();
     }
     public static void fetchScores(List&lt;Data&gt; result) {
-<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){</span>
-<span class="fc" id="L66">            return;</span>
+        if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){
+            return;
         }
-<span class="nc" id="L68">        Request request = new Request.Builder()</span>
-<span class="nc" id="L69">                .url(&quot;https://score-board-afe96bddb988.herokuapp.com/get_scores&quot;)</span>
-<span class="nc" id="L70">                .build();</span>
+        Request request = new Request.Builder()
+                .url(&quot;https://score-board-afe96bddb988.herokuapp.com/get_scores&quot;)
+                .build();
 
 <span class="nc" id="L72">        client.newCall(request).enqueue(new Callback() {</span>
             @Override
@@ -92,7 +92,7 @@ import java.util.concurrent.CountDownLatch;
                 }
 <span class="nc" id="L93">            }</span>
         });
-<span class="nc" id="L95">    }</span>
+    }
 
     public static class Data implements Comparable&lt;Data&gt;{
         private String player;
