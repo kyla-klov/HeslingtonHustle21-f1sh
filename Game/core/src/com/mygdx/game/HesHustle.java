@@ -37,6 +37,7 @@ public class HesHustle extends Game {
 	}
 
 	//For tests
+	@SuppressWarnings("unused")
 	public void setScreenManager(ScreenManager screenManager) {
 		this.screenManager = screenManager;
 	}

@@ -4,20 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.GameClock;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.mygdx.game.HesHustle;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.mygdx.game.Utils.ScreenType;
 
 
@@ -33,16 +28,15 @@ public class SleepGameScreen extends InputAdapter implements Screen {
     private final BitmapFont mainText;
     private final int zRange = 5;
     boolean roundInPlay = true;
-    private Random random;
+    private final Random random;
     private String zText = "";
-    private int numberRounds = 2;
+    private int numberRounds = 1;
     private int roundNumber = 0;
     private int numberZ = 0;
     private float waitTime = 0.2f;
     private final int numberGames = 2;
     private int gameNumber = 0;
     private int gameWins = 0;
-    private boolean endGame = false;
 
     public SleepGameScreen(HesHustle game){
         this.game = game;
@@ -145,7 +139,6 @@ public class SleepGameScreen extends InputAdapter implements Screen {
     @Override
     public void dispose() {
         // Dispose logic
-        batch.dispose();
         mainText.dispose();
     }
 

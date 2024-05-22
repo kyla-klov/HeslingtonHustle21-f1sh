@@ -43,7 +43,7 @@ public class ScreenManager {
             case SLEEP_SCREEN:
                     return new SleepGameScreen(game);
             case COOKIE_SCREEN:
-                return new CookieClickerScreen(game);
+                return new CookieCatcherScreen(game);
             case MENU_SCREEN:
                 return new MenuScreen(game);
             case GAME_SCREEN:

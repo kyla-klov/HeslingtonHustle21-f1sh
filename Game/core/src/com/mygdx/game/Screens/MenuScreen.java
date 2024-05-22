@@ -53,7 +53,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.getScreenManager().setScreen(ScreenType.SLEEP_SCREEN);
+                game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
             }
         });
 

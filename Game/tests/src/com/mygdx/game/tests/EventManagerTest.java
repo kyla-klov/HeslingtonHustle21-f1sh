@@ -32,7 +32,7 @@ public class EventManagerTest {
     @Spy private final Event StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", ScreenType.CHECKIN_CODE_SCREEN);
     @Spy private final Event PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, "", ScreenType.BASKETBALL_SCREEN);
     @Spy private final Event Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, "", mockedImage);
-    @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", mockedImage);
+    @Spy private final Event EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", ScreenType.COOKIE_SCREEN);
 
     @InjectMocks private EventManager mockedEM = mock(EventManager.class, withSettings()
             .useConstructor(mockedGame, mockedClock)
@@ -129,8 +129,6 @@ public class EventManagerTest {
     }
     @Test
     public void testMaxCalcScore1() {
-        // this one needs fixing because im not sure what the expected score is actually supposed to be
-        //Testing for max score
         for (int day = 1; day <= 7; day++) {
             mockedEM.interact("Ducks");
             mockedEM.interact("Computer\nScience\nDepartment");
@@ -146,8 +144,6 @@ public class EventManagerTest {
 
     @Test
     public void testMaxCalcScore2() {
-        // this one needs fixing because im not sure what the expected score is actually supposed to be
-        //Testing for max score
         for (int day = 1; day <= 5; day++) {
             mockedEM.interact("Ducks");
             mockedEM.interact("Computer\nScience\nDepartment");
@@ -177,7 +173,59 @@ public class EventManagerTest {
     }
 
     @Test
-    public void testRandomCalcScore() {
+    public void testDoNothingScore(){
+        float expectedScore = 0;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+    }
+
+    @Test
+    public void testNoStudyScore() {
+        for (int day = 1; day <= 7; day++) {
+            mockedEM.interact("Ducks");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Langwith");
+        }
+        int expectedScore = 50;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+    }
+
+    @Test
+    public void testNoEatScore() {
+        for (int day = 1; day <= 7; day++) {
+            mockedEM.interact("Ducks");
+            mockedEM.interact("Computer\nScience\nDepartment");
+            mockedEM.addStudyHours(4); //Studies for 4 hours
+            mockedEM.interact("Langwith");
+        }
+        int expectedScore = 75;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+    }
+
+    @Test
+    public void testStudyOnceScore() {
+        for (int day = 1; day <= 6; day++) {
+            mockedEM.interact("Ducks");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Langwith");
+        }
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(4); //Studies for 4 hours
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+        float expectedScore = 63.5f;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+    }
+
+
+    @Test
+    public void testRandomCalcScore1() {
         mockedEM.interact("Ducks");
         mockedEM.interact("Ducks");
         mockedEM.interact("Ducks");
@@ -220,6 +268,50 @@ public class EventManagerTest {
         mockedEM.interact("Langwith");
 
         float expectedScore = 44.5f;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+    }
+
+    @Test
+    public void testRandomCalcScore2() {
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(2);
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("BasketBall");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(8);
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(2);
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("BasketBall");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(8);
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(2);
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        float expectedScore = 54.5f;
         assertEquals(expectedScore, mockedEM.calcScore(), 0);
     }
 

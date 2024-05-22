@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -16,45 +15,43 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 import com.mygdx.game.Utils.GameClock;
 
-import java.util.Random;
-
-public class CookieClickerScreen extends InputAdapter implements Screen {
+public class CookieCatcherScreen extends InputAdapter implements Screen {
     public HesHustle game;
     private int cookiesCollected = 0;
     private final OrthographicCamera camera;
     private final Viewport vp;
-    private BitmapFont cookiesCollectedText;
+    private final BitmapFont cookiesCollectedText;
     private final GameClock gameClock;
     private final GlyphLayout glyphLayout;
     private final SpriteBatch batch;
-    Texture plate;
-    float plateX;
-    float plateHeight = 100;
-    float plateWidth = 100;
-    Texture cookie;
-    float cookieX;
-    float cookieY;
-    int cookieHeight = 50;
-    int cookieWidth = 50;
-    Random random;
-    Vector2 startingPosition;
-    Vector2 endPosition;
-    float speed = 500f;
-    boolean aKeyPressed = false;
-    boolean dKeyPressed = false;
+    private final Texture plate;
+    private final ResourceManager resourceManager;
+    private float plateX;
+    private final float plateHeight = 100;
+    private final float plateWidth = 100;
+    private final Texture cookie;
+    private float cookieX;
+    private float cookieY;
+    private final int cookieHeight = 50;
+    private final int cookieWidth = 50;
+    private final Vector2 startingPosition;
+    private float speed = 500f;
+    private boolean aKeyPressed = false;
+    private boolean dKeyPressed = false;
 
-    public CookieClickerScreen(HesHustle game){
+    public CookieCatcherScreen(HesHustle game){
         this.game = game;
+        resourceManager = new ResourceManager();
         batch = game.getBatch();
-        random = new Random();
         glyphLayout = new GlyphLayout();
         gameClock = new GameClock();
-        cookiesCollectedText = new BitmapFont();
-        cookie = new Texture("Activitys/duck game/duck.png");
-        plate = new Texture("Activitys/basketball/basketball.png");
+        cookiesCollectedText = resourceManager.addDisposable(new BitmapFont());
+        cookie = resourceManager.addDisposable(new Texture(Gdx.files.internal("cookie.png")));
+        plate = resourceManager.addDisposable(new Texture(Gdx.files.internal("plate.png")));
         camera = new OrthographicCamera();
         vp = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);
         camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);
@@ -62,7 +59,6 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
 
         plateX = (vp.getWorldWidth() - plateWidth) / 2f;
         startingPosition = new Vector2(cookieX, vp.getWorldHeight() - 50);
-        endPosition = new Vector2(cookieX, 0);
     }
 
 
@@ -73,13 +69,14 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
+        if (delta > 0.1f) return;
         gameClock.update(delta);
         ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);
         camera.update();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
         float deltaTime = Gdx.graphics.getDeltaTime();
-        update(deltaTime);
+        update();
 
         boolean collision = isColliding();
 
@@ -120,11 +117,8 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
         float plateYMax = (vp.getWorldHeight() - plateHeight) / 2 - 200 + cookieHeight;
         float plateYMin = (vp.getWorldHeight() - plateHeight) / 2 - 200;
 
-        if ((cookieXMin <= plateXMax && cookieXMax >= plateXMin) &&
-            (cookieYMin <= plateYMax && cookieYMax >= plateYMin)){
-            return true;
-        }
-        return false;
+        return (cookieXMin <= plateXMax && cookieXMax >= plateXMin) &&
+                (cookieYMin <= plateYMax && cookieYMax >= plateYMin);
     }
 
     public void resetCookie(){
@@ -159,7 +153,7 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
 
     @Override
     public void dispose() {
-
+        resourceManager.disposeAll();
     }
 
     @Override
@@ -186,13 +180,13 @@ public class CookieClickerScreen extends InputAdapter implements Screen {
         return false;
     }
 
-    public void update(float deltaTime){
+    public void update(){
         if (plateX >= 0 && aKeyPressed){
-            plateX = plateX - 15;
+            plateX = plateX - 15 * speed/500f;
         }
 
         if (plateX < vp.getWorldWidth() - plateWidth && dKeyPressed){
-            plateX = plateX + 15;
+            plateX = plateX + 15 * speed/500f;
         }
 
     }

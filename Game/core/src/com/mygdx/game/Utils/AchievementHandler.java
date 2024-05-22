@@ -57,13 +57,13 @@ public class AchievementHandler implements Disposable {
         achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER, "AchievementsDisplay/DuckAchievementSilver.png"));
         achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD, "AchievementsDisplay/DuckAchievementGold.png"));
 
-        achievements.add(new Achievement("Feast to Fullest", "Eat 3 times in a day", Achievement.Type.BRONZE, "AchievementsDisplay/AchievementPlaceHolder.png"));
-        achievements.add(new Achievement("Feast to Fullest", "Eat 4 times in a day", Achievement.Type.SILVER, "AchievementsDisplay/AchievementPlaceHolder.png"));
-        achievements.add(new Achievement("Feast to Fullest", "Eat 5 times in a day", Achievement.Type.GOLD, "AchievementsDisplay/AchievementPlaceHolder.png"));
+        achievements.add(new Achievement("Feast to Fullest", "Eat 3 times in a day", Achievement.Type.BRONZE, "AchievementsDisplay/FTFBronze.png"));
+        achievements.add(new Achievement("Feast to Fullest", "Eat 4 times in a day", Achievement.Type.SILVER, "AchievementsDisplay/FTFSilver.png"));
+        achievements.add(new Achievement("Feast to Fullest", "Eat 5 times in a day", Achievement.Type.GOLD, "AchievementsDisplay/FTFGold.png"));
 
-        achievements.add(new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementsDisplay/AchievementPlaceHolder.png"));
-        achievements.add(new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER, "AchievementsDisplay/AchievementPlaceHolder.png"));
-        achievements.add(new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD, "AchievementsDisplay/AchievementPlaceHolder.png"));
+        achievements.add(new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementsDisplay/HikerBronze.png"));
+        achievements.add(new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER, "AchievementsDisplay/HikerSilver.png"));
+        achievements.add(new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD, "AchievementsDisplay/HikerGold.png"));
     }
 
     @Override
