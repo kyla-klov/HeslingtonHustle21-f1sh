@@ -59,6 +59,7 @@ public class ControlsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.getGameSound().buttonClickedSoundActivate();
                 game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);
             }
         });

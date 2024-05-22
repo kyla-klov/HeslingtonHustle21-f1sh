@@ -19,11 +19,6 @@ public class SettingsScreen implements Screen {
 
 
     private SelectBox<String> resolutionSelectBox;
-    //private GameMusic gameMusic;
-
-    // Placeholder variables for volume and resolution settings
-    //private static float musicVolume = 1f;
-    private static float soundVolume = 1f;
 
     public SettingsScreen(HesHustle game) {
         this.game = game;
@@ -56,11 +51,11 @@ public class SettingsScreen implements Screen {
         // Sound Volume Components
         Label soundVolumeLabel = new Label("Sound Volume", skin);
         Slider soundVolumeSlider = new Slider(0.0f, 1.0f, 0.01f, false, skin);
-        soundVolumeSlider.setValue(soundVolume);
+        soundVolumeSlider.setValue(game.getGameSound().getVolume());
         soundVolumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                soundVolume = ((Slider) actor).getValue();
+                game.getGameSound().setVolume(((Slider) actor).getValue());
             }
         });
 
@@ -80,6 +75,7 @@ public class SettingsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.getGameSound().buttonClickedSoundActivate();
                 game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);
             }
         });

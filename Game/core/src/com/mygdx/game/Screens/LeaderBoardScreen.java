@@ -90,6 +90,7 @@ public class LeaderBoardScreen implements Screen {
     public void touchDown(float screenX, float screenY){
         Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);
         if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){
+            game.getGameSound().buttonClickedSoundActivate();
             game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);
         }
     }

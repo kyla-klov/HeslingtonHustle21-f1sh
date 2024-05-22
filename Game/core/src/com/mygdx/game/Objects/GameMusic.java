@@ -6,7 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Disposable;
 
 public class GameMusic implements Disposable {
-    private Music music;
+    private final Music music;
     private float volume;
 
     public GameMusic() {
@@ -35,12 +35,6 @@ public class GameMusic implements Disposable {
 
     public float getVolume() {
         return volume;
-    }
-
-    public void play() {
-        if (!music.isPlaying()) {
-            music.play();
-        }
     }
 
     public void pause() {

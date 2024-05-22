@@ -2,56 +2,32 @@ package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Manages game sound effects including sound level adjustments and playing specific sounds.
  * It handles sound effects for increasing volume, decreasing volume, and button clicks.
  */
-public class GameSound {
-    Music upSound;
-    Music downSound;
-    Music buttonClickedSound;
-    Music eatingSound;
-    private int soundLevel = 4;
+public class GameSound implements Disposable {
+    private final Music buttonClickedSound;
+    private float volume = 1f;
+
 
     /**
      * Initializes sound effects by loading the audio files.
      */
     public GameSound(){
-        upSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/high_note.mp3"));
-        downSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/low_note.mp3"));
         buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/button_press.mp3"));
-        eatingSound = Gdx.audio.newMusic(Gdx.files.internal("sfx/eating_sound.wav"));
+        setVolume(volume);
     }
 
-    /**
-     * Gets the current sound level.
-     *
-     * @return The current sound level.
-     */
-    public int getSoundLevel(){
-        return this.soundLevel;
+    public float getVolume(){
+        return volume;
     }
 
-    /**
-     * Plays the sound effect for increasing the volume. Stops the sound if it is already playing before restarting it.
-     */
-    public void upSoundActivate(){
-        if (upSound.isPlaying()){
-            upSound.stop();
-        }
-        upSound.play();
-    }
-
-    /**
-     * Plays the sound effect for decreasing the volume. Stops the sound if it is already playing before restarting it.
-     */
-    public void downSoundActivate(){
-        if (downSound.isPlaying()){
-            downSound.stop();
-            downSound.play();
-        }
-        downSound.play();
+    public void setVolume(float volume){
+        this.volume = volume;
+        buttonClickedSound.setVolume(volume);
     }
 
     /**
@@ -64,41 +40,10 @@ public class GameSound {
         buttonClickedSound.play();
     }
 
-    /**
-     * Plays the sound effect for increasing the volume. Stops the sound if it is already playing before restarting it.
-     */
-    public void eatingSoundActivate(){
-        if (eatingSound.isPlaying()){
-            eatingSound.stop();
-        }
-        eatingSound.play();
-    }
 
-    /**
-     * Increments the sound volume level by one step if not already at the maximum. Also adjusts the volume of all sound effects accordingly.
-     */
-    public void incrementVolume() {
-        if (soundLevel <= 3){ // Check if volume is not already at maximum
-            soundLevel = soundLevel + 1;
-            float floatingMusicLevel = (float) soundLevel;
-            upSound.setVolume(floatingMusicLevel*25/100);
-            downSound.setVolume(floatingMusicLevel*25/100);
-            buttonClickedSound.setVolume(floatingMusicLevel*25/100);
-            eatingSound.setVolume(floatingMusicLevel*25/100);
-        }
-    }
-
-    /**
-     * Decrements the music volume level by one, if it is not already at the minimum level. Adjusts the music playback volume accordingly.
-     */
-    public void decrementVolume() {
-        if (this.soundLevel >= 1) { // Check if volume is not already at minimum
-            soundLevel = soundLevel - 1;
-            float floatingMusicLevel = (float) soundLevel;
-            upSound.setVolume(floatingMusicLevel*25/100);
-            downSound.setVolume(floatingMusicLevel*25/100);
-            buttonClickedSound.setVolume(floatingMusicLevel*25/100);
-        }
+    @Override
+    public void dispose() {
+        buttonClickedSound.dispose();
     }
 }
 

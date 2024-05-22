@@ -51,6 +51,7 @@ public class MenuScreen implements Screen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
+                game.getGameSound().buttonClickedSoundActivate();
                 game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
             }
         });
@@ -59,6 +60,7 @@ public class MenuScreen implements Screen {
         controlsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
+                game.getGameSound().buttonClickedSoundActivate();
                 game.getScreenManager().setScreen(ScreenType.CONTROLS_SCREEN);
             }
         });
@@ -67,6 +69,7 @@ public class MenuScreen implements Screen {
         leaderBoardButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
+                game.getGameSound().buttonClickedSoundActivate();
                 game.getScreenManager().setScreen(ScreenType.LEADERBOARD_SCREEN);
             }
         });
@@ -75,6 +78,7 @@ public class MenuScreen implements Screen {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
+                game.getGameSound().buttonClickedSoundActivate();
                 game.getScreenManager().setScreen(ScreenType.SETTINGS_SCREEN, 10f);
             }
         });

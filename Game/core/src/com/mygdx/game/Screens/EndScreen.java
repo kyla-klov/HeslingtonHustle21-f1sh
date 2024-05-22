@@ -13,7 +13,6 @@ import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.AchievementsDisplay;
 import com.mygdx.game.Objects.LeaderBoard;
 import com.mygdx.game.Utils.ScreenType;
-import com.mygdx.game.Utils.ViewportAdapter;
 
 public class EndScreen implements Screen{
     private final HesHustle game;
@@ -82,6 +81,7 @@ public class EndScreen implements Screen{
         // Add functionality to buttons
         playAgainButton.addListener(event -> {
             if (!event.isHandled()) return false;
+            game.getGameSound().buttonClickedSoundActivate();
             game.getScreenManager().removeScreenFromMemory(ScreenType.GAME_SCREEN);
             game.setNewGame();
             game.getScreenManager().setScreen(ScreenType.GAME_SCREEN); // Restart the game
@@ -90,6 +90,7 @@ public class EndScreen implements Screen{
 
         mainMenuButton.addListener(event -> {
             if (!event.isHandled()) return false;
+            game.getGameSound().buttonClickedSoundActivate();
             game.setNewGame();
             game.getScreenManager().setScreen(ScreenType.MENU_SCREEN); // Go back to the main menu
             return true;
