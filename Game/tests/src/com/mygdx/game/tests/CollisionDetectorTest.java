@@ -17,7 +17,6 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
 import java.lang.reflect.Field;
 
