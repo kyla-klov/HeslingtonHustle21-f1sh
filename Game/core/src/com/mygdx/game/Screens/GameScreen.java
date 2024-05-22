@@ -3,7 +3,6 @@ package com.mygdx.game.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -223,7 +222,7 @@ public class GameScreen implements Screen {
     public void writeToFile() {
         String player = nameTextField.getValue();
         float score = eventM.calcScore();
-        boolean success = Server.submitScore(player, (int) score);
+        boolean success = Server.submitScore(player, score);
         int status = success ? 1 : 0;
         String data = nameTextField.getValue() +  "," + eventM.calcScore() + "," + status + "\n";
         FileHandle file = Gdx.files.local("storage/PlayerData.txt");

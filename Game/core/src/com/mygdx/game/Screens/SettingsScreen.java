@@ -16,6 +16,9 @@ public class SettingsScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final ResourceManager resourceManager;
+
+
+    private SelectBox<String> resolutionSelectBox;
     //private GameMusic gameMusic;
 
     // Placeholder variables for volume and resolution settings
@@ -31,6 +34,7 @@ public class SettingsScreen implements Screen {
     }
 
     private void initialiseSettings() {
+
         Skin skin = resourceManager.addDisposable(new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json")));
         Skin skin2 = resourceManager.addDisposable(new Skin(Gdx.files.internal("metalui/metal-ui.json")));
 
@@ -61,10 +65,10 @@ public class SettingsScreen implements Screen {
         });
 
         // Resolution Selector Components using skin2
-        Label resolutionLabel = new Label("Resolution", skin);
-        SelectBox<String> resolutionSelectBox = new SelectBox<>(skin2);
-        resolutionSelectBox.setItems("800x600", "1024x768", "1280x720", "1920x1080");
-        resolutionSelectBox.setSelected("1280x720");
+        Label resolutionLabel = new Label("Mode", skin);
+        resolutionSelectBox = new SelectBox<>(skin2);
+        resolutionSelectBox.setItems("Windowed", "Full Screen");
+        resolutionSelectBox.setSelected("Windowed");
 
         // Back Button
         TextButton backButton = new TextButton("Back", skin);
@@ -97,6 +101,11 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        if (resolutionSelectBox.getSelected().equals("Full Screen")){
+            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+        } else if (Gdx.graphics.isFullscreen()){
+            Gdx.graphics.setWindowedMode((int) (Gdx.graphics.getWidth() * 0.75f), (int) (Gdx.graphics.getHeight() * 0.75f));
+        }
         ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);
         stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
