@@ -2,6 +2,7 @@ package com.mygdx.game.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -10,8 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -28,7 +28,7 @@ public class MenuScreen implements Screen {
     public MenuScreen(HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
-        this.stage = resourceManager.addDisposable(new Stage(new ScreenViewport()));
+        this.stage = resourceManager.addDisposable(new Stage(new FitViewport(1600, 900)));
         initialiseMenu();
     }
 
@@ -107,7 +107,8 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);
+        Gdx.gl.glClearColor(0f,0f,0f,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
     }
