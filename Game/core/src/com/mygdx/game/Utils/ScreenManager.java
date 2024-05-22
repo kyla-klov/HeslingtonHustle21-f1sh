@@ -40,6 +40,8 @@ public class ScreenManager {
 
     private Screen createScreen(ScreenType screenType, Object... args){
         switch (screenType){
+            case SLEEP_SCREEN:
+                    return new SleepGameScreen(game);
             case COOKIE_SCREEN:
                 return new CookieClickerScreen(game);
             case MENU_SCREEN:
