@@ -18,13 +18,13 @@ public class NameTextField {
     private boolean capsLockOn;
     private boolean active;
 
-<span class="nc" id="L21">    public NameTextField(Viewport vp, BitmapFont font, Texture textField, boolean active){</span>
-<span class="nc" id="L22">        this.vp = vp;</span>
-<span class="nc" id="L23">        this.font = font;</span>
-<span class="nc" id="L24">        this.textField = textField;</span>
-<span class="nc" id="L25">        this.active = active;</span>
-<span class="nc" id="L26">        inputText = new StringBuilder();</span>
-<span class="nc" id="L27">    }</span>
+<span class="fc" id="L21">    public NameTextField(Viewport vp, BitmapFont font, Texture textField, boolean active){</span>
+<span class="fc" id="L22">        this.vp = vp;</span>
+<span class="fc" id="L23">        this.font = font;</span>
+<span class="fc" id="L24">        this.textField = textField;</span>
+<span class="fc" id="L25">        this.active = active;</span>
+<span class="fc" id="L26">        inputText = new StringBuilder();</span>
+<span class="fc" id="L27">    }</span>
     public NameTextField(Viewport vp) {
 <span class="nc" id="L29">        this(vp, new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)),</span>
 <span class="nc" id="L30">                new Texture(Gdx.files.internal(&quot;NameTextField.png&quot;)), true);</span>
@@ -36,26 +36,26 @@ public class NameTextField {
 <span class="nc" id="L36">    }</span>
 
     public void render(SpriteBatch batch){
-<span class="nc bnc" id="L39" title="All 2 branches missed.">        if (!active) return;</span>
-<span class="nc" id="L40">        handleInput();</span>
-<span class="nc" id="L41">        float x = 800 - 338/2f;</span>
-<span class="nc" id="L42">        float y = 450 - 157/2f;</span>
-<span class="nc" id="L43">        ViewportAdapter.drawUI(vp, batch, textField, x, y, 338, 157);</span>
-<span class="nc" id="L44">        ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), x+70, y+68);</span>
-<span class="nc" id="L45">    }</span>
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (!active) return;</span>
+<span class="fc" id="L40">        handleInput();</span>
+<span class="fc" id="L41">        float x = 800 - 338/2f;</span>
+<span class="fc" id="L42">        float y = 450 - 157/2f;</span>
+<span class="fc" id="L43">        ViewportAdapter.drawUI(vp, batch, textField, x, y, 338, 157);</span>
+<span class="fc" id="L44">        ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), x+70, y+68);</span>
+<span class="fc" id="L45">    }</span>
 
     private void handleInput() {
-<span class="nc bnc" id="L48" title="All 4 branches missed.">        boolean shiftPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);</span>
-<span class="nc bnc" id="L49" title="All 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.CAPS_LOCK)){</span>
+<span class="pc bpc" id="L48" title="2 of 4 branches missed.">        boolean shiftPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.CAPS_LOCK)){</span>
 <span class="nc bnc" id="L50" title="All 2 branches missed.">            capsLockOn = !capsLockOn;</span>
         }
 
-<span class="nc bnc" id="L53" title="All 4 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) &amp;&amp; inputText.length() &gt; 0) {</span>
+<span class="pc bpc" id="L53" title="3 of 4 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) &amp;&amp; inputText.length() &gt; 0) {</span>
 <span class="nc" id="L54">            inputText.setLength(inputText.length() - 1);</span>
         }
 
-<span class="nc bnc" id="L57" title="All 2 branches missed.">        for (int i = Input.Keys.A; i &lt;= Input.Keys.Z; i++) {</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (int i = Input.Keys.A; i &lt;= Input.Keys.Z; i++) {</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
 <span class="nc" id="L59">                char character = Input.Keys.toString(i).charAt(0);</span>
 <span class="nc bnc" id="L60" title="All 8 branches missed.">                if ((shiftPressed &amp;&amp; !capsLockOn) || (!shiftPressed &amp;&amp; capsLockOn)) {</span>
 <span class="nc" id="L61">                    inputText.append(Character.toUpperCase(character));</span>
@@ -65,24 +65,24 @@ public class NameTextField {
             }
         }
 
-<span class="nc bnc" id="L68" title="All 2 branches missed.">        for (int i = Input.Keys.NUM_0; i &lt;= Input.Keys.NUM_9; i++) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (int i = Input.Keys.NUM_0; i &lt;= Input.Keys.NUM_9; i++) {</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
 <span class="nc" id="L70">                inputText.append(Input.Keys.toString(i));</span>
             }
         }
 
-<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {</span>
 <span class="nc" id="L75">            inputText.append(&quot; &quot;);</span>
         }
 
-<span class="nc bnc" id="L78" title="All 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {</span>
 <span class="nc" id="L79">            value = inputText.toString();</span>
 <span class="nc" id="L80">            active = false;</span>
         }
-<span class="nc" id="L82">    }</span>
+<span class="fc" id="L82">    }</span>
 
     public boolean textEntered() {
-<span class="nc bnc" id="L85" title="All 2 branches missed.">        return !active;</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        return !active;</span>
     }
 
     public String getValue() {
