@@ -27,6 +27,10 @@ public class ScreenManager {
         }
     }
 
+    public void removeScreenFromMemory(ScreenType screenType) {
+        screensInMemory.remove(screenType);
+    }
+
     public void setScreen(ScreenType screenType, Object... args){
         if (curScreen != null && !screensInMemory.containsKey(curScreenType)) {
             curScreen.dispose();

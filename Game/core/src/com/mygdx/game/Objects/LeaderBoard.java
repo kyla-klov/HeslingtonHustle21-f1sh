@@ -15,7 +15,7 @@ import com.mygdx.game.Utils.ViewportAdapter;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LeaderBoard implements Disposable {
+public class LeaderBoard implements Disposable{
     private static final String FILE_PATH = "storage/PlayerData.txt";
 
     private final Texture leaderBoardTexture;

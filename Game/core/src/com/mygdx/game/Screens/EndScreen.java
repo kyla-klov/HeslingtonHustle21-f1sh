@@ -8,8 +8,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.HesHustle;
+import com.mygdx.game.Objects.AchievementsDisplay;
+import com.mygdx.game.Objects.LeaderBoard;
+import com.mygdx.game.Utils.ScreenType;
+import com.mygdx.game.Utils.ViewportAdapter;
 
 public class EndScreen implements Screen{
     private final HesHustle game;
@@ -18,11 +22,14 @@ public class EndScreen implements Screen{
     private final TextButton playAgainButton;
     private final TextButton mainMenuButton;
     private final TextButton exitButton;
+    private final LeaderBoard leaderBoard;
+    private final AchievementsDisplay achievementsDisplay;
+    private final FitViewport vp;
     private final float score;
 
 
     public EndScreen(final HesHustle game, final float score) {
-        this(game, score, new Stage(new ScreenViewport()),
+        this(game, score, new Stage(new FitViewport(1600, 900)),
                 new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json")));
 //        this.game = game;
 //        stage = new Stage(new ScreenViewport());
@@ -54,12 +61,14 @@ public class EndScreen implements Screen{
         this.playAgainButton = playAgainButton;
         this.mainMenuButton = mainMenuButton;
         this.exitButton = exitButton;
-        //LeaderBoard lb = new LeaderBoard();
+        vp = (FitViewport) stage.getViewport();
+        this.leaderBoard = new LeaderBoard(vp, 60, 450 - 377/2f, 450, 377);
+        this.achievementsDisplay = new AchievementsDisplay(vp, game.getAchievementHandler(), 1100, 450 - 377/2f);
+        achievementsDisplay.show();
         setupUi();
     }
 
     private void setupUi(){
-
         Table table = new Table ();
         table.setFillParent(true);
         stage.addActor(table);
@@ -73,13 +82,16 @@ public class EndScreen implements Screen{
         // Add functionality to buttons
         playAgainButton.addListener(event -> {
             if (!event.isHandled()) return false;
-            game.setScreen(new GameScreen(game)); // Restart the game
+            game.getScreenManager().removeScreenFromMemory(ScreenType.GAME_SCREEN);
+            game.setNewGame();
+            game.getScreenManager().setScreen(ScreenType.GAME_SCREEN); // Restart the game
             return true;
         });
 
         mainMenuButton.addListener(event -> {
             if (!event.isHandled()) return false;
-            game.setScreen(new MenuScreen(game)); // Go back to the main menu
+            game.setNewGame();
+            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN); // Go back to the main menu
             return true;
         });
 
@@ -103,6 +115,7 @@ public class EndScreen implements Screen{
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
@@ -110,6 +123,12 @@ public class EndScreen implements Screen{
         ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);
         stage.act(Math.min(delta, 1 / 30f));
         stage.draw();
+
+        game.getBatch().setProjectionMatrix(vp.getCamera().combined);
+        game.getBatch().begin();
+        leaderBoard.render(game.getBatch());
+        achievementsDisplay.render(game.getBatch());
+        game.getBatch().end();
     }
 
     @Override

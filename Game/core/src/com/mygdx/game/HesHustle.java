@@ -19,15 +19,21 @@ public class HesHustle extends Game {
 	public void create () {
         batch = new SpriteBatch();
 		screenManager = new ScreenManager(this);
-		achievementHandler = new AchievementHandler();
 		gameMusic = new GameMusic(); // Initialize and start playing here
-		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);
+		setNewGame();
 		screenManager.setScreen(ScreenType.MENU_SCREEN);
 		fullScreen = false;
 	}
 
 	public GameMusic getGameMusic() {
 		return gameMusic;
+	}
+
+	public void setNewGame(){
+		if (achievementHandler!=null) achievementHandler.dispose();
+		achievementHandler = new AchievementHandler();
+		screenManager.removeScreenFromMemory(ScreenType.GAME_SCREEN);
+		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);
 	}
 
 	public ScreenManager getScreenManager() {

@@ -75,7 +75,7 @@ public class MenuScreen implements Screen {
         settingsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y){
-                game.getScreenManager().setScreen(ScreenType.SETTINGS_SCREEN);
+                game.getScreenManager().setScreen(ScreenType.SETTINGS_SCREEN, 10f);
             }
         });
 
