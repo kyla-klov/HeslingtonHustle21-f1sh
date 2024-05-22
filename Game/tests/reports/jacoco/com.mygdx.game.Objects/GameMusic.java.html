@@ -9,51 +9,44 @@ public class GameMusic implements Disposable {
     private Music music;
     private float volume;
 
-    public GameMusic() {
-<span class="nc" id="L13">        this(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;);</span>
-        // Load your music file
+<span class="fc" id="L12">    public GameMusic() {</span>
+<span class="fc" id="L13">        setup();</span>
+<span class="fc" id="L14">    }</span>
 
-//        music = Gdx.audio.newMusic(Gdx.files.internal(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;));
-//        music.setLooping(true);  // If you want the music to loop
-//        volume = 0.5f;  // Default volume
-//        music.setVolume(volume);
-//        music.play();
-<span class="nc" id="L21">    }</span>
-
-<span class="nc" id="L23">    public GameMusic(String filePath){</span>
+    private void setup(){
         // Load your music file
-<span class="nc" id="L25">        music = Gdx.audio.newMusic(Gdx.files.internal(filePath));</span>
-<span class="nc" id="L26">        music.setLooping(true);  // If you want the music to loop</span>
-<span class="nc" id="L27">        volume = 0.5f;  // Default volume</span>
-<span class="nc" id="L28">        music.setVolume(volume);</span>
-<span class="nc" id="L29">        music.play();</span>
-<span class="nc" id="L30">    }</span>
+<span class="fc" id="L18">        music = Gdx.audio.newMusic(Gdx.files.internal(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;));</span>
+<span class="fc" id="L19">        music.setLooping(true);  // If you want the music to loop</span>
+<span class="fc" id="L20">        volume = 0.5f;  // Default volume</span>
+<span class="fc" id="L21">        music.setVolume(volume);</span>
+<span class="fc" id="L22">        music.play();</span>
+<span class="fc" id="L23">    }</span>
     public void setVolume(float volume) {
-<span class="nc" id="L32">        this.volume = volume;</span>
-<span class="nc" id="L33">        music.setVolume(volume);</span>
-<span class="nc" id="L34">    }</span>
+<span class="nc" id="L25">        this.volume = volume;</span>
+<span class="nc" id="L26">        music.setVolume(volume);</span>
+<span class="nc" id="L27">    }</span>
 
     public float getVolume() {
-<span class="nc" id="L37">        return volume;</span>
+<span class="nc" id="L30">        return volume;</span>
     }
 
     public void play() {
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (!music.isPlaying()) {</span>
-<span class="nc" id="L42">            music.play();</span>
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (!music.isPlaying()) {</span>
+<span class="fc" id="L35">            music.play();</span>
         }
-<span class="nc" id="L44">    }</span>
+<span class="fc" id="L37">    }</span>
 
     public void pause() {
-<span class="nc" id="L47">        music.pause();</span>
-<span class="nc" id="L48">    }</span>
+<span class="fc" id="L40">        music.pause();</span>
+<span class="fc" id="L41">    }</span>
 
     public void stop() {
-<span class="nc" id="L51">        music.stop();</span>
-<span class="nc" id="L52">    }</span>
+<span class="fc" id="L44">        music.stop();</span>
+<span class="fc" id="L45">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc" id="L56">        music.dispose();</span>
-<span class="nc" id="L57">    }</span>
+<span class="fc" id="L49">        music.dispose();</span>
+<span class="fc" id="L50">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
