@@ -39,7 +39,7 @@ public class LeaderBoardScreen implements Screen {
         vp = new FitViewport(1600, 900, camera);
         vp.apply();
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        leaderBoard = new LeaderBoard(vp, 800 - 301/2f, 450 - 377/2f, 301, 377);
+        leaderBoard = new LeaderBoard(vp, 800 - 450/2f, 450 - 377/2f, 450, 377);
     }
 
     @Override

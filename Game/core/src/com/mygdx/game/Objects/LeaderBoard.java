@@ -76,11 +76,11 @@ public class LeaderBoard implements Disposable {
         for (int i = c; i < upper; i++) {
             Data d = data.get(i);
             String name = d.getPlayer();
-            String score = Float.toString(d.getScore());
+            String score = "   " + d.getScore();
 
-            if (name.length() >= 5){
-                name = name.substring(0, 5);
-                score = " " + score;
+            if (name.length() > 8) {
+                name = name.substring(0, 8);
+                name += "..";
             }
             float h = y + (300 - (i-c)*50)*height/377f;
             ViewportAdapter.drawFont(vp, font, batch, (i+1) + ". " + name, x + 50*width/301f, h);
@@ -128,6 +128,7 @@ public class LeaderBoard implements Disposable {
         return data;
     }
 
+    @SuppressWarnings("unused")
     public int getPage() {
         return page;
     }
