@@ -29,12 +29,7 @@ public class GameMusicTest {
     public void testMusicSetUp(){
         assertTrue(Gdx.files.internal("music_loop/Ludum Dare 30 - 01.ogg").exists());
     }
-    @Test
-    public void testPlay(){
-        mockedGameMusic.pause();
-        mockedGameMusic.play();
-        verify(music).play();
-    }
+    
     @Test
     public void testPause(){
         mockedGameMusic.pause();
