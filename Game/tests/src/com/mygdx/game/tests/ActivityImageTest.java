@@ -1,7 +1,9 @@
 package com.mygdx.game.tests;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -35,10 +37,12 @@ public class ActivityImageTest {
         verifyNoInteractions(mockedBatch);
         ArgumentCaptor<Texture> textureArgumentCaptor = ArgumentCaptor.forClass(Texture.class);
         ArgumentCaptor<TextureRegion> textureRegionArgumentCaptor = ArgumentCaptor.forClass(TextureRegion.class);
-        InOrder inOrder = inOrder(mockedBatch);
+        InOrder inOrder = inOrder(mockedBatch, Gdx.gl);
         mockedImage.setActive();
         mockedImage.render(mockedCamera, mockedBatch);
 
+        inOrder.verify(Gdx.gl).glEnable(GL20.GL_BLEND);
+        inOrder.verify(Gdx.gl).glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         inOrder.verify(mockedBatch,times(1)).setColor(new Color(0,0,0.2f,0.7f));
         inOrder.verify(mockedBatch,times(1)).draw(
                 textureArgumentCaptor.capture(), eq(0f), eq(-0.5f),
