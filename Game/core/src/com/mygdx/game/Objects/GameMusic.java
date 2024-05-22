@@ -1,12 +1,11 @@
 package com.mygdx.game.Objects;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Disposable;
 
 public class GameMusic implements Disposable {
-    private final Music music;
+    private Music music;
     private float volume;
 
     public GameMusic() {
