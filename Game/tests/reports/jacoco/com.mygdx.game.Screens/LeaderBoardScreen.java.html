@@ -90,13 +90,14 @@ public class LeaderBoardScreen implements Screen {
     public void touchDown(float screenX, float screenY){
 <span class="nc" id="L91">        Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
 <span class="nc bnc" id="L92" title="All 2 branches missed.">        if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){</span>
-<span class="nc" id="L93">            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
+<span class="nc" id="L93">            game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L94">            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
         }
-<span class="nc" id="L95">    }</span>
+<span class="nc" id="L96">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc" id="L99">        resourceManager.disposeAll();</span>
-<span class="nc" id="L100">    }</span>
+<span class="nc" id="L100">        resourceManager.disposeAll();</span>
+<span class="nc" id="L101">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

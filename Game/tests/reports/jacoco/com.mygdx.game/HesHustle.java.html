@@ -4,79 +4,86 @@
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Objects.GameMusic;
+import com.mygdx.game.Objects.GameSound;
 import com.mygdx.game.Utils.AchievementHandler;
 import com.mygdx.game.Utils.ScreenManager;
 import com.mygdx.game.Utils.ScreenType;
 
-<span class="nc" id="L11">public class HesHustle extends Game {</span>
+<span class="nc" id="L12">public class HesHustle extends Game {</span>
 	private SpriteBatch batch;
 	private ScreenManager screenManager;
 	private AchievementHandler achievementHandler;
 	private GameMusic gameMusic;
+	private GameSound gameSound;
 	private boolean fullScreen;
 
 	@Override
 	public void create () {
-<span class="nc" id="L20">        batch = new SpriteBatch();</span>
-<span class="nc" id="L21">		screenManager = new ScreenManager(this);</span>
-<span class="nc" id="L22">		gameMusic = new GameMusic(); // Initialize and start playing here</span>
-<span class="nc" id="L23">		setNewGame();</span>
-<span class="nc" id="L24">		screenManager.setScreen(ScreenType.MENU_SCREEN);</span>
-<span class="nc" id="L25">		fullScreen = false;</span>
-<span class="nc" id="L26">	}</span>
+<span class="nc" id="L22">        batch = new SpriteBatch();</span>
+<span class="nc" id="L23">		screenManager = new ScreenManager(this);</span>
+<span class="nc" id="L24">		gameMusic = new GameMusic(); // Initialize and start playing here</span>
+<span class="nc" id="L25">		gameSound = new GameSound();</span>
+<span class="nc" id="L26">		setNewGame();</span>
+<span class="nc" id="L27">		screenManager.setScreen(ScreenType.MENU_SCREEN);</span>
+<span class="nc" id="L28">		fullScreen = false;</span>
+<span class="nc" id="L29">	}</span>
 
 	public GameMusic getGameMusic() {
-<span class="nc" id="L29">		return gameMusic;</span>
+<span class="nc" id="L32">		return gameMusic;</span>
 	}
 
 	public void setNewGame(){
-<span class="nc bnc" id="L33" title="All 2 branches missed.">		if (achievementHandler!=null) achievementHandler.dispose();</span>
-<span class="nc" id="L34">		achievementHandler = new AchievementHandler();</span>
-<span class="nc" id="L35">		screenManager.removeScreenFromMemory(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L36">		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L37">	}</span>
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		if (achievementHandler!=null) achievementHandler.dispose();</span>
+<span class="nc" id="L37">		achievementHandler = new AchievementHandler();</span>
+<span class="nc" id="L38">		screenManager.removeScreenFromMemory(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L39">		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L40">	}</span>
 
 	public ScreenManager getScreenManager() {
-<span class="nc" id="L40">		return screenManager;</span>
+<span class="nc" id="L43">		return screenManager;</span>
 	}
 
 	public AchievementHandler getAchievementHandler() {
-<span class="nc" id="L44">		return achievementHandler;</span>
+<span class="nc" id="L47">		return achievementHandler;</span>
 	}
 
 	public SpriteBatch getBatch() {
-<span class="nc" id="L48">		return batch;</span>
+<span class="nc" id="L51">		return batch;</span>
 	}
 
 	//For tests
 	@SuppressWarnings(&quot;unused&quot;)
 	public void setScreenManager(ScreenManager screenManager) {
-<span class="nc" id="L54">		this.screenManager = screenManager;</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc" id="L57">		this.screenManager = screenManager;</span>
+<span class="nc" id="L58">	}</span>
 
 	//For tests
 	public void setBatch(SpriteBatch batch) {
-<span class="nc" id="L59">		this.batch = batch;</span>
-<span class="nc" id="L60">	}</span>
+<span class="nc" id="L62">		this.batch = batch;</span>
+<span class="nc" id="L63">	}</span>
 
 	public boolean getFullScreen() {
-<span class="nc" id="L63">		return fullScreen;</span>
+<span class="nc" id="L66">		return fullScreen;</span>
 	}
 
 	public void setFullScreen(boolean fullScreen) {
-<span class="nc" id="L67">		this.fullScreen = fullScreen;</span>
-<span class="nc" id="L68">	}</span>
+<span class="nc" id="L70">		this.fullScreen = fullScreen;</span>
+<span class="nc" id="L71">	}</span>
+
+	public GameSound getGameSound() {
+<span class="nc" id="L74">		return gameSound;</span>
+	}
 
 	@Override
 	public void render () {
-<span class="nc" id="L72">		super.render();</span>
-<span class="nc" id="L73">	}</span>
+<span class="nc" id="L79">		super.render();</span>
+<span class="nc" id="L80">	}</span>
 	
 	@Override
 	public void dispose () {
-<span class="nc" id="L77">		batch.dispose();</span>
-<span class="nc" id="L78">		gameMusic.dispose();</span>
-<span class="nc" id="L79">	}</span>
+<span class="nc" id="L84">		batch.dispose();</span>
+<span class="nc" id="L85">		gameMusic.dispose();</span>
+<span class="nc" id="L86">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
