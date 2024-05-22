@@ -20,7 +20,7 @@ public class Server {
             return false;
         }
         MediaType JSON = MediaType.get("application/json; charset=utf-8");
-        String json = String.format("{\"player\": \"%s\", \"score\": %f}", player, score);
+        String json = "{\"player\": \"" + player + "\", \"score\": " + score + "}";
         RequestBody body = RequestBody.create(json, JSON);
         Request request = new Request.Builder()
                 .url("https://score-board-afe96bddb988.herokuapp.com/submit_score")
@@ -55,7 +55,7 @@ public class Server {
         try {
             latch.await(); // Wait for the callback to count down
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            //Thread.currentThread().interrupt();
             System.out.println("Thread was interrupted");
         }
 
@@ -90,7 +90,6 @@ public class Server {
                 } else {
                     System.out.println("Unexpected code" + response);
                 }
-
             }
         });
     }

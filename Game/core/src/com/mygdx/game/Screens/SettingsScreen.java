@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
@@ -28,7 +28,7 @@ public class SettingsScreen implements Screen {
     public SettingsScreen(HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
-        this.stage = resourceManager.addDisposable(new Stage(new ScreenViewport()));
+        this.stage = resourceManager.addDisposable(new Stage(new FitViewport(1600, 900)));
         //this.gameMusic = new GameMusic();
         initialiseSettings();
     }
@@ -68,7 +68,12 @@ public class SettingsScreen implements Screen {
         Label resolutionLabel = new Label("Mode", skin);
         resolutionSelectBox = new SelectBox<>(skin2);
         resolutionSelectBox.setItems("Windowed", "Full Screen");
-        resolutionSelectBox.setSelected("Windowed");
+        if (game.getFullScreen()){
+            resolutionSelectBox.setSelected("Full Screen");
+        }
+        else {
+            resolutionSelectBox.setSelected("Windowed");
+        }
 
         // Back Button
         TextButton backButton = new TextButton("Back", skin);
@@ -103,8 +108,10 @@ public class SettingsScreen implements Screen {
     public void render(float delta) {
         if (resolutionSelectBox.getSelected().equals("Full Screen")){
             Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+            game.setFullScreen(true);
         } else if (Gdx.graphics.isFullscreen()){
             Gdx.graphics.setWindowedMode((int) (Gdx.graphics.getWidth() * 0.75f), (int) (Gdx.graphics.getHeight() * 0.75f));
+            game.setFullScreen(false);
         }
         ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);
         stage.act(Math.min(delta, 1 / 30f));

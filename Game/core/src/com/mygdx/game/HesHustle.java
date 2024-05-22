@@ -2,12 +2,8 @@ package com.mygdx.game;
 
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Objects.GameMusic;
-import com.mygdx.game.Screens.CheckinGameScreen;
-import com.mygdx.game.Screens.MenuScreen;
 import com.mygdx.game.Utils.AchievementHandler;
 import com.mygdx.game.Utils.ScreenManager;
 import com.mygdx.game.Utils.ScreenType;
@@ -17,6 +13,7 @@ public class HesHustle extends Game {
 	private ScreenManager screenManager;
 	private AchievementHandler achievementHandler;
 	private GameMusic gameMusic;
+	private boolean fullScreen;
 
 	@Override
 	public void create () {
@@ -26,6 +23,7 @@ public class HesHustle extends Game {
 		gameMusic = new GameMusic(); // Initialize and start playing here
 		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);
 		screenManager.setScreen(ScreenType.MENU_SCREEN);
+		fullScreen = false;
 	}
 
 	public GameMusic getGameMusic() {
@@ -55,7 +53,13 @@ public class HesHustle extends Game {
 		this.batch = batch;
 	}
 
+	public boolean getFullScreen() {
+		return fullScreen;
+	}
 
+	public void setFullScreen(boolean fullScreen) {
+		this.fullScreen = fullScreen;
+	}
 
 	@Override
 	public void render () {
