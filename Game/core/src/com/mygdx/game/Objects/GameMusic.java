@@ -2,64 +2,46 @@ package com.mygdx.game.Objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
-/**
- * The GameMusic class manages game music, including playback and volume level adjustments.
- * Initializes the game's background music and allows for dynamic volume control.
- */
-public class GameMusic {
+public class GameMusic implements Disposable {
+    private Music music;
+    private float volume;
 
-    Music audio;
-    // Music levels is quarters
-    private int musicLevel = 4;
-
-    private final float musicCap = 0.1f;
-    /**
-     * Constructor for GameMusic. Initializes and starts playing the game's background music at the maximum volume level.
-     */
     public GameMusic() {
-        setup();
+        // Load your music file
+        music = Gdx.audio.newMusic(Gdx.files.internal("music_loop/Ludum Dare 30 - 01.ogg"));
+        music.setLooping(true);  // If you want the music to loop
+        volume = 0.5f;  // Default volume
+        music.setVolume(volume);
+        music.play();
     }
 
-    private void setup(){
-        audio = Gdx.audio.newMusic(Gdx.files.internal("music_loop/Ludum Dare 30 - 01.ogg"));
-        audio.play();
-        audio.setVolume(musicCap); // Set volume to 100%
-        audio.setLooping(true);
+    public void setVolume(float volume) {
+        this.volume = volume;
+        music.setVolume(volume);
     }
 
-    /**
-     * Returns the current music volume level.
-     * @return The current music volume level.
-     */
-    public int getMusicLevel(){
-        return this.musicLevel;
+    public float getVolume() {
+        return volume;
     }
 
-    @SuppressWarnings("unused")
-    public Music getAudio() {
-        return audio;
-    }
-
-    /**
-     * Increments the music volume level by one, if it is not already at the maximum level. Adjusts the music playback volume accordingly.
-     */
-    public void incrementVolume() {
-        if (musicLevel <= 3){ // Check if volume is not already at maximum
-            musicLevel = musicLevel + 1;
-            float floatingMusicLevel = (float) musicLevel;
-            audio.setVolume(floatingMusicLevel*25/100*musicCap);
+    public void play() {
+        if (!music.isPlaying()) {
+            music.play();
         }
     }
 
-    /**
-     * Decrements the music volume level by one, if it is not already at the minimum level. Adjusts the music playback volume accordingly.
-     */
-    public void decrementVolume() {
-        if (this.musicLevel >= 1){ // Check if volume is not already at minimum
-            musicLevel = musicLevel - 1;
-            float floatingMusicLevel = (float) musicLevel;
-            audio.setVolume(floatingMusicLevel*25/100*musicCap);
-        }
+    public void pause() {
+        music.pause();
+    }
+
+    public void stop() {
+        music.stop();
+    }
+
+    @Override
+    public void dispose() {
+        music.dispose();
     }
 }

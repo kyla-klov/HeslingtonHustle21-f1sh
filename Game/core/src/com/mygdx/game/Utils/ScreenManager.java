@@ -60,6 +60,10 @@ public class ScreenManager {
                 return new LeaderBoardScreen(game);
             case CHECKIN_CODE_SCREEN:
                 return new CheckinGameScreen(game, (EventManager) args[0]);
+            case CONTROLS_SCREEN:
+                return new ControlsScreen(game);
+            case SETTINGS_SCREEN:
+                return new SettingsScreen(game);
             default:
                 return null;
         }

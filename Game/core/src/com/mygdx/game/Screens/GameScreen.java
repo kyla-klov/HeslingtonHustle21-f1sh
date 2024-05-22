@@ -48,12 +48,11 @@ public class GameScreen implements Screen {
     private final TiledMap tiledMap;
 
     private LightCycle LC;
-    private final Music BGmusic;
 
     private Achievement.Type hiker = null;
 
     public GameScreen(final HesHustle game, final GameClock gameClock, final TiledMap tiledMap,
-                      final TiledMapRenderer TmRender, final Music BGmusic){
+                      final TiledMapRenderer TmRender){
         this.game = game;
         this.batch = game.getBatch();
         this.gameClock = gameClock;
@@ -71,14 +70,12 @@ public class GameScreen implements Screen {
         this.activityImages = new ArrayList<>();
         this.buildings = new ArrayList<>();
 
-        this.BGmusic = resourceManager.addDisposable(BGmusic);
-        this.BGmusic.setLooping(true);
         uiElements = new UIElements(vp, game.getAchievementHandler());
         nameTextField = new NameTextField(vp);
         create();
     }
     public GameScreen(final HesHustle game) {
-        this(game, new GameClock(), null, null, Gdx.audio.newMusic(Gdx.files.internal("XPT5HRY-video-game.mp3")));
+        this(game, new GameClock(), null, null);
     }
 
     public void create(){
@@ -240,12 +237,10 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        BGmusic.play();
     }
 
     @Override
     public void hide() {
-        BGmusic.pause();
     }
 
     @Override
