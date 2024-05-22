@@ -34,13 +34,16 @@ public class LeaderBoardTest {
 
     @Test
     public void testReadPlayerData(){
-        assertEquals(2, leaderBoard.getData().size());
+        assertEquals(3, leaderBoard.getData().size());
         assertEquals("Tech", leaderBoard.getData().get(0).getPlayer());
         assertEquals(99f, leaderBoard.getData().get(0).getScore(), 0);
         assertEquals(2, leaderBoard.getData().get(0).getStatus(), 0);
-        assertEquals("Hemlock", leaderBoard.getData().get(1).getPlayer());
+        assertEquals("R. Hemlock", leaderBoard.getData().get(1).getPlayer());
         assertEquals(29.6f, leaderBoard.getData().get(1).getScore(), 0);
         assertEquals(1, leaderBoard.getData().get(1).getStatus(), 0);
+        assertEquals("Darth Jar Jar", leaderBoard.getData().get(2).getPlayer());
+        assertEquals(28.0f, leaderBoard.getData().get(2).getScore(), 0);
+        assertEquals(3, leaderBoard.getData().get(2).getStatus(), 0);
     }
 
     @Test
@@ -59,14 +62,16 @@ public class LeaderBoardTest {
         inOrder.verify(mockedBatch).draw(argumentCaptor.capture(), eq(250f), eq(32f), eq(32f), eq(32f));
         inOrder.verify(mockedFont).draw(mockedBatch, "Leader board", 60f, 350f);
         inOrder.verify(mockedFont).draw(mockedBatch, "1. Tech", 50f, 300f);
-        inOrder.verify(mockedFont).draw(mockedBatch, "99.0", 170f, 300f);
-        inOrder.verify(mockedFont).draw(mockedBatch, "2. Hemlo", 50f, 250f);
-        inOrder.verify(mockedFont).draw(mockedBatch, " 29.6", 170f, 250f);
+        inOrder.verify(mockedFont).draw(mockedBatch, "   99.0", 170f, 300f);
+        inOrder.verify(mockedFont).draw(mockedBatch, "2. R. Hemlock", 50f, 250f);
+        inOrder.verify(mockedFont).draw(mockedBatch, "   29.6", 170f, 250f);
+        inOrder.verify(mockedFont).draw(mockedBatch, "3. Darth Ja..", 50f, 200f);
+        inOrder.verify(mockedFont).draw(mockedBatch, "   28.0", 170f, 200f);
     }
     @Test
     public void testTouchDown(){
-//        leaderBoard.touchDown(0, 0);
-//        assertEquals(0, leaderBoard.getPage(), 0);
+        leaderBoard.touchDown(0, 0);
+        assertEquals(0, leaderBoard.getPage(), 0);
 //        vp.setWorldHeight(1);
 //        vp.setWorldHeight(1);
 //        leaderBoard.touchDown(200, 200);
