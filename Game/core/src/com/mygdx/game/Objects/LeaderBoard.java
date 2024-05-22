@@ -28,21 +28,36 @@ public class LeaderBoard implements Disposable {
     private ArrayList<Data> data;
     private int page;
 
-
-    public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
+    public LeaderBoard(Viewport vp, BitmapFont font, float x, float y, float width, float height){
         this.vp = vp;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.font = font;
         page = 0;
-        font = new BitmapFont(Gdx.files.internal("font.fnt"));
         data = readPlayerData();
         Collections.sort(data);
         Collections.reverse(data);
         leaderBoardTexture = new Texture(Gdx.files.internal("LeaderBoard.png"));
         upArrowTexture = new Texture(Gdx.files.internal("up.png"));
         downArrowTexture = new Texture(Gdx.files.internal("down.png"));
+    }
+    public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
+        this(vp, new BitmapFont(Gdx.files.internal("font.fnt")), x, y, width, height);
+//        this.vp = vp;
+//        this.x = x;
+//        this.y = y;
+//        this.width = width;
+//        this.height = height;
+//        page = 0;
+//        font = new BitmapFont(Gdx.files.internal("font.fnt"));
+//        data = readPlayerData();
+//        Collections.sort(data);
+//        Collections.reverse(data);
+//        leaderBoardTexture = new Texture(Gdx.files.internal("LeaderBoard.png"));
+//        upArrowTexture = new Texture(Gdx.files.internal("up.png"));
+//        downArrowTexture = new Texture(Gdx.files.internal("down.png"));
     }
 
     public void render(SpriteBatch batch){
@@ -109,4 +124,11 @@ public class LeaderBoard implements Disposable {
 
     }
 
+    public ArrayList<Data> getData() {
+        return data;
+    }
+
+    public int getPage() {
+        return page;
+    }
 }
