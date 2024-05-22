@@ -182,11 +182,11 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
 
     public void update(){
         if (plateX >= 0 && aKeyPressed){
-            plateX = plateX - 15 * speed/500f;
+            plateX = plateX - 25 * speed/500f;
         }
 
         if (plateX < vp.getWorldWidth() - plateWidth && dKeyPressed){
-            plateX = plateX + 15 * speed/500f;
+            plateX = plateX + 20 * speed/500f;
         }
 
     }

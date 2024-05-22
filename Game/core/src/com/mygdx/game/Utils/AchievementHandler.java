@@ -53,9 +53,9 @@ public class AchievementHandler implements Disposable {
         achievements.add(new Achievement("Baller", "Score at least 10 points in basketball", Achievement.Type.SILVER, "AchievementsDisplay/BallerAchievementSilver.png"));
         achievements.add(new Achievement("Baller", "Score at least 12 points in basketball", Achievement.Type.GOLD, "AchievementsDisplay/BallerAchievementGold.png"));
 
-        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 20 seconds", Achievement.Type.BRONZE, "AchievementsDisplay/DuckAchievementBronze.png"));
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 17 seconds", Achievement.Type.BRONZE, "AchievementsDisplay/DuckAchievementBronze.png"));
         achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 16 seconds", Achievement.Type.SILVER, "AchievementsDisplay/DuckAchievementSilver.png"));
-        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 12 seconds", Achievement.Type.GOLD, "AchievementsDisplay/DuckAchievementGold.png"));
+        achievements.add(new Achievement("Duck Duck Go", "Feed all of the ducks in under 15 seconds", Achievement.Type.GOLD, "AchievementsDisplay/DuckAchievementGold.png"));
 
         achievements.add(new Achievement("Feast to Fullest", "Eat 3 times in a day", Achievement.Type.BRONZE, "AchievementsDisplay/FTFBronze.png"));
         achievements.add(new Achievement("Feast to Fullest", "Eat 4 times in a day", Achievement.Type.SILVER, "AchievementsDisplay/FTFSilver.png"));
