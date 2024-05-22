@@ -39,7 +39,7 @@ public class LeaderBoardScreen implements Screen {
         vp = new FitViewport(1600, 900, camera);
         vp.apply();
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
-        leaderBoard = new LeaderBoard(vp, 800 - 301/2f, 450 - 377/2f, 301, 377);
+        leaderBoard = new LeaderBoard(vp, 800 - 450/2f, 450 - 377/2f, 450, 377);
     }
 
     @Override
@@ -90,6 +90,7 @@ public class LeaderBoardScreen implements Screen {
     public void touchDown(float screenX, float screenY){
         Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);
         if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){
+            game.getGameSound().buttonClickedSoundActivate();
             game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);
         }
     }

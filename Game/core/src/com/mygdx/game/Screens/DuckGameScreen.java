@@ -66,13 +66,13 @@ public class DuckGameScreen implements Screen, InputProcessor{
         } else {
             timeToComplete = (int) gameClock.getRawTime();
 
-            if (timeToComplete <= 18){
+            if (timeToComplete <= 17){
                 game.getAchievementHandler().getAchievement("Duck Duck Go", Achievement.Type.BRONZE).unlock();
             }
-            if (timeToComplete <= 17){
+            if (timeToComplete <= 16){
                 game.getAchievementHandler().getAchievement("Duck Duck Go", Achievement.Type.SILVER).unlock();
             }
-            if (timeToComplete <= 16){
+            if (timeToComplete <= 15){
                 game.getAchievementHandler().getAchievement("Duck Duck Go", Achievement.Type.GOLD).unlock();
             }
 
@@ -144,7 +144,7 @@ public class DuckGameScreen implements Screen, InputProcessor{
         Vector2 touchPoint = vp.unproject(new Vector2(worldX, worldY));
 
         if (touchPoint.x >= duckX && touchPoint.x <= duckX + duckWidth &&
-                touchPoint.y >= duckY && touchPoint.y <= duckY + duckHeight) {
+                touchPoint.y >= duckY && touchPoint.y <= duckY + duckHeight && isDuckOnScreen) {
             // Duck has been successfully clicked
             isDuckOnScreen = false;
             gameClock.addEvent(f -> spawnDuck(), 0.4f);

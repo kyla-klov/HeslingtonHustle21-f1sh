@@ -9,6 +9,10 @@ public class GameMusic implements Disposable {
     private float volume;
 
     public GameMusic() {
+        setup();
+    }
+
+    private void setup(){
         // Load your music file
         music = Gdx.audio.newMusic(Gdx.files.internal("music_loop/Ludum Dare 30 - 01.ogg"));
         music.setLooping(true);  // If you want the music to loop
@@ -16,7 +20,6 @@ public class GameMusic implements Disposable {
         music.setVolume(volume);
         music.play();
     }
-
     public void setVolume(float volume) {
         this.volume = volume;
         music.setVolume(volume);
@@ -24,12 +27,6 @@ public class GameMusic implements Disposable {
 
     public float getVolume() {
         return volume;
-    }
-
-    public void play() {
-        if (!music.isPlaying()) {
-            music.play();
-        }
     }
 
     public void pause() {

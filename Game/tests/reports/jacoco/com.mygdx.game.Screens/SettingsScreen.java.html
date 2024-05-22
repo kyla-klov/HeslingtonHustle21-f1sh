@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SettingsScreen.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">tests</a> &gt; <a href="index.source.html" class="el_package">com.mygdx.game.Screens</a> &gt; <span class="el_source">SettingsScreen.java</span></div><h1>SettingsScreen.java</h1><pre class="source lang-java linenums">package com.mygdx.game.Screens;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.mygdx.game.HesHustle;
+import com.mygdx.game.Utils.ResourceManager;
+import com.mygdx.game.Utils.ScreenType;
+
+public class SettingsScreen implements Screen {
+    private final HesHustle game;
+    private final Stage stage;
+    private final ResourceManager resourceManager;
+
+
+    private SelectBox&lt;String&gt; resolutionSelectBox;
+
+<span class="nc" id="L23">    public SettingsScreen(HesHustle game) {</span>
+<span class="nc" id="L24">        this.game = game;</span>
+<span class="nc" id="L25">        this.resourceManager = new ResourceManager();</span>
+<span class="nc" id="L26">        this.stage = resourceManager.addDisposable(new Stage(new FitViewport(1600, 900)));</span>
+        //this.gameMusic = new GameMusic();
+<span class="nc" id="L28">        initialiseSettings();</span>
+<span class="nc" id="L29">    }</span>
+
+    private void initialiseSettings() {
+
+<span class="nc" id="L33">        Skin skin = resourceManager.addDisposable(new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)));</span>
+<span class="nc" id="L34">        Skin skin2 = resourceManager.addDisposable(new Skin(Gdx.files.internal(&quot;metalui/metal-ui.json&quot;)));</span>
+
+<span class="nc" id="L36">        Label settingsLabel = new Label(&quot;Settings&quot;, skin, &quot;default&quot;);</span>
+<span class="nc" id="L37">        settingsLabel.setFontScale(2.0f);</span>
+
+        // Music Volume Components
+<span class="nc" id="L40">        Label musicVolumeLabel = new Label(&quot;Music Volume&quot;, skin);</span>
+<span class="nc" id="L41">        Slider musicVolumeSlider = new Slider(0.0f, 1.0f, 0.01f, false, skin);</span>
+<span class="nc" id="L42">        musicVolumeSlider.setValue(game.getGameMusic().getVolume());</span>
+<span class="nc" id="L43">        musicVolumeSlider.addListener(new ChangeListener() {</span>
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+<span class="nc" id="L46">                float newVolume = ((Slider) actor).getValue();</span>
+<span class="nc" id="L47">                game.getGameMusic().setVolume(newVolume);</span>
+<span class="nc" id="L48">            }</span>
+        });
+
+        // Sound Volume Components
+<span class="nc" id="L52">        Label soundVolumeLabel = new Label(&quot;Sound Volume&quot;, skin);</span>
+<span class="nc" id="L53">        Slider soundVolumeSlider = new Slider(0.0f, 1.0f, 0.01f, false, skin);</span>
+<span class="nc" id="L54">        soundVolumeSlider.setValue(game.getGameSound().getVolume());</span>
+<span class="nc" id="L55">        soundVolumeSlider.addListener(new ChangeListener() {</span>
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+<span class="nc" id="L58">                game.getGameSound().setVolume(((Slider) actor).getValue());</span>
+<span class="nc" id="L59">            }</span>
+        });
+
+        // Resolution Selector Components using skin2
+<span class="nc" id="L63">        Label resolutionLabel = new Label(&quot;Mode&quot;, skin);</span>
+<span class="nc" id="L64">        resolutionSelectBox = new SelectBox&lt;&gt;(skin2);</span>
+<span class="nc" id="L65">        resolutionSelectBox.setItems(&quot;Windowed&quot;, &quot;Full Screen&quot;);</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (game.getFullScreen()){</span>
+<span class="nc" id="L67">            resolutionSelectBox.setSelected(&quot;Full Screen&quot;);</span>
+        }
+        else {
+<span class="nc" id="L70">            resolutionSelectBox.setSelected(&quot;Windowed&quot;);</span>
+        }
+
+        // Back Button
+<span class="nc" id="L74">        TextButton backButton = new TextButton(&quot;Back&quot;, skin);</span>
+<span class="nc" id="L75">        backButton.addListener(new ChangeListener() {</span>
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+<span class="nc" id="L78">                game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L79">                game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
+<span class="nc" id="L80">            }</span>
+        });
+
+        // Table setup
+<span class="nc" id="L84">        Table table = new Table();</span>
+<span class="nc" id="L85">        table.setFillParent(true);</span>
+<span class="nc" id="L86">        table.add(settingsLabel).padBottom(20).row();</span>
+<span class="nc" id="L87">        table.add(musicVolumeLabel).padBottom(10).left().row();</span>
+<span class="nc" id="L88">        table.add(musicVolumeSlider).fillX().padBottom(20).row();</span>
+<span class="nc" id="L89">        table.add(soundVolumeLabel).padBottom(10).left().row();</span>
+<span class="nc" id="L90">        table.add(soundVolumeSlider).fillX().padBottom(20).row();</span>
+<span class="nc" id="L91">        table.add(resolutionLabel).padBottom(10).left().row();</span>
+<span class="nc" id="L92">        table.add(resolutionSelectBox).fillX().padBottom(20).row();</span>
+<span class="nc" id="L93">        table.add(backButton).fillX().pad(10);</span>
+<span class="nc" id="L94">        stage.addActor(table);</span>
+<span class="nc" id="L95">    }</span>
+
+    @Override
+    public void show() {
+<span class="nc" id="L99">        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+<span class="nc" id="L100">        Gdx.input.setInputProcessor(stage);</span>
+<span class="nc" id="L101">    }</span>
+
+    @Override
+    public void render(float delta) {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">        if (resolutionSelectBox.getSelected().equals(&quot;Full Screen&quot;)){</span>
+<span class="nc" id="L106">            Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());</span>
+<span class="nc" id="L107">            game.setFullScreen(true);</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">        } else if (Gdx.graphics.isFullscreen()){</span>
+<span class="nc" id="L109">            Gdx.graphics.setWindowedMode((int) (Gdx.graphics.getWidth() * 0.75f), (int) (Gdx.graphics.getHeight() * 0.75f));</span>
+<span class="nc" id="L110">            game.setFullScreen(false);</span>
+        }
+<span class="nc" id="L112">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L113">        stage.act(Math.min(delta, 1 / 30f));</span>
+<span class="nc" id="L114">        stage.draw();</span>
+<span class="nc" id="L115">    }</span>
+
+    @Override
+    public void resize(int width, int height) {
+<span class="nc" id="L119">        stage.getViewport().update(width, height, true);</span>
+<span class="nc" id="L120">    }</span>
+
+    @Override
+    public void pause() {
+<span class="nc" id="L124">    }</span>
+
+    @Override
+    public void resume() {
+<span class="nc" id="L128">    }</span>
+
+    @Override
+    public void hide() {
+<span class="nc" id="L132">    }</span>
+
+    @Override
+    public void dispose() {
+<span class="nc" id="L136">        resourceManager.disposeAll();</span>
+<span class="nc" id="L137">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

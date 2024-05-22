@@ -2,12 +2,9 @@ package com.mygdx.game;
 
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Objects.GameMusic;
-import com.mygdx.game.Screens.CheckinGameScreen;
-import com.mygdx.game.Screens.MenuScreen;
+import com.mygdx.game.Objects.GameSound;
 import com.mygdx.game.Utils.AchievementHandler;
 import com.mygdx.game.Utils.ScreenManager;
 import com.mygdx.game.Utils.ScreenType;
@@ -17,19 +14,29 @@ public class HesHustle extends Game {
 	private ScreenManager screenManager;
 	private AchievementHandler achievementHandler;
 	private GameMusic gameMusic;
+	private GameSound gameSound;
+	private boolean fullScreen;
 
 	@Override
 	public void create () {
         batch = new SpriteBatch();
 		screenManager = new ScreenManager(this);
-		achievementHandler = new AchievementHandler();
 		gameMusic = new GameMusic(); // Initialize and start playing here
-		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);
+		gameSound = new GameSound();
+		setNewGame();
 		screenManager.setScreen(ScreenType.MENU_SCREEN);
+		fullScreen = false;
 	}
 
 	public GameMusic getGameMusic() {
 		return gameMusic;
+	}
+
+	public void setNewGame(){
+		if (achievementHandler!=null) achievementHandler.dispose();
+		achievementHandler = new AchievementHandler();
+		screenManager.removeScreenFromMemory(ScreenType.GAME_SCREEN);
+		screenManager.addScreenToMemory(ScreenType.GAME_SCREEN);
 	}
 
 	public ScreenManager getScreenManager() {
@@ -55,7 +62,17 @@ public class HesHustle extends Game {
 		this.batch = batch;
 	}
 
+	public boolean getFullScreen() {
+		return fullScreen;
+	}
 
+	public void setFullScreen(boolean fullScreen) {
+		this.fullScreen = fullScreen;
+	}
+
+	public GameSound getGameSound() {
+		return gameSound;
+	}
 
 	@Override
 	public void render () {

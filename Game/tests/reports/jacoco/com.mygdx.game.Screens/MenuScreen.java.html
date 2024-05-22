@@ -2,15 +2,16 @@
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -22,102 +23,124 @@ public class MenuScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final ResourceManager resourceManager;
-    private final OrthographicCamera camera;
+    private Image backgroundImage;
 
-
-<span class="nc" id="L28">    public MenuScreen(HesHustle game, ResourceManager resourceManager, Stage stage){</span>
+<span class="nc" id="L28">    public MenuScreen(HesHustle game) {</span>
 <span class="nc" id="L29">        this.game = game;</span>
-<span class="nc" id="L30">        this.resourceManager = resourceManager;</span>
-<span class="nc" id="L31">        this.stage = stage;</span>
-
-<span class="nc" id="L33">        camera = new OrthographicCamera();</span>
-<span class="nc" id="L34">        Viewport vp = new FitViewport(1600, 900, camera);</span>
-<span class="nc" id="L35">        vp.apply();</span>
-
-<span class="nc" id="L37">        stage.setViewport(vp);</span>
-<span class="nc" id="L38">        initialiseMenu();</span>
-<span class="nc" id="L39">    }</span>
-    public MenuScreen(HesHustle game) {
-<span class="nc" id="L41">        this(game, new ResourceManager(), new Stage());</span>
-<span class="nc" id="L42">    }</span>
+<span class="nc" id="L30">        this.resourceManager = new ResourceManager();</span>
+<span class="nc" id="L31">        this.stage = resourceManager.addDisposable(new Stage(new FitViewport(1600, 900)));</span>
+<span class="nc" id="L32">        initialiseMenu();</span>
+<span class="nc" id="L33">    }</span>
 
     private void initialiseMenu(){
-<span class="nc" id="L45">        Gdx.input.setInputProcessor(stage);</span>
+<span class="nc" id="L36">        Gdx.input.setInputProcessor(stage);</span>
 
-<span class="nc" id="L47">        Skin skin = resourceManager.addDisposable(new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)));</span>
+        // Load background image
+<span class="nc" id="L39">        Texture bgTexture = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;blurred_background.png&quot;)));</span>
+<span class="nc" id="L40">        backgroundImage = new Image(bgTexture);</span>
+<span class="nc" id="L41">        backgroundImage.setScaling(Scaling.fill);</span>
+<span class="nc" id="L42">        backgroundImage.setFillParent(true);</span>
+<span class="nc" id="L43">        stage.addActor(backgroundImage);</span>
 
-<span class="nc" id="L49">        Label titleLabel = new Label(&quot;Heslington Hustle&quot;, skin, &quot;default&quot;);</span>
-<span class="nc" id="L50">        titleLabel.setFontScale(2.0f);</span>
+<span class="nc" id="L45">        Skin skin = resourceManager.addDisposable(new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)));</span>
 
-<span class="nc" id="L52">        TextButton playButton = new TextButton(&quot;Play&quot;, skin);</span>
-<span class="nc" id="L53">        playButton.addListener(new ClickListener() {</span>
+<span class="nc" id="L47">        Label titleLabel = new Label(&quot;Heslington Hustle&quot;, skin, &quot;default&quot;);</span>
+<span class="nc" id="L48">        titleLabel.setFontScale(2.0f);</span>
+
+<span class="nc" id="L50">        TextButton playButton = new TextButton(&quot;Play&quot;, skin);</span>
+<span class="nc" id="L51">        playButton.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y){
-<span class="nc" id="L56">                game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L57">            }</span>
+<span class="nc" id="L54">                game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L55">                game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L56">            }</span>
         });
 
-<span class="nc" id="L60">        TextButton leaderBoardButton = new TextButton(&quot;Leader Board&quot;, skin);</span>
-<span class="nc" id="L61">        leaderBoardButton.addListener(new ClickListener() {</span>
+<span class="nc" id="L59">        TextButton controlsButton = new TextButton (&quot;Controls&quot;, skin);</span>
+<span class="nc" id="L60">        controlsButton.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y){
-<span class="nc" id="L64">                game.getScreenManager().setScreen(ScreenType.LEADERBOARD_SCREEN);</span>
+<span class="nc" id="L63">                game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L64">                game.getScreenManager().setScreen(ScreenType.CONTROLS_SCREEN);</span>
 <span class="nc" id="L65">            }</span>
         });
 
-
-<span class="nc" id="L69">        TextButton exitButton = new TextButton(&quot;Exit&quot;, skin);</span>
-<span class="nc" id="L70">        exitButton.addListener(new ClickListener() {</span>
+<span class="nc" id="L68">        TextButton leaderBoardButton = new TextButton(&quot;Leader Board&quot;, skin);</span>
+<span class="nc" id="L69">        leaderBoardButton.addListener(new ClickListener() {</span>
             @Override
-            public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L73">                Gdx.app.exit();</span>
+            public void clicked(InputEvent event, float x, float y){
+<span class="nc" id="L72">                game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L73">                game.getScreenManager().setScreen(ScreenType.LEADERBOARD_SCREEN);</span>
 <span class="nc" id="L74">            }</span>
         });
 
-<span class="nc" id="L77">        Table table = new Table();</span>
-<span class="nc" id="L78">        table.setFillParent(true);</span>
-<span class="nc" id="L79">        table.add(titleLabel).padBottom(50).row(); // Add the title label and move to the next row</span>
-<span class="nc" id="L80">        table.add(playButton).pad(10).row();</span>
-<span class="nc" id="L81">        table.add(leaderBoardButton).pad(10).row();// Add the play button and move to the next row</span>
-<span class="nc" id="L82">        table.add(exitButton).pad(10); // Add the exit button</span>
+<span class="nc" id="L77">        TextButton settingsButton = new TextButton (&quot;Settings&quot;, skin);</span>
+<span class="nc" id="L78">        settingsButton.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+<span class="nc" id="L81">                game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L82">                game.getScreenManager().setScreen(ScreenType.SETTINGS_SCREEN, 10f);</span>
+<span class="nc" id="L83">            }</span>
+        });
 
-<span class="nc" id="L84">        stage.addActor(table);</span>
-<span class="nc" id="L85">    }</span>
+
+<span class="nc" id="L87">        TextButton exitButton = new TextButton(&quot;Exit&quot;, skin);</span>
+<span class="nc" id="L88">        exitButton.addListener(new ClickListener() {</span>
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+<span class="nc" id="L91">                Gdx.app.exit();</span>
+<span class="nc" id="L92">            }</span>
+        });
+
+<span class="nc" id="L95">        Table table = new Table();</span>
+<span class="nc" id="L96">        table.setFillParent(true);</span>
+<span class="nc" id="L97">        table.add(titleLabel).padBottom(50).row(); // Add the title label and move to the next row</span>
+<span class="nc" id="L98">        table.add(playButton).pad(10).row(); // Add the play button and move to the next row</span>
+<span class="nc" id="L99">        table.add(controlsButton).pad(10).row(); // Add the controls button to see controls information</span>
+<span class="nc" id="L100">        table.add(leaderBoardButton).pad(10).row(); // Player can now see leaderboard whenever</span>
+<span class="nc" id="L101">        table.add(settingsButton).pad(10).row(); // Add the settings button so user can adjust the settings</span>
+<span class="nc" id="L102">        table.add(exitButton).pad(10); // Add the exit button</span>
+
+<span class="nc" id="L104">        stage.addActor(table);</span>
+<span class="nc" id="L105">    }</span>
 
     @Override
     public void show() {
-<span class="nc" id="L89">        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
-<span class="nc" id="L90">    }</span>
+<span class="nc" id="L109">        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());</span>
+<span class="nc" id="L110">    }</span>
 
     @Override
     public void render(float delta) {
-<span class="nc" id="L94">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
-<span class="nc" id="L95">        stage.act(Math.min(delta, 1 / 30f));</span>
-<span class="nc" id="L96">        stage.draw();</span>
-<span class="nc" id="L97">    }</span>
+<span class="nc" id="L114">        Gdx.gl.glClearColor(0f,0f,0f,1);</span>
+<span class="nc" id="L115">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+<span class="nc" id="L116">        stage.act(Math.min(delta, 1 / 30f));</span>
+<span class="nc" id="L117">        stage.draw();</span>
+<span class="nc" id="L118">    }</span>
 
     @Override
     public void resize(int width, int height) {
-<span class="nc" id="L101">        stage.getViewport().update(width, height, true);</span>
-<span class="nc" id="L102">        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);</span>
-<span class="nc" id="L103">    }</span>
+<span class="nc" id="L122">        stage.getViewport().update(width, height, true);</span>
+<span class="nc" id="L123">        backgroundImage.setSize(width, height);</span>
+<span class="nc" id="L124">    }</span>
+
+
 
     @Override
     public void pause() {
-<span class="nc" id="L107">    }</span>
+<span class="nc" id="L130">    }</span>
 
     @Override
     public void resume() {
-<span class="nc" id="L111">    }</span>
+<span class="nc" id="L134">    }</span>
 
     @Override
     public void hide() {
-<span class="nc" id="L115">        Gdx.input.setInputProcessor(null);</span>
-<span class="nc" id="L116">    }</span>
+<span class="nc" id="L138">        Gdx.input.setInputProcessor(null);</span>
+<span class="nc" id="L139">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc" id="L120">        resourceManager.disposeAll();</span>
-<span class="nc" id="L121">    }</span>
+<span class="nc" id="L143">        resourceManager.disposeAll();</span>
+<span class="nc" id="L144">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

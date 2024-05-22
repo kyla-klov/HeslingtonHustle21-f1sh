@@ -10,7 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
@@ -23,7 +23,7 @@ public class ControlsScreen implements Screen {
     public ControlsScreen(HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
-        this.stage = resourceManager.addDisposable(new Stage(new ScreenViewport()));
+        this.stage = resourceManager.addDisposable(new Stage(new FitViewport(1600, 900)));
         initialiseSettings();
     }
 
@@ -59,6 +59,7 @@ public class ControlsScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                game.getGameSound().buttonClickedSoundActivate();
                 game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);
             }
         });

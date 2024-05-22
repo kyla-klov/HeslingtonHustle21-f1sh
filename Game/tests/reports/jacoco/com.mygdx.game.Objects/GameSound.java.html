@@ -2,104 +2,49 @@
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Manages game sound effects including sound level adjustments and playing specific sounds.
  * It handles sound effects for increasing volume, decreasing volume, and button clicks.
  */
-public class GameSound {
-    Music upSound;
-    Music downSound;
-    Music buttonClickedSound;
-    Music eatingSound;
-<span class="nc" id="L15">    private int soundLevel = 4;</span>
+public class GameSound implements Disposable {
+    private final Music buttonClickedSound;
+<span class="nc" id="L13">    private float volume = 1f;</span>
+
 
     /**
      * Initializes sound effects by loading the audio files.
      */
-<span class="nc" id="L20">    public GameSound(){</span>
-<span class="nc" id="L21">        upSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/high_note.mp3&quot;));</span>
-<span class="nc" id="L22">        downSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/low_note.mp3&quot;));</span>
-<span class="nc" id="L23">        buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/button_press.mp3&quot;));</span>
-<span class="nc" id="L24">        eatingSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/eating_sound.wav&quot;));</span>
-<span class="nc" id="L25">    }</span>
+<span class="nc" id="L19">    public GameSound(){</span>
+<span class="nc" id="L20">        buttonClickedSound = Gdx.audio.newMusic(Gdx.files.internal(&quot;sfx/button_press.mp3&quot;));</span>
+<span class="nc" id="L21">        setVolume(volume);</span>
+<span class="nc" id="L22">    }</span>
 
-    /**
-     * Gets the current sound level.
-     *
-     * @return The current sound level.
-     */
-    public int getSoundLevel(){
-<span class="nc" id="L33">        return this.soundLevel;</span>
+    public float getVolume(){
+<span class="nc" id="L25">        return volume;</span>
     }
 
-    /**
-     * Plays the sound effect for increasing the volume. Stops the sound if it is already playing before restarting it.
-     */
-    public void upSoundActivate(){
-<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (upSound.isPlaying()){</span>
-<span class="nc" id="L41">            upSound.stop();</span>
-        }
-<span class="nc" id="L43">        upSound.play();</span>
-<span class="nc" id="L44">    }</span>
-
-    /**
-     * Plays the sound effect for decreasing the volume. Stops the sound if it is already playing before restarting it.
-     */
-    public void downSoundActivate(){
-<span class="nc bnc" id="L50" title="All 2 branches missed.">        if (downSound.isPlaying()){</span>
-<span class="nc" id="L51">            downSound.stop();</span>
-<span class="nc" id="L52">            downSound.play();</span>
-        }
-<span class="nc" id="L54">        downSound.play();</span>
-<span class="nc" id="L55">    }</span>
+    public void setVolume(float volume){
+<span class="nc" id="L29">        this.volume = volume;</span>
+<span class="nc" id="L30">        buttonClickedSound.setVolume(volume);</span>
+<span class="nc" id="L31">    }</span>
 
     /**
      * Plays the sound effect for a button click. Stops the sound if it is already playing before restarting it.
      */
     public void buttonClickedSoundActivate(){
-<span class="nc bnc" id="L61" title="All 2 branches missed.">        if (buttonClickedSound.isPlaying()){</span>
-<span class="nc" id="L62">            buttonClickedSound.stop();</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">        if (buttonClickedSound.isPlaying()){</span>
+<span class="nc" id="L38">            buttonClickedSound.stop();</span>
         }
-<span class="nc" id="L64">        buttonClickedSound.play();</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L40">        buttonClickedSound.play();</span>
+<span class="nc" id="L41">    }</span>
 
-    /**
-     * Plays the sound effect for increasing the volume. Stops the sound if it is already playing before restarting it.
-     */
-    public void eatingSoundActivate(){
-<span class="nc bnc" id="L71" title="All 2 branches missed.">        if (eatingSound.isPlaying()){</span>
-<span class="nc" id="L72">            eatingSound.stop();</span>
-        }
-<span class="nc" id="L74">        eatingSound.play();</span>
-<span class="nc" id="L75">    }</span>
 
-    /**
-     * Increments the sound volume level by one step if not already at the maximum. Also adjusts the volume of all sound effects accordingly.
-     */
-    public void incrementVolume() {
-<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (soundLevel &lt;= 3){ // Check if volume is not already at maximum</span>
-<span class="nc" id="L82">            soundLevel = soundLevel + 1;</span>
-<span class="nc" id="L83">            float floatingMusicLevel = (float) soundLevel;</span>
-<span class="nc" id="L84">            upSound.setVolume(floatingMusicLevel*25/100);</span>
-<span class="nc" id="L85">            downSound.setVolume(floatingMusicLevel*25/100);</span>
-<span class="nc" id="L86">            buttonClickedSound.setVolume(floatingMusicLevel*25/100);</span>
-<span class="nc" id="L87">            eatingSound.setVolume(floatingMusicLevel*25/100);</span>
-        }
-<span class="nc" id="L89">    }</span>
-
-    /**
-     * Decrements the music volume level by one, if it is not already at the minimum level. Adjusts the music playback volume accordingly.
-     */
-    public void decrementVolume() {
-<span class="nc bnc" id="L95" title="All 2 branches missed.">        if (this.soundLevel &gt;= 1) { // Check if volume is not already at minimum</span>
-<span class="nc" id="L96">            soundLevel = soundLevel - 1;</span>
-<span class="nc" id="L97">            float floatingMusicLevel = (float) soundLevel;</span>
-<span class="nc" id="L98">            upSound.setVolume(floatingMusicLevel*25/100);</span>
-<span class="nc" id="L99">            downSound.setVolume(floatingMusicLevel*25/100);</span>
-<span class="nc" id="L100">            buttonClickedSound.setVolume(floatingMusicLevel*25/100);</span>
-        }
-<span class="nc" id="L102">    }</span>
+    @Override
+    public void dispose() {
+<span class="nc" id="L46">        buttonClickedSound.dispose();</span>
+<span class="nc" id="L47">    }</span>
 }
 
 

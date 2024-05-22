@@ -15,7 +15,7 @@ import com.mygdx.game.Utils.ViewportAdapter;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LeaderBoard implements Disposable {
+public class LeaderBoard implements Disposable{
     private static final String FILE_PATH = "storage/PlayerData.txt";
 
     private final Texture leaderBoardTexture;
@@ -28,21 +28,36 @@ public class LeaderBoard implements Disposable {
     private ArrayList<Data> data;
     private int page;
 
-
-    public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
+    public LeaderBoard(Viewport vp, BitmapFont font, float x, float y, float width, float height){
         this.vp = vp;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
+        this.font = font;
         page = 0;
-        font = new BitmapFont(Gdx.files.internal("font.fnt"));
         data = readPlayerData();
         Collections.sort(data);
         Collections.reverse(data);
         leaderBoardTexture = new Texture(Gdx.files.internal("LeaderBoard.png"));
         upArrowTexture = new Texture(Gdx.files.internal("up.png"));
         downArrowTexture = new Texture(Gdx.files.internal("down.png"));
+    }
+    public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
+        this(vp, new BitmapFont(Gdx.files.internal("font.fnt")), x, y, width, height);
+//        this.vp = vp;
+//        this.x = x;
+//        this.y = y;
+//        this.width = width;
+//        this.height = height;
+//        page = 0;
+//        font = new BitmapFont(Gdx.files.internal("font.fnt"));
+//        data = readPlayerData();
+//        Collections.sort(data);
+//        Collections.reverse(data);
+//        leaderBoardTexture = new Texture(Gdx.files.internal("LeaderBoard.png"));
+//        upArrowTexture = new Texture(Gdx.files.internal("up.png"));
+//        downArrowTexture = new Texture(Gdx.files.internal("down.png"));
     }
 
     public void render(SpriteBatch batch){
@@ -61,11 +76,11 @@ public class LeaderBoard implements Disposable {
         for (int i = c; i < upper; i++) {
             Data d = data.get(i);
             String name = d.getPlayer();
-            String score = Float.toString(d.getScore());
+            String score = "   " + d.getScore();
 
-            if (name.length() >= 5){
-                name = name.substring(0, 5);
-                score = " " + score;
+            if (name.length() > 8 && name.length() != 10) {
+                name = name.substring(0, 8);
+                name += "..";
             }
             float h = y + (300 - (i-c)*50)*height/377f;
             ViewportAdapter.drawFont(vp, font, batch, (i+1) + ". " + name, x + 50*width/301f, h);
@@ -109,4 +124,12 @@ public class LeaderBoard implements Disposable {
 
     }
 
+    public ArrayList<Data> getData() {
+        return data;
+    }
+
+    @SuppressWarnings("unused")
+    public int getPage() {
+        return page;
+    }
 }
