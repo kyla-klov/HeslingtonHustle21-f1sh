@@ -128,14 +128,101 @@ public class EventManagerTest {
         mockedEM.updateTime(Sleep);
     }
     @Test
-    public void testCalcScore() {
+    public void testMaxCalcScore1() {
         // this one needs fixing because im not sure what the expected score is actually supposed to be
+        //Testing for max score
+        for (int day = 1; day <= 7; day++) {
+            mockedEM.interact("Ducks");
+            mockedEM.interact("Computer\nScience\nDepartment");
+            mockedEM.addStudyHours(4); //Studies for 4 hours
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Langwith");
+        }
+        int expectedScore = 100;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+    }
+
+    @Test
+    public void testMaxCalcScore2() {
+        // this one needs fixing because im not sure what the expected score is actually supposed to be
+        //Testing for max score
+        for (int day = 1; day <= 5; day++) {
+            mockedEM.interact("Ducks");
+            mockedEM.interact("Computer\nScience\nDepartment");
+            mockedEM.addStudyHours(4); //Studies for 4 hours
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Piazza");
+            mockedEM.interact("Langwith");
+        }
+
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
         mockedEM.interact("Ducks");
         mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(8); //Studies for 4 hours
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
         mockedEM.interact("Langwith");
-        int expectedScore = 77;
-//        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+        int expectedScore = 100;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
     }
+
+    @Test
+    public void testRandomCalcScore() {
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(2);
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("BasketBall");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(8);
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Ducks");
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(2);
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("BasketBall");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(8);
+        mockedEM.interact("Langwith");
+
+        mockedEM.interact("Computer\nScience\nDepartment");
+        mockedEM.addStudyHours(2);
+        mockedEM.interact("Piazza");
+        mockedEM.interact("Langwith");
+
+        float expectedScore = 44.5f;
+        assertEquals(expectedScore, mockedEM.calcScore(), 0);
+    }
+
 
     @After
     public void releaseMocks() throws Exception {

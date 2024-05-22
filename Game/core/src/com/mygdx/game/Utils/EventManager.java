@@ -59,6 +59,8 @@ public class EventManager {
 
     private void updateMealAchievement(){
         int mealsEaten = mealTimes.get(gameClock.getDays()-1).size();
+
+        if (game.getAchievementHandler() == null) return;
         if (mealsEaten >= 3){
             game.getAchievementHandler().getAchievement("Feast to Fullest", Achievement.Type.BRONZE).unlock();
         }
