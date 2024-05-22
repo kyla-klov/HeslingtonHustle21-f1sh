@@ -78,7 +78,7 @@ public class LeaderBoard implements Disposable {
             String name = d.getPlayer();
             String score = "   " + d.getScore();
 
-            if (name.length() > 8) {
+            if (name.length() > 8 && name.length() != 10) {
                 name = name.substring(0, 8);
                 name += "..";
             }
