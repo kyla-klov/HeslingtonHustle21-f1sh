@@ -54,7 +54,7 @@ import java.util.List;
 <span class="fc" id="L54">        StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, &quot;CSBuildingStudy&quot;, ScreenType.CHECKIN_CODE_SCREEN);</span>
 <span class="fc" id="L55">        PlayBBall = new Event(2, -30, 0, 10, Event.Type.RECREATIONAL, 25, &quot;&quot;, ScreenType.BASKETBALL_SCREEN);</span>
 <span class="fc" id="L56">        Sleep = new Event(8, 90, 0, 0, Event.Type.SLEEP, 0, &quot;&quot;, resourceManager.addDisposable(new ActivityImage(&quot;Activitys/langwith.png&quot;)));</span>
-<span class="fc" id="L57">        EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, &quot;&quot;, resourceManager.addDisposable(new ActivityImage(&quot;Activitys/piazza.png&quot;)));</span>
+<span class="fc" id="L57">        EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, &quot;&quot;, ScreenType.COOKIE_SCREEN);</span>
 <span class="fc" id="L58">    }</span>
 
     private void updateMealAchievement(){
@@ -191,12 +191,12 @@ import java.util.List;
         }
 <span class="pc bpc" id="L192" title="1 of 6 branches missed.">        if (num0s == 0 || (num0s == 1 &amp;&amp; num1s &lt;= 5)){</span>
 <span class="fc" id="L193">            s1 = 100;</span>
-<span class="pc bpc" id="L194" title="2 of 4 branches missed.">        } else if (num0s == 2 &amp;&amp; num1s &lt;= 4){</span>
+<span class="pc bpc" id="L194" title="1 of 4 branches missed.">        } else if (num0s == 2 &amp;&amp; num1s &lt;= 4){</span>
 <span class="fc" id="L195">            s1 = 60;</span>
-<span class="nc bnc" id="L196" title="All 2 branches missed.">        } else if (num0s &lt; 7){</span>
-<span class="nc" id="L197">            s1 = 40;</span>
+<span class="fc bfc" id="L196" title="All 2 branches covered.">        } else if (num0s &lt; 7){</span>
+<span class="fc" id="L197">            s1 = 40;</span>
         } else{
-<span class="nc" id="L199">            s1 = 0;</span>
+<span class="fc" id="L199">            s1 = 0;</span>
         }
 
 //        int totalStudyHours = gameScreen.getTotalStudyHours();
@@ -209,7 +209,7 @@ import java.util.List;
             }
 <span class="fc" id="L210">        }</span>
 <span class="fc" id="L211">        notEaten = (notEaten + 1)/2;</span>
-<span class="pc bpc" id="L212" title="3 of 5 branches missed.">        switch (notEaten){</span>
+<span class="pc bpc" id="L212" title="2 of 5 branches missed.">        switch (notEaten){</span>
             case 0:
 <span class="fc" id="L214">                s4 = 100;</span>
 <span class="fc" id="L215">                break;</span>
@@ -220,8 +220,8 @@ import java.util.List;
 <span class="nc" id="L220">                s4 = 60;</span>
 <span class="nc" id="L221">                break;</span>
             case 3:
-<span class="nc" id="L223">                s4 = 40;</span>
-<span class="nc" id="L224">                break;</span>
+<span class="fc" id="L223">                s4 = 40;</span>
+<span class="fc" id="L224">                break;</span>
             default:
 <span class="fc" id="L226">                s4 = 0;</span>
                 break;
@@ -234,7 +234,7 @@ import java.util.List;
             }
         }
 
-<span class="pc bpc" id="L237" title="4 of 6 branches missed.">        switch (numBad){</span>
+<span class="pc bpc" id="L237" title="3 of 6 branches missed.">        switch (numBad){</span>
             case 0:
 <span class="fc" id="L239">                s5 = 100;</span>
 <span class="fc" id="L240">                break;</span>
@@ -253,7 +253,7 @@ import java.util.List;
 <span class="nc" id="L253">                s5 = 20;</span>
 <span class="nc" id="L254">                break;</span>
             default:
-<span class="nc" id="L256">                s5 = 0;</span>
+<span class="fc" id="L256">                s5 = 0;</span>
                 break;
         }
 <span class="fc" id="L259">        return (s1 + s3 + s4 + s5) / 4f;</span>
