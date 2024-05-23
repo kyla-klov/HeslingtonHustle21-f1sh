@@ -4,9 +4,17 @@ import java.util.Objects;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Disposable;
 
+
+/**
+ * The Achievement class represents an achievement in the game.
+ * Each achievement has a name, description, type, texture, and an unlocked status.
+ */
 public class Achievement implements Disposable {
-<span class="fc" id="L8">    public enum Type{</span>
-<span class="fc" id="L9">        BRONZE, SILVER, GOLD</span>
+    /**
+     * Enum representing the type of the achievement (BRONZE, SILVER, GOLD).
+     */
+<span class="fc" id="L16">    public enum Type{</span>
+<span class="fc" id="L17">        BRONZE, SILVER, GOLD</span>
     }
 
     private final String description;
@@ -16,52 +24,88 @@ public class Achievement implements Disposable {
 
     private boolean unlocked;
 
-<span class="fc" id="L19">    public Achievement(String name, String description, Type achievementType, String imgPath){</span>
-<span class="fc" id="L20">        this.description = description;</span>
-<span class="fc" id="L21">        this.name = name;</span>
-<span class="fc" id="L22">        this.achievementType = achievementType;</span>
-<span class="fc" id="L23">        this.achievementTexture = new Texture(imgPath);</span>
-<span class="fc" id="L24">        unlocked = false;</span>
-<span class="fc" id="L25">    }</span>
 
-    public Type getAchievmentType(){
-<span class="fc" id="L28">        return achievementType;</span>
-    }
-
-    public String getName(){
-<span class="fc" id="L32">        return name;</span>
-    }
-
-    @SuppressWarnings(&quot;unused&quot;)
-    public String getDescription(){
-<span class="fc" id="L37">        return description;</span>
-    }
-
-    public void unlock(){
-<span class="fc" id="L41">        unlocked = true;</span>
+    /**
+     * Constructs an Achievement with the specified name, description, type, and image path.
+     *
+     * @param name            the name of the achievement
+     * @param description     the description of the achievement
+     * @param achievementType the type of the achievement (BRONZE, SILVER, GOLD)
+     * @param imgPath         the path to the image representing the achievement
+     */
+<span class="fc" id="L36">    public Achievement(String name, String description, Type achievementType, String imgPath){</span>
+<span class="fc" id="L37">        this.description = description;</span>
+<span class="fc" id="L38">        this.name = name;</span>
+<span class="fc" id="L39">        this.achievementType = achievementType;</span>
+<span class="fc" id="L40">        this.achievementTexture = new Texture(imgPath);</span>
+<span class="fc" id="L41">        unlocked = false;</span>
 <span class="fc" id="L42">    }</span>
 
-    @SuppressWarnings(&quot;unused&quot;)
-    public boolean isUnlocked(){
-<span class="fc" id="L46">        return unlocked;</span>
+
+    /**
+     * Returns the type of the achievement.
+     *
+     * @return the type of the achievement
+     */
+    public Type getAchievmentType(){
+<span class="fc" id="L51">        return achievementType;</span>
     }
 
+    /**
+     * Returns the name of the achievement.
+     *
+     * @return the name of the achievement
+     */
+    public String getName(){
+<span class="fc" id="L60">        return name;</span>
+    }
+
+    /**
+     * Returns the description of the achievement.
+     *
+     * @return the description of the achievement
+     */
+    public String getDescription(){
+<span class="fc" id="L69">        return description;</span>
+    }
+
+    /**
+     * Unlocks the achievement.
+     */
+    public void unlock(){
+<span class="fc" id="L76">        unlocked = true;</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Returns whether the achievement is unlocked.
+     *
+     * @return true if the achievement is unlocked, false otherwise
+     */
+    public boolean isUnlocked(){
+<span class="fc" id="L85">        return unlocked;</span>
+    }
+
+    /**
+     * Returns the texture of the achievement.
+     *
+     * @return the texture of the achievement
+     */
     public Texture getAchievementTexture(){
-<span class="fc" id="L50">        return achievementTexture;</span>
+<span class="fc" id="L94">        return achievementTexture;</span>
     }
 
     @Override
     public boolean equals(Object o) {
-<span class="pc bpc" id="L55" title="1 of 2 branches missed.">        if (this == o) return true;</span>
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (!(o instanceof Achievement)) return false;</span>
-<span class="fc" id="L57">        Achievement that = (Achievement) o;</span>
-<span class="pc bpc" id="L58" title="4 of 8 branches missed.">        return isUnlocked() == that.isUnlocked() &amp;&amp; Objects.equals(getDescription(), that.getDescription()) &amp;&amp; Objects.equals(getName(), that.getName()) &amp;&amp; achievementType == that.achievementType;</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (this == o) return true;</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">        if (!(o instanceof Achievement)) return false;</span>
+<span class="fc" id="L101">        Achievement that = (Achievement) o;</span>
+<span class="pc bpc" id="L102" title="4 of 8 branches missed.">        return isUnlocked() == that.isUnlocked() &amp;&amp; Objects.equals(getDescription(), that.getDescription()) &amp;&amp; Objects.equals(getName(), that.getName()) &amp;&amp; achievementType == that.achievementType;</span>
     }
 
     @Override
     public void dispose(){
-<span class="nc" id="L63">        achievementTexture.dispose();</span>
-<span class="nc" id="L64">    }</span>
+<span class="nc" id="L107">        achievementTexture.dispose();</span>
+<span class="nc" id="L108">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

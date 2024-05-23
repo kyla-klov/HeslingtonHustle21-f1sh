@@ -17,7 +17,9 @@ import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 import com.mygdx.game.Utils.ViewportAdapter;
 
-
+/**
+ * The LeaderBoardScreen class represents the screen that displays the leaderboard.
+ */
 public class LeaderBoardScreen implements Screen {
     private final Viewport vp;
     private final LeaderBoard leaderBoard;
@@ -27,77 +29,92 @@ public class LeaderBoardScreen implements Screen {
     private final Texture backButton;
     private final SpriteBatch batch;
 
+    /**
+     * Constructs a LeaderBoardScreen with the specified game instance.
+     *
+     * @param game the game instance
+     */
+<span class="nc" id="L37">    public LeaderBoardScreen(HesHustle game) {</span>
+<span class="nc" id="L38">        this.game = game;</span>
+<span class="nc" id="L39">        batch = game.getBatch();</span>
+<span class="nc" id="L40">        resourceManager = new ResourceManager();</span>
 
-<span class="nc" id="L31">    public LeaderBoardScreen(HesHustle game) {</span>
-<span class="nc" id="L32">        this.game = game;</span>
-<span class="nc" id="L33">        batch = game.getBatch();</span>
-<span class="nc" id="L34">        resourceManager = new ResourceManager();</span>
+<span class="nc" id="L42">        backButton = new Texture(Gdx.files.internal(&quot;turn-back.png&quot;));</span>
 
-<span class="nc" id="L36">        backButton = new Texture(Gdx.files.internal(&quot;turn-back.png&quot;));</span>
-
-<span class="nc" id="L38">        camera = new OrthographicCamera();</span>
-<span class="nc" id="L39">        vp = new FitViewport(1600, 900, camera);</span>
-<span class="nc" id="L40">        vp.apply();</span>
-<span class="nc" id="L41">        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);</span>
-<span class="nc" id="L42">        leaderBoard = new LeaderBoard(vp, 800 - 450/2f, 450 - 377/2f, 450, 377);</span>
-<span class="nc" id="L43">    }</span>
+<span class="nc" id="L44">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L45">        vp = new FitViewport(1600, 900, camera);</span>
+<span class="nc" id="L46">        vp.apply();</span>
+<span class="nc" id="L47">        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);</span>
+<span class="nc" id="L48">        leaderBoard = new LeaderBoard(vp, 800 - 450/2f, 450 - 377/2f, 450, 377);</span>
+<span class="nc" id="L49">    }</span>
 
     @Override
     public void show() {
 
-<span class="nc" id="L48">    }</span>
+<span class="nc" id="L54">    }</span>
 
+    /**
+     * renders the leaderboard and other elements.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
-<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L53">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L64">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
         }
 
-<span class="nc" id="L56">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
-<span class="nc" id="L57">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+<span class="nc" id="L67">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L68">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
 
-<span class="nc" id="L59">        camera.update();</span>
-<span class="nc" id="L60">        batch.setProjectionMatrix(camera.combined);</span>
-<span class="nc" id="L61">        vp.apply();</span>
-<span class="nc" id="L62">        batch.begin();</span>
-<span class="nc" id="L63">        leaderBoard.render(batch);</span>
-<span class="nc" id="L64">        batch.draw(backButton,30, 30, 64, 64);</span>
-<span class="nc" id="L65">        batch.end();</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L70">        camera.update();</span>
+<span class="nc" id="L71">        batch.setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L72">        vp.apply();</span>
+<span class="nc" id="L73">        batch.begin();</span>
+<span class="nc" id="L74">        leaderBoard.render(batch);</span>
+<span class="nc" id="L75">        batch.draw(backButton,30, 30, 64, 64);</span>
+<span class="nc" id="L76">        batch.end();</span>
+<span class="nc" id="L77">    }</span>
 
     @Override
     public void resize(int width, int height) {
-<span class="nc" id="L70">        vp.update(width, height);</span>
-<span class="nc" id="L71">        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);</span>
-<span class="nc" id="L72">    }</span>
+<span class="nc" id="L81">        vp.update(width, height);</span>
+<span class="nc" id="L82">        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);</span>
+<span class="nc" id="L83">    }</span>
 
 
     @Override
     public void pause() {
 
-<span class="nc" id="L78">    }</span>
+<span class="nc" id="L89">    }</span>
 
     @Override
     public void resume() {
 
-<span class="nc" id="L83">    }</span>
+<span class="nc" id="L94">    }</span>
 
     @Override
     public void hide() {
 
-<span class="nc" id="L88">    }</span>
+<span class="nc" id="L99">    }</span>
 
+    /**
+     * Handles touch down events for the leaderboard screen.
+     *
+     * @param screenX the x position of the touch
+     * @param screenY the y position of the touch
+     */
     public void touchDown(float screenX, float screenY){
-<span class="nc" id="L91">        Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){</span>
-<span class="nc" id="L93">            game.getGameSound().buttonClickedSoundActivate();</span>
-<span class="nc" id="L94">            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
+<span class="nc" id="L108">        Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){</span>
+<span class="nc" id="L110">            game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L111">            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
         }
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L113">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc" id="L100">        resourceManager.disposeAll();</span>
-<span class="nc" id="L101">    }</span>
+<span class="nc" id="L117">        resourceManager.disposeAll();</span>
+<span class="nc" id="L118">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

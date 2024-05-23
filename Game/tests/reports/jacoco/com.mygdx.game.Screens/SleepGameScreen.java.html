@@ -18,6 +18,12 @@ import com.mygdx.game.Utils.ScreenType;
 
 import java.util.Random;
 
+//
+//
+// NOT IN USE
+//
+//
+
 public class SleepGameScreen extends InputAdapter implements Screen {
     HesHustle game;
     private final GameClock gameClock;
@@ -26,184 +32,184 @@ public class SleepGameScreen extends InputAdapter implements Screen {
     private final Viewport vp;
     private final SpriteBatch batch;
     private final BitmapFont mainText;
-<span class="nc" id="L29">    private final int zRange = 5;</span>
-<span class="nc" id="L30">    boolean roundInPlay = true;</span>
+<span class="nc" id="L35">    private final int zRange = 5;</span>
+<span class="nc" id="L36">    boolean roundInPlay = true;</span>
     private final Random random;
-<span class="nc" id="L32">    private String zText = &quot;&quot;;</span>
-<span class="nc" id="L33">    private int numberRounds = 1;</span>
-<span class="nc" id="L34">    private int roundNumber = 0;</span>
-<span class="nc" id="L35">    private int numberZ = 0;</span>
-<span class="nc" id="L36">    private float waitTime = 0.2f;</span>
-<span class="nc" id="L37">    private final int numberGames = 2;</span>
-<span class="nc" id="L38">    private int gameNumber = 0;</span>
-<span class="nc" id="L39">    private int gameWins = 0;</span>
+<span class="nc" id="L38">    private String zText = &quot;&quot;;</span>
+<span class="nc" id="L39">    private int numberRounds = 1;</span>
+<span class="nc" id="L40">    private int roundNumber = 0;</span>
+<span class="nc" id="L41">    private int numberZ = 0;</span>
+<span class="nc" id="L42">    private float waitTime = 0.2f;</span>
+<span class="nc" id="L43">    private final int numberGames = 2;</span>
+<span class="nc" id="L44">    private int gameNumber = 0;</span>
+<span class="nc" id="L45">    private int gameWins = 0;</span>
 
-<span class="nc" id="L41">    public SleepGameScreen(HesHustle game){</span>
-<span class="nc" id="L42">        this.game = game;</span>
-<span class="nc" id="L43">        gameClock = new GameClock();</span>
-<span class="nc" id="L44">        random = new Random();</span>
-<span class="nc" id="L45">        batch = game.getBatch();</span>
-<span class="nc" id="L46">        glyphLayout = new GlyphLayout();</span>
-<span class="nc" id="L47">        mainText = new BitmapFont();</span>
-<span class="nc" id="L48">        camera = new OrthographicCamera();</span>
-<span class="nc" id="L49">        vp = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);</span>
-<span class="nc" id="L50">        camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);</span>
-<span class="nc" id="L51">        camera.update();</span>
-<span class="nc" id="L52">        gameNumber += 1;</span>
-<span class="nc" id="L53">        playRound();</span>
-<span class="nc" id="L54">    }</span>
+<span class="nc" id="L47">    public SleepGameScreen(HesHustle game){</span>
+<span class="nc" id="L48">        this.game = game;</span>
+<span class="nc" id="L49">        gameClock = new GameClock();</span>
+<span class="nc" id="L50">        random = new Random();</span>
+<span class="nc" id="L51">        batch = game.getBatch();</span>
+<span class="nc" id="L52">        glyphLayout = new GlyphLayout();</span>
+<span class="nc" id="L53">        mainText = new BitmapFont();</span>
+<span class="nc" id="L54">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L55">        vp = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);</span>
+<span class="nc" id="L56">        camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);</span>
+<span class="nc" id="L57">        camera.update();</span>
+<span class="nc" id="L58">        gameNumber += 1;</span>
+<span class="nc" id="L59">        playRound();</span>
+<span class="nc" id="L60">    }</span>
 
     @Override
     public void show() {
-<span class="nc" id="L58">        Gdx.input.setInputProcessor(this);</span>
-<span class="nc" id="L59">    }</span>
+<span class="nc" id="L64">        Gdx.input.setInputProcessor(this);</span>
+<span class="nc" id="L65">    }</span>
 
     public String generateRandomZ(){
-<span class="nc" id="L62">        int randomNumber = random.nextInt(zRange) + 1;</span>
-<span class="nc" id="L63">        numberZ = numberZ + randomNumber;</span>
-<span class="nc" id="L64">        String text = &quot;&quot;;</span>
+<span class="nc" id="L68">        int randomNumber = random.nextInt(zRange) + 1;</span>
+<span class="nc" id="L69">        numberZ = numberZ + randomNumber;</span>
+<span class="nc" id="L70">        String text = &quot;&quot;;</span>
 
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (int i = 0; i&lt;randomNumber; i++){</span>
-<span class="nc" id="L67">            text = text + &quot;z&quot;;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        for (int i = 0; i&lt;randomNumber; i++){</span>
+<span class="nc" id="L73">            text = text + &quot;z&quot;;</span>
         }
-<span class="nc" id="L69">        return text;</span>
+<span class="nc" id="L75">        return text;</span>
     }
 
     public void playRound(){
-<span class="nc" id="L73">        roundNumber += 1;</span>
+<span class="nc" id="L79">        roundNumber += 1;</span>
 
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        if (roundNumber &lt;= numberRounds){</span>
-<span class="nc" id="L76">            zText = generateRandomZ();</span>
-<span class="nc" id="L77">            gameClock.addEvent(f -&gt; clearText(), 4f);</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (roundNumber &lt;= numberRounds){</span>
+<span class="nc" id="L82">            zText = generateRandomZ();</span>
+<span class="nc" id="L83">            gameClock.addEvent(f -&gt; clearText(), 4f);</span>
         } else {
-<span class="nc" id="L79">            roundInPlay = false;</span>
-<span class="nc" id="L80">            zText = &quot;Guess: &quot;;</span>
+<span class="nc" id="L85">            roundInPlay = false;</span>
+<span class="nc" id="L86">            zText = &quot;Guess: &quot;;</span>
         }
-<span class="nc" id="L82">    }</span>
+<span class="nc" id="L88">    }</span>
 
     public void nextRound(){
-<span class="nc" id="L85">        gameClock.addEvent(f -&gt; playRound(), waitTime);</span>
-<span class="nc" id="L86">    }</span>
+<span class="nc" id="L91">        gameClock.addEvent(f -&gt; playRound(), waitTime);</span>
+<span class="nc" id="L92">    }</span>
 
 
     public void endGame(){
-<span class="nc" id="L90">        game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L91">    }</span>
+<span class="nc" id="L96">        game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L97">    }</span>
 
     public void displayEndText(){
-<span class="nc" id="L94">        zText = &quot;You won &quot; + gameWins;</span>
-<span class="nc" id="L95">        gameClock.addEvent(f -&gt; endGame(), 2f);</span>
-<span class="nc" id="L96">    }</span>
+<span class="nc" id="L100">        zText = &quot;You won &quot; + gameWins;</span>
+<span class="nc" id="L101">        gameClock.addEvent(f -&gt; endGame(), 2f);</span>
+<span class="nc" id="L102">    }</span>
 
     public void clearText(){
-<span class="nc" id="L99">        zText = &quot;&quot;;</span>
-<span class="nc" id="L100">        nextRound();</span>
-<span class="nc" id="L101">    }</span>
+<span class="nc" id="L105">        zText = &quot;&quot;;</span>
+<span class="nc" id="L106">        nextRound();</span>
+<span class="nc" id="L107">    }</span>
 
 
     @Override
     public void render(float delta) {
-<span class="nc" id="L106">        gameClock.update(delta);</span>
-<span class="nc" id="L107">        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);</span>
-<span class="nc" id="L108">        camera.update();</span>
-<span class="nc" id="L109">        batch.setProjectionMatrix(camera.combined);</span>
-<span class="nc" id="L110">        batch.begin();</span>
-<span class="nc" id="L111">        String gameOverText = zText;</span>
-<span class="nc" id="L112">        glyphLayout.setText(mainText, gameOverText);</span>
-<span class="nc" id="L113">        float x = (vp.getWorldWidth() - glyphLayout.width) / 2;</span>
-<span class="nc" id="L114">        float y = (vp.getWorldHeight() - glyphLayout.height) / 2;</span>
-<span class="nc" id="L115">        mainText.draw(batch, gameOverText, x, y);</span>
-<span class="nc" id="L116">        batch.end();</span>
-<span class="nc" id="L117">    }</span>
+<span class="nc" id="L112">        gameClock.update(delta);</span>
+<span class="nc" id="L113">        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);</span>
+<span class="nc" id="L114">        camera.update();</span>
+<span class="nc" id="L115">        batch.setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L116">        batch.begin();</span>
+<span class="nc" id="L117">        String gameOverText = zText;</span>
+<span class="nc" id="L118">        glyphLayout.setText(mainText, gameOverText);</span>
+<span class="nc" id="L119">        float x = (vp.getWorldWidth() - glyphLayout.width) / 2;</span>
+<span class="nc" id="L120">        float y = (vp.getWorldHeight() - glyphLayout.height) / 2;</span>
+<span class="nc" id="L121">        mainText.draw(batch, gameOverText, x, y);</span>
+<span class="nc" id="L122">        batch.end();</span>
+<span class="nc" id="L123">    }</span>
 
     @Override
     public void resize(int width, int height) {
-<span class="nc" id="L121">        vp.update(width, height);</span>
-<span class="nc" id="L122">    }</span>
+<span class="nc" id="L127">        vp.update(width, height);</span>
+<span class="nc" id="L128">    }</span>
 
     @Override
     public void pause() {
 
-<span class="nc" id="L127">    }</span>
+<span class="nc" id="L133">    }</span>
 
     @Override
     public void resume() {
 
-<span class="nc" id="L132">    }</span>
+<span class="nc" id="L138">    }</span>
 
     @Override
     public void hide() {
 
-<span class="nc" id="L137">    }</span>
+<span class="nc" id="L143">    }</span>
 
     @Override
     public void dispose() {
         // Dispose logic
-<span class="nc" id="L142">        mainText.dispose();</span>
-<span class="nc" id="L143">    }</span>
+<span class="nc" id="L148">        mainText.dispose();</span>
+<span class="nc" id="L149">    }</span>
 
     @Override
     public boolean keyDown(int keycode){
-<span class="nc bnc" id="L147" title="All 4 branches missed.">        if (keycode == Input.Keys.NUM_1 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L148">            zText = zText + &quot;1&quot;;</span>
-<span class="nc" id="L149">            return true;</span>
-<span class="nc bnc" id="L150" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_2 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L151">            zText = zText + &quot;2&quot;;</span>
-<span class="nc" id="L152">            return true;</span>
-<span class="nc bnc" id="L153" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_3 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L154">            zText = zText + &quot;3&quot;;</span>
+<span class="nc bnc" id="L153" title="All 4 branches missed.">        if (keycode == Input.Keys.NUM_1 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L154">            zText = zText + &quot;1&quot;;</span>
 <span class="nc" id="L155">            return true;</span>
-<span class="nc bnc" id="L156" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_4 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L157">            zText = zText + &quot;4&quot;;</span>
+<span class="nc bnc" id="L156" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_2 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L157">            zText = zText + &quot;2&quot;;</span>
 <span class="nc" id="L158">            return true;</span>
-<span class="nc bnc" id="L159" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_5 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L160">            zText = zText + &quot;5&quot;;</span>
+<span class="nc bnc" id="L159" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_3 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L160">            zText = zText + &quot;3&quot;;</span>
 <span class="nc" id="L161">            return true;</span>
-<span class="nc bnc" id="L162" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_6 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L163">            zText = zText + &quot;6&quot;;</span>
+<span class="nc bnc" id="L162" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_4 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L163">            zText = zText + &quot;4&quot;;</span>
 <span class="nc" id="L164">            return true;</span>
-<span class="nc bnc" id="L165" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_7 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L166">            zText = zText + &quot;7&quot;;</span>
+<span class="nc bnc" id="L165" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_5 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L166">            zText = zText + &quot;5&quot;;</span>
 <span class="nc" id="L167">            return true;</span>
-<span class="nc bnc" id="L168" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_8 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L169">            zText = zText + &quot;8&quot;;</span>
+<span class="nc bnc" id="L168" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_6 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L169">            zText = zText + &quot;6&quot;;</span>
 <span class="nc" id="L170">            return true;</span>
-<span class="nc bnc" id="L171" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_9 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L172">            zText = zText + &quot;9&quot;;</span>
+<span class="nc bnc" id="L171" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_7 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L172">            zText = zText + &quot;7&quot;;</span>
 <span class="nc" id="L173">            return true;</span>
-<span class="nc bnc" id="L174" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_0 &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L175">            zText = zText + &quot;0&quot;;</span>
+<span class="nc bnc" id="L174" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_8 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L175">            zText = zText + &quot;8&quot;;</span>
 <span class="nc" id="L176">            return true;</span>
-<span class="nc bnc" id="L177" title="All 4 branches missed.">        } else if (keycode == Input.Keys.ENTER &amp;&amp; !roundInPlay) {</span>
-<span class="nc" id="L178">            String number = &quot;&quot;;</span>
-<span class="nc bnc" id="L179" title="All 2 branches missed.">            for (char x : zText.toCharArray()){</span>
-<span class="nc bnc" id="L180" title="All 2 branches missed.">                if (Character.isDigit(x)){</span>
-<span class="nc" id="L181">                    number = number + x;</span>
+<span class="nc bnc" id="L177" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_9 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L178">            zText = zText + &quot;9&quot;;</span>
+<span class="nc" id="L179">            return true;</span>
+<span class="nc bnc" id="L180" title="All 4 branches missed.">        } else if (keycode == Input.Keys.NUM_0 &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L181">            zText = zText + &quot;0&quot;;</span>
+<span class="nc" id="L182">            return true;</span>
+<span class="nc bnc" id="L183" title="All 4 branches missed.">        } else if (keycode == Input.Keys.ENTER &amp;&amp; !roundInPlay) {</span>
+<span class="nc" id="L184">            String number = &quot;&quot;;</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">            for (char x : zText.toCharArray()){</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">                if (Character.isDigit(x)){</span>
+<span class="nc" id="L187">                    number = number + x;</span>
                 }
             }
-<span class="nc" id="L184">            int guess = Integer.parseInt(number);</span>
-<span class="nc bnc" id="L185" title="All 2 branches missed.">            if (guess == numberZ){</span>
-<span class="nc" id="L186">                numberZ = 0;</span>
-<span class="nc" id="L187">                gameWins = gameWins + 1;</span>
+<span class="nc" id="L190">            int guess = Integer.parseInt(number);</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            if (guess == numberZ){</span>
+<span class="nc" id="L192">                numberZ = 0;</span>
+<span class="nc" id="L193">                gameWins = gameWins + 1;</span>
             }
 
-<span class="nc bnc" id="L190" title="All 2 branches missed.">            if (gameNumber &lt; numberGames){</span>
-<span class="nc" id="L191">                gameNumber = gameNumber + 1;</span>
-<span class="nc" id="L192">                roundNumber = 0;</span>
-<span class="nc" id="L193">                roundInPlay = true;</span>
-<span class="nc" id="L194">                gameClock.addEvent(f -&gt; playRound(), 0.5f);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">            if (gameNumber &lt; numberGames){</span>
+<span class="nc" id="L197">                gameNumber = gameNumber + 1;</span>
+<span class="nc" id="L198">                roundNumber = 0;</span>
+<span class="nc" id="L199">                roundInPlay = true;</span>
+<span class="nc" id="L200">                gameClock.addEvent(f -&gt; playRound(), 0.5f);</span>
             } else {
-<span class="nc" id="L196">                displayEndText();</span>
+<span class="nc" id="L202">                displayEndText();</span>
             }
 
-<span class="nc" id="L199">            return true;</span>
-<span class="nc bnc" id="L200" title="All 4 branches missed.">        } else if (keycode == Input.Keys.BACKSPACE &amp;&amp; !roundInPlay){</span>
-<span class="nc" id="L201">            char lastChar = zText.charAt(zText.length() - 1);</span>
-<span class="nc bnc" id="L202" title="All 2 branches missed.">            if (!(lastChar == ' ')){</span>
-<span class="nc" id="L203">                zText = zText.substring(0, zText.length() - 1);</span>
+<span class="nc" id="L205">            return true;</span>
+<span class="nc bnc" id="L206" title="All 4 branches missed.">        } else if (keycode == Input.Keys.BACKSPACE &amp;&amp; !roundInPlay){</span>
+<span class="nc" id="L207">            char lastChar = zText.charAt(zText.length() - 1);</span>
+<span class="nc bnc" id="L208" title="All 2 branches missed.">            if (!(lastChar == ' ')){</span>
+<span class="nc" id="L209">                zText = zText.substring(0, zText.length() - 1);</span>
             }
         }
-<span class="nc" id="L206">        return false;</span>
+<span class="nc" id="L212">        return false;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

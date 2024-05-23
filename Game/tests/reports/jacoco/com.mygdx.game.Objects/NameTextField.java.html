@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.ViewportAdapter;
 
+/**
+ * The NameTextField class provides a text input field that allows the player to enter their name.
+ * It handles rendering the text field and processing input from the keyboard.
+ */
 public class NameTextField {
     private final StringBuilder inputText;
     private final BitmapFont font;
@@ -18,75 +22,97 @@ public class NameTextField {
     private boolean capsLockOn;
     private boolean active;
 
-<span class="fc" id="L21">    public NameTextField(Viewport vp, BitmapFont font, Texture textField, boolean active){</span>
-<span class="fc" id="L22">        this.vp = vp;</span>
-<span class="fc" id="L23">        this.font = font;</span>
-<span class="fc" id="L24">        this.textField = textField;</span>
-<span class="fc" id="L25">        this.active = active;</span>
-<span class="fc" id="L26">        inputText = new StringBuilder();</span>
-<span class="fc" id="L27">    }</span>
+    /**
+     * Constructs a NameTextField with the specified parameters.
+     *
+     * @param vp        the viewport to use for rendering
+     * @param font      the font to use for rendering text
+     * @param textField the texture of the text field
+     * @param active    the initial active state of the text field
+     */
+<span class="fc" id="L33">    public NameTextField(Viewport vp, BitmapFont font, Texture textField, boolean active){</span>
+<span class="fc" id="L34">        this.vp = vp;</span>
+<span class="fc" id="L35">        this.font = font;</span>
+<span class="fc" id="L36">        this.textField = textField;</span>
+<span class="fc" id="L37">        this.active = active;</span>
+<span class="fc" id="L38">        inputText = new StringBuilder();</span>
+<span class="fc" id="L39">    }</span>
+
+    /**
+     * Constructs a NameTextField with default font and texture, and specified viewport.
+     *
+     * @param vp the viewport to use for rendering
+     */
     public NameTextField(Viewport vp) {
-<span class="nc" id="L29">        this(vp, new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)),</span>
-<span class="nc" id="L30">                new Texture(Gdx.files.internal(&quot;NameTextField.png&quot;)), true);</span>
-//        this.vp = vp;
-//        inputText = new StringBuilder();
-//        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));
-//        textField = new Texture(Gdx.files.internal(&quot;NameTextField.png&quot;));
-//        active = true;
-<span class="nc" id="L36">    }</span>
+<span class="nc" id="L47">        this(vp, new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)),</span>
+<span class="nc" id="L48">                new Texture(Gdx.files.internal(&quot;NameTextField.png&quot;)), true);</span>
+<span class="nc" id="L49">    }</span>
 
+    /**
+     * Renders the text field using the specified sprite batch.
+     *
+     * @param batch the sprite batch used for rendering
+     */
     public void render(SpriteBatch batch){
-<span class="fc bfc" id="L39" title="All 2 branches covered.">        if (!active) return;</span>
-<span class="fc" id="L40">        handleInput();</span>
-<span class="fc" id="L41">        float x = 800 - 338/2f;</span>
-<span class="fc" id="L42">        float y = 450 - 157/2f;</span>
-<span class="fc" id="L43">        ViewportAdapter.drawUI(vp, batch, textField, x, y, 338, 157);</span>
-<span class="fc" id="L44">        ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), x+70, y+68);</span>
-<span class="fc" id="L45">    }</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">        if (!active) return;</span>
+<span class="fc" id="L58">        handleInput();</span>
+<span class="fc" id="L59">        float x = 800 - 338/2f;</span>
+<span class="fc" id="L60">        float y = 450 - 157/2f;</span>
+<span class="fc" id="L61">        ViewportAdapter.drawUI(vp, batch, textField, x, y, 338, 157);</span>
+<span class="fc" id="L62">        ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), x+70, y+68);</span>
+<span class="fc" id="L63">    }</span>
 
+    /**
+     * Handles keyboard input for the text field.
+     */
     private void handleInput() {
-<span class="pc bpc" id="L48" title="2 of 4 branches missed.">        boolean shiftPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);</span>
-<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.CAPS_LOCK)){</span>
-<span class="nc bnc" id="L50" title="All 2 branches missed.">            capsLockOn = !capsLockOn;</span>
+<span class="pc bpc" id="L69" title="2 of 4 branches missed.">        boolean shiftPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.CAPS_LOCK)){</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">            capsLockOn = !capsLockOn;</span>
         }
 
-<span class="pc bpc" id="L53" title="3 of 4 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) &amp;&amp; inputText.length() &gt; 0) {</span>
-<span class="nc" id="L54">            inputText.setLength(inputText.length() - 1);</span>
+<span class="pc bpc" id="L74" title="3 of 4 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.BACKSPACE) &amp;&amp; inputText.length() &gt; 0) {</span>
+<span class="nc" id="L75">            inputText.setLength(inputText.length() - 1);</span>
         }
 
-<span class="fc bfc" id="L57" title="All 2 branches covered.">        for (int i = Input.Keys.A; i &lt;= Input.Keys.Z; i++) {</span>
-<span class="pc bpc" id="L58" title="1 of 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
-<span class="nc" id="L59">                char character = Input.Keys.toString(i).charAt(0);</span>
-<span class="nc bnc" id="L60" title="All 8 branches missed.">                if ((shiftPressed &amp;&amp; !capsLockOn) || (!shiftPressed &amp;&amp; capsLockOn)) {</span>
-<span class="nc" id="L61">                    inputText.append(Character.toUpperCase(character));</span>
+<span class="fc bfc" id="L78" title="All 2 branches covered.">        for (int i = Input.Keys.A; i &lt;= Input.Keys.Z; i++) {</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
+<span class="nc" id="L80">                char character = Input.Keys.toString(i).charAt(0);</span>
+<span class="nc bnc" id="L81" title="All 8 branches missed.">                if ((shiftPressed &amp;&amp; !capsLockOn) || (!shiftPressed &amp;&amp; capsLockOn)) {</span>
+<span class="nc" id="L82">                    inputText.append(Character.toUpperCase(character));</span>
                 } else {
-<span class="nc" id="L63">                    inputText.append(Character.toLowerCase(character));</span>
+<span class="nc" id="L84">                    inputText.append(Character.toLowerCase(character));</span>
                 }
             }
         }
 
-<span class="fc bfc" id="L68" title="All 2 branches covered.">        for (int i = Input.Keys.NUM_0; i &lt;= Input.Keys.NUM_9; i++) {</span>
-<span class="pc bpc" id="L69" title="1 of 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
-<span class="nc" id="L70">                inputText.append(Input.Keys.toString(i));</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        for (int i = Input.Keys.NUM_0; i &lt;= Input.Keys.NUM_9; i++) {</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">            if (Gdx.input.isKeyJustPressed(i)) {</span>
+<span class="nc" id="L91">                inputText.append(Input.Keys.toString(i));</span>
             }
         }
 
-<span class="pc bpc" id="L74" title="1 of 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {</span>
-<span class="nc" id="L75">            inputText.append(&quot; &quot;);</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {</span>
+<span class="nc" id="L96">            inputText.append(&quot; &quot;);</span>
         }
 
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {</span>
-<span class="nc" id="L79">            value = inputText.toString();</span>
-<span class="nc" id="L80">            active = false;</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {</span>
+<span class="nc" id="L100">            value = inputText.toString();</span>
+<span class="nc" id="L101">            active = false;</span>
         }
-<span class="fc" id="L82">    }</span>
-
+<span class="fc" id="L103">    }</span>
+    /**
+     * @return true if text has been entered, false otherwise
+     */
     public boolean textEntered() {
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        return !active;</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">        return !active;</span>
     }
 
+    /**
+     * @return the entered text
+     */
     public String getValue() {
-<span class="nc" id="L89">        return value;</span>
+<span class="nc" id="L115">        return value;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

@@ -10,6 +10,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ViewportAdapter;
 
+/**
+ * The EnergyBar class represents a visual energy bar in the game.
+ * It handles rendering the energy bar with different textures for the edges and the center,
+ * and it updates the display based on the current energy level.
+ */
 public class EnergyBar implements Disposable {
     private final Texture centre;
     private final Texture leftEdge;
@@ -23,47 +28,66 @@ public class EnergyBar implements Disposable {
 
     private final float x, y, width, height, edgeWidth;
 
-<span class="fc" id="L26">    public EnergyBar(Viewport vp, float x, float y, float width, float height, float edgeWidth){</span>
-<span class="fc" id="L27">        this.vp = vp;</span>
-<span class="fc" id="L28">        this.x = x;</span>
-<span class="fc" id="L29">        this.y = y;</span>
-<span class="fc" id="L30">        this.width = width;</span>
-<span class="fc" id="L31">        this.height = height;</span>
-<span class="fc" id="L32">        this.edgeWidth = edgeWidth;</span>
-<span class="fc" id="L33">        resourceManager = new ResourceManager();</span>
-<span class="fc" id="L34">        centre = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_center-repeating_blue.png&quot;));</span>
-<span class="fc" id="L35">        leftEdge = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_left_edge_blue.png&quot;));</span>
-<span class="fc" id="L36">        rightEdge = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_right_edge_blue.png&quot;));</span>
-<span class="fc" id="L37">        holderCentre = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_center-repeating_blue.png&quot;));</span>
-<span class="fc" id="L38">        holderLeft = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_left_edge_blue.png&quot;));</span>
-<span class="fc" id="L39">        holderRight = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_right_edge_blue.png&quot;));</span>
-<span class="fc" id="L40">    }</span>
+    /**
+     * Constructs an EnergyBar with the specified parameters.
+     *
+     * @param vp        the viewport to use for rendering
+     * @param x         the x position of the energy bar
+     * @param y         the y position of the energy bar
+     * @param width     the width of the energy bar
+     * @param height    the height of the energy bar
+     * @param edgeWidth the width of the edges of the energy bar
+     */
+<span class="fc" id="L41">    public EnergyBar(Viewport vp, float x, float y, float width, float height, float edgeWidth){</span>
+<span class="fc" id="L42">        this.vp = vp;</span>
+<span class="fc" id="L43">        this.x = x;</span>
+<span class="fc" id="L44">        this.y = y;</span>
+<span class="fc" id="L45">        this.width = width;</span>
+<span class="fc" id="L46">        this.height = height;</span>
+<span class="fc" id="L47">        this.edgeWidth = edgeWidth;</span>
+<span class="fc" id="L48">        resourceManager = new ResourceManager();</span>
+<span class="fc" id="L49">        centre = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_center-repeating_blue.png&quot;));</span>
+<span class="fc" id="L50">        leftEdge = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_left_edge_blue.png&quot;));</span>
+<span class="fc" id="L51">        rightEdge = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_right_edge_blue.png&quot;));</span>
+<span class="fc" id="L52">        holderCentre = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_center-repeating_blue.png&quot;));</span>
+<span class="fc" id="L53">        holderLeft = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_left_edge_blue.png&quot;));</span>
+<span class="fc" id="L54">        holderRight = resourceManager.addDisposable(new Texture(&quot;EnergyBar/meter_bar_holder_right_edge_blue.png&quot;));</span>
+<span class="fc" id="L55">    }</span>
 
+    /**
+     * Renders the energy bar using the specified sprite batch and energy level.
+     *
+     * @param batch  the sprite batch used for rendering
+     * @param energy the current energy level (0-100)
+     */
     public void render(SpriteBatch batch, float energy){
-<span class="fc" id="L43">        ViewportAdapter.drawUI(vp, batch, holderLeft, x, y, edgeWidth, height);</span>
-<span class="fc" id="L44">        ViewportAdapter.drawUI(vp, batch, holderCentre, x+edgeWidth, y, width-edgeWidth*2, height);</span>
-<span class="fc" id="L45">        ViewportAdapter.drawUI(vp, batch, holderRight, x+width-edgeWidth, y, edgeWidth, height);</span>
+<span class="fc" id="L64">        ViewportAdapter.drawUI(vp, batch, holderLeft, x, y, edgeWidth, height);</span>
+<span class="fc" id="L65">        ViewportAdapter.drawUI(vp, batch, holderCentre, x+edgeWidth, y, width-edgeWidth*2, height);</span>
+<span class="fc" id="L66">        ViewportAdapter.drawUI(vp, batch, holderRight, x+width-edgeWidth, y, edgeWidth, height);</span>
 
-<span class="fc" id="L47">        Vector2 blCorner = ViewportAdapter.toScreen(vp, x + edgeWidth * 0.41f, y);</span>
-<span class="fc" id="L48">        Vector2 trCorner = ViewportAdapter.toScreen(vp, x + width - edgeWidth * 0.41f, y + height);</span>
-<span class="fc" id="L49">        int scissorX = (int) blCorner.x;</span>
-<span class="fc" id="L50">        int scissorY = (int) blCorner.y;</span>
-<span class="fc" id="L51">        int scissorWidth = (int) ((trCorner.x - blCorner.x) * energy/100f);</span>
-<span class="fc" id="L52">        int scissorHeight = (int) (trCorner.y - blCorner.y);</span>
+<span class="fc" id="L68">        Vector2 blCorner = ViewportAdapter.toScreen(vp, x + edgeWidth * 0.41f, y);</span>
+<span class="fc" id="L69">        Vector2 trCorner = ViewportAdapter.toScreen(vp, x + width - edgeWidth * 0.41f, y + height);</span>
+<span class="fc" id="L70">        int scissorX = (int) blCorner.x;</span>
+<span class="fc" id="L71">        int scissorY = (int) blCorner.y;</span>
+<span class="fc" id="L72">        int scissorWidth = (int) ((trCorner.x - blCorner.x) * energy/100f);</span>
+<span class="fc" id="L73">        int scissorHeight = (int) (trCorner.y - blCorner.y);</span>
 
-<span class="fc" id="L54">        batch.draw(centre, 0, 0, 0, 0);</span>
-<span class="fc" id="L55">        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);</span>
-<span class="fc" id="L56">        Gdx.gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);</span>
-<span class="fc" id="L57">        ViewportAdapter.drawUI(vp, batch, leftEdge, x, y, edgeWidth, height);</span>
-<span class="fc" id="L58">        ViewportAdapter.drawUI(vp, batch, centre, x+edgeWidth, y, width-edgeWidth*2, height);</span>
-<span class="fc" id="L59">        ViewportAdapter.drawUI(vp, batch, rightEdge, x+width-edgeWidth, y, edgeWidth, height);</span>
-<span class="fc" id="L60">        batch.draw(centre, 0, 0, 0, 0);</span>
-<span class="fc" id="L61">        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);</span>
-<span class="fc" id="L62">    }</span>
+<span class="fc" id="L75">        batch.draw(centre, 0, 0, 0, 0);</span>
+<span class="fc" id="L76">        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);</span>
+<span class="fc" id="L77">        Gdx.gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);</span>
+<span class="fc" id="L78">        ViewportAdapter.drawUI(vp, batch, leftEdge, x, y, edgeWidth, height);</span>
+<span class="fc" id="L79">        ViewportAdapter.drawUI(vp, batch, centre, x+edgeWidth, y, width-edgeWidth*2, height);</span>
+<span class="fc" id="L80">        ViewportAdapter.drawUI(vp, batch, rightEdge, x+width-edgeWidth, y, edgeWidth, height);</span>
+<span class="fc" id="L81">        batch.draw(centre, 0, 0, 0, 0);</span>
+<span class="fc" id="L82">        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);</span>
+<span class="fc" id="L83">    }</span>
 
+    /**
+     * Disposes of all resources used by this energy bar.
+     */
     @Override
     public void dispose() {
-<span class="nc" id="L66">        resourceManager.disposeAll();</span>
-<span class="nc" id="L67">    }</span>
+<span class="nc" id="L90">        resourceManager.disposeAll();</span>
+<span class="nc" id="L91">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

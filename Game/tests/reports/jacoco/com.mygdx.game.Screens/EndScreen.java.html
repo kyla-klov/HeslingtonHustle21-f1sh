@@ -14,6 +14,9 @@ import com.mygdx.game.Objects.AchievementsDisplay;
 import com.mygdx.game.Objects.LeaderBoard;
 import com.mygdx.game.Utils.ScreenType;
 
+/**
+ * The EndScreen class represents the screen displayed at the end of the game.
+ */
 public class EndScreen implements Screen{
     private final HesHustle game;
     private final Stage stage;
@@ -26,136 +29,142 @@ public class EndScreen implements Screen{
     private final FitViewport vp;
     private final float score;
 
-
+    /**
+     * Constructs an EndScreen with the specified game instance and score.
+     *
+     * @param game  the game instance
+     * @param score the player's score
+     */
     public EndScreen(final HesHustle game, final float score) {
-<span class="nc" id="L31">        this(game, score, new Stage(new FitViewport(1600, 900)),</span>
-<span class="nc" id="L32">                new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)));</span>
-//        this.game = game;
-//        stage = new Stage(new ScreenViewport());
-//        Gdx.input.setInputProcessor(stage);
-//        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;));
-//        playAgainButton = new TextButton(&quot;Play Again&quot;, skin);
-//        mainMenuButton = new TextButton(&quot;Main Menu&quot;, skin);
-//        exitButton = new TextButton(&quot;Exit&quot;, skin);
-//        setupUi();
-<span class="nc" id="L41">    }</span>
+<span class="nc" id="L39">        this(game, score, new Stage(new FitViewport(1600, 900)),</span>
+<span class="nc" id="L40">                new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)));</span>
+
+<span class="nc" id="L42">    }</span>
 
     private EndScreen(final HesHustle game, final float score, final Stage stage, final Skin skin) {
-<span class="nc" id="L44">        this(game, score, stage, skin,</span>
+<span class="nc" id="L45">        this(game, score, stage, skin,</span>
                 new TextButton(&quot;Play Again&quot;, skin),
                 new TextButton(&quot;Main Menu&quot;, skin),
                 new TextButton(&quot;Exit&quot;, skin));
-<span class="nc" id="L48">    }</span>
+<span class="nc" id="L49">    }</span>
     public EndScreen(final HesHustle game, final float score,
                      final Stage stage,
                      final Skin skin,
                      final TextButton playAgainButton,
                      final TextButton mainMenuButton,
-<span class="nc" id="L54">                     final TextButton exitButton) {</span>
-<span class="nc" id="L55">        this.game = game;</span>
-<span class="nc" id="L56">        this.score = score;</span>
-<span class="nc" id="L57">        this.stage = stage;</span>
-<span class="nc" id="L58">        this.skin = skin;</span>
-<span class="nc" id="L59">        Gdx.input.setInputProcessor(stage);</span>
-<span class="nc" id="L60">        this.playAgainButton = playAgainButton;</span>
-<span class="nc" id="L61">        this.mainMenuButton = mainMenuButton;</span>
-<span class="nc" id="L62">        this.exitButton = exitButton;</span>
-<span class="nc" id="L63">        vp = (FitViewport) stage.getViewport();</span>
-<span class="nc" id="L64">        this.leaderBoard = new LeaderBoard(vp, 60, 450 - 377/2f, 450, 377);</span>
-<span class="nc" id="L65">        this.achievementsDisplay = new AchievementsDisplay(vp, game.getAchievementHandler(), 1100, 450 - 377/2f);</span>
-<span class="nc" id="L66">        achievementsDisplay.show();</span>
-<span class="nc" id="L67">        setupUi();</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L55">                     final TextButton exitButton) {</span>
+<span class="nc" id="L56">        this.game = game;</span>
+<span class="nc" id="L57">        this.score = score;</span>
+<span class="nc" id="L58">        this.stage = stage;</span>
+<span class="nc" id="L59">        this.skin = skin;</span>
+<span class="nc" id="L60">        Gdx.input.setInputProcessor(stage);</span>
+<span class="nc" id="L61">        this.playAgainButton = playAgainButton;</span>
+<span class="nc" id="L62">        this.mainMenuButton = mainMenuButton;</span>
+<span class="nc" id="L63">        this.exitButton = exitButton;</span>
+<span class="nc" id="L64">        vp = (FitViewport) stage.getViewport();</span>
+<span class="nc" id="L65">        this.leaderBoard = new LeaderBoard(vp, 60, 450 - 377/2f, 450, 377);</span>
+<span class="nc" id="L66">        this.achievementsDisplay = new AchievementsDisplay(vp, game.getAchievementHandler(), 1100, 450 - 377/2f);</span>
+<span class="nc" id="L67">        achievementsDisplay.show();</span>
+<span class="nc" id="L68">        setupUi();</span>
+<span class="nc" id="L69">    }</span>
 
+    /**
+     * Sets up the UI elements for the end screen, including labels and buttons.
+     */
     private void setupUi(){
-<span class="nc" id="L71">        Table table = new Table ();</span>
-<span class="nc" id="L72">        table.setFillParent(true);</span>
-<span class="nc" id="L73">        stage.addActor(table);</span>
+<span class="nc" id="L75">        Table table = new Table ();</span>
+<span class="nc" id="L76">        table.setFillParent(true);</span>
+<span class="nc" id="L77">        stage.addActor(table);</span>
 
-<span class="nc bnc" id="L75" title="All 2 branches missed.">        Label endLabel = new Label((score &gt;= 40f) ? &quot;Congratulations!&quot;:&quot;Unlucky!&quot;, skin, &quot;default&quot;);</span>
-<span class="nc" id="L76">        endLabel.setFontScale(2.0f);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">        Label endLabel = new Label((score &gt;= 40f) ? &quot;Congratulations!&quot;:&quot;Unlucky!&quot;, skin, &quot;default&quot;);</span>
+<span class="nc" id="L80">        endLabel.setFontScale(2.0f);</span>
 
-<span class="nc" id="L78">        Label scoreLabel = new Label(&quot;Score: &quot; + score, skin, &quot;default&quot;);</span>
-<span class="nc" id="L79">        scoreLabel.setFontScale(1.0f);</span>
+<span class="nc" id="L82">        Label scoreLabel = new Label(&quot;Score: &quot; + score, skin, &quot;default&quot;);</span>
+<span class="nc" id="L83">        scoreLabel.setFontScale(1.0f);</span>
 
         // Add functionality to buttons
-<span class="nc" id="L82">        playAgainButton.addListener(event -&gt; {</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
-<span class="nc" id="L84">            game.getGameSound().buttonClickedSoundActivate();</span>
-<span class="nc" id="L85">            game.getScreenManager().removeScreenFromMemory(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L86">            game.setNewGame();</span>
-<span class="nc" id="L87">            game.getScreenManager().setScreen(ScreenType.GAME_SCREEN); // Restart the game</span>
-<span class="nc" id="L88">            return true;</span>
+<span class="nc" id="L86">        playAgainButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
+<span class="nc" id="L88">            game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L89">            game.getScreenManager().removeScreenFromMemory(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L90">            game.setNewGame();</span>
+<span class="nc" id="L91">            game.getScreenManager().setScreen(ScreenType.GAME_SCREEN); // Restart the game</span>
+<span class="nc" id="L92">            return true;</span>
         });
 
-<span class="nc" id="L91">        mainMenuButton.addListener(event -&gt; {</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
-<span class="nc" id="L93">            game.getGameSound().buttonClickedSoundActivate();</span>
-<span class="nc" id="L94">            game.setNewGame();</span>
-<span class="nc" id="L95">            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN); // Go back to the main menu</span>
-<span class="nc" id="L96">            return true;</span>
+<span class="nc" id="L95">        mainMenuButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
+<span class="nc" id="L97">            game.getGameSound().buttonClickedSoundActivate();</span>
+<span class="nc" id="L98">            game.setNewGame();</span>
+<span class="nc" id="L99">            game.getScreenManager().setScreen(ScreenType.MENU_SCREEN); // Go back to the main menu</span>
+<span class="nc" id="L100">            return true;</span>
         });
 
-<span class="nc" id="L99">        exitButton.addListener(event -&gt; {</span>
-<span class="nc bnc" id="L100" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
-<span class="nc" id="L101">            Gdx.app.exit(); // Exit the game</span>
-<span class="nc" id="L102">            return true;</span>
+<span class="nc" id="L103">        exitButton.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            if (!event.isHandled()) return false;</span>
+<span class="nc" id="L105">            Gdx.app.exit(); // Exit the game</span>
+<span class="nc" id="L106">            return true;</span>
         });
 
         // Layout the buttons in the table
-<span class="nc" id="L106">        table.add(endLabel).pad(10).row();</span>
-<span class="nc" id="L107">        table.add(scoreLabel).pad(10).row();</span>
-<span class="nc" id="L108">        table.add(playAgainButton).pad(10).row();</span>
-<span class="nc" id="L109">        table.add(mainMenuButton).pad(10).row();</span>
-<span class="nc" id="L110">        table.add(exitButton).pad(10);</span>
+<span class="nc" id="L110">        table.add(endLabel).pad(10).row();</span>
+<span class="nc" id="L111">        table.add(scoreLabel).pad(10).row();</span>
+<span class="nc" id="L112">        table.add(playAgainButton).pad(10).row();</span>
+<span class="nc" id="L113">        table.add(mainMenuButton).pad(10).row();</span>
+<span class="nc" id="L114">        table.add(exitButton).pad(10);</span>
 
-<span class="nc" id="L112">    }</span>
+<span class="nc" id="L116">    }</span>
 
 
 
 
     @Override
     public void show() {
-<span class="nc" id="L119">        Gdx.input.setInputProcessor(stage);</span>
-<span class="nc" id="L120">    }</span>
+<span class="nc" id="L123">        Gdx.input.setInputProcessor(stage);</span>
+<span class="nc" id="L124">    }</span>
 
+    /**
+     * Renders screen elements
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
-<span class="nc" id="L124">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
-<span class="nc" id="L125">        stage.act(Math.min(delta, 1 / 30f));</span>
-<span class="nc" id="L126">        stage.draw();</span>
+<span class="nc" id="L133">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L134">        stage.act(Math.min(delta, 1 / 30f));</span>
+<span class="nc" id="L135">        stage.draw();</span>
 
-<span class="nc" id="L128">        game.getBatch().setProjectionMatrix(vp.getCamera().combined);</span>
-<span class="nc" id="L129">        game.getBatch().begin();</span>
-<span class="nc" id="L130">        leaderBoard.render(game.getBatch());</span>
-<span class="nc" id="L131">        achievementsDisplay.render(game.getBatch());</span>
-<span class="nc" id="L132">        game.getBatch().end();</span>
-<span class="nc" id="L133">    }</span>
+<span class="nc" id="L137">        game.getBatch().setProjectionMatrix(vp.getCamera().combined);</span>
+<span class="nc" id="L138">        game.getBatch().begin();</span>
+<span class="nc" id="L139">        leaderBoard.render(game.getBatch());</span>
+<span class="nc" id="L140">        achievementsDisplay.render(game.getBatch());</span>
+<span class="nc" id="L141">        game.getBatch().end();</span>
+<span class="nc" id="L142">    }</span>
 
     @Override
     public void resize(int width, int height) {
-<span class="nc" id="L137">        stage.getViewport().update(width, height, true);</span>
-<span class="nc" id="L138">    }</span>
+<span class="nc" id="L146">        stage.getViewport().update(width, height, true);</span>
+<span class="nc" id="L147">    }</span>
 
     @Override
     public void pause() {
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L151">    }</span>
 
 
     @Override
     public void resume() {
-<span class="nc" id="L147">    }</span>
+<span class="nc" id="L156">    }</span>
 
     @Override
     public void hide() {
-<span class="nc" id="L151">    }</span>
+<span class="nc" id="L160">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc bnc" id="L155" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
-<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
+<span class="nc bnc" id="L164" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
 
 
-<span class="nc" id="L159">    }</span>
+<span class="nc" id="L168">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

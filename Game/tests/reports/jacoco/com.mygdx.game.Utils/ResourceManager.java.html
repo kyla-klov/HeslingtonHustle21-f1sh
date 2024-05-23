@@ -5,29 +5,43 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.utils.Disposable;
 
-<span class="fc" id="L8">public class ResourceManager {</span>
-<span class="fc" id="L9">    private final ArrayList&lt;Disposable&gt; disposables = new ArrayList&lt;&gt;();</span>
+/**
+ * The ResourceManager class is responsible for managing disposable resources.
+ * It provides methods to add resources to be managed and to dispose of all managed resources.
+ */
+<span class="fc" id="L12">public class ResourceManager {</span>
+<span class="fc" id="L13">    private final ArrayList&lt;Disposable&gt; disposables = new ArrayList&lt;&gt;();</span>
 
+    /**
+     * Adds a disposable resource to the list of managed resources.
+     *
+     * @param resource the resource to be managed
+     * @param &lt;T&gt;      the type of the resource, which must implement the Disposable interface
+     * @return the added resource
+     */
     public &lt;T extends Disposable&gt; T addDisposable(T resource) {
-<span class="fc" id="L12">        disposables.add(resource);</span>
-<span class="fc" id="L13">        return resource;</span>
+<span class="fc" id="L23">        disposables.add(resource);</span>
+<span class="fc" id="L24">        return resource;</span>
     }
 
+    /**
+     * Disposes of all managed resources.
+     * This method should be called to release resources when they are no longer needed.
+     */
     public void disposeAll() {
-<span class="fc bfc" id="L17" title="All 2 branches covered.">        for (Disposable resource : disposables) {</span>
-<span class="fc" id="L18">            resource.dispose();</span>
-<span class="fc" id="L19">        }</span>
-<span class="fc" id="L20">    }</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">        for (Disposable resource : disposables) {</span>
+<span class="fc" id="L33">            resource.dispose();</span>
+<span class="fc" id="L34">        }</span>
+<span class="fc" id="L35">    }</span>
 
+    /**
+     * Returns the list of managed disposable resources.
+     *
+     * @return the list of managed disposable resources
+     */
     public ArrayList&lt;Disposable&gt; getDisposables() {
-<span class="fc" id="L23">        return disposables;</span>
+<span class="fc" id="L43">        return disposables;</span>
     }
-    /*    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ResourceManager)) return false;
-        ResourceManager that = (ResourceManager) o;
-        return Objects.equals(disposables, that.disposables);
-    }*/
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

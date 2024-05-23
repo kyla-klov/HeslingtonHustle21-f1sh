@@ -19,9 +19,12 @@ import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 import com.mygdx.game.Utils.GameClock;
 
+/**
+ * Handles logic and rendering for the Cookie Catcher game.
+ */
 public class CookieCatcherScreen extends InputAdapter implements Screen {
     public HesHustle game;
-<span class="nc" id="L24">    private int cookiesCollected = 0;</span>
+<span class="nc" id="L27">    private int cookiesCollected = 0;</span>
     private final OrthographicCamera camera;
     private final Viewport vp;
     private final BitmapFont cookiesCollectedText;
@@ -31,164 +34,200 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
     private final Texture plate;
     private final ResourceManager resourceManager;
     private float plateX;
-<span class="nc" id="L34">    private final float plateHeight = 100;</span>
-<span class="nc" id="L35">    private final float plateWidth = 100;</span>
+<span class="nc" id="L37">    private final float plateHeight = 100;</span>
+<span class="nc" id="L38">    private final float plateWidth = 100;</span>
     private final Texture cookie;
     private float cookieX;
     private float cookieY;
-<span class="nc" id="L39">    private final int cookieHeight = 50;</span>
-<span class="nc" id="L40">    private final int cookieWidth = 50;</span>
+<span class="nc" id="L42">    private final int cookieHeight = 50;</span>
+<span class="nc" id="L43">    private final int cookieWidth = 50;</span>
     private final Vector2 startingPosition;
-<span class="nc" id="L42">    private float speed = 500f;</span>
-<span class="nc" id="L43">    private boolean aKeyPressed = false;</span>
-<span class="nc" id="L44">    private boolean dKeyPressed = false;</span>
+<span class="nc" id="L45">    private float speed = 500f;</span>
+<span class="nc" id="L46">    private boolean aKeyPressed = false;</span>
+<span class="nc" id="L47">    private boolean dKeyPressed = false;</span>
 
-<span class="nc" id="L46">    public CookieCatcherScreen(HesHustle game){</span>
-<span class="nc" id="L47">        this.game = game;</span>
-<span class="nc" id="L48">        resourceManager = new ResourceManager();</span>
-<span class="nc" id="L49">        batch = game.getBatch();</span>
-<span class="nc" id="L50">        glyphLayout = new GlyphLayout();</span>
-<span class="nc" id="L51">        gameClock = new GameClock();</span>
-<span class="nc" id="L52">        cookiesCollectedText = resourceManager.addDisposable(new BitmapFont());</span>
-<span class="nc" id="L53">        cookie = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;cookie.png&quot;)));</span>
-<span class="nc" id="L54">        plate = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;plate.png&quot;)));</span>
-<span class="nc" id="L55">        camera = new OrthographicCamera();</span>
-<span class="nc" id="L56">        vp = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);</span>
-<span class="nc" id="L57">        camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);</span>
-<span class="nc" id="L58">        camera.update();</span>
+    /**
+     * Constructs the Cookie Catcher screen with game instance.
+     *
+     * @param game instance of the game
+     */
+<span class="nc" id="L54">    public CookieCatcherScreen(HesHustle game){</span>
+<span class="nc" id="L55">        this.game = game;</span>
+<span class="nc" id="L56">        resourceManager = new ResourceManager();</span>
+<span class="nc" id="L57">        batch = game.getBatch();</span>
+<span class="nc" id="L58">        glyphLayout = new GlyphLayout();</span>
+<span class="nc" id="L59">        gameClock = new GameClock();</span>
+<span class="nc" id="L60">        cookiesCollectedText = resourceManager.addDisposable(new BitmapFont());</span>
+<span class="nc" id="L61">        cookie = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;cookie.png&quot;)));</span>
+<span class="nc" id="L62">        plate = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;plate.png&quot;)));</span>
+<span class="nc" id="L63">        camera = new OrthographicCamera();</span>
+<span class="nc" id="L64">        vp = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera);</span>
+<span class="nc" id="L65">        camera.position.set(vp.getWorldWidth() / 2f, vp.getWorldHeight() / 2f, 0);</span>
+<span class="nc" id="L66">        camera.update();</span>
 
-<span class="nc" id="L60">        plateX = (vp.getWorldWidth() - plateWidth) / 2f;</span>
-<span class="nc" id="L61">        startingPosition = new Vector2(cookieX, vp.getWorldHeight() - 50);</span>
-<span class="nc" id="L62">    }</span>
+<span class="nc" id="L68">        plateX = (vp.getWorldWidth() - plateWidth) / 2f;</span>
+<span class="nc" id="L69">        startingPosition = new Vector2(cookieX, vp.getWorldHeight() - 50);</span>
+<span class="nc" id="L70">    }</span>
 
 
     @Override
     public void show() {
-<span class="nc" id="L67">        Gdx.input.setInputProcessor(this);</span>
-<span class="nc" id="L68">    }</span>
+<span class="nc" id="L75">        Gdx.input.setInputProcessor(this);</span>
+<span class="nc" id="L76">    }</span>
 
+    /**
+     * Renders the game elements and updates logic.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
-<span class="nc bnc" id="L72" title="All 2 branches missed.">        if (delta &gt; 0.1f) return;</span>
-<span class="nc" id="L73">        gameClock.update(delta);</span>
-<span class="nc" id="L74">        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);</span>
-<span class="nc" id="L75">        camera.update();</span>
-<span class="nc" id="L76">        batch.setProjectionMatrix(camera.combined);</span>
-<span class="nc" id="L77">        batch.begin();</span>
-<span class="nc" id="L78">        float deltaTime = Gdx.graphics.getDeltaTime();</span>
-<span class="nc" id="L79">        update();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        if (delta &gt; 0.1f) return;</span>
+<span class="nc" id="L86">        gameClock.update(delta);</span>
+<span class="nc" id="L87">        ScreenUtils.clear(0.3f, 0.55f, 0.7f, 1);</span>
+<span class="nc" id="L88">        camera.update();</span>
+<span class="nc" id="L89">        batch.setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L90">        batch.begin();</span>
+<span class="nc" id="L91">        float deltaTime = Gdx.graphics.getDeltaTime();</span>
+<span class="nc" id="L92">        update();</span>
 
-<span class="nc" id="L81">        boolean collision = isColliding();</span>
+<span class="nc" id="L94">        boolean collision = isColliding();</span>
 
-<span class="nc bnc" id="L83" title="All 2 branches missed.">        if (collision) {</span>
-<span class="nc" id="L84">            cookiesCollected = cookiesCollected + 1;</span>
-<span class="nc" id="L85">            speed = speed + 10;</span>
-<span class="nc" id="L86">            resetCookie();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (collision) {</span>
+<span class="nc" id="L97">            cookiesCollected = cookiesCollected + 1;</span>
+<span class="nc" id="L98">            speed = speed + 10;</span>
+<span class="nc" id="L99">            resetCookie();</span>
         }
 
 
-<span class="nc" id="L90">        startingPosition.y -= speed * deltaTime;</span>
+<span class="nc" id="L103">        startingPosition.y -= speed * deltaTime;</span>
 
-<span class="nc bnc" id="L92" title="All 6 branches missed.">        if (startingPosition.y + cookieHeight &lt; 0 || startingPosition.x + cookieWidth &lt; 0 || startingPosition.x &gt; vp.getWorldWidth()) {</span>
-<span class="nc" id="L93">            String gameOverText = &quot;Game over. You collected &quot; + cookiesCollected + &quot; cookie(s)!&quot;;</span>
-<span class="nc" id="L94">            glyphLayout.setText(cookiesCollectedText, gameOverText);</span>
-<span class="nc" id="L95">            cookiesCollectedText.draw(batch, gameOverText, (vp.getWorldWidth() - glyphLayout.width) / 2, (vp.getWorldHeight() - glyphLayout.height) / 2);</span>
-<span class="nc" id="L96">            gameClock.addEvent(f -&gt; endGame(), 1f);</span>
-<span class="nc" id="L97">        } else {</span>
-<span class="nc" id="L98">            String text = &quot;Collected &quot; + cookiesCollected + &quot; cookie(s)!&quot;;</span>
-<span class="nc" id="L99">            glyphLayout.setText(cookiesCollectedText, text);</span>
-<span class="nc" id="L100">            cookiesCollectedText.draw(batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);</span>
-<span class="nc" id="L101">            batch.draw(cookie, startingPosition.x, startingPosition.y, cookieWidth, cookieHeight);</span>
-<span class="nc" id="L102">            cookieX = startingPosition.x;</span>
-<span class="nc" id="L103">            cookieY = startingPosition.y;</span>
-<span class="nc" id="L104">            batch.draw(plate, plateX, (vp.getWorldHeight() - plateHeight) / 2 - 200, plateWidth, plateHeight);</span>
+<span class="nc bnc" id="L105" title="All 6 branches missed.">        if (startingPosition.y + cookieHeight &lt; 0 || startingPosition.x + cookieWidth &lt; 0 || startingPosition.x &gt; vp.getWorldWidth()) {</span>
+<span class="nc" id="L106">            String gameOverText = &quot;Game over. You collected &quot; + cookiesCollected + &quot; cookie(s)!&quot;;</span>
+<span class="nc" id="L107">            glyphLayout.setText(cookiesCollectedText, gameOverText);</span>
+<span class="nc" id="L108">            cookiesCollectedText.draw(batch, gameOverText, (vp.getWorldWidth() - glyphLayout.width) / 2, (vp.getWorldHeight() - glyphLayout.height) / 2);</span>
+<span class="nc" id="L109">            gameClock.addEvent(f -&gt; endGame(), 1f);</span>
+<span class="nc" id="L110">        } else {</span>
+<span class="nc" id="L111">            String text = &quot;Collected &quot; + cookiesCollected + &quot; cookie(s)!&quot;;</span>
+<span class="nc" id="L112">            glyphLayout.setText(cookiesCollectedText, text);</span>
+<span class="nc" id="L113">            cookiesCollectedText.draw(batch, text, (vp.getWorldWidth() - glyphLayout.width) / 2, vp.getWorldHeight() - 10);</span>
+<span class="nc" id="L114">            batch.draw(cookie, startingPosition.x, startingPosition.y, cookieWidth, cookieHeight);</span>
+<span class="nc" id="L115">            cookieX = startingPosition.x;</span>
+<span class="nc" id="L116">            cookieY = startingPosition.y;</span>
+<span class="nc" id="L117">            batch.draw(plate, plateX, (vp.getWorldHeight() - plateHeight) / 2 - 200, plateWidth, plateHeight);</span>
         }
-<span class="nc" id="L106">        batch.end();</span>
+<span class="nc" id="L119">        batch.end();</span>
 
-<span class="nc" id="L108">    }</span>
+<span class="nc" id="L121">    }</span>
 
+    /**
+     * Checks if plate catches cookie
+     *
+     * @return true is plate catches cookie, false otherwise.
+     */
     public boolean isColliding() {
-<span class="nc" id="L111">        float cookieXMax = cookieX + cookieWidth;</span>
-<span class="nc" id="L112">        float cookieXMin = cookieX;</span>
-<span class="nc" id="L113">        float cookieYMax = cookieY + cookieHeight;</span>
-<span class="nc" id="L114">        float cookieYMin = cookieY;</span>
-<span class="nc" id="L115">        float plateXMax = plateX + plateWidth;</span>
-<span class="nc" id="L116">        float plateXMin = plateX;</span>
-<span class="nc" id="L117">        float plateYMax = (vp.getWorldHeight() - plateHeight) / 2 - 200 + cookieHeight;</span>
-<span class="nc" id="L118">        float plateYMin = (vp.getWorldHeight() - plateHeight) / 2 - 200;</span>
+<span class="nc" id="L129">        float cookieXMax = cookieX + cookieWidth;</span>
+<span class="nc" id="L130">        float cookieXMin = cookieX;</span>
+<span class="nc" id="L131">        float cookieYMax = cookieY + cookieHeight;</span>
+<span class="nc" id="L132">        float cookieYMin = cookieY;</span>
+<span class="nc" id="L133">        float plateXMax = plateX + plateWidth;</span>
+<span class="nc" id="L134">        float plateXMin = plateX;</span>
+<span class="nc" id="L135">        float plateYMax = (vp.getWorldHeight() - plateHeight) / 2 - 200 + cookieHeight;</span>
+<span class="nc" id="L136">        float plateYMin = (vp.getWorldHeight() - plateHeight) / 2 - 200;</span>
 
-<span class="nc bnc" id="L120" title="All 8 branches missed.">        return (cookieXMin &lt;= plateXMax &amp;&amp; cookieXMax &gt;= plateXMin) &amp;&amp;</span>
+<span class="nc bnc" id="L138" title="All 8 branches missed.">        return (cookieXMin &lt;= plateXMax &amp;&amp; cookieXMax &gt;= plateXMin) &amp;&amp;</span>
                 (cookieYMin &lt;= plateYMax &amp;&amp; cookieYMax &gt;= plateYMin);
     }
 
+    /**
+     * resets cookie position.
+     */
     public void resetCookie(){
-<span class="nc" id="L125">        startingPosition.y = vp.getWorldHeight() + cookieHeight;</span>
-<span class="nc" id="L126">        startingPosition.x = MathUtils.random(vp.getWorldWidth() - cookieWidth);</span>
-<span class="nc" id="L127">    }</span>
+<span class="nc" id="L146">        startingPosition.y = vp.getWorldHeight() + cookieHeight;</span>
+<span class="nc" id="L147">        startingPosition.x = MathUtils.random(vp.getWorldWidth() - cookieWidth);</span>
+<span class="nc" id="L148">    }</span>
 
+    /**
+     * returns to main game.
+     */
     public void endGame(){
-<span class="nc" id="L130">        game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L131">    }</span>
+<span class="nc" id="L154">        game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L155">    }</span>
 
 
     @Override
     public void resize(int width, int height) {
-<span class="nc" id="L136">        vp.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);</span>
-<span class="nc" id="L137">    }</span>
+<span class="nc" id="L160">        vp.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);</span>
+<span class="nc" id="L161">    }</span>
 
     @Override
     public void pause() {
 
-<span class="nc" id="L142">    }</span>
+<span class="nc" id="L166">    }</span>
 
     @Override
     public void resume() {
 
-<span class="nc" id="L147">    }</span>
+<span class="nc" id="L171">    }</span>
 
     @Override
     public void hide() {
 
-<span class="nc" id="L152">    }</span>
+<span class="nc" id="L176">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc" id="L156">        resourceManager.disposeAll();</span>
-<span class="nc" id="L157">    }</span>
+<span class="nc" id="L180">        resourceManager.disposeAll();</span>
+<span class="nc" id="L181">    }</span>
 
+    /**
+     * Handles input detection.
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return true if a or d pressed, false otherwise
+     */
     @Override
     public boolean keyDown(int keycode){
-<span class="nc bnc" id="L161" title="All 2 branches missed.">        if (keycode == Input.Keys.D){</span>
-<span class="nc" id="L162">            dKeyPressed = true;</span>
-<span class="nc" id="L163">            return true;</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">        } else if (keycode == Input.Keys.A){</span>
-<span class="nc" id="L165">            aKeyPressed = true;</span>
-<span class="nc" id="L166">            return true;</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">        if (keycode == Input.Keys.D){</span>
+<span class="nc" id="L192">            dKeyPressed = true;</span>
+<span class="nc" id="L193">            return true;</span>
+<span class="nc bnc" id="L194" title="All 2 branches missed.">        } else if (keycode == Input.Keys.A){</span>
+<span class="nc" id="L195">            aKeyPressed = true;</span>
+<span class="nc" id="L196">            return true;</span>
         }
-<span class="nc" id="L168">        return false;</span>
+<span class="nc" id="L198">        return false;</span>
     }
 
+    /**
+     * Handles input logic.
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return true if a or d released, false otherwise
+     */
     @Override
     public boolean keyUp(int keycode){
-<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (keycode == Input.Keys.D){</span>
-<span class="nc" id="L174">            dKeyPressed = false;</span>
-<span class="nc" id="L175">            return true;</span>
-<span class="nc bnc" id="L176" title="All 2 branches missed.">        } else if (keycode == Input.Keys.A){</span>
-<span class="nc" id="L177">            aKeyPressed = false;</span>
-<span class="nc" id="L178">            return true;</span>
+<span class="nc bnc" id="L209" title="All 2 branches missed.">        if (keycode == Input.Keys.D){</span>
+<span class="nc" id="L210">            dKeyPressed = false;</span>
+<span class="nc" id="L211">            return true;</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">        } else if (keycode == Input.Keys.A){</span>
+<span class="nc" id="L213">            aKeyPressed = false;</span>
+<span class="nc" id="L214">            return true;</span>
         }
-<span class="nc" id="L180">        return false;</span>
+<span class="nc" id="L216">        return false;</span>
     }
 
+    /**
+     * Updates the plate position.
+     */
     public void update(){
-<span class="nc bnc" id="L184" title="All 4 branches missed.">        if (plateX &gt;= 0 &amp;&amp; aKeyPressed){</span>
-<span class="nc" id="L185">            plateX = plateX - 25 * speed/500f;</span>
+<span class="nc bnc" id="L223" title="All 4 branches missed.">        if (plateX &gt;= 0 &amp;&amp; aKeyPressed){</span>
+<span class="nc" id="L224">            plateX = plateX - 25 * speed/500f;</span>
         }
 
-<span class="nc bnc" id="L188" title="All 4 branches missed.">        if (plateX &lt; vp.getWorldWidth() - plateWidth &amp;&amp; dKeyPressed){</span>
-<span class="nc" id="L189">            plateX = plateX + 20 * speed/500f;</span>
+<span class="nc bnc" id="L227" title="All 4 branches missed.">        if (plateX &lt; vp.getWorldWidth() - plateWidth &amp;&amp; dKeyPressed){</span>
+<span class="nc" id="L228">            plateX = plateX + 20 * speed/500f;</span>
         }
 
-<span class="nc" id="L192">    }</span>
+<span class="nc" id="L231">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

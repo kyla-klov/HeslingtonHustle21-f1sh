@@ -13,77 +13,85 @@ import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.game.Utils.ScreenType;
 
-
+/**
+ * The PauseScreen class represents the pause screen of the game.
+ */
 public class PauseScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final Skin skin;
 
-<span class="nc" id="L22">    public PauseScreen(final HesHustle game) {</span>
-<span class="nc" id="L23">        this.game = game;</span>
-<span class="nc" id="L24">        stage = new Stage(new ScreenViewport());</span>
-<span class="nc" id="L25">        Gdx.input.setInputProcessor(stage);</span>
+    /**
+     * Constructs a PauseScreen with the specified game instance.
+     *
+     * @param game the game instance
+     */
+<span class="nc" id="L29">    public PauseScreen(final HesHustle game) {</span>
+<span class="nc" id="L30">        this.game = game;</span>
+<span class="nc" id="L31">        stage = new Stage(new ScreenViewport());</span>
+<span class="nc" id="L32">        Gdx.input.setInputProcessor(stage);</span>
 
-<span class="nc" id="L27">        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)); // Ensure you have this file in your assets</span>
+<span class="nc" id="L34">        skin = new Skin(Gdx.files.internal(&quot;Craftacular_UI_Skin/craftacular-ui.json&quot;)); // Ensure you have this file in your assets</span>
 
-<span class="nc" id="L29">        setupUi();</span>
-<span class="nc" id="L30">    }</span>
+<span class="nc" id="L36">        setupUi();</span>
+<span class="nc" id="L37">    }</span>
+
+    /**
+     * Sets up the screen UI elements and the stage.
+     */
     private void setupUi() {
-<span class="nc" id="L32">        Table table = new Table();</span>
-<span class="nc" id="L33">        table.setFillParent(true);</span>
-<span class="nc" id="L34">        stage.addActor(table);</span>
+<span class="nc" id="L43">        Table table = new Table();</span>
+<span class="nc" id="L44">        table.setFillParent(true);</span>
+<span class="nc" id="L45">        stage.addActor(table);</span>
 
-<span class="nc" id="L36">        TextButton resumeButton = new TextButton(&quot;Resume&quot;, skin);</span>
-<span class="nc" id="L37">        TextButton mainMenuButton = new TextButton(&quot;Main Menu&quot;, skin);</span>
+<span class="nc" id="L47">        TextButton resumeButton = new TextButton(&quot;Resume&quot;, skin);</span>
+<span class="nc" id="L48">        TextButton mainMenuButton = new TextButton(&quot;Main Menu&quot;, skin);</span>
 
-<span class="nc" id="L39">        resumeButton.addListener(new ClickListener() {</span>
+<span class="nc" id="L50">        resumeButton.addListener(new ClickListener() {</span>
             public void clicked(InputEvent event, float x, float y) {
                 // Ensure this transitions back to your game screen, adjusting as necessary
-<span class="nc" id="L42">                game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
-<span class="nc" id="L43">            }</span>
+<span class="nc" id="L53">                game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);</span>
+<span class="nc" id="L54">            }</span>
         });
-<span class="nc" id="L45">        mainMenuButton.addListener(new ClickListener() {</span>
+<span class="nc" id="L56">        mainMenuButton.addListener(new ClickListener() {</span>
             @Override
             public void clicked(InputEvent event, float x, float y) {
-<span class="nc" id="L48">                game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
-<span class="nc" id="L49">            }</span>
+<span class="nc" id="L59">                game.getScreenManager().setScreen(ScreenType.MENU_SCREEN);</span>
+<span class="nc" id="L60">            }</span>
         });
-<span class="nc" id="L51">        table.add(resumeButton).pad(10).row();</span>
-<span class="nc" id="L52">        table.add(mainMenuButton).pad(10);</span>
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L62">        table.add(resumeButton).pad(10).row();</span>
+<span class="nc" id="L63">        table.add(mainMenuButton).pad(10);</span>
+<span class="nc" id="L64">    }</span>
     @Override
-<span class="nc" id="L55">    public void show() {}</span>
+<span class="nc" id="L66">    public void show() {}</span>
 
     @Override
     public void render(float delta) {
-<span class="nc" id="L59">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
-<span class="nc" id="L60">        stage.act(Math.min(delta, 1 / 30f));</span>
-<span class="nc" id="L61">        stage.draw();</span>
-<span class="nc" id="L62">    }@Override</span>
+<span class="nc" id="L70">        ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);</span>
+<span class="nc" id="L71">        stage.act(Math.min(delta, 1 / 30f));</span>
+<span class="nc" id="L72">        stage.draw();</span>
+<span class="nc" id="L73">    }@Override</span>
     public void resize(int width, int height) {
-<span class="nc" id="L64">        stage.getViewport().update(width, height, true);</span>
-<span class="nc" id="L65">    }</span>
+<span class="nc" id="L75">        stage.getViewport().update(width, height, true);</span>
+<span class="nc" id="L76">    }</span>
 
     @Override
     public void pause() {
-<span class="nc" id="L69">    }</span>
+<span class="nc" id="L80">    }</span>
 
     @Override
     public void resume() {
-<span class="nc" id="L73">    }</span>
+<span class="nc" id="L84">    }</span>
 
     @Override
     public void hide() {
-<span class="nc" id="L77">    }</span>
+<span class="nc" id="L88">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc bnc" id="L81" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
-<span class="nc" id="L83">    }</span>
-
-
-
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        if (stage != null) stage.dispose();</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (skin != null) skin.dispose();</span>
+<span class="nc" id="L94">    }</span>
 }
 
 

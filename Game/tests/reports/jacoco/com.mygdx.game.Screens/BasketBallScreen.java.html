@@ -112,123 +112,128 @@ public class BasketBallScreen implements Screen, InputProcessor {
 <span class="nc" id="L112">        }, 30f);</span>
 <span class="nc" id="L113">    }</span>
 
+    /**
+     * Renders the basketball screen elements
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
-<span class="nc" id="L117">        update(delta);</span>
+<span class="nc" id="L122">        update(delta);</span>
 
         //Clear Screen
-<span class="nc" id="L120">        Gdx.gl.glClearColor(0, 0, 0, 1);</span>
-<span class="nc" id="L121">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+<span class="nc" id="L125">        Gdx.gl.glClearColor(0, 0, 0, 1);</span>
+<span class="nc" id="L126">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
 
-<span class="nc" id="L123">        vp.apply();</span>
+<span class="nc" id="L128">        vp.apply();</span>
 
         //Set screen scale bounds using scissor test//
-<span class="nc" id="L126">        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);</span>
-<span class="nc" id="L127">        Gdx.gl.glScissor(vp.getScreenX(), vp.getScreenY(), vp.getScreenWidth(), vp.getScreenHeight());</span>
+<span class="nc" id="L131">        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);</span>
+<span class="nc" id="L132">        Gdx.gl.glScissor(vp.getScreenX(), vp.getScreenY(), vp.getScreenWidth(), vp.getScreenHeight());</span>
 
-<span class="nc" id="L129">        Gdx.gl.glClearColor(0.5f, 0.7f, 0.9f, 1);</span>
-<span class="nc" id="L130">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+<span class="nc" id="L134">        Gdx.gl.glClearColor(0.5f, 0.7f, 0.9f, 1);</span>
+<span class="nc" id="L135">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
 
-<span class="nc" id="L132">        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);</span>
+<span class="nc" id="L137">        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);</span>
         /////////////////////////////////////////////
 
         //Update camera and set projection matrix
-<span class="nc" id="L136">        camera.update();</span>
-<span class="nc" id="L137">        game.getBatch().setProjectionMatrix(camera.combined);</span>
+<span class="nc" id="L141">        camera.update();</span>
+<span class="nc" id="L142">        game.getBatch().setProjectionMatrix(camera.combined);</span>
 
         //Render Objects
-<span class="nc" id="L140">        game.getBatch().begin();</span>
-<span class="nc" id="L141">        game.getBatch().draw(backgroundTexture, 0, 0, 800, 600);</span>
+<span class="nc" id="L145">        game.getBatch().begin();</span>
+<span class="nc" id="L146">        game.getBatch().draw(backgroundTexture, 0, 0, 800, 600);</span>
 
-<span class="nc" id="L143">        ball.render(game.getBatch());</span>
+<span class="nc" id="L148">        ball.render(game.getBatch());</span>
 
-<span class="nc" id="L145">        game.getBatch().draw(hoopTexture, 0, 0, 800, 600);</span>
+<span class="nc" id="L150">        game.getBatch().draw(hoopTexture, 0, 0, 800, 600);</span>
 
         //Check game over condition and display message accordingly
-<span class="nc bnc" id="L148" title="All 2 branches missed.">        if (gameOver) {</span>
-<span class="nc" id="L149">            font.draw(game.getBatch(), &quot;Times Up!&quot;, 100, 580);</span>
+<span class="nc bnc" id="L153" title="All 2 branches missed.">        if (gameOver) {</span>
+<span class="nc" id="L154">            font.draw(game.getBatch(), &quot;Times Up!&quot;, 100, 580);</span>
         } else {
-<span class="nc" id="L151">            font.draw(game.getBatch(), &quot;Press SPACE to bounce the ball into the hoop.&quot;, 100, 580);</span>
-<span class="nc" id="L152">            font.draw(game.getBatch(), &quot;You have 30 seconds!&quot;, 270, 540);</span>
+<span class="nc" id="L156">            font.draw(game.getBatch(), &quot;Press SPACE to bounce the ball into the hoop.&quot;, 100, 580);</span>
+<span class="nc" id="L157">            font.draw(game.getBatch(), &quot;You have 30 seconds!&quot;, 270, 540);</span>
         }
 
         //Display score
-<span class="nc" id="L156">        font.draw(game.getBatch(), &quot;Score: &quot; + score, 350, 500);</span>
+<span class="nc" id="L161">        font.draw(game.getBatch(), &quot;Score: &quot; + score, 350, 500);</span>
 
-<span class="nc" id="L158">        game.getBatch().end();</span>
-<span class="nc" id="L159">    }</span>
+<span class="nc" id="L163">        game.getBatch().end();</span>
+<span class="nc" id="L164">    }</span>
 
     @Override
     public void resize(int width, int height) {
-<span class="nc" id="L163">        vp.update(width, height);</span>
-<span class="nc" id="L164">    }</span>
+<span class="nc" id="L168">        vp.update(width, height);</span>
+<span class="nc" id="L169">    }</span>
 
     @Override
     public void pause() {
         // This method is called when the game is paused.
-<span class="nc" id="L169">    }</span>
+<span class="nc" id="L174">    }</span>
 
     @Override
     public void resume() {
         // This method is called when the game is resumed.
-<span class="nc" id="L174">    }</span>
+<span class="nc" id="L179">    }</span>
 
     @Override
     public void hide() {
         // This method is called when the screen is hidden.
-<span class="nc" id="L179">    }</span>
-
-    @Override
-    public void dispose() {
-<span class="nc" id="L183">        resourceManager.disposeAll();</span>
 <span class="nc" id="L184">    }</span>
 
     @Override
+    public void dispose() {
+<span class="nc" id="L188">        resourceManager.disposeAll();</span>
+<span class="nc" id="L189">    }</span>
+
+    @Override
     public boolean keyDown(int keycode) {
-<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (keycode == Input.Keys.SPACE) {</span>
-<span class="nc" id="L189">            ball.setVelocity(new Vector2(300, 900));</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">        if (keycode == Input.Keys.SPACE) {</span>
+<span class="nc" id="L194">            ball.setVelocity(new Vector2(300, 900));</span>
         }
-<span class="nc" id="L191">        return true;</span>
+<span class="nc" id="L196">        return true;</span>
     }
 
     @Override
     public boolean keyUp(int keycode) {
-<span class="nc" id="L196">        return false;</span>
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
 <span class="nc" id="L201">        return false;</span>
     }
 
     @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    public boolean keyTyped(char character) {
 <span class="nc" id="L206">        return false;</span>
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 <span class="nc" id="L211">        return false;</span>
     }
 
     @Override
-    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 <span class="nc" id="L216">        return false;</span>
     }
 
     @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
 <span class="nc" id="L221">        return false;</span>
     }
 
     @Override
-    public boolean mouseMoved(int screenX, int screenY) {
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
 <span class="nc" id="L226">        return false;</span>
     }
 
     @Override
-    public boolean scrolled(float amountX, float amountY) {
+    public boolean mouseMoved(int screenX, int screenY) {
 <span class="nc" id="L231">        return false;</span>
+    }
+
+    @Override
+    public boolean scrolled(float amountX, float amountY) {
+<span class="nc" id="L236">        return false;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

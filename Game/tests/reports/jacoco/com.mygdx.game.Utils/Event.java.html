@@ -2,6 +2,9 @@
 
 import com.mygdx.game.Objects.ActivityImage;
 
+/**
+ * The Event Class holds information about an event that can be triggered.
+ */
 public class Event {
     private final double timeCost;
     private final int energyCost;
@@ -11,11 +14,11 @@ public class Event {
     private final String description;
     private final ActivityImage activityImage;
     private final ScreenType screenType;
-<span class="fc" id="L14">    public enum Type {</span>
-<span class="fc" id="L15">        EAT,</span>
-<span class="fc" id="L16">        SLEEP,</span>
-<span class="fc" id="L17">        STUDY,</span>
-<span class="fc" id="L18">        RECREATIONAL</span>
+<span class="fc" id="L17">    public enum Type {</span>
+<span class="fc" id="L18">        EAT,</span>
+<span class="fc" id="L19">        SLEEP,</span>
+<span class="fc" id="L20">        STUDY,</span>
+<span class="fc" id="L21">        RECREATIONAL</span>
     }
     private final Type eventType;
 
@@ -30,62 +33,62 @@ public class Event {
      * @param fatigue                  The amount of fatigue a player has after an event
      */
 
-<span class="fc" id="L33">    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ActivityImage activityImage) {</span>
-<span class="fc" id="L34">        this.timeCost = time;</span>
-<span class="fc" id="L35">        this.energyCost = energy;</span>
-<span class="fc" id="L36">        this.studyTime = studyTime;</span>
-<span class="fc" id="L37">        this.fatigue = fatigue;</span>
-<span class="fc" id="L38">        this.eventType = eventType;</span>
-<span class="fc" id="L39">        this.moneyCost = moneyCost;</span>
-<span class="fc" id="L40">        this.description = description;</span>
-<span class="fc" id="L41">        this.activityImage = activityImage;</span>
-<span class="fc" id="L42">        this.screenType = null;</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L36">    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ActivityImage activityImage) {</span>
+<span class="fc" id="L37">        this.timeCost = time;</span>
+<span class="fc" id="L38">        this.energyCost = energy;</span>
+<span class="fc" id="L39">        this.studyTime = studyTime;</span>
+<span class="fc" id="L40">        this.fatigue = fatigue;</span>
+<span class="fc" id="L41">        this.eventType = eventType;</span>
+<span class="fc" id="L42">        this.moneyCost = moneyCost;</span>
+<span class="fc" id="L43">        this.description = description;</span>
+<span class="fc" id="L44">        this.activityImage = activityImage;</span>
+<span class="fc" id="L45">        this.screenType = null;</span>
+<span class="fc" id="L46">    }</span>
 
-<span class="fc" id="L45">    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ScreenType screenType) {</span>
-<span class="fc" id="L46">        this.timeCost = time;</span>
-<span class="fc" id="L47">        this.energyCost = energy;</span>
-<span class="fc" id="L48">        this.studyTime = studyTime;</span>
-<span class="fc" id="L49">        this.fatigue = fatigue;</span>
-<span class="fc" id="L50">        this.eventType = eventType;</span>
-<span class="fc" id="L51">        this.moneyCost = moneyCost;</span>
-<span class="fc" id="L52">        this.description = description;</span>
-<span class="fc" id="L53">        this.activityImage = null;</span>
-<span class="fc" id="L54">        this.screenType = screenType;</span>
-<span class="fc" id="L55">    }</span>
+<span class="fc" id="L48">    public Event(double time,int energy, int studyTime, int fatigue, Type eventType, int moneyCost, String description, ScreenType screenType) {</span>
+<span class="fc" id="L49">        this.timeCost = time;</span>
+<span class="fc" id="L50">        this.energyCost = energy;</span>
+<span class="fc" id="L51">        this.studyTime = studyTime;</span>
+<span class="fc" id="L52">        this.fatigue = fatigue;</span>
+<span class="fc" id="L53">        this.eventType = eventType;</span>
+<span class="fc" id="L54">        this.moneyCost = moneyCost;</span>
+<span class="fc" id="L55">        this.description = description;</span>
+<span class="fc" id="L56">        this.activityImage = null;</span>
+<span class="fc" id="L57">        this.screenType = screenType;</span>
+<span class="fc" id="L58">    }</span>
 
-<span class="fc" id="L57">    public ActivityImage getActivityImage() { return activityImage; }</span>
+<span class="fc" id="L60">    public ActivityImage getActivityImage() { return activityImage; }</span>
 
-<span class="fc" id="L59">    public ScreenType getScreenType() { return screenType; }</span>
+<span class="fc" id="L62">    public ScreenType getScreenType() { return screenType; }</span>
 
     public int getEnergyCost() {
-<span class="fc" id="L62">        return energyCost;</span>
+<span class="fc" id="L65">        return energyCost;</span>
     }
 
     public double getTimeCost() {
-<span class="fc" id="L66">        return timeCost;</span>
+<span class="fc" id="L69">        return timeCost;</span>
     }
 
     public int getStudyTime() {
-<span class="fc" id="L70">        return studyTime;</span>
+<span class="fc" id="L73">        return studyTime;</span>
     }
 
     public int getFatigue() {
-<span class="fc" id="L74">        return fatigue;</span>
+<span class="fc" id="L77">        return fatigue;</span>
     }
 
     public Type getEventType() {
-<span class="fc" id="L78">        return eventType;</span>
+<span class="fc" id="L81">        return eventType;</span>
     }
 
     @SuppressWarnings(&quot;unused&quot;)
     public int getMoneyCost() {
-<span class="fc" id="L83">        return moneyCost;</span>
+<span class="fc" id="L86">        return moneyCost;</span>
     }
 
     @SuppressWarnings(&quot;unused&quot;)
     public String getDescription() {
-<span class="fc" id="L88">        return description;</span>
+<span class="fc" id="L91">        return description;</span>
     }
 }
 

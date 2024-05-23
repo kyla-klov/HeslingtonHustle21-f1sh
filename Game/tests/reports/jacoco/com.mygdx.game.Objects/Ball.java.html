@@ -5,6 +5,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * The Ball class represents a ball object with position, velocity, and acceleration.
+ * It handles updating the ball's position and rendering the ball with a rotation effect.
+ */
 public class Ball {
     private final float radius;
     private final Vector2 position;
@@ -12,57 +16,125 @@ public class Ball {
     private final Vector2 acceleration;
     private final Texture txt;
 
-<span class="nc" id="L15">    private float angle = 0;</span>
+<span class="nc" id="L19">    private float angle = 0;</span>
 
-<span class="nc" id="L17">    public Ball(Texture txt, float x, float y, float radius) {</span>
-<span class="nc" id="L18">        this.radius = radius;</span>
-<span class="nc" id="L19">        this.position = new Vector2(x, y);</span>
-<span class="nc" id="L20">        this.velocity = new Vector2(0, 0);</span>
-<span class="nc" id="L21">        this.acceleration = new Vector2(0, 0);</span>
-<span class="nc" id="L22">        this.txt = txt;</span>
-<span class="nc" id="L23">    }</span>
+    /**
+     * Constructs a Ball with the specified texture, position, and radius.
+     *
+     * @param txt    the texture of the ball
+     * @param x      the initial x position of the ball
+     * @param y      the initial y position of the ball
+     * @param radius the radius of the ball
+     */
+<span class="nc" id="L29">    public Ball(Texture txt, float x, float y, float radius) {</span>
+<span class="nc" id="L30">        this.radius = radius;</span>
+<span class="nc" id="L31">        this.position = new Vector2(x, y);</span>
+<span class="nc" id="L32">        this.velocity = new Vector2(0, 0);</span>
+<span class="nc" id="L33">        this.acceleration = new Vector2(0, 0);</span>
+<span class="nc" id="L34">        this.txt = txt;</span>
+<span class="nc" id="L35">    }</span>
 
+    /**
+     * Updates the ball's position and velocity based on the elapsed time and world width.
+     *
+     * @param deltaTime the time elapsed since the last update
+     * @param wldWidth  the width of the world
+     */
     public void update(float deltaTime, float wldWidth){
-<span class="nc" id="L26">        position.add(velocity.cpy().scl(deltaTime));</span>
-<span class="nc" id="L27">        velocity.add(acceleration.cpy().scl(deltaTime));</span>
-<span class="nc" id="L28">        float angularVelocity = (180 * velocity.x) / (3.14f * radius);</span>
-<span class="nc" id="L29">        angle -= angularVelocity * deltaTime;</span>
-<span class="nc bnc" id="L30" title="All 2 branches missed.">        if (position.x &gt; wldWidth){</span>
-<span class="nc" id="L31">            position.x -= wldWidth;</span>
+<span class="nc" id="L44">        position.add(velocity.cpy().scl(deltaTime));</span>
+<span class="nc" id="L45">        velocity.add(acceleration.cpy().scl(deltaTime));</span>
+<span class="nc" id="L46">        float angularVelocity = (180 * velocity.x) / (3.14f * radius);</span>
+<span class="nc" id="L47">        angle -= angularVelocity * deltaTime;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (position.x &gt; wldWidth){</span>
+<span class="nc" id="L49">            position.x -= wldWidth;</span>
         }
-<span class="nc bnc" id="L33" title="All 2 branches missed.">        if (position.x &lt; 0){</span>
-<span class="nc" id="L34">            position.x += wldWidth;</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (position.x &lt; 0){</span>
+<span class="nc" id="L52">            position.x += wldWidth;</span>
         }
-<span class="nc" id="L36">    }</span>
-
-    public void render(SpriteBatch batch){
-<span class="nc" id="L39">        batch.draw(new TextureRegion(txt), position.x - radius, position.y - radius, (int) radius, (int) radius, (int) (2*radius), (int) (2*radius), 1, 1, angle);</span>
-<span class="nc" id="L40">    }</span>
-
-    public float getRadius() {
-<span class="nc" id="L43">        return radius;</span>
-    }
-
-    public Vector2 getPosition() {
-<span class="nc" id="L47">        return position.cpy();</span>
-    }
-    public Vector2 nextPosition(float deltaTime){
-<span class="nc" id="L50">        return position.cpy().add(velocity.cpy().scl(deltaTime));</span>
-    }
-    public void setPosition(Vector2 position) {
-<span class="nc" id="L53">        this.position.set(position);</span>
 <span class="nc" id="L54">    }</span>
+
+    /**
+     * Renders the ball using the specified sprite batch.
+     *
+     * @param batch the sprite batch used for rendering
+     */
+    public void render(SpriteBatch batch){
+<span class="nc" id="L62">        batch.draw(new TextureRegion(txt), position.x - radius, position.y - radius, (int) radius, (int) radius, (int) (2*radius), (int) (2*radius), 1, 1, angle);</span>
+<span class="nc" id="L63">    }</span>
+
+    /**
+     * Gets the radius of the ball.
+     *
+     * @return the radius of the ball
+     */
+    public float getRadius() {
+<span class="nc" id="L71">        return radius;</span>
+    }
+
+    /**
+     * Gets the position of the ball.
+     *
+     * @return a copy of the position of the ball
+     */
+    public Vector2 getPosition() {
+<span class="nc" id="L80">        return position.cpy();</span>
+    }
+
+
+    /**
+     * Calculates the next position of the ball based on the elapsed time.
+     *
+     * @param deltaTime the time elapsed
+     * @return the next position of the ball
+     */
+    public Vector2 nextPosition(float deltaTime){
+<span class="nc" id="L91">        return position.cpy().add(velocity.cpy().scl(deltaTime));</span>
+    }
+
+    /**
+     * Sets the position of the ball.
+     *
+     * @param position the new position of the ball
+     */
+    public void setPosition(Vector2 position) {
+<span class="nc" id="L100">        this.position.set(position);</span>
+<span class="nc" id="L101">    }</span>
+
+    /**
+     * Gets the velocity of the ball.
+     *
+     * @return a copy of the velocity of the ball
+     */
     public Vector2 getVelocity() {
-<span class="nc" id="L56">        return velocity.cpy();</span>
+<span class="nc" id="L109">        return velocity.cpy();</span>
     }
+
+    /**
+     * Sets the velocity of the ball.
+     *
+     * @param velocity the new velocity of the ball
+     */
     public void setVelocity(Vector2 velocity) {
-<span class="nc" id="L59">        this.velocity.set(velocity);</span>
-<span class="nc" id="L60">    }</span>
+<span class="nc" id="L118">        this.velocity.set(velocity);</span>
+<span class="nc" id="L119">    }</span>
+
+    /**
+     * Gets the acceleration of the ball.
+     *
+     * @return a copy of the acceleration of the ball
+     */
     public Vector2 getAcceleration() {
-<span class="nc" id="L62">        return acceleration.cpy();</span>
+<span class="nc" id="L127">        return acceleration.cpy();</span>
     }
+
+    /**
+     * Sets the acceleration of the ball.
+     *
+     * @param acceleration the new acceleration of the ball
+     */
     public void setAcceleration(Vector2 acceleration) {
-<span class="nc" id="L65">        this.acceleration.set(acceleration);</span>
-<span class="nc" id="L66">    }</span>
+<span class="nc" id="L136">        this.acceleration.set(acceleration);</span>
+<span class="nc" id="L137">    }</span>
+
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

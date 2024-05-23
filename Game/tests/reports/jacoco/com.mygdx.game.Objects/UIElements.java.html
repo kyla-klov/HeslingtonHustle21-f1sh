@@ -10,6 +10,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.AchievementHandler;
 import com.mygdx.game.Utils.ViewportAdapter;
 
+/**
+ * The UIElements class manages various UI elements in the game
+ */
 public class UIElements {
     private final Viewport vp;
     private final BitmapFont font;
@@ -24,99 +27,141 @@ public class UIElements {
     private boolean tapActive;
     private boolean buttonPressed;
 
+    /**
+     * Constructs a UIElements object with the specified parameters.
+     *
+     * @param vp                  the viewport to use for rendering
+     * @param achievementHandler  the achievement handler to use for managing achievements
+     * @param energyBar           the energy bar to display
+     * @param achievementsDisplay the achievements display to manage
+     * @param font                the font to use for rendering text
+     */
     public UIElements(Viewport vp, AchievementHandler achievementHandler,
-<span class="fc" id="L28">                      EnergyBar energyBar, AchievementsDisplay achievementsDisplay, BitmapFont font){</span>
-<span class="fc" id="L29">        this.vp = vp;</span>
-<span class="fc" id="L30">        this.energyBar = energyBar;</span>
-<span class="fc" id="L31">        this.achievementsDisplay = achievementsDisplay;</span>
-<span class="fc" id="L32">        this.font = font;</span>
-<span class="fc" id="L33">        achievementsButton  = new Texture(Gdx.files.internal(&quot;badge.png&quot;));</span>
-<span class="fc" id="L34">        tap = new Texture(Gdx.files.internal(&quot;tap.png&quot;));</span>
-<span class="fc" id="L35">        startX = 1490; startY = 750;</span>
-<span class="fc" id="L36">        endX = 1475; endY = 775;</span>
-<span class="fc" id="L37">        tapActive = true;</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L40">                      EnergyBar energyBar, AchievementsDisplay achievementsDisplay, BitmapFont font){</span>
+<span class="fc" id="L41">        this.vp = vp;</span>
+<span class="fc" id="L42">        this.energyBar = energyBar;</span>
+<span class="fc" id="L43">        this.achievementsDisplay = achievementsDisplay;</span>
+<span class="fc" id="L44">        this.font = font;</span>
+<span class="fc" id="L45">        achievementsButton  = new Texture(Gdx.files.internal(&quot;badge.png&quot;));</span>
+<span class="fc" id="L46">        tap = new Texture(Gdx.files.internal(&quot;tap.png&quot;));</span>
+<span class="fc" id="L47">        startX = 1490; startY = 750;</span>
+<span class="fc" id="L48">        endX = 1475; endY = 775;</span>
+<span class="fc" id="L49">        tapActive = true;</span>
+<span class="fc" id="L50">    }</span>
+
+    /**
+     * Constructs a UIElements object with default parameters.
+     *
+     * @param vp                 the viewport to use for rendering
+     * @param achievementHandler the achievement handler to use for managing achievements
+     */
     public UIElements(Viewport vp, AchievementHandler achievementHandler) {
-<span class="nc" id="L40">        this(vp, achievementHandler,</span>
+<span class="nc" id="L59">        this(vp, achievementHandler,</span>
                 new EnergyBar(vp, 80, 600, 270, 50, 27),
                 new AchievementsDisplay(vp, achievementHandler, 1200, 370),
-<span class="nc" id="L43">                new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)));</span>
-//        this.vp = vp;
-//        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));
-//        achievementsButton  = new Texture(Gdx.files.internal(&quot;badge.png&quot;));
-//        tap = new Texture(Gdx.files.internal(&quot;tap.png&quot;));
-//        energyBar = new EnergyBar(vp, 80, 600, 270, 50, 27);
-//        achievementsDisplay = new AchievementsDisplay(vp, achievementHandler, 1200, 370);
-//        startX = 1490; startY = 750;
-//        endX = 1475; endY = 775;
-//        tapActive = true;
-<span class="nc" id="L53">    }</span>
+<span class="nc" id="L62">                new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)));</span>
+<span class="nc" id="L63">    }</span>
 
+    /**
+     * Updates the state of the UI elements.
+     *
+     * @param deltaTime the time elapsed since the last update
+     */
     public void update(float deltaTime){
-<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L57">            buttonPressed = true;</span>
-<span class="nc" id="L58">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L72">            buttonPressed = true;</span>
+<span class="nc" id="L73">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
         }
-<span class="pc bpc" id="L60" title="3 of 4 branches missed.">        if (buttonPressed &amp;&amp; !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L61">            buttonPressed = false;</span>
-<span class="nc" id="L62">            touchUp();</span>
+<span class="pc bpc" id="L75" title="3 of 4 branches missed.">        if (buttonPressed &amp;&amp; !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L76">            buttonPressed = false;</span>
+<span class="nc" id="L77">            touchUp();</span>
         }
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (!tapActive) return;</span>
-<span class="fc" id="L65">        float duration = 1.0f; // Duration of the glide in seconds</span>
-<span class="fc" id="L66">        float easingFactor = deltaTime / duration; // Adjust this value to control the speed</span>
-<span class="fc" id="L67">        progress += easingFactor;</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">        if (!tapActive) return;</span>
+<span class="fc" id="L80">        float duration = 1.0f; // Duration of the glide in seconds</span>
+<span class="fc" id="L81">        float easingFactor = deltaTime / duration; // Adjust this value to control the speed</span>
+<span class="fc" id="L82">        progress += easingFactor;</span>
 
         // Quadratic easing out: f(t) = -t*(t-2)
-<span class="fc" id="L70">        float easedProgress = -progress * (progress - 2);</span>
+<span class="fc" id="L85">        float easedProgress = -progress * (progress - 2);</span>
 
         // Update current position based on eased progress
-<span class="fc" id="L73">        curX = startX + (endX - startX) * easedProgress;</span>
-<span class="fc" id="L74">        curY = startY + (endY - startY) * easedProgress;</span>
+<span class="fc" id="L88">        curX = startX + (endX - startX) * easedProgress;</span>
+<span class="fc" id="L89">        curY = startY + (endY - startY) * easedProgress;</span>
 
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (progress &gt;= 2f){</span>
-<span class="fc" id="L77">            progress = 0.0f;</span>
-<span class="fc" id="L78">            curX = startX;</span>
-<span class="fc" id="L79">            curY = startY;</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">        if (progress &gt;= 2f){</span>
+<span class="fc" id="L92">            progress = 0.0f;</span>
+<span class="fc" id="L93">            curX = startX;</span>
+<span class="fc" id="L94">            curY = startY;</span>
         }
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L96">    }</span>
 
+    /**
+     * Renders the UI elements using the specified sprite batch.
+     *
+     * @param batch   the sprite batch used for rendering
+     * @param time    the current time to display
+     * @param day     the current day to display
+     * @param sleep   the sleep count to display
+     * @param rec     the recreation count to display
+     * @param eat     the eat count to display
+     * @param study   the study hours to display
+     * @param energy  the current energy level to display
+     * @param score   the current score to display
+     */
     public void render(SpriteBatch batch, String time, int day, int sleep, int rec, int eat, int study, float energy, float score){
-<span class="fc" id="L84">        energyBar.render(batch, energy);</span>
-<span class="fc" id="L85">        achievementsDisplay.render(batch);</span>
-<span class="fc" id="L86">        ViewportAdapter.drawUI(vp, batch, achievementsButton, 1450, 800, 50, 50);</span>
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (tapActive) ViewportAdapter.drawUI(vp, batch, tap, curX, curY, 50, 50);</span>
-<span class="fc" id="L88">        font.getData().setScale(1.4f);</span>
-<span class="fc" id="L89">        ViewportAdapter.drawFont(vp, font, batch, &quot;Score: &quot; + score, 100, 825);</span>
-<span class="fc" id="L90">        font.getData().setScale(1f);</span>
-<span class="fc" id="L91">        ViewportAdapter.drawFont(vp, font, batch, time, 1200, 840);</span>
-<span class="fc" id="L92">        ViewportAdapter.drawFont(vp, font, batch, &quot;Day: &quot; + day, 1050, 840);</span>
-<span class="fc" id="L93">        ViewportAdapter.drawFont(vp, font, batch, &quot;Sleep Count: &quot; + sleep, 100, 780);</span>
-<span class="fc" id="L94">        ViewportAdapter.drawFont(vp, font, batch, &quot;Rec Count: &quot; + rec, 100, 750);</span>
-<span class="fc" id="L95">        ViewportAdapter.drawFont(vp, font, batch, &quot;Eat Count: &quot; + eat, 100, 720);</span>
-<span class="fc" id="L96">        ViewportAdapter.drawFont(vp, font, batch, &quot;Study Hours: &quot; + study, 100, 690);</span>
-<span class="fc" id="L97">    }</span>
+<span class="fc" id="L112">        energyBar.render(batch, energy);</span>
+<span class="fc" id="L113">        achievementsDisplay.render(batch);</span>
+<span class="fc" id="L114">        ViewportAdapter.drawUI(vp, batch, achievementsButton, 1450, 800, 50, 50);</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (tapActive) ViewportAdapter.drawUI(vp, batch, tap, curX, curY, 50, 50);</span>
+<span class="fc" id="L116">        font.getData().setScale(1.4f);</span>
+<span class="fc" id="L117">        ViewportAdapter.drawFont(vp, font, batch, &quot;Score: &quot; + score, 100, 825);</span>
+<span class="fc" id="L118">        font.getData().setScale(1f);</span>
+<span class="fc" id="L119">        ViewportAdapter.drawFont(vp, font, batch, time, 1200, 840);</span>
+<span class="fc" id="L120">        ViewportAdapter.drawFont(vp, font, batch, &quot;Day: &quot; + day, 1050, 840);</span>
+<span class="fc" id="L121">        ViewportAdapter.drawFont(vp, font, batch, &quot;Sleep Count: &quot; + sleep, 100, 780);</span>
+<span class="fc" id="L122">        ViewportAdapter.drawFont(vp, font, batch, &quot;Rec Count: &quot; + rec, 100, 750);</span>
+<span class="fc" id="L123">        ViewportAdapter.drawFont(vp, font, batch, &quot;Eat Count: &quot; + eat, 100, 720);</span>
+<span class="fc" id="L124">        ViewportAdapter.drawFont(vp, font, batch, &quot;Study Hours: &quot; + study, 100, 690);</span>
+<span class="fc" id="L125">    }</span>
 
+    /**
+     * Handles touch down events for the UI elements.
+     *
+     * @param screenX the x position of the touch
+     * @param screenY the y position of the touch
+     */
     public void touchDown(int screenX, int screenY){
-<span class="nc" id="L100">        Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
-<span class="nc bnc" id="L101" title="All 2 branches missed.">        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, 1450, 800, 50, 50)){</span>
-<span class="nc" id="L102">            tapActive = false;</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">            if (achievementsDisplay.isVisible()){</span>
-<span class="nc" id="L104">                achievementsDisplay.hide();</span>
+<span class="nc" id="L134">        Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, 1450, 800, 50, 50)){</span>
+<span class="nc" id="L136">            tapActive = false;</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">            if (achievementsDisplay.isVisible()){</span>
+<span class="nc" id="L138">                achievementsDisplay.hide();</span>
             } else{
-<span class="nc" id="L106">                achievementsDisplay.show();</span>
+<span class="nc" id="L140">                achievementsDisplay.show();</span>
             }
         }
-<span class="nc" id="L109">    }</span>
+<span class="nc" id="L143">    }</span>
 
+
+    /**
+     * Handles touch up events for the UI elements.
+     */
     public void touchUp(){
-<span class="nc" id="L112">    }</span>
+<span class="nc" id="L150">    }</span>
 
+
+    /**
+     * @return the current x position of the tap icon
+     */
     public float getCurX() {
-<span class="fc" id="L115">        return curX;</span>
+<span class="fc" id="L157">        return curX;</span>
     }
 
+    /**
+     * @return the current y position of the tap icon
+     */
     public float getCurY() {
-<span class="fc" id="L119">        return curY;</span>
+<span class="fc" id="L164">        return curY;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

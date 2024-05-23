@@ -8,31 +8,90 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-<span class="nc" id="L11">public class ViewportAdapter {</span>
+/**
+ * The ViewportAdapter class provides utility methods for drawing UI elements and handling screen-to-world coordinate transformations.
+ */
+<span class="nc" id="L14">public class ViewportAdapter {</span>
+    /**
+     * Draws a texture on the UI.
+     *
+     * @param vp     the viewport
+     * @param batch  the sprite batch
+     * @param txt    the texture to draw
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     * @param width  the width of the texture
+     * @param height the height of the texture
+     */
     public static void drawUI(Viewport vp, SpriteBatch batch, Texture txt, float x, float y, float width, float height){
-<span class="fc" id="L13">        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);</span>
-<span class="fc" id="L14">    }</span>
+<span class="fc" id="L27">        batch.draw(txt, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f, width, height);</span>
+<span class="fc" id="L28">    }</span>
 
+    /**
+     * Draws text using a BitmapFont.
+     *
+     * @param vp     the viewport
+     * @param font   the bitmap font
+     * @param batch  the sprite batch
+     * @param text   the text to draw
+     * @param x      the x coordinate
+     * @param y      the y coordinate
+     */
     public static void drawFont(Viewport vp, BitmapFont font, SpriteBatch batch, String text, float x, float y){
-<span class="fc" id="L17">        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);</span>
-<span class="fc" id="L18">    }</span>
+<span class="fc" id="L41">        font.draw(batch, text, x + vp.getCamera().position.x - vp.getWorldWidth()/2f, y + vp.getCamera().position.y - vp.getWorldHeight()/2f);</span>
+<span class="fc" id="L42">    }</span>
 
+    /**
+     * Converts to screen coordinates.
+     *
+     * @param vp the viewport
+     * @param x  the x coordinate in world space
+     * @param y  the y coordinate in world space
+     * @return the corresponding screen coordinates as a Vector2
+     */
     public static Vector2 toScreen(Viewport vp, float x, float y){
-<span class="fc" id="L21">        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);</span>
+<span class="fc" id="L53">        return new Vector2(x * vp.getScreenWidth() / vp.getWorldWidth() + (Gdx.graphics.getWidth() - vp.getScreenWidth()) / 2f, y * vp.getScreenHeight() / vp.getWorldHeight() + (Gdx.graphics.getHeight() - vp.getScreenHeight()) / 2f);</span>
     }
 
+    /**
+     * Converts screen coordinates to game coordinates.
+     *
+     * @param vp      the viewport
+     * @param screenX the x coordinate in screen space
+     * @param screenY the y coordinate in screen space
+     * @return the corresponding world coordinates as a Vector2
+     */
     public static Vector2 screenToGame (Viewport vp, float screenX, float screenY){
-<span class="fc" id="L25">        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();</span>
-<span class="fc" id="L26">        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();</span>
-<span class="fc" id="L27">        return new Vector2(transX, transY);</span>
+<span class="fc" id="L65">        float transX = (screenX - (Gdx.graphics.getWidth() - vp.getScreenWidth())/2f) * vp.getWorldWidth() / vp.getScreenWidth();</span>
+<span class="fc" id="L66">        float transY = (Gdx.graphics.getHeight() - screenY - (Gdx.graphics.getHeight() - vp.getScreenHeight())/2f) * vp.getWorldHeight() / vp.getScreenHeight();</span>
+<span class="fc" id="L67">        return new Vector2(transX, transY);</span>
     }
 
+    /**
+     * Checks if a touch point is over a specified rectangular area.
+     *
+     * @param touchX the x coordinate of the touch point
+     * @param touchY the y coordinate of the touch point
+     * @param x      the x coordinate of the top-left corner of the area
+     * @param y      the y coordinate of the top-left corner of the area
+     * @param width  the width of the area
+     * @param height the height of the area
+     * @return true if the touch point is over the area, false otherwise
+     */
     public static boolean isOver(float touchX, float touchY, float x, float y, float width, float height) {
-<span class="fc bfc" id="L31" title="All 8 branches covered.">        return (touchX &gt; x &amp;&amp; touchX &lt; x + width &amp;&amp; touchY &gt; y &amp;&amp; touchY &lt; y + height);</span>
+<span class="fc bfc" id="L82" title="All 8 branches covered.">        return (touchX &gt; x &amp;&amp; touchX &lt; x + width &amp;&amp; touchY &gt; y &amp;&amp; touchY &lt; y + height);</span>
     }
 
+    /**
+     * Checks if a touch point is over a specified rectangle.
+     *
+     * @param touchX the x coordinate of the touch point
+     * @param touchY the y coordinate of the touch point
+     * @param rect   the rectangle
+     * @return true if the touch point is over the rectangle, false otherwise
+     */
     public static boolean isOver(float touchX, float touchY, Rectangle rect) {
-<span class="fc bfc" id="L35" title="All 8 branches covered.">        return (touchX &gt; rect.x &amp;&amp; touchX &lt; rect.x + rect.width &amp;&amp; touchY &gt; rect.y &amp;&amp; touchY &lt; rect.y + rect.height);</span>
+<span class="fc bfc" id="L94" title="All 8 branches covered.">        return (touchX &gt; rect.x &amp;&amp; touchX &lt; rect.x + rect.width &amp;&amp; touchY &gt; rect.y &amp;&amp; touchY &lt; rect.y + rect.height);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

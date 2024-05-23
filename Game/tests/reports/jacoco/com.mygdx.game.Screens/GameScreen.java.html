@@ -50,219 +50,260 @@ public class GameScreen implements Screen {
 
 <span class="fc" id="L51">    private Achievement.Type hiker = null;</span>
 
+    /**
+     * Constructs a GameScreen with the specified parameters.
+     *
+     * @param game             the game instance
+     * @param gameClock        the game clock to manage time
+     * @param tiledMap         the tiled map for the game world
+     * @param TmRender         the tiled map renderer
+     * @param camera           the camera to use for rendering
+     * @param vp               the viewport to use for rendering
+     * @param uiElements       the UI elements to display
+     * @param nameTextField    the text field for entering the player's name
+     */
     public GameScreen(final HesHustle game, final GameClock gameClock, final TiledMap tiledMap,
                       final TiledMapRenderer TmRender, final OrthographicCamera camera,
                       final FitViewport vp,
-<span class="fc" id="L56">                      final UIElements uiElements, final NameTextField nameTextField){</span>
-<span class="fc" id="L57">        this.game = game;</span>
-<span class="fc" id="L58">        this.batch = game.getBatch();</span>
-<span class="fc" id="L59">        this.gameClock = gameClock;</span>
-<span class="fc" id="L60">        this.camera = camera;</span>
-<span class="fc" id="L61">        this.vp = vp;</span>
-<span class="pc bpc" id="L62" title="2 of 4 branches missed.">        if (tiledMap != null &amp;&amp; TmRender != null){</span>
-<span class="fc" id="L63">            this.tiledMap = resourceManager.addDisposable(tiledMap);</span>
-<span class="fc" id="L64">            this.TmRender = TmRender;</span>
+<span class="fc" id="L68">                      final UIElements uiElements, final NameTextField nameTextField){</span>
+<span class="fc" id="L69">        this.game = game;</span>
+<span class="fc" id="L70">        this.batch = game.getBatch();</span>
+<span class="fc" id="L71">        this.gameClock = gameClock;</span>
+<span class="fc" id="L72">        this.camera = camera;</span>
+<span class="fc" id="L73">        this.vp = vp;</span>
+<span class="pc bpc" id="L74" title="2 of 4 branches missed.">        if (tiledMap != null &amp;&amp; TmRender != null){</span>
+<span class="fc" id="L75">            this.tiledMap = resourceManager.addDisposable(tiledMap);</span>
+<span class="fc" id="L76">            this.TmRender = TmRender;</span>
         }
         else{
-<span class="nc" id="L67">            this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load(&quot;MAP/map1.tmx&quot;));</span>
-<span class="nc" id="L68">            this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap, batch);</span>
+<span class="nc" id="L79">            this.tiledMap = resourceManager.addDisposable(new TmxMapLoader().load(&quot;MAP/map1.tmx&quot;));</span>
+<span class="nc" id="L80">            this.TmRender = new OrthogonalTiledMapRenderer(this.tiledMap, batch);</span>
         }
 
-<span class="fc" id="L71">        this.activityImages = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L72">        this.buildings = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L83">        this.activityImages = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L84">        this.buildings = new ArrayList&lt;&gt;();</span>
 
-<span class="fc" id="L74">        this.uiElements = uiElements;</span>
-<span class="fc" id="L75">        this.nameTextField = nameTextField;</span>
-<span class="fc" id="L76">        create();</span>
-<span class="fc" id="L77">    }</span>
+<span class="fc" id="L86">        this.uiElements = uiElements;</span>
+<span class="fc" id="L87">        this.nameTextField = nameTextField;</span>
+<span class="fc" id="L88">        create();</span>
+<span class="fc" id="L89">    }</span>
 
     private GameScreen(final HesHustle game, final OrthographicCamera camera, final FitViewport vp){
-<span class="nc" id="L80">        this(game, new GameClock(), null, null, camera, vp, new UIElements(vp, game.getAchievementHandler()), new NameTextField(vp));</span>
-<span class="nc" id="L81">    }</span>
+<span class="nc" id="L92">        this(game, new GameClock(), null, null, camera, vp, new UIElements(vp, game.getAchievementHandler()), new NameTextField(vp));</span>
+<span class="nc" id="L93">    }</span>
     private GameScreen(final HesHustle game, final OrthographicCamera camera){
-<span class="nc" id="L83">        this(game, camera, new FitViewport(1600,900, camera));</span>
-<span class="nc" id="L84">    }</span>
+<span class="nc" id="L95">        this(game, camera, new FitViewport(1600,900, camera));</span>
+<span class="nc" id="L96">    }</span>
     public GameScreen(final HesHustle game) {
-<span class="nc" id="L86">        this(game, new OrthographicCamera());</span>
-<span class="nc" id="L87">    }</span>
+<span class="nc" id="L98">        this(game, new OrthographicCamera());</span>
+<span class="nc" id="L99">    }</span>
 
+    /**
+     * Initializes the game objects and settings.
+     */
     public void create(){
 
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
-<span class="fc" id="L92">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get(&quot;collisionLayer&quot;);</span>
-<span class="fc" id="L93">        collisionLayer.setVisible(false);</span>
-<span class="fc" id="L94">        Building comSci = new Building(530, 380,&quot;Computer\nScience\nDepartment&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;book.png&quot;))));</span>
-<span class="fc" id="L95">        Building BBall = new Building(1450, 2000, &quot;BasketBall&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;ball-of-basketball.png&quot;))));</span>
-<span class="fc" id="L96">        Building duck = new Building(2112, 360, &quot;Ducks&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;duck_icon.png&quot;))));</span>
-<span class="fc" id="L97">        Building langwith = new Building(1360, 1375, &quot;Langwith&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;sleep.png&quot;))));</span>
-<span class="fc" id="L98">        Building piazza = new Building(2550, 1380, &quot;Piazza&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;restaurant.png&quot;))));</span>
+<span class="fc" id="L107">        TiledMapTileLayer collisionLayer = (TiledMapTileLayer) tiledMap.getLayers().get(&quot;collisionLayer&quot;);</span>
+<span class="fc" id="L108">        collisionLayer.setVisible(false);</span>
+<span class="fc" id="L109">        Building comSci = new Building(530, 380,&quot;Computer\nScience\nDepartment&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;book.png&quot;))));</span>
+<span class="fc" id="L110">        Building BBall = new Building(1450, 2000, &quot;BasketBall&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;ball-of-basketball.png&quot;))));</span>
+<span class="fc" id="L111">        Building duck = new Building(2112, 360, &quot;Ducks&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;duck_icon.png&quot;))));</span>
+<span class="fc" id="L112">        Building langwith = new Building(1360, 1375, &quot;Langwith&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;sleep.png&quot;))));</span>
+<span class="fc" id="L113">        Building piazza = new Building(2550, 1380, &quot;Piazza&quot;, resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;restaurant.png&quot;))));</span>
 
-<span class="fc" id="L100">        buildings.add(comSci);//separate building list to cycle through to find closest to player</span>
-<span class="fc" id="L101">        buildings.add(BBall);</span>
-<span class="fc" id="L102">        buildings.add(duck);</span>
-<span class="fc" id="L103">        buildings.add(langwith);</span>
-<span class="fc" id="L104">        buildings.add(piazza);</span>
+<span class="fc" id="L115">        buildings.add(comSci);//separate building list to cycle through to find closest to player</span>
+<span class="fc" id="L116">        buildings.add(BBall);</span>
+<span class="fc" id="L117">        buildings.add(duck);</span>
+<span class="fc" id="L118">        buildings.add(langwith);</span>
+<span class="fc" id="L119">        buildings.add(piazza);</span>
 
-<span class="fc" id="L106">        eventM = new EventManager(game, gameClock);</span>
-<span class="fc" id="L107">        player = new PlayerController(1000,1000, eventM, collisionLayer);</span>
-<span class="fc" id="L108">        LC = new LightCycle();</span>
+<span class="fc" id="L121">        eventM = new EventManager(game, gameClock);</span>
+<span class="fc" id="L122">        player = new PlayerController(1000,1000, eventM, collisionLayer);</span>
+<span class="fc" id="L123">        LC = new LightCycle();</span>
 
-<span class="fc bfc" id="L110" title="All 2 branches covered.">        for (int i = 0; i &lt; eventM.listEvents().size(); i++) {</span>
-<span class="fc" id="L111">            activityImages.add(eventM.listEvents().get(i).getActivityImage());</span>
+<span class="fc bfc" id="L125" title="All 2 branches covered.">        for (int i = 0; i &lt; eventM.listEvents().size(); i++) {</span>
+<span class="fc" id="L126">            activityImages.add(eventM.listEvents().get(i).getActivityImage());</span>
         }
-<span class="fc" id="L113">    }</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Updates the game state.
+     *
+     * @param delta the time elapsed since the last update
+     */
     public void update(float delta) {
-<span class="fc" id="L115">        gameClock.update(delta);</span>
+<span class="fc" id="L136">        gameClock.update(delta);</span>
 
-<span class="fc" id="L117">        player.update(delta);</span>
+<span class="fc" id="L138">        player.update(delta);</span>
 
-<span class="fc" id="L119">        player.setBD(getNearest());</span>
+<span class="fc" id="L140">        player.setBD(getNearest());</span>
 
-<span class="fc" id="L121">        uiElements.update(delta);</span>
+<span class="fc" id="L142">        uiElements.update(delta);</span>
 
-<span class="pc bpc" id="L123" title="1 of 2 branches missed.">        if (checkGameOverCondition()) {</span>
-<span class="nc" id="L124">            writeToFile();</span>
-<span class="nc" id="L125">            game.getScreenManager().setScreen(ScreenType.END_SCREEN, eventM.calcScore()); // Switch to EndScreen</span>
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">        if (checkGameOverCondition()) {</span>
+<span class="nc" id="L145">            writeToFile();</span>
+<span class="nc" id="L146">            game.getScreenManager().setScreen(ScreenType.END_SCREEN, eventM.calcScore()); // Switch to EndScreen</span>
         }
 
-<span class="fc" id="L128">        int steps = (int) (player.getDistanceTravelled() / 7.5);</span>
-<span class="fc bfc" id="L129" title="All 4 branches covered.">        if (steps &gt;= 2500 &amp;&amp; hiker == null){</span>
-<span class="fc" id="L130">            hiker = Achievement.Type.BRONZE;</span>
-<span class="fc" id="L131">            game.getAchievementHandler().getAchievement(&quot;Hiker&quot;, Achievement.Type.BRONZE).unlock();</span>
-<span class="fc bfc" id="L132" title="All 4 branches covered.">        } else if (steps &gt;= 5000 &amp;&amp; hiker == Achievement.Type.BRONZE){</span>
-<span class="fc" id="L133">            hiker = Achievement.Type.SILVER;</span>
-<span class="fc" id="L134">            game.getAchievementHandler().getAchievement(&quot;Hiker&quot;, Achievement.Type.SILVER).unlock();</span>
-<span class="pc bpc" id="L135" title="1 of 4 branches missed.">        } else if (steps &gt;= 10000 &amp;&amp; hiker == Achievement.Type.SILVER){</span>
-<span class="fc" id="L136">            hiker = Achievement.Type.GOLD;</span>
-<span class="fc" id="L137">            game.getAchievementHandler().getAchievement(&quot;Hiker&quot;, Achievement.Type.GOLD).unlock();</span>
+<span class="fc" id="L149">        int steps = (int) (player.getDistanceTravelled() / 7.5);</span>
+<span class="fc bfc" id="L150" title="All 4 branches covered.">        if (steps &gt;= 2500 &amp;&amp; hiker == null){</span>
+<span class="fc" id="L151">            hiker = Achievement.Type.BRONZE;</span>
+<span class="fc" id="L152">            game.getAchievementHandler().getAchievement(&quot;Hiker&quot;, Achievement.Type.BRONZE).unlock();</span>
+<span class="fc bfc" id="L153" title="All 4 branches covered.">        } else if (steps &gt;= 5000 &amp;&amp; hiker == Achievement.Type.BRONZE){</span>
+<span class="fc" id="L154">            hiker = Achievement.Type.SILVER;</span>
+<span class="fc" id="L155">            game.getAchievementHandler().getAchievement(&quot;Hiker&quot;, Achievement.Type.SILVER).unlock();</span>
+<span class="pc bpc" id="L156" title="1 of 4 branches missed.">        } else if (steps &gt;= 10000 &amp;&amp; hiker == Achievement.Type.SILVER){</span>
+<span class="fc" id="L157">            hiker = Achievement.Type.GOLD;</span>
+<span class="fc" id="L158">            game.getAchievementHandler().getAchievement(&quot;Hiker&quot;, Achievement.Type.GOLD).unlock();</span>
         }
-<span class="fc" id="L139">    }</span>
+<span class="fc" id="L160">    }</span>
 
 
-
+    /**
+     * Renders game elements.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
 
-<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (nameTextField.textEntered()) update(delta);</span>
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (nameTextField.textEntered()) update(delta);</span>
 
-<span class="fc" id="L148">        Gdx.gl.glClearColor(0f,0f,0f,1);</span>
-<span class="fc" id="L149">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
+<span class="fc" id="L173">        Gdx.gl.glClearColor(0f,0f,0f,1);</span>
+<span class="fc" id="L174">        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);</span>
 
-<span class="fc" id="L151">        updateCamera();</span>
-<span class="fc" id="L152">        vp.apply();</span>
-<span class="fc" id="L153">        camera.update();</span>
+<span class="fc" id="L176">        updateCamera();</span>
+<span class="fc" id="L177">        vp.apply();</span>
+<span class="fc" id="L178">        camera.update();</span>
 
-<span class="fc" id="L155">        batch.setProjectionMatrix(vp.getCamera().combined);</span>
+<span class="fc" id="L180">        batch.setProjectionMatrix(vp.getCamera().combined);</span>
 
-<span class="fc" id="L157">        TmRender.setView(camera);</span>
-<span class="fc" id="L158">        TmRender.render();</span>
+<span class="fc" id="L182">        TmRender.setView(camera);</span>
+<span class="fc" id="L183">        TmRender.render();</span>
 
-<span class="fc" id="L160">        batch.begin();</span>
+<span class="fc" id="L185">        batch.begin();</span>
 
-<span class="fc bfc" id="L162" title="All 2 branches covered.">        for (Building building : buildings) {</span>
-<span class="fc" id="L163">            building.render(batch);</span>
-<span class="fc" id="L164">        }</span>
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        for (Building building : buildings) {</span>
+<span class="fc" id="L188">            building.render(batch);</span>
+<span class="fc" id="L189">        }</span>
 
-<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (nameTextField.textEntered()){</span>
-<span class="fc" id="L167">            player.render(batch);</span>
-<span class="fc" id="L168">            LC.render(batch, gameClock.getHours(), gameClock.getMinutes());</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (nameTextField.textEntered()){</span>
+<span class="fc" id="L192">            player.render(batch);</span>
+<span class="fc" id="L193">            LC.render(batch, gameClock.getHours(), gameClock.getMinutes());</span>
         }
 
-<span class="fc" id="L171">        uiElements.render(batch, gameClock.getTime(), gameClock.getDays(), eventM.getSleep(), eventM.getRec(), eventM.getEat(), eventM.getTotalStudyHours(), eventM.getEnergy(), eventM.calcScore());</span>
-<span class="fc" id="L172">        renderActivityImages();</span>
-<span class="fc" id="L173">        nameTextField.render(batch);</span>
-<span class="fc" id="L174">        batch.end();</span>
+<span class="fc" id="L196">        uiElements.render(batch, gameClock.getTime(), gameClock.getDays(), eventM.getSleep(), eventM.getRec(), eventM.getEat(), eventM.getTotalStudyHours(), eventM.getEnergy(), eventM.calcScore());</span>
+<span class="fc" id="L197">        renderActivityImages();</span>
+<span class="fc" id="L198">        nameTextField.render(batch);</span>
+<span class="fc" id="L199">        batch.end();</span>
         //gui.render(vp.getCamera(),game,shape);
           // position of the projection matrix, and we need it for the event render
-<span class="pc bpc" id="L177" title="1 of 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {</span>
-<span class="nc" id="L178">            game.getScreenManager().setScreen(ScreenType.PAUSE_SCREEN);</span>
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {</span>
+<span class="nc" id="L203">            game.getScreenManager().setScreen(ScreenType.PAUSE_SCREEN);</span>
         }
-<span class="fc" id="L180">    }</span>
+<span class="fc" id="L205">    }</span>
 
+    /**
+     * Renders activity images on the screen.
+     */
     public void renderActivityImages(){
-<span class="fc bfc" id="L183" title="All 2 branches covered.">        for (ActivityImage activityImage : activityImages) {</span>
-<span class="fc bfc" id="L184" title="All 2 branches covered.">            if (activityImage != null) activityImage.render(vp.getCamera(),batch);</span>
-<span class="fc" id="L185">        }</span>
-<span class="fc" id="L186">    }</span>
+<span class="fc bfc" id="L211" title="All 2 branches covered.">        for (ActivityImage activityImage : activityImages) {</span>
+<span class="fc bfc" id="L212" title="All 2 branches covered.">            if (activityImage != null) activityImage.render(vp.getCamera(),batch);</span>
+<span class="fc" id="L213">        }</span>
+<span class="fc" id="L214">    }</span>
 
-    // method updates the camera position, so it follows the player but shows less out-of-bounds area
+    /**
+     * Updates the camera position to follow the player, showing less out-of-bounds area.
+     */
     public void updateCamera()
     {
         float x,y;
-<span class="fc" id="L192">        float xConst = (float)1600/Gdx.graphics.getWidth(); // these constants are the ration of initial screen width to current</span>
-<span class="fc" id="L193">        float yConst = (float)900/Gdx.graphics.getHeight(); // if screen is half as wide it zooms out so its 2x smaller</span>
+<span class="fc" id="L222">        float xConst = (float)1600/Gdx.graphics.getWidth(); // these constants are the ration of initial screen width to current</span>
+<span class="fc" id="L223">        float yConst = (float)900/Gdx.graphics.getHeight(); // if screen is half as wide it zooms out so its 2x smaller</span>
 
-<span class="fc" id="L195">        float camWidth = (float) vp.getScreenWidth() /2;</span>
-<span class="fc" id="L196">        float camHeight = (float) vp.getScreenHeight() /2;</span>
+<span class="fc" id="L225">        float camWidth = (float) vp.getScreenWidth() /2;</span>
+<span class="fc" id="L226">        float camHeight = (float) vp.getScreenHeight() /2;</span>
 
-<span class="pc bpc" id="L198" title="1 of 2 branches missed.">        if (player.getPos().x &gt; 2884 - camWidth*xConst) {</span>
-<span class="nc" id="L199">            x = 2884- camWidth*xConst;</span>
-<span class="fc" id="L200">        } else x = Math.max(player.getPos().x, camWidth * xConst);</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        if (player.getPos().x &gt; 2884 - camWidth*xConst) {</span>
+<span class="nc" id="L229">            x = 2884- camWidth*xConst;</span>
+<span class="fc" id="L230">        } else x = Math.max(player.getPos().x, camWidth * xConst);</span>
 
-<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        if (player.getPos().y &gt; 2238- camHeight*yConst) {</span>
-<span class="nc" id="L203">            y = 2238- camHeight*yConst;</span>
-<span class="fc" id="L204">        } else y = Math.max(player.getPos().y, camHeight * yConst);</span>
+<span class="pc bpc" id="L232" title="1 of 2 branches missed.">        if (player.getPos().y &gt; 2238- camHeight*yConst) {</span>
+<span class="nc" id="L233">            y = 2238- camHeight*yConst;</span>
+<span class="fc" id="L234">        } else y = Math.max(player.getPos().y, camHeight * yConst);</span>
 
-<span class="fc" id="L206">        vp.getCamera().position.set(x,y,0);</span>
-<span class="fc" id="L207">    }</span>
+<span class="fc" id="L236">        vp.getCamera().position.set(x,y,0);</span>
+<span class="fc" id="L237">    }</span>
 
     public Building getNearest() //calculated the nearest building to the player rn
     {
-<span class="fc" id="L211">        Building closest = null;</span>
-<span class="fc" id="L212">        float closDis = 200f;</span>
-<span class="fc bfc" id="L213" title="All 2 branches covered.">        for (Building bd : buildings) {</span>
-<span class="fc bfc" id="L214" title="All 2 branches covered.">            if (Math.sqrt(Vector2.dst2(player.getPos().x,player.getPos().y,bd.getPos().x,bd.getPos().y)) &lt; closDis)</span>
+<span class="fc" id="L241">        Building closest = null;</span>
+<span class="fc" id="L242">        float closDis = 200f;</span>
+<span class="fc bfc" id="L243" title="All 2 branches covered.">        for (Building bd : buildings) {</span>
+<span class="fc bfc" id="L244" title="All 2 branches covered.">            if (Math.sqrt(Vector2.dst2(player.getPos().x,player.getPos().y,bd.getPos().x,bd.getPos().y)) &lt; closDis)</span>
             {
-<span class="fc" id="L216">                closest = bd;</span>
-<span class="fc" id="L217">                closDis = (float) Math.sqrt(Vector2.dst2(player.getPos().x,player.getPos().y,bd.getPos().x,bd.getPos().y));</span>
+<span class="fc" id="L246">                closest = bd;</span>
+<span class="fc" id="L247">                closDis = (float) Math.sqrt(Vector2.dst2(player.getPos().x,player.getPos().y,bd.getPos().x,bd.getPos().y));</span>
             }
-<span class="fc" id="L219">        }</span>
-<span class="fc" id="L220">        return closest;</span>
+<span class="fc" id="L249">        }</span>
+<span class="fc" id="L250">        return closest;</span>
     }
 
+    /**
+     * @return the nearest building
+     */
     public List&lt;Building&gt; getBuildings() {
-<span class="fc" id="L224">        return buildings;</span>
+<span class="fc" id="L257">        return buildings;</span>
     }
 
+    /**
+     * Checks game over condition.
+     *
+     * @return true if condition met, false otherwise.
+     */
     private boolean checkGameOverCondition(){
-<span class="pc bpc" id="L228" title="1 of 2 branches missed.">        return gameClock.getDays() &gt; 7;</span>
+<span class="pc bpc" id="L266" title="1 of 2 branches missed.">        return gameClock.getDays() &gt; 7;</span>
     }
 
+    /**
+     * Saves players game run data to file and attempts to write it to server.
+     */
     public void writeToFile() {
-<span class="fc" id="L232">        String player = nameTextField.getValue();</span>
-<span class="fc" id="L233">        float score = eventM.calcScore();</span>
-<span class="fc" id="L234">        boolean success = Server.submitScore(player, score);</span>
-<span class="pc bpc" id="L235" title="1 of 2 branches missed.">        int status = success ? 1 : 0;</span>
-<span class="fc" id="L236">        String data = nameTextField.getValue() +  &quot;,&quot; + eventM.calcScore() + &quot;,&quot; + status + &quot;\n&quot;;</span>
-<span class="fc" id="L237">        FileHandle file = Gdx.files.local(&quot;storage/PlayerData.txt&quot;);</span>
-<span class="fc" id="L238">        file.writeString(data, true);</span>
-<span class="fc" id="L239">    }</span>
+<span class="fc" id="L273">        String player = nameTextField.getValue();</span>
+<span class="fc" id="L274">        float score = eventM.calcScore();</span>
+<span class="fc" id="L275">        boolean success = Server.submitScore(player, score);</span>
+<span class="pc bpc" id="L276" title="1 of 2 branches missed.">        int status = success ? 1 : 0;</span>
+<span class="fc" id="L277">        String data = nameTextField.getValue() +  &quot;,&quot; + eventM.calcScore() + &quot;,&quot; + status + &quot;\n&quot;;</span>
+<span class="fc" id="L278">        FileHandle file = Gdx.files.local(&quot;storage/PlayerData.txt&quot;);</span>
+<span class="fc" id="L279">        file.writeString(data, true);</span>
+<span class="fc" id="L280">    }</span>
 
     @Override
     public void resize(int width, int height) { //This is important for the GUI class to stay in aspect
-<span class="nc" id="L243">        vp.update(width,height);</span>
-<span class="nc" id="L244">    }</span>
+<span class="nc" id="L284">        vp.update(width,height);</span>
+<span class="nc" id="L285">    }</span>
 
     @Override
     public void show() {
-<span class="nc" id="L248">    }</span>
+<span class="nc" id="L289">    }</span>
 
     @Override
     public void hide() {
-<span class="nc" id="L252">    }</span>
+<span class="nc" id="L293">    }</span>
 
     @Override
     public void pause() {
-<span class="nc" id="L256">    }</span>
+<span class="nc" id="L297">    }</span>
 
     @Override
     public void resume() {
 
-<span class="nc" id="L261">    }</span>
+<span class="nc" id="L302">    }</span>
 
     @Override
     public void dispose() {
-<span class="nc" id="L265">        resourceManager.disposeAll();</span>
-<span class="nc" id="L266">    }</span>
+<span class="nc" id="L306">        resourceManager.disposeAll();</span>
+<span class="nc" id="L307">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

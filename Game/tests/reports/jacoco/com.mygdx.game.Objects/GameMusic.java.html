@@ -4,42 +4,69 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.utils.Disposable;
 
+/**
+ * The GameMusic class manages the background music for the game.
+ * It handles the setup, playback, volume control, and disposal of the music resource.
+ */
 public class GameMusic implements Disposable {
     private Music music;
     private float volume;
 
-<span class="fc" id="L11">    public GameMusic() {</span>
-<span class="fc" id="L12">        setup();</span>
-<span class="fc" id="L13">    }</span>
+    /**
+     * Constructs a GameMusic object and sets up the music.
+     */
+<span class="fc" id="L18">    public GameMusic() {</span>
+<span class="fc" id="L19">        setup();</span>
+<span class="fc" id="L20">    }</span>
 
+    /**
+     * Sets up the music by loading the music file, setting it to loop, and setting the default volume.
+     */
     private void setup(){
         // Load your music file
-<span class="fc" id="L17">        music = Gdx.audio.newMusic(Gdx.files.internal(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;));</span>
-<span class="fc" id="L18">        music.setLooping(true);  // If you want the music to loop</span>
-<span class="fc" id="L19">        volume = 0.5f;  // Default volume</span>
-<span class="fc" id="L20">        music.setVolume(volume);</span>
-<span class="fc" id="L21">        music.play();</span>
-<span class="fc" id="L22">    }</span>
-    public void setVolume(float volume) {
-<span class="nc" id="L24">        this.volume = volume;</span>
-<span class="nc" id="L25">        music.setVolume(volume);</span>
-<span class="nc" id="L26">    }</span>
+<span class="fc" id="L27">        music = Gdx.audio.newMusic(Gdx.files.internal(&quot;music_loop/Ludum Dare 30 - 01.ogg&quot;));</span>
+<span class="fc" id="L28">        music.setLooping(true);  // If you want the music to loop</span>
+<span class="fc" id="L29">        volume = 0.5f;  // Default volume</span>
+<span class="fc" id="L30">        music.setVolume(volume);</span>
+<span class="fc" id="L31">        music.play();</span>
+<span class="fc" id="L32">    }</span>
 
+
+    /**
+     * @param volume the new volume level (0.0 to 1.0)
+     */
+    public void setVolume(float volume) {
+<span class="nc" id="L39">        this.volume = volume;</span>
+<span class="nc" id="L40">        music.setVolume(volume);</span>
+<span class="nc" id="L41">    }</span>
+
+    /**
+     * @return the current volume level
+     */
     public float getVolume() {
-<span class="nc" id="L29">        return volume;</span>
+<span class="nc" id="L47">        return volume;</span>
     }
 
+    /**
+     * Pauses the music playback.
+     */
     public void pause() {
-<span class="fc" id="L33">        music.pause();</span>
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L54">        music.pause();</span>
+<span class="fc" id="L55">    }</span>
 
+    /**
+     * Stops the music playback.
+     */
     public void stop() {
-<span class="fc" id="L37">        music.stop();</span>
-<span class="fc" id="L38">    }</span>
+<span class="fc" id="L61">        music.stop();</span>
+<span class="fc" id="L62">    }</span>
 
+    /**
+     * Disposes of the music resource.
+     */
     @Override
     public void dispose() {
-<span class="fc" id="L42">        music.dispose();</span>
-<span class="fc" id="L43">    }</span>
+<span class="fc" id="L69">        music.dispose();</span>
+<span class="fc" id="L70">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

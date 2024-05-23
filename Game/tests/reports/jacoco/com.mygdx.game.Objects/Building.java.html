@@ -13,24 +13,46 @@ public class Building {
     private final Vector2 pos;
     private final Texture txt;
 
+    /**
+     * Constructs a Building with the specified position, name, and texture.
+     *
+     * @param x    the x position of the building
+     * @param y    the y position of the building
+     * @param name the name of the building
+     * @param txt  the texture of the building
+     */
+<span class="fc" id="L24">    public Building(float x, float y, String name, Texture txt) {</span>
+<span class="fc" id="L25">        pos = new Vector2(x, y);</span>
+<span class="fc" id="L26">        this.name = name;</span>
+<span class="fc" id="L27">        this.txt = txt;</span>
+<span class="fc" id="L28">    }</span>
 
-<span class="fc" id="L17">    public Building(float x, float y, String name, Texture txt) {</span>
-<span class="fc" id="L18">        pos = new Vector2(x, y);</span>
-<span class="fc" id="L19">        this.name = name;</span>
-<span class="fc" id="L20">        this.txt = txt;</span>
-<span class="fc" id="L21">    }</span>
-
+    /**
+     * Gets the position of the building.
+     *
+     * @return the position of the building
+     */
     public Vector2 getPos(){
-<span class="fc" id="L24">        return pos;</span>
+<span class="fc" id="L36">        return pos;</span>
     }
 
+    /**
+     * Gets the name of the building.
+     *
+     * @return the name of the building
+     */
     public String getName() {
-<span class="nc" id="L28">        return name;</span>
+<span class="nc" id="L45">        return name;</span>
     }
 
+    /**
+     * Renders the building using the specified sprite batch.
+     *
+     * @param batch the sprite batch used for rendering
+     */
     public void render(SpriteBatch batch) {
-<span class="fc" id="L32">        batch.draw(txt, pos.x, pos.y, 64, 64);</span>
-<span class="fc" id="L33">    }</span>
+<span class="fc" id="L54">        batch.draw(txt, pos.x, pos.y, 64, 64);</span>
+<span class="fc" id="L55">    }</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

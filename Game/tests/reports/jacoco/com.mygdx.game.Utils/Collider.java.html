@@ -7,6 +7,10 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Collider class represents a collection of surfaces and points that can be used to detect collisions.
+ * It supports adding box colliders, individual surfaces, and damped points.
+ */
 public class Collider {
     private final List&lt;Vector3&gt; horSurfs;
     private final List&lt;Vector3&gt; vertSurfs;
@@ -14,67 +18,87 @@ public class Collider {
     private final List&lt;Vector2&gt; dampedPoints;
     private boolean dampedPointsActive;
 
-<span class="nc" id="L17">    public Collider() {</span>
-<span class="nc" id="L18">        horSurfs = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L19">        vertSurfs = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L20">        points = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L21">        dampedPoints = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L22">    }</span>
 
+    /**
+     * Constructs a Collider with empty lists of surfaces and points.
+     */
+<span class="nc" id="L25">    public Collider() {</span>
+<span class="nc" id="L26">        horSurfs = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L27">        vertSurfs = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L28">        points = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L29">        dampedPoints = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L30">    }</span>
+
+    /**
+     * Adds a box collider to the collection.
+     *
+     * @param boxCollider the rectangle representing the box collider
+     */
     public void addBoxCollider(Rectangle boxCollider){
-<span class="nc" id="L25">        horSurfs.add(new Vector3(boxCollider.x, boxCollider.y, boxCollider.width));</span>
-<span class="nc" id="L26">        horSurfs.add(new Vector3(boxCollider.x, boxCollider.y + boxCollider.height, boxCollider.width));</span>
-<span class="nc" id="L27">        vertSurfs.add(new Vector3(boxCollider.x, boxCollider.y, boxCollider.height));</span>
-<span class="nc" id="L28">        vertSurfs.add(new Vector3(boxCollider.x + boxCollider.width, boxCollider.y, boxCollider.height));</span>
+<span class="nc" id="L38">        horSurfs.add(new Vector3(boxCollider.x, boxCollider.y, boxCollider.width));</span>
+<span class="nc" id="L39">        horSurfs.add(new Vector3(boxCollider.x, boxCollider.y + boxCollider.height, boxCollider.width));</span>
+<span class="nc" id="L40">        vertSurfs.add(new Vector3(boxCollider.x, boxCollider.y, boxCollider.height));</span>
+<span class="nc" id="L41">        vertSurfs.add(new Vector3(boxCollider.x + boxCollider.width, boxCollider.y, boxCollider.height));</span>
 
-<span class="nc" id="L30">        points.add(new Vector2(boxCollider.x, boxCollider.y));</span>
-<span class="nc" id="L31">        points.add(new Vector2(boxCollider.x, boxCollider.y + boxCollider.height));</span>
-<span class="nc" id="L32">        points.add(new Vector2(boxCollider.x + boxCollider.width, boxCollider.y));</span>
-<span class="nc" id="L33">        points.add(new Vector2(boxCollider.x + boxCollider.width, boxCollider.y + boxCollider.height));</span>
-<span class="nc" id="L34">    }</span>
+<span class="nc" id="L43">        points.add(new Vector2(boxCollider.x, boxCollider.y));</span>
+<span class="nc" id="L44">        points.add(new Vector2(boxCollider.x, boxCollider.y + boxCollider.height));</span>
+<span class="nc" id="L45">        points.add(new Vector2(boxCollider.x + boxCollider.width, boxCollider.y));</span>
+<span class="nc" id="L46">        points.add(new Vector2(boxCollider.x + boxCollider.width, boxCollider.y + boxCollider.height));</span>
+<span class="nc" id="L47">    }</span>
 
+    /**
+     * Adds a surface to the collection.
+     *
+     * @param surface the vector representing the surface
+     * @param isHor   true if the surface is horizontal, false if vertical
+     */
     public void addSurface(Vector3 surface, boolean isHor){
-<span class="nc" id="L37">        points.add(new Vector2(surface.x, surface.y));</span>
-<span class="nc bnc" id="L38" title="All 2 branches missed.">        if (isHor){</span>
-<span class="nc" id="L39">            horSurfs.add(surface);</span>
-<span class="nc" id="L40">            points.add(new Vector2(surface.x + surface.z, surface.y));</span>
+<span class="nc" id="L56">        points.add(new Vector2(surface.x, surface.y));</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        if (isHor){</span>
+<span class="nc" id="L58">            horSurfs.add(surface);</span>
+<span class="nc" id="L59">            points.add(new Vector2(surface.x + surface.z, surface.y));</span>
         }
         else{
-<span class="nc" id="L43">            vertSurfs.add(surface);</span>
-<span class="nc" id="L44">            points.add(new Vector2(surface.x, surface.y + surface.z));</span>
+<span class="nc" id="L62">            vertSurfs.add(surface);</span>
+<span class="nc" id="L63">            points.add(new Vector2(surface.x, surface.y + surface.z));</span>
         }
-<span class="nc" id="L46">    }</span>
+<span class="nc" id="L65">    }</span>
 
+    /**
+     * Adds a damped point to the collection.
+     *
+     * @param point the vector representing the damped point
+     */
     public void addDampedPoint(Vector2 point){
-<span class="nc" id="L49">        dampedPoints.add(point);</span>
-<span class="nc" id="L50">    }</span>
+<span class="nc" id="L73">        dampedPoints.add(point);</span>
+<span class="nc" id="L74">    }</span>
 
     public List&lt;Vector3&gt; getHorSurfs(){
-<span class="nc" id="L53">        return this.horSurfs;</span>
+<span class="nc" id="L77">        return this.horSurfs;</span>
     }
 
     public List&lt;Vector3&gt; getVerSurfs(){
-<span class="nc" id="L57">        return this.vertSurfs;</span>
+<span class="nc" id="L81">        return this.vertSurfs;</span>
     }
 
     public List&lt;Vector2&gt; getPoints(){
-<span class="nc" id="L61">        return this.points;</span>
+<span class="nc" id="L85">        return this.points;</span>
     }
 
     public List&lt;Vector2&gt; getDampedPoints(){
-<span class="nc" id="L65">        return this.dampedPoints;</span>
+<span class="nc" id="L89">        return this.dampedPoints;</span>
     }
 
     public void activateDampedPoints() {
-<span class="nc" id="L69">        dampedPointsActive = true;</span>
-<span class="nc" id="L70">    }</span>
+<span class="nc" id="L93">        dampedPointsActive = true;</span>
+<span class="nc" id="L94">    }</span>
 
     public void deactivateDampedPoints() {
-<span class="nc" id="L73">        dampedPointsActive = false;</span>
-<span class="nc" id="L74">    }</span>
+<span class="nc" id="L97">        dampedPointsActive = false;</span>
+<span class="nc" id="L98">    }</span>
 
     public boolean isDampedPointsActive() {
-<span class="nc" id="L77">        return dampedPointsActive;</span>
+<span class="nc" id="L101">        return dampedPointsActive;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

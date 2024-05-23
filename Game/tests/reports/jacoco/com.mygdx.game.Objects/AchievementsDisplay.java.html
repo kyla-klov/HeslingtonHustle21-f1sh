@@ -17,6 +17,10 @@ import com.mygdx.game.Utils.ViewportAdapter;
 
 import java.util.*;
 
+/**
+ * The AchievementsDisplay class is responsible for displaying achievements in the game.
+ * It handles the rendering of achievements, scrolling, and user interactions with the achievements display.
+ */
 public class AchievementsDisplay implements Disposable {
     final private Texture background;
     final private Texture tick;
@@ -33,7 +37,7 @@ public class AchievementsDisplay implements Disposable {
     private final float tickX, padlockX, selectY, selectWidth, selectHeight;
     private final float bgWidth, bgHeight, achievementWidth, achievementHeight, scrollWidth, scrollHeight;
 
-<span class="fc" id="L36">    private final float scale = 1f;</span>
+<span class="fc" id="L40">    private final float scale = 1f;</span>
 
     private boolean scrolling;
     private boolean unlocked;
@@ -42,152 +46,148 @@ public class AchievementsDisplay implements Disposable {
     private float relY;
     private float scrollY;
 
-<span class="fc" id="L45">    public AchievementsDisplay(Viewport vp, BitmapFont font, AchievementHandler achievementHandler, float posX, float posY){</span>
-<span class="fc" id="L46">        this.vp = vp;</span>
-<span class="fc" id="L47">        this.achievementHandler = achievementHandler;</span>
-<span class="fc" id="L48">        this.posX = posX;</span>
-<span class="fc" id="L49">        this.posY = posY;</span>
+    /**
+     * Constructs an AchievementsDisplay with the specified parameters.
+     *
+     * @param vp                the viewport to use for rendering
+     * @param font              the font to use for rendering text
+     * @param achievementHandler the achievement handler to use for retrieving achievements
+     * @param posX              the x position of the achievements display
+     * @param posY              the y position of the achievements display
+     */
+<span class="fc" id="L58">    public AchievementsDisplay(Viewport vp, BitmapFont font, AchievementHandler achievementHandler, float posX, float posY){</span>
+<span class="fc" id="L59">        this.vp = vp;</span>
+<span class="fc" id="L60">        this.achievementHandler = achievementHandler;</span>
+<span class="fc" id="L61">        this.posX = posX;</span>
+<span class="fc" id="L62">        this.posY = posY;</span>
 
-<span class="fc" id="L51">        resourceManager = new ResourceManager();</span>
-<span class="fc" id="L52">        achievementDims = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L64">        resourceManager = new ResourceManager();</span>
+<span class="fc" id="L65">        achievementDims = new HashMap&lt;&gt;();</span>
 
-<span class="fc bfc" id="L54" title="All 2 branches covered.">        for (Achievement achievement : achievementHandler.getAchievements()) {</span>
-<span class="fc" id="L55">            achievementDims.put(achievement, new Rectangle());</span>
-<span class="fc" id="L56">        }</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for (Achievement achievement : achievementHandler.getAchievements()) {</span>
+<span class="fc" id="L68">            achievementDims.put(achievement, new Rectangle());</span>
+<span class="fc" id="L69">        }</span>
 
-<span class="fc" id="L58">        visible = false;</span>
-<span class="fc" id="L59">        unlocked = true;</span>
-<span class="fc" id="L60">        buttonPressed = false;</span>
-<span class="fc" id="L61">        this.font = resourceManager.addDisposable(font);</span>
-<span class="fc" id="L62">        background = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/AchievementsBackground.png&quot;)));</span>
-<span class="fc" id="L63">        tick = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/check-mark.png&quot;)));</span>
-<span class="fc" id="L64">        padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/lock-padlock-symbol-for-security-interface.png&quot;)));</span>
-<span class="fc" id="L65">        scrollBar = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/ScrollBar2.png&quot;)));</span>
-<span class="fc" id="L66">        highlight = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/HighlightSelected.png&quot;)));</span>
+<span class="fc" id="L71">        visible = false;</span>
+<span class="fc" id="L72">        unlocked = true;</span>
+<span class="fc" id="L73">        buttonPressed = false;</span>
+<span class="fc" id="L74">        this.font = resourceManager.addDisposable(font);</span>
+<span class="fc" id="L75">        background = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/AchievementsBackground.png&quot;)));</span>
+<span class="fc" id="L76">        tick = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/check-mark.png&quot;)));</span>
+<span class="fc" id="L77">        padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/lock-padlock-symbol-for-security-interface.png&quot;)));</span>
+<span class="fc" id="L78">        scrollBar = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/ScrollBar2.png&quot;)));</span>
+<span class="fc" id="L79">        highlight = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/HighlightSelected.png&quot;)));</span>
 
-<span class="fc" id="L68">        bgWidth = background.getWidth() * scale;</span>
-<span class="fc" id="L69">        bgHeight = background.getHeight() * scale;</span>
-<span class="fc" id="L70">        achievementWidth = 210f * scale;</span>
-<span class="fc" id="L71">        achievementHeight = 70f * scale;</span>
-<span class="fc" id="L72">        scrollWidth = 13f * scale;</span>
-<span class="fc" id="L73">        scrollHeight = 67f * scale;</span>
-<span class="fc" id="L74">        scrollY = bgHeight*0.67f + posY;</span>
-<span class="fc" id="L75">        scrollX = posX+bgWidth*0.87f;</span>
-<span class="fc" id="L76">        tickX = posX + bgWidth * 0.3f;</span>
-<span class="fc" id="L77">        padlockX = posX + bgWidth * 0.65f;</span>
-<span class="fc" id="L78">        selectY = posY + bgHeight * 0.88f;</span>
-<span class="fc" id="L79">        selectWidth = 25;</span>
-<span class="fc" id="L80">        selectHeight = 25;</span>
-<span class="fc" id="L81">    }</span>
+<span class="fc" id="L81">        bgWidth = background.getWidth() * scale;</span>
+<span class="fc" id="L82">        bgHeight = background.getHeight() * scale;</span>
+<span class="fc" id="L83">        achievementWidth = 210f * scale;</span>
+<span class="fc" id="L84">        achievementHeight = 70f * scale;</span>
+<span class="fc" id="L85">        scrollWidth = 13f * scale;</span>
+<span class="fc" id="L86">        scrollHeight = 67f * scale;</span>
+<span class="fc" id="L87">        scrollY = bgHeight*0.67f + posY;</span>
+<span class="fc" id="L88">        scrollX = posX+bgWidth*0.87f;</span>
+<span class="fc" id="L89">        tickX = posX + bgWidth * 0.3f;</span>
+<span class="fc" id="L90">        padlockX = posX + bgWidth * 0.65f;</span>
+<span class="fc" id="L91">        selectY = posY + bgHeight * 0.88f;</span>
+<span class="fc" id="L92">        selectWidth = 25;</span>
+<span class="fc" id="L93">        selectHeight = 25;</span>
+<span class="fc" id="L94">    }</span>
 
+    /**
+     * Constructs an AchievementsDisplay with the specified parameters, using a default font.
+     *
+     * @param vp                the viewport to use for rendering
+     * @param achievementHandler the achievement handler to use for retrieving achievements
+     * @param posX              the x position of the achievements display
+     * @param posY              the y position of the achievements display
+     */
     public AchievementsDisplay(Viewport vp, AchievementHandler achievementHandler, float posX, float posY){
-<span class="nc" id="L84">        this(vp, new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)), achievementHandler, posX, posY);</span>
-//        this.vp = vp;
-//        this.achievementHandler = achievementHandler;
-//        this.posX = posX;
-//        this.posY = posY;
-//
-//        resourceManager = new ResourceManager();
-//        achievementDims = new HashMap&lt;&gt;();
-//
-//        for (Achievement achievement : achievementHandler.getAchievements()) {
-//            achievementDims.put(achievement, new Rectangle());
-//        }
-//
-//        visible = false;
-//        unlocked = true;
-//        buttonPressed = false;
-//        font = resourceManager.addDisposable(new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)));
-//        background = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/AchievementsBackground.png&quot;)));
-//        tick = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/check-mark.png&quot;)));
-//        padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/lock-padlock-symbol-for-security-interface.png&quot;)));
-//        scrollBar = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/ScrollBar2.png&quot;)));
-//        highlight = resourceManager.addDisposable(new Texture(Gdx.files.internal(&quot;AchievementsDisplay/HighlightSelected.png&quot;)));
-//
-//        bgWidth = background.getWidth() * scale;
-//        bgHeight = background.getHeight() * scale;
-//        achievementWidth = 210f * scale;
-//        achievementHeight = 70f * scale;
-//        scrollWidth = 13f * scale;
-//        scrollHeight = 67f * scale;
-//        scrollY = bgHeight*0.67f + posY;
-//        scrollX = posX+bgWidth*0.87f;
-//        tickX = posX + bgWidth * 0.3f;
-//        padlockX = posX + bgWidth * 0.65f;
-//        selectY = posY + bgHeight * 0.88f;
-//        selectWidth = 25;
-//        selectHeight = 25;
-<span class="nc" id="L120">    }</span>
+<span class="nc" id="L105">        this(vp, new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)), achievementHandler, posX, posY);</span>
+<span class="nc" id="L106">    }</span>
 
+    /**
+     * Renders the achievements display.
+     *
+     * @param batch the sprite batch to use for rendering
+     */
     public void render(SpriteBatch batch){
-<span class="fc bfc" id="L123" title="All 2 branches covered.">        if (!visible) return;</span>
-<span class="pc bpc" id="L124" title="1 of 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L125">            buttonPressed = true;</span>
-<span class="nc" id="L126">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (!visible) return;</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L116">            buttonPressed = true;</span>
+<span class="nc" id="L117">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
         }
-<span class="pc bpc" id="L128" title="3 of 4 branches missed.">        if (buttonPressed &amp;&amp; !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L129">            buttonPressed = false;</span>
-<span class="nc" id="L130">            touchUp();</span>
+<span class="pc bpc" id="L119" title="3 of 4 branches missed.">        if (buttonPressed &amp;&amp; !Gdx.input.isButtonPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L120">            buttonPressed = false;</span>
+<span class="nc" id="L121">            touchUp();</span>
         }
 
-<span class="fc" id="L133">        updateScroller();</span>
+<span class="fc" id="L124">        updateScroller();</span>
 
-<span class="fc" id="L135">        ViewportAdapter.drawUI(vp, batch, background, posX, posY, bgWidth, bgHeight);</span>
-<span class="fc" id="L136">        ViewportAdapter.drawUI(vp, batch, scrollBar, scrollX, scrollY, scrollWidth, scrollHeight);</span>
-<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (unlocked) ViewportAdapter.drawUI(vp, batch, highlight, tickX, selectY, selectWidth, selectHeight);</span>
-<span class="nc" id="L138">        else ViewportAdapter.drawUI(vp, batch, highlight, padlockX, selectY, selectWidth, selectHeight);</span>
-<span class="fc" id="L139">        ViewportAdapter.drawUI(vp, batch, tick, tickX, selectY, 25, 25);</span>
-<span class="fc" id="L140">        ViewportAdapter.drawUI(vp, batch, padlock, padlockX, selectY, 25, 25);</span>
-<span class="fc" id="L141">        drawAchievements(batch);</span>
-<span class="fc" id="L142">        writeDescriptions(batch, Gdx.input.getX(), Gdx.input.getY());</span>
-<span class="fc" id="L143">    }</span>
+<span class="fc" id="L126">        ViewportAdapter.drawUI(vp, batch, background, posX, posY, bgWidth, bgHeight);</span>
+<span class="fc" id="L127">        ViewportAdapter.drawUI(vp, batch, scrollBar, scrollX, scrollY, scrollWidth, scrollHeight);</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">        if (unlocked) ViewportAdapter.drawUI(vp, batch, highlight, tickX, selectY, selectWidth, selectHeight);</span>
+<span class="nc" id="L129">        else ViewportAdapter.drawUI(vp, batch, highlight, padlockX, selectY, selectWidth, selectHeight);</span>
+<span class="fc" id="L130">        ViewportAdapter.drawUI(vp, batch, tick, tickX, selectY, 25, 25);</span>
+<span class="fc" id="L131">        ViewportAdapter.drawUI(vp, batch, padlock, padlockX, selectY, 25, 25);</span>
+<span class="fc" id="L132">        drawAchievements(batch);</span>
+<span class="fc" id="L133">        writeDescriptions(batch, Gdx.input.getX(), Gdx.input.getY());</span>
+<span class="fc" id="L134">    }</span>
 
+    /**
+     * Updates the scroller position based on user input.
+     */
     private void updateScroller(){
         //Handle Scroll Logic
-<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        if (scrolling){</span>
-<span class="nc" id="L148">            scrollY = ViewportAdapter.screenToGame(vp, 0, Gdx.input.getY()).y - relY;</span>
-<span class="nc bnc" id="L149" title="All 2 branches missed.">            if (scrollY &lt; posY + bgHeight*0.17f){</span>
-<span class="nc" id="L150">                scrollY = posY + bgHeight*0.17f;</span>
-<span class="nc bnc" id="L151" title="All 2 branches missed.">            } else if (scrollY &gt; posY + bgHeight*0.67f){</span>
-<span class="nc" id="L152">                scrollY = posY + bgHeight*0.67f;</span>
+<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        if (scrolling){</span>
+<span class="nc" id="L142">            scrollY = ViewportAdapter.screenToGame(vp, 0, Gdx.input.getY()).y - relY;</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (scrollY &lt; posY + bgHeight*0.17f){</span>
+<span class="nc" id="L144">                scrollY = posY + bgHeight*0.17f;</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">            } else if (scrollY &gt; posY + bgHeight*0.67f){</span>
+<span class="nc" id="L146">                scrollY = posY + bgHeight*0.67f;</span>
             }
         }
-<span class="fc" id="L155">    }</span>
+<span class="fc" id="L149">    }</span>
 
+    /**
+     * Draws the achievements within the display.
+     *
+     * @param batch the sprite batch to use for rendering
+     */
     private void drawAchievements(SpriteBatch batch){
         //Calculate the screen coords of scissor box
-<span class="fc" id="L159">        Vector2 blCorner = ViewportAdapter.toScreen(vp, posX, posY + 25 * scale);</span>
-<span class="fc" id="L160">        Vector2 trCorner = ViewportAdapter.toScreen(vp, posX+bgWidth, posY+bgHeight - 55 * scale);</span>
+<span class="fc" id="L158">        Vector2 blCorner = ViewportAdapter.toScreen(vp, posX, posY + 25 * scale);</span>
+<span class="fc" id="L159">        Vector2 trCorner = ViewportAdapter.toScreen(vp, posX+bgWidth, posY+bgHeight - 55 * scale);</span>
 
-<span class="fc" id="L162">        int scissorX = (int) blCorner.x;</span>
-<span class="fc" id="L163">        int scissorY = (int) blCorner.y;</span>
-<span class="fc" id="L164">        int scissorWidth = (int) (trCorner.x - blCorner.x);</span>
-<span class="fc" id="L165">        int scissorHeight = (int) (trCorner.y - blCorner.y);</span>
+<span class="fc" id="L161">        int scissorX = (int) blCorner.x;</span>
+<span class="fc" id="L162">        int scissorY = (int) blCorner.y;</span>
+<span class="fc" id="L163">        int scissorWidth = (int) (trCorner.x - blCorner.x);</span>
+<span class="fc" id="L164">        int scissorHeight = (int) (trCorner.y - blCorner.y);</span>
 
         //Draw Achievements
-<span class="fc" id="L168">        batch.draw(highlight, 0, 0, 0, 0);</span>
-<span class="fc" id="L169">        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);</span>
-<span class="fc" id="L170">        Gdx.gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);</span>
-<span class="fc" id="L171">        List&lt;Achievement&gt; achievements = achievementHandler.getAchievements();</span>
-<span class="fc" id="L172">        int c = 0;</span>
-<span class="fc bfc" id="L173" title="All 2 branches covered.">        for (Achievement achievement : achievements){</span>
-<span class="fc bfc" id="L174" title="All 2 branches covered.">            if (achievement.isUnlocked() == unlocked){</span>
-<span class="fc" id="L175">                c++;</span>
-<span class="fc" id="L176">                float x = posX + (bgWidth - achievementWidth)/2f;</span>
-<span class="fc" id="L177">                float y = posY + bgHeight * 0.95f + (bgHeight*0.67f + posY - scrollY)*6 - (bgHeight/10 + achievementHeight) * c;</span>
-<span class="fc" id="L178">                achievementDims.put(achievement, new Rectangle(x, y, achievementWidth, achievementHeight));</span>
-<span class="fc" id="L179">                ViewportAdapter.drawUI(vp, batch, achievement.getAchievementTexture(), x, y, achievementWidth, achievementHeight);</span>
+<span class="fc" id="L167">        batch.draw(highlight, 0, 0, 0, 0);</span>
+<span class="fc" id="L168">        Gdx.gl.glEnable(GL20.GL_SCISSOR_TEST);</span>
+<span class="fc" id="L169">        Gdx.gl.glScissor(scissorX, scissorY, scissorWidth, scissorHeight);</span>
+<span class="fc" id="L170">        List&lt;Achievement&gt; achievements = achievementHandler.getAchievements();</span>
+<span class="fc" id="L171">        int c = 0;</span>
+<span class="fc bfc" id="L172" title="All 2 branches covered.">        for (Achievement achievement : achievements){</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">            if (achievement.isUnlocked() == unlocked){</span>
+<span class="fc" id="L174">                c++;</span>
+<span class="fc" id="L175">                float x = posX + (bgWidth - achievementWidth)/2f;</span>
+<span class="fc" id="L176">                float y = posY + bgHeight * 0.95f + (bgHeight*0.67f + posY - scrollY)*6 - (bgHeight/10 + achievementHeight) * c;</span>
+<span class="fc" id="L177">                achievementDims.put(achievement, new Rectangle(x, y, achievementWidth, achievementHeight));</span>
+<span class="fc" id="L178">                ViewportAdapter.drawUI(vp, batch, achievement.getAchievementTexture(), x, y, achievementWidth, achievementHeight);</span>
             }
-<span class="fc" id="L181">        }</span>
-<span class="fc" id="L182">        batch.draw(highlight, 0, 0, 0, 0);</span>
-<span class="fc" id="L183">        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);</span>
-<span class="fc" id="L184">    }</span>
+<span class="fc" id="L180">        }</span>
+<span class="fc" id="L181">        batch.draw(highlight, 0, 0, 0, 0);</span>
+<span class="fc" id="L182">        Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);</span>
+<span class="fc" id="L183">    }</span>
 
-    @Override
-    public void dispose() {
-<span class="nc" id="L188">        resourceManager.disposeAll();</span>
-<span class="nc" id="L189">    }</span>
-
+    /**
+     * Handles touch down events.
+     *
+     * @param screenX the x position of the touch
+     * @param screenY the y position of the touch
+     */
     public void touchDown(int screenX, int screenY) {
 <span class="nc" id="L192">        Vector2 gamePos = ViewportAdapter.screenToGame(vp,  screenX, screenY);</span>
 
@@ -203,34 +203,64 @@ public class AchievementsDisplay implements Disposable {
         }
 <span class="nc" id="L204">    }</span>
 
+    /**
+     * Writes descriptions for achievements.
+     *
+     * @param batch    the sprite batch to use for rendering
+     * @param screenX  the x position of the touch
+     * @param screenY  the y position of the touch
+     */
     public void writeDescriptions(SpriteBatch batch, int screenX, int screenY){
-<span class="fc" id="L207">        Vector2 gamePos = ViewportAdapter.screenToGame(vp,  screenX, screenY);</span>
-<span class="fc bfc" id="L208" title="All 2 branches covered.">        for (Achievement achievement : achievementHandler.getAchievements()) {</span>
-<span class="fc" id="L209">            Rectangle dims = achievementDims.get(achievement);</span>
-<span class="pc bpc" id="L210" title="1 of 4 branches missed.">            if (achievement.isUnlocked() == unlocked &amp;&amp; ViewportAdapter.isOver(gamePos.x, gamePos.y, dims)){</span>
-<span class="fc" id="L211">                ViewportAdapter.drawFont(vp, font, batch, achievement.getName(), dims.x - 250, dims.y + 50);</span>
-<span class="fc" id="L212">                ViewportAdapter.drawFont(vp, font, batch, achievement.getDescription(), dims.x - 250, dims.y);</span>
+<span class="fc" id="L214">        Vector2 gamePos = ViewportAdapter.screenToGame(vp,  screenX, screenY);</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        for (Achievement achievement : achievementHandler.getAchievements()) {</span>
+<span class="fc" id="L216">            Rectangle dims = achievementDims.get(achievement);</span>
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">            if (achievement.isUnlocked() == unlocked &amp;&amp; ViewportAdapter.isOver(gamePos.x, gamePos.y, dims)){</span>
+<span class="fc" id="L218">                ViewportAdapter.drawFont(vp, font, batch, achievement.getName(), dims.x - 250, dims.y + 50);</span>
+<span class="fc" id="L219">                ViewportAdapter.drawFont(vp, font, batch, achievement.getDescription(), dims.x - 250, dims.y);</span>
             }
-<span class="fc" id="L214">        }</span>
-<span class="fc" id="L215">    }</span>
+<span class="fc" id="L221">        }</span>
+<span class="fc" id="L222">    }</span>
 
+    /**
+     * Handles touch up events.
+     */
     public void touchUp() {
-<span class="nc" id="L218">        scrolling = false;</span>
-<span class="nc" id="L219">    }</span>
+<span class="nc" id="L228">        scrolling = false;</span>
+<span class="nc" id="L229">    }</span>
 
-    @SuppressWarnings(&quot;unused&quot;)
+    /**
+     * Shows the achievements display.
+     */
     public void show(){
-<span class="fc" id="L223">        visible = true;</span>
-<span class="fc" id="L224">    }</span>
+<span class="fc" id="L235">        visible = true;</span>
+<span class="fc" id="L236">    }</span>
 
-    @SuppressWarnings(&quot;unused&quot;)
+    /**
+     * Hides the achievements display.
+     */
     public void hide(){
-<span class="nc" id="L228">        scrollY = bgHeight*0.67f + posY;</span>
-<span class="nc" id="L229">        visible = false;</span>
-<span class="nc" id="L230">    }</span>
+<span class="nc" id="L242">        scrollY = bgHeight*0.67f + posY;</span>
+<span class="nc" id="L243">        visible = false;</span>
+<span class="nc" id="L244">    }</span>
 
+    /**
+     * Checks if the achievements display is visible.
+     *
+     * @return true if the display is visible, false otherwise
+     */
     public boolean isVisible(){
-<span class="nc" id="L233">        return visible;</span>
+<span class="nc" id="L252">        return visible;</span>
     }
+
+    /**
+     * Disposes of all resources used by this display.
+     */
+    @Override
+    public void dispose() {
+<span class="nc" id="L260">        resourceManager.disposeAll();</span>
+<span class="nc" id="L261">    }</span>
+
 }
+
+
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

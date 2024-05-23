@@ -28,109 +28,147 @@ public class LeaderBoard implements Disposable{
     private ArrayList&lt;Data&gt; data;
     private int page;
 
-<span class="fc" id="L31">    public LeaderBoard(Viewport vp, BitmapFont font, float x, float y, float width, float height){</span>
-<span class="fc" id="L32">        this.vp = vp;</span>
-<span class="fc" id="L33">        this.x = x;</span>
-<span class="fc" id="L34">        this.y = y;</span>
-<span class="fc" id="L35">        this.width = width;</span>
-<span class="fc" id="L36">        this.height = height;</span>
-<span class="fc" id="L37">        this.font = font;</span>
-<span class="fc" id="L38">        page = 0;</span>
-<span class="fc" id="L39">        data = readPlayerData();</span>
-<span class="fc" id="L40">        Collections.sort(data);</span>
-<span class="fc" id="L41">        Collections.reverse(data);</span>
-<span class="fc" id="L42">        leaderBoardTexture = new Texture(Gdx.files.internal(&quot;LeaderBoard.png&quot;));</span>
-<span class="fc" id="L43">        upArrowTexture = new Texture(Gdx.files.internal(&quot;up.png&quot;));</span>
-<span class="fc" id="L44">        downArrowTexture = new Texture(Gdx.files.internal(&quot;down.png&quot;));</span>
-<span class="fc" id="L45">    }</span>
+    /**
+     * Constructs a LeaderBoard with the specified parameters.
+     *
+     * @param vp     the viewport to use for rendering
+     * @param font   the font to use for rendering text
+     * @param x      the x position of the leaderboard
+     * @param y      the y position of the leaderboard
+     * @param width  the width of the leaderboard
+     * @param height the height of the leaderboard
+     */
+<span class="fc" id="L41">    public LeaderBoard(Viewport vp, BitmapFont font, float x, float y, float width, float height){</span>
+<span class="fc" id="L42">        this.vp = vp;</span>
+<span class="fc" id="L43">        this.x = x;</span>
+<span class="fc" id="L44">        this.y = y;</span>
+<span class="fc" id="L45">        this.width = width;</span>
+<span class="fc" id="L46">        this.height = height;</span>
+<span class="fc" id="L47">        this.font = font;</span>
+<span class="fc" id="L48">        page = 0;</span>
+<span class="fc" id="L49">        data = readPlayerData();</span>
+<span class="fc" id="L50">        Collections.sort(data);</span>
+<span class="fc" id="L51">        Collections.reverse(data);</span>
+<span class="fc" id="L52">        leaderBoardTexture = new Texture(Gdx.files.internal(&quot;LeaderBoard.png&quot;));</span>
+<span class="fc" id="L53">        upArrowTexture = new Texture(Gdx.files.internal(&quot;up.png&quot;));</span>
+<span class="fc" id="L54">        downArrowTexture = new Texture(Gdx.files.internal(&quot;down.png&quot;));</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Constructs a LeaderBoard with the specified parameters, using a default font.
+     *
+     * @param vp     the viewport to use for rendering
+     * @param x      the x position of the leaderboard
+     * @param y      the y position of the leaderboard
+     * @param width  the width of the leaderboard
+     * @param height the height of the leaderboard
+     */
     public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
-<span class="nc" id="L47">        this(vp, new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)), x, y, width, height);</span>
-//        this.vp = vp;
-//        this.x = x;
-//        this.y = y;
-//        this.width = width;
-//        this.height = height;
-//        page = 0;
-//        font = new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;));
-//        data = readPlayerData();
-//        Collections.sort(data);
-//        Collections.reverse(data);
-//        leaderBoardTexture = new Texture(Gdx.files.internal(&quot;LeaderBoard.png&quot;));
-//        upArrowTexture = new Texture(Gdx.files.internal(&quot;up.png&quot;));
-//        downArrowTexture = new Texture(Gdx.files.internal(&quot;down.png&quot;));
-<span class="nc" id="L61">    }</span>
+<span class="nc" id="L67">        this(vp, new BitmapFont(Gdx.files.internal(&quot;font.fnt&quot;)), x, y, width, height);</span>
+<span class="nc" id="L68">    }</span>
 
+    /**
+     * Renders the leaderboard using the specified sprite batch.
+     *
+     * @param batch the sprite batch used for rendering
+     */
     public void render(SpriteBatch batch){
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
-<span class="nc" id="L65">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){</span>
+<span class="nc" id="L77">            touchDown(Gdx.input.getX(), Gdx.input.getY());</span>
         }
-<span class="fc" id="L67">        ViewportAdapter.drawUI(vp, batch, leaderBoardTexture, x, y, width, height);</span>
-<span class="fc" id="L68">        ViewportAdapter.drawUI(vp, batch, upArrowTexture, x+250*width/301f, y+300*height/377f, 32*width/301f, 32*height/377f);</span>
-<span class="fc" id="L69">        ViewportAdapter.drawUI(vp, batch, downArrowTexture, x+250*width/301f, y+32*height/377f, 32*width/301f, 32*height/377f);</span>
-<span class="fc" id="L70">        ViewportAdapter.drawFont(vp, font, batch, &quot;Leader board&quot;, x+60*width/301f, y+350*height/377f);</span>
-<span class="fc" id="L71">        int c = page * 5;</span>
-<span class="fc" id="L72">        int upper = c+5;</span>
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">        if (data.size() &lt; upper){</span>
-<span class="fc" id="L74">            upper = data.size();</span>
+<span class="fc" id="L79">        ViewportAdapter.drawUI(vp, batch, leaderBoardTexture, x, y, width, height);</span>
+<span class="fc" id="L80">        ViewportAdapter.drawUI(vp, batch, upArrowTexture, x+250*width/301f, y+300*height/377f, 32*width/301f, 32*height/377f);</span>
+<span class="fc" id="L81">        ViewportAdapter.drawUI(vp, batch, downArrowTexture, x+250*width/301f, y+32*height/377f, 32*width/301f, 32*height/377f);</span>
+<span class="fc" id="L82">        ViewportAdapter.drawFont(vp, font, batch, &quot;Leader board&quot;, x+60*width/301f, y+350*height/377f);</span>
+<span class="fc" id="L83">        int c = page * 5;</span>
+<span class="fc" id="L84">        int upper = c+5;</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (data.size() &lt; upper){</span>
+<span class="fc" id="L86">            upper = data.size();</span>
         }
-<span class="fc bfc" id="L76" title="All 2 branches covered.">        for (int i = c; i &lt; upper; i++) {</span>
-<span class="fc" id="L77">            Data d = data.get(i);</span>
-<span class="fc" id="L78">            String name = d.getPlayer();</span>
-<span class="fc" id="L79">            String score = &quot;   &quot; + d.getScore();</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">        for (int i = c; i &lt; upper; i++) {</span>
+<span class="fc" id="L89">            Data d = data.get(i);</span>
+<span class="fc" id="L90">            String name = d.getPlayer();</span>
+<span class="fc" id="L91">            String score = &quot;   &quot; + d.getScore();</span>
 
-<span class="fc bfc" id="L81" title="All 4 branches covered.">            if (name.length() &gt; 8 &amp;&amp; name.length() != 10) {</span>
-<span class="fc" id="L82">                name = name.substring(0, 8);</span>
-<span class="fc" id="L83">                name += &quot;..&quot;;</span>
+<span class="fc bfc" id="L93" title="All 4 branches covered.">            if (name.length() &gt; 8 &amp;&amp; name.length() != 10) {</span>
+<span class="fc" id="L94">                name = name.substring(0, 8);</span>
+<span class="fc" id="L95">                name += &quot;..&quot;;</span>
             }
-<span class="fc" id="L85">            float h = y + (300 - (i-c)*50)*height/377f;</span>
-<span class="fc" id="L86">            ViewportAdapter.drawFont(vp, font, batch, (i+1) + &quot;. &quot; + name, x + 50*width/301f, h);</span>
-<span class="fc" id="L87">            ViewportAdapter.drawFont(vp, font, batch, score, x + 170*width/301f, h);</span>
+<span class="fc" id="L97">            float h = y + (300 - (i-c)*50)*height/377f;</span>
+<span class="fc" id="L98">            ViewportAdapter.drawFont(vp, font, batch, (i+1) + &quot;. &quot; + name, x + 50*width/301f, h);</span>
+<span class="fc" id="L99">            ViewportAdapter.drawFont(vp, font, batch, score, x + 170*width/301f, h);</span>
         }
-<span class="fc" id="L89">    }</span>
+<span class="fc" id="L101">    }</span>
 
+
+    /**
+     * Reads player data from a file and fetches additional scores from the server.
+     *
+     * @return an ArrayList of Data objects containing player information
+     */
     private ArrayList&lt;Data&gt; readPlayerData() {
-<span class="fc" id="L92">        data = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L93">        FileHandle file = Gdx.files.local(FILE_PATH);</span>
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">        if (file.exists()) {</span>
-<span class="fc" id="L95">            String[] lines = file.readString().split(&quot;\n&quot;);</span>
-<span class="fc bfc" id="L96" title="All 2 branches covered.">            for (String line : lines) {</span>
-<span class="fc" id="L97">                String[] parts = line.split(&quot;,&quot;);</span>
-<span class="fc bfc" id="L98" title="All 2 branches covered.">                if (parts.length == 3) {</span>
-<span class="fc" id="L99">                    String name = parts[0];</span>
-<span class="fc" id="L100">                    float score = Float.parseFloat(parts[1]);</span>
-<span class="fc" id="L101">                    int status = Integer.parseInt(parts[2]);</span>
-<span class="fc" id="L102">                    data.add(new Data(name, score, status));</span>
+<span class="fc" id="L110">        data = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L111">        FileHandle file = Gdx.files.local(FILE_PATH);</span>
+<span class="pc bpc" id="L112" title="1 of 2 branches missed.">        if (file.exists()) {</span>
+<span class="fc" id="L113">            String[] lines = file.readString().split(&quot;\n&quot;);</span>
+<span class="fc bfc" id="L114" title="All 2 branches covered.">            for (String line : lines) {</span>
+<span class="fc" id="L115">                String[] parts = line.split(&quot;,&quot;);</span>
+<span class="fc bfc" id="L116" title="All 2 branches covered.">                if (parts.length == 3) {</span>
+<span class="fc" id="L117">                    String name = parts[0];</span>
+<span class="fc" id="L118">                    float score = Float.parseFloat(parts[1]);</span>
+<span class="fc" id="L119">                    System.out.println();</span>
+<span class="fc" id="L120">                    int status = Integer.parseInt(parts[2]);</span>
+<span class="fc" id="L121">                    data.add(new Data(name, score, status));</span>
                 }
             }
         }
 
-<span class="fc" id="L107">        Server.fetchScores(data);</span>
+<span class="fc" id="L126">        Server.fetchScores(data);</span>
 
-<span class="fc" id="L109">        return data;</span>
-    }
-
-    public void touchDown(int screenX, int screenY) {
-<span class="fc" id="L113">        Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
-<span class="pc bpc" id="L114" title="1 of 2 branches missed.">        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 300*height/377f, 32*width/301f, 32*height/377f)){</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">            if (page &gt; 0) page--;</span>
-        }
-<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 32*height/377f, 32*width/301f, 32*height/377f)){</span>
-<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (page &lt; data.size()/5) page++;</span>
-        }
-<span class="fc" id="L120">    }</span>
-
-    @Override
-    public void dispose() {
-
-<span class="nc" id="L125">    }</span>
-
-    public ArrayList&lt;Data&gt; getData() {
 <span class="fc" id="L128">        return data;</span>
     }
 
+    /**
+     * Handles touch down events for navigating the leaderboard.
+     *
+     * @param screenX the x position of the touch
+     * @param screenY the y position of the touch
+     */
+    public void touchDown(int screenX, int screenY) {
+<span class="fc" id="L138">        Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 300*height/377f, 32*width/301f, 32*height/377f)){</span>
+<span class="nc bnc" id="L140" title="All 2 branches missed.">            if (page &gt; 0) page--;</span>
+        }
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 32*height/377f, 32*width/301f, 32*height/377f)){</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (page &lt; data.size()/5) page++;</span>
+        }
+<span class="fc" id="L145">    }</span>
+
+    /**
+     * Disposes of all resources used by this leaderboard.
+     */
+    @Override
+    public void dispose() {
+
+<span class="nc" id="L153">    }</span>
+
+    /**
+     * Gets the player data displayed on the leaderboard.
+     *
+     * @return an ArrayList of Data objects containing player information
+     */
+    public ArrayList&lt;Data&gt; getData() {
+<span class="fc" id="L161">        return data;</span>
+    }
+
+    /**
+     * Gets the current page of the leaderboard.
+     *
+     * @return the current page number
+     */
     @SuppressWarnings(&quot;unused&quot;)
     public int getPage() {
-<span class="fc" id="L133">        return page;</span>
+<span class="fc" id="L171">        return page;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

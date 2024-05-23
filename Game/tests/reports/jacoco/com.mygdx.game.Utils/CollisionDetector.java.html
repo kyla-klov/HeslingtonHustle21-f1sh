@@ -10,60 +10,92 @@ public class CollisionDetector {
     private final TiledMapTileLayer collisionLayer;
     private final PlayerController player;
 
-<span class="fc" id="L13">    public CollisionDetector(PlayerController player, TiledMapTileLayer collisionLayer) {</span>
-<span class="fc" id="L14">        this.player = player;</span>
-<span class="fc" id="L15">        this.collisionLayer = collisionLayer;</span>
-<span class="fc" id="L16">    }</span>
+    /**
+     * Constructs the CollisionDetector with specified instances of player and collisionLayer.
+     *
+     * @param player instance of player
+     * @param collisionLayer instance of collisionLayer
+     */
+<span class="fc" id="L19">    public CollisionDetector(PlayerController player, TiledMapTileLayer collisionLayer) {</span>
+<span class="fc" id="L20">        this.player = player;</span>
+<span class="fc" id="L21">        this.collisionLayer = collisionLayer;</span>
+<span class="fc" id="L22">    }</span>
 
     // Getter methods for player information
     public float getX() {
-<span class="fc" id="L20">        return player.getPos().x;</span>
+<span class="fc" id="L26">        return player.getPos().x;</span>
     }
 
     public float getY() {
-<span class="fc" id="L24">        return player.getPos().y;</span>
+<span class="fc" id="L30">        return player.getPos().y;</span>
     }
 
-
+    /**
+     * Detects whether a cell at a specific coordinate is blocked
+     *
+     * @param x x position of cell
+     * @param y y position of cell
+     * @return true if cell is blocked, false otherwise
+     */
     public boolean isCellBlocked(float x, float y) {
-<span class="fc" id="L29">        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));</span>
-<span class="pc bpc" id="L30" title="1 of 6 branches missed.">        return cell != null &amp;&amp; cell.getTile() != null &amp;&amp; cell.getTile().getProperties().containsKey(&quot;blocked&quot;);</span>
+<span class="fc" id="L41">        TiledMapTileLayer.Cell cell = collisionLayer.getCell((int) (x / collisionLayer.getTileWidth()), (int) (y / collisionLayer.getTileHeight()));</span>
+<span class="pc bpc" id="L42" title="1 of 6 branches missed.">        return cell != null &amp;&amp; cell.getTile() != null &amp;&amp; cell.getTile().getProperties().containsKey(&quot;blocked&quot;);</span>
     }
 
+    /**
+     * Detects if player collides to the right.
+     *
+     * @return true if collision detected, false otherwise.
+     */
     public boolean collidesRight() {
-<span class="fc bfc" id="L34" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
-<span class="fc bfc" id="L35" title="All 2 branches covered.">            if (isCellBlocked(getX() + player.getWidth(), getY() + step)) {</span>
-<span class="fc" id="L36">                return true;</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (isCellBlocked(getX() + player.getWidth(), getY() + step)) {</span>
+<span class="fc" id="L53">                return true;</span>
             }
         }
-<span class="fc" id="L39">        return false;</span>
+<span class="fc" id="L56">        return false;</span>
     }
 
+    /**
+     * Detects if player collides to the left.
+     *
+     * @return true if collision detected, false otherwise.
+     */
     public boolean collidesLeft() {
-<span class="fc bfc" id="L43" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
-<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (isCellBlocked(getX(), getY() + step)) {</span>
-<span class="fc" id="L45">                return true;</span>
+<span class="fc bfc" id="L65" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">            if (isCellBlocked(getX(), getY() + step)) {</span>
+<span class="fc" id="L67">                return true;</span>
             }
         }
-<span class="fc" id="L48">        return false;</span>
+<span class="fc" id="L70">        return false;</span>
     }
 
+    /**
+     * Detects if player collides upwards.
+     *
+     * @return true if collision detected, false otherwise.
+     */
     public boolean collidesUp() {
-<span class="fc bfc" id="L52" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
-<span class="fc bfc" id="L53" title="All 2 branches covered.">            if (isCellBlocked(getX() + step, getY() + player.getHeight())) {</span>
-<span class="fc" id="L54">                return true;</span>
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if (isCellBlocked(getX() + step, getY() + player.getHeight())) {</span>
+<span class="fc" id="L81">                return true;</span>
             }
         }
-<span class="fc" id="L57">        return false;</span>
+<span class="fc" id="L84">        return false;</span>
     }
 
+    /**
+     * Detects if player collides downwards.
+     *
+     * @return true if collision detected, false otherwise.
+     */
     public boolean collidesDown() {
-<span class="fc bfc" id="L61" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">            if (isCellBlocked(getX() + step, getY())) {</span>
-<span class="fc" id="L63">                return true;</span>
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        for (float step = 4; step &lt; player.getWidth()-4; step += (float) (collisionLayer.getTileWidth() - 8) / 4) {</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">            if (isCellBlocked(getX() + step, getY())) {</span>
+<span class="fc" id="L95">                return true;</span>
             }
         }
-<span class="fc" id="L66">        return false;</span>
+<span class="fc" id="L98">        return false;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
