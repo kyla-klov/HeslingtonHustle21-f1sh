@@ -51,12 +51,14 @@ public class GameScreen implements Screen {
     private Achievement.Type hiker = null;
 
     public GameScreen(final HesHustle game, final GameClock gameClock, final TiledMap tiledMap,
-                      final TiledMapRenderer TmRender){
+                      final TiledMapRenderer TmRender, final OrthographicCamera camera,
+                      final FitViewport vp,
+                      final UIElements uiElements, final NameTextField nameTextField){
         this.game = game;
         this.batch = game.getBatch();
         this.gameClock = gameClock;
-        this.camera = new OrthographicCamera();
-        this.vp = new FitViewport(1600,900, camera);
+        this.camera = camera;
+        this.vp = vp;
         if (tiledMap != null && TmRender != null){
             this.tiledMap = resourceManager.addDisposable(tiledMap);
             this.TmRender = TmRender;
@@ -69,12 +71,19 @@ public class GameScreen implements Screen {
         this.activityImages = new ArrayList<>();
         this.buildings = new ArrayList<>();
 
-        uiElements = new UIElements(vp, game.getAchievementHandler());
-        nameTextField = new NameTextField(vp);
+        this.uiElements = uiElements;
+        this.nameTextField = nameTextField;
         create();
     }
+
+    private GameScreen(final HesHustle game, final OrthographicCamera camera, final FitViewport vp){
+        this(game, new GameClock(), null, null, camera, vp, new UIElements(vp, game.getAchievementHandler()), new NameTextField(vp));
+    }
+    private GameScreen(final HesHustle game, final OrthographicCamera camera){
+        this(game, camera, new FitViewport(1600,900, camera));
+    }
     public GameScreen(final HesHustle game) {
-        this(game, new GameClock(), null, null);
+        this(game, new OrthographicCamera());
     }
 
     public void create(){

@@ -3,5 +3,5 @@ R. Hemlock,29.6,1
 Tech
 Tech,99.0
 Tech,99.0,3,Brown
-Tech,99.0,2
-Darth Jar Jar,28.0,3
+Tech,99.0,1
+Darth Jar Jar,28.0,0

@@ -42,8 +42,7 @@ public class AchievementsDisplay implements Disposable {
     private float relY;
     private float scrollY;
 
-
-    public AchievementsDisplay(Viewport vp, AchievementHandler achievementHandler, float posX, float posY){
+    public AchievementsDisplay(Viewport vp, BitmapFont font, AchievementHandler achievementHandler, float posX, float posY){
         this.vp = vp;
         this.achievementHandler = achievementHandler;
         this.posX = posX;
@@ -59,7 +58,7 @@ public class AchievementsDisplay implements Disposable {
         visible = false;
         unlocked = true;
         buttonPressed = false;
-        font = resourceManager.addDisposable(new BitmapFont(Gdx.files.internal("font.fnt")));
+        this.font = resourceManager.addDisposable(font);
         background = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/AchievementsBackground.png")));
         tick = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/check-mark.png")));
         padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/lock-padlock-symbol-for-security-interface.png")));
@@ -79,6 +78,45 @@ public class AchievementsDisplay implements Disposable {
         selectY = posY + bgHeight * 0.88f;
         selectWidth = 25;
         selectHeight = 25;
+    }
+
+    public AchievementsDisplay(Viewport vp, AchievementHandler achievementHandler, float posX, float posY){
+        this(vp, new BitmapFont(Gdx.files.internal("font.fnt")), achievementHandler, posX, posY);
+//        this.vp = vp;
+//        this.achievementHandler = achievementHandler;
+//        this.posX = posX;
+//        this.posY = posY;
+//
+//        resourceManager = new ResourceManager();
+//        achievementDims = new HashMap<>();
+//
+//        for (Achievement achievement : achievementHandler.getAchievements()) {
+//            achievementDims.put(achievement, new Rectangle());
+//        }
+//
+//        visible = false;
+//        unlocked = true;
+//        buttonPressed = false;
+//        font = resourceManager.addDisposable(new BitmapFont(Gdx.files.internal("font.fnt")));
+//        background = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/AchievementsBackground.png")));
+//        tick = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/check-mark.png")));
+//        padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/lock-padlock-symbol-for-security-interface.png")));
+//        scrollBar = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/ScrollBar2.png")));
+//        highlight = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/HighlightSelected.png")));
+//
+//        bgWidth = background.getWidth() * scale;
+//        bgHeight = background.getHeight() * scale;
+//        achievementWidth = 210f * scale;
+//        achievementHeight = 70f * scale;
+//        scrollWidth = 13f * scale;
+//        scrollHeight = 67f * scale;
+//        scrollY = bgHeight*0.67f + posY;
+//        scrollX = posX+bgWidth*0.87f;
+//        tickX = posX + bgWidth * 0.3f;
+//        padlockX = posX + bgWidth * 0.65f;
+//        selectY = posY + bgHeight * 0.88f;
+//        selectWidth = 25;
+//        selectHeight = 25;
     }
 
     public void render(SpriteBatch batch){

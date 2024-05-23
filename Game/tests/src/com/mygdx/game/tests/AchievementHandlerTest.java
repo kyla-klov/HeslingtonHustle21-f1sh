@@ -4,11 +4,8 @@ import com.mygdx.game.Utils.Achievement;
 import com.mygdx.game.Utils.AchievementHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(GdxTestRunner.class)
 public class AchievementHandlerTest {
@@ -24,7 +21,6 @@ public class AchievementHandlerTest {
     Achievement bronzeHiker = new Achievement("Hiker", "Walk at least 2500 steps", Achievement.Type.BRONZE, "AchievementsDisplay/AchievementPlaceHolder.png");
     Achievement silverHiker = new Achievement("Hiker", "Walk at least 5000 steps", Achievement.Type.SILVER,"AchievementsDisplay/AchievementPlaceHolder.png");
     Achievement goldHiker = new Achievement("Hiker", "Walk at least 10000 steps", Achievement.Type.GOLD, "AchievementsDisplay/AchievementPlaceHolder.png");
-    @InjectMocks
     private final AchievementHandler achievementHandler = new AchievementHandler();
 
     @Test
