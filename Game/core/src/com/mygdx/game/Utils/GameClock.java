@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * The GameClock class manages the in-game time and events that are triggered based on time.
+ * It maintains the current time in hours, minutes, and days, and allows for scheduling events.
+ */
 public class GameClock {
     private float cappedTime;
     private float rawTime;
@@ -13,11 +17,20 @@ public class GameClock {
     private final List<Consumer<String>> eventQueue;
     private final List<Float> eventTimers;
 
+    /**
+     * Constructs a GameClock with initial time set to 8:00 on day 1.
+     * Initializes the event queue and timers.
+     */
     public GameClock() {
         eventQueue = new ArrayList<>();
         eventTimers = new ArrayList<>();
     }
 
+    /**
+     * Updates the game clock and executes scheduled events.
+     *
+     * @param deltaTime the time elapsed since the last update
+     */
     public void update(float deltaTime) {
         if (deltaTime < 0){
             return;
@@ -26,6 +39,11 @@ public class GameClock {
         executeEvents(deltaTime);
     }
 
+    /**
+     * Updates the in-game time.
+     *
+     * @param deltaTime the time elapsed since the last update
+     */
     private void updateTime(float deltaTime){
         cappedTime += deltaTime;
         rawTime += deltaTime;
@@ -43,6 +61,11 @@ public class GameClock {
         }
     }
 
+    /**
+     * Executes scheduled events based on the elapsed time.
+     *
+     * @param deltaTime the time elapsed since the last update
+     */
     private void executeEvents(float deltaTime) {
         for (int i = 0; i < eventTimers.size(); i++) {
             eventTimers.set(i, eventTimers.get(i) - deltaTime);
@@ -58,6 +81,7 @@ public class GameClock {
             eventQueue.remove(null);
         }
     }
+
 
     public int getMinutes() {
         return minutes;
@@ -87,9 +111,11 @@ public class GameClock {
         return rawTime;
     }
 
-    // Cannot use String.format() method because GWT have no String Formatter
-    // It will cause error when running $gradlew build
-    // Issue was discussed in Google Groups: https://groups.google.com/g/google-web-toolkit/c/h93GJsNqoKg
+    /**
+     * Returns the formatted current time as a string in the format "Time: HH:MM".
+     *
+     * @return the formatted current time
+     */
     public String getTime(){
         String hrs;
         String mins;
@@ -98,18 +124,33 @@ public class GameClock {
         if (minutes < 10){mins = 0 + Integer.toString(minutes);}
         else {mins = Integer.toString(minutes);}
         return "Time: " + hrs + ":" + mins;
-//        return String.format("Time: %02d:%02d", hours, minutes);
     }
 
+    /**
+     * Adds an event to be executed after a specified time.
+     *
+     * @param event the event to add
+     * @param timer the time after which the event should be executed
+     */
     public void addEvent(Consumer<String> event, float timer) {
         eventQueue.add(event);
         eventTimers.add(timer);
     }
 
+    /**
+     * Returns the event queue.
+     *
+     * @return the event queue
+     */
     public List<Consumer<String>> getEventQueue() {
         return eventQueue;
     }
 
+    /**
+     * Returns the event timers.
+     *
+     * @return the event timers
+     */
     public List<Float> getEventTimers() {
         return eventTimers;
     }

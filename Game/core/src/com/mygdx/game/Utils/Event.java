@@ -2,6 +2,9 @@ package com.mygdx.game.Utils;
 
 import com.mygdx.game.Objects.ActivityImage;
 
+/**
+ * The Event Class holds information about an event that can be triggered.
+ */
 public class Event {
     private final double timeCost;
     private final int energyCost;

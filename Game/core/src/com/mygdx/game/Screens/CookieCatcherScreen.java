@@ -19,6 +19,9 @@ import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 import com.mygdx.game.Utils.GameClock;
 
+/**
+ * Handles logic and rendering for the Cookie Catcher game.
+ */
 public class CookieCatcherScreen extends InputAdapter implements Screen {
     public HesHustle game;
     private int cookiesCollected = 0;
@@ -43,6 +46,11 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
     private boolean aKeyPressed = false;
     private boolean dKeyPressed = false;
 
+    /**
+     * Constructs the Cookie Catcher screen with game instance.
+     *
+     * @param game instance of the game
+     */
     public CookieCatcherScreen(HesHustle game){
         this.game = game;
         resourceManager = new ResourceManager();
@@ -67,6 +75,11 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
         Gdx.input.setInputProcessor(this);
     }
 
+    /**
+     * Renders the game elements and updates logic.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         if (delta > 0.1f) return;
@@ -107,6 +120,11 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
 
     }
 
+    /**
+     * Checks if plate catches cookie
+     *
+     * @return true is plate catches cookie, false otherwise.
+     */
     public boolean isColliding() {
         float cookieXMax = cookieX + cookieWidth;
         float cookieXMin = cookieX;
@@ -121,11 +139,17 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
                 (cookieYMin <= plateYMax && cookieYMax >= plateYMin);
     }
 
+    /**
+     * resets cookie position.
+     */
     public void resetCookie(){
         startingPosition.y = vp.getWorldHeight() + cookieHeight;
         startingPosition.x = MathUtils.random(vp.getWorldWidth() - cookieWidth);
     }
 
+    /**
+     * returns to main game.
+     */
     public void endGame(){
         game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
     }
@@ -156,6 +180,12 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
         resourceManager.disposeAll();
     }
 
+    /**
+     * Handles input detection.
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return true if a or d pressed, false otherwise
+     */
     @Override
     public boolean keyDown(int keycode){
         if (keycode == Input.Keys.D){
@@ -168,6 +198,12 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
         return false;
     }
 
+    /**
+     * Handles input logic.
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return true if a or d released, false otherwise
+     */
     @Override
     public boolean keyUp(int keycode){
         if (keycode == Input.Keys.D){
@@ -180,6 +216,9 @@ public class CookieCatcherScreen extends InputAdapter implements Screen {
         return false;
     }
 
+    /**
+     * Updates the plate position.
+     */
     public void update(){
         if (plateX >= 0 && aKeyPressed){
             plateX = plateX - 25 * speed/500f;

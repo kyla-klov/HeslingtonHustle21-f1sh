@@ -32,6 +32,12 @@ public class EventManager {
 
     private int eat, sleep, rec;
 
+    /**
+     * Constructs the EventManager with specified game and gameClock instances
+     *
+     * @param game game instance
+     * @param gameClock GameClock instance
+     */
     public EventManager(HesHustle game, GameClock gameClock) {
         this.game = game;
         this.gameClock = gameClock;
@@ -49,6 +55,9 @@ public class EventManager {
         generateEvents();
     }
 
+    /**
+     * Generates hardcoded events
+     */
     private void generateEvents() {
         FeedDucks = new Event(1, -5, 0, -5, Event.Type.RECREATIONAL, 0, "", ScreenType.DUCK_GAME_SCREEN);
         StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", ScreenType.CHECKIN_CODE_SCREEN);
@@ -57,6 +66,9 @@ public class EventManager {
         EatPiazza = new Event(1, 10, 0, 0, Event.Type.EAT, 0, "", ScreenType.COOKIE_SCREEN);
     }
 
+    /**
+     * Updates achievement
+     */
     private void updateMealAchievement(){
         int mealsEaten = mealTimes.get(gameClock.getDays()-1).size();
 
@@ -72,10 +84,18 @@ public class EventManager {
         }
     }
 
+    /**
+     * @return current Event
+     */
     public Event getCurEvent() {
         return curEvent;
     }
 
+    /**
+     * Determines which event is triggered.
+     *
+     * @param name name of interaction
+     */
     public void interact(String name) {
 
         switch (name) {
@@ -138,10 +158,20 @@ public class EventManager {
 
     }
 
+    /**
+     * Increases study hours by h.
+     *
+     * @param h increase in study hours
+     */
     public void addStudyHours(int h){
         totalStudyHours += h;
     }
 
+    /**
+     * Updates energy.
+     *
+     * @param e Event
+     */
     public void updateEnergy(Event e) {
         energy += e.getEnergyCost();
         if (energy < 0) {
@@ -153,6 +183,11 @@ public class EventManager {
 
     }
 
+    /**
+     * Updates time.
+     *
+     * @param e Event
+     */
     public void updateTime(Event e) {
         if (e.getEventType() == Event.Type.SLEEP) {
             gameClock.setMinutes(0);
@@ -177,6 +212,11 @@ public class EventManager {
         return playedEvents;
     }
 
+    /**
+     * Calculates the players score.
+     *
+     * @return score
+     */
     public float calcScore(){
         int s1, s3, s4, s5;
 
@@ -280,6 +320,11 @@ public class EventManager {
         return !frozen;
     }
 
+    /**
+     * Returns a list of events.
+     *
+     * @return list of events
+     */
     public ArrayList<Event> listEvents(){
         ArrayList<Event> list = new ArrayList<>();
         list.add(FeedDucks);
@@ -290,12 +335,20 @@ public class EventManager {
         return list;
     }
 
+    /**
+     * Adds a place to list of places studied.
+     */
     public void addStudyPlace(String studyPlace){
         if (!placesStudied.contains(studyPlace)){
             placesStudied.add(studyPlace);
         }
     }
 
+    /**
+     * Adds a meal and time of meal to list.
+     *
+     * @param time time of meal
+     */
     public void addMeal(int time){
         mealTimes.get(gameClock.getDays()-1).add(time);
     }

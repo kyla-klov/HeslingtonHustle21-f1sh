@@ -12,9 +12,19 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * The Server class handles communication with a remote server for submitting and fetching scores.
+ */
 public class Server {
     private static final OkHttpClient client = new OkHttpClient();
 
+    /**
+     * Submits a player's score to the remote server.
+     *
+     * @param player the player's name
+     * @param score  the player's score
+     * @return true if the score was successfully submitted, false otherwise
+     */
     public static boolean submitScore(String player, float score) {
         if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){
             return false;
@@ -61,6 +71,12 @@ public class Server {
 
         return result.getResult();
     }
+
+    /**
+     * Fetches the list of scores from the remote server and updates the provided result list.
+     *
+     * @param result the list to be updated with fetched scores
+     */
     public static void fetchScores(List<Data> result) {
         if (Gdx.app.getType() == Application.ApplicationType.HeadlessDesktop){
             return;
@@ -94,6 +110,9 @@ public class Server {
         });
     }
 
+    /**
+     * Represents a data structure for holding player score information.
+     */
     public static class Data implements Comparable<Data>{
         private String player;
         private float score;
@@ -128,6 +147,9 @@ public class Server {
         }
     }
 
+    /**
+     * A helper class for handling asynchronous results.
+     */
     private static class Result{
         private boolean result;
         public void successful(){

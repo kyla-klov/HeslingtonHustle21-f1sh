@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.ViewportAdapter;
 
+/**
+ * The NameTextField class provides a text input field that allows the player to enter their name.
+ * It handles rendering the text field and processing input from the keyboard.
+ */
 public class NameTextField {
     private final StringBuilder inputText;
     private final BitmapFont font;
@@ -18,6 +22,14 @@ public class NameTextField {
     private boolean capsLockOn;
     private boolean active;
 
+    /**
+     * Constructs a NameTextField with the specified parameters.
+     *
+     * @param vp        the viewport to use for rendering
+     * @param font      the font to use for rendering text
+     * @param textField the texture of the text field
+     * @param active    the initial active state of the text field
+     */
     public NameTextField(Viewport vp, BitmapFont font, Texture textField, boolean active){
         this.vp = vp;
         this.font = font;
@@ -25,16 +37,22 @@ public class NameTextField {
         this.active = active;
         inputText = new StringBuilder();
     }
+
+    /**
+     * Constructs a NameTextField with default font and texture, and specified viewport.
+     *
+     * @param vp the viewport to use for rendering
+     */
     public NameTextField(Viewport vp) {
         this(vp, new BitmapFont(Gdx.files.internal("font.fnt")),
                 new Texture(Gdx.files.internal("NameTextField.png")), true);
-//        this.vp = vp;
-//        inputText = new StringBuilder();
-//        font = new BitmapFont(Gdx.files.internal("font.fnt"));
-//        textField = new Texture(Gdx.files.internal("NameTextField.png"));
-//        active = true;
     }
 
+    /**
+     * Renders the text field using the specified sprite batch.
+     *
+     * @param batch the sprite batch used for rendering
+     */
     public void render(SpriteBatch batch){
         if (!active) return;
         handleInput();
@@ -44,6 +62,9 @@ public class NameTextField {
         ViewportAdapter.drawFont(vp, font, batch, inputText.toString(), x+70, y+68);
     }
 
+    /**
+     * Handles keyboard input for the text field.
+     */
     private void handleInput() {
         boolean shiftPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         if (Gdx.input.isKeyPressed(Input.Keys.CAPS_LOCK)){
@@ -80,11 +101,16 @@ public class NameTextField {
             active = false;
         }
     }
-
+    /**
+     * @return true if text has been entered, false otherwise
+     */
     public boolean textEntered() {
         return !active;
     }
 
+    /**
+     * @return the entered text
+     */
     public String getValue() {
         return value;
     }

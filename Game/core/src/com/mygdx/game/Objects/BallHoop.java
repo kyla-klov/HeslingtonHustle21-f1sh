@@ -4,12 +4,25 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Utils.Collider;
 
+/**
+ * The BallHoop class represents a basketball hoop with collision detection capabilities.
+ * It manages the position, dimensions, and collision detection for the hoop.
+ */
 public class BallHoop {
     private final Vector2 position;
     private final Collider collider;
     private final float hoopWidth;
     private final float edgeWidth;
 
+    /**
+     * Constructs a BallHoop with the specified position, dimensions, and height.
+     *
+     * @param x         the x position of the hoop
+     * @param y         the y position of the hoop
+     * @param hoopWidth the width of the hoop
+     * @param edgeWidth the width of the edges
+     * @param height    the height of the hoop
+     */
     public BallHoop(float x, float y, float hoopWidth, float edgeWidth, float height) {
         this.position = new Vector2(x, y);
         this.collider = new Collider();
@@ -33,6 +46,13 @@ public class BallHoop {
         }
     }
 
+    /**
+     * Checks if the ball has scored a goal by passing through the hoop.
+     *
+     * @param ball      the ball to check
+     * @param deltaTime the time elapsed since the last update
+     * @return true if the ball has scored a goal, false otherwise
+     */
     public boolean isGoal(Ball ball, float deltaTime){
         if (ball.getPosition().y > position.y && ball.getPosition().x > position.x + edgeWidth && ball.getPosition().x <= position.x + edgeWidth + hoopWidth) {
             collider.activateDampedPoints();
@@ -42,6 +62,11 @@ public class BallHoop {
         return false;
     }
 
+    /**
+     * Gets the collider for the hoop.
+     *
+     * @return the collider
+     */
     public Collider getCollider(){
         return collider;
     }

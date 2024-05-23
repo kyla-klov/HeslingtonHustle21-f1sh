@@ -112,6 +112,11 @@ public class BasketBallScreen implements Screen, InputProcessor {
         }, 30f);
     }
 
+    /**
+     * Renders the basketball screen elements
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         update(delta);

@@ -13,12 +13,19 @@ import com.mygdx.game.HesHustle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.game.Utils.ScreenType;
 
-
+/**
+ * The PauseScreen class represents the pause screen of the game.
+ */
 public class PauseScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final Skin skin;
 
+    /**
+     * Constructs a PauseScreen with the specified game instance.
+     *
+     * @param game the game instance
+     */
     public PauseScreen(final HesHustle game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
@@ -28,6 +35,10 @@ public class PauseScreen implements Screen {
 
         setupUi();
     }
+
+    /**
+     * Sets up the screen UI elements and the stage.
+     */
     private void setupUi() {
         Table table = new Table();
         table.setFillParent(true);
@@ -81,9 +92,6 @@ public class PauseScreen implements Screen {
         if (stage != null) stage.dispose();
         if (skin != null) skin.dispose();
     }
-
-
-
 }
 
 

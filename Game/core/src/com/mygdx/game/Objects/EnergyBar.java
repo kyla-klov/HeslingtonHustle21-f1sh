@@ -10,6 +10,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ViewportAdapter;
 
+/**
+ * The EnergyBar class represents a visual energy bar in the game.
+ * It handles rendering the energy bar with different textures for the edges and the center,
+ * and it updates the display based on the current energy level.
+ */
 public class EnergyBar implements Disposable {
     private final Texture centre;
     private final Texture leftEdge;
@@ -23,6 +28,16 @@ public class EnergyBar implements Disposable {
 
     private final float x, y, width, height, edgeWidth;
 
+    /**
+     * Constructs an EnergyBar with the specified parameters.
+     *
+     * @param vp        the viewport to use for rendering
+     * @param x         the x position of the energy bar
+     * @param y         the y position of the energy bar
+     * @param width     the width of the energy bar
+     * @param height    the height of the energy bar
+     * @param edgeWidth the width of the edges of the energy bar
+     */
     public EnergyBar(Viewport vp, float x, float y, float width, float height, float edgeWidth){
         this.vp = vp;
         this.x = x;
@@ -39,6 +54,12 @@ public class EnergyBar implements Disposable {
         holderRight = resourceManager.addDisposable(new Texture("EnergyBar/meter_bar_holder_right_edge_blue.png"));
     }
 
+    /**
+     * Renders the energy bar using the specified sprite batch and energy level.
+     *
+     * @param batch  the sprite batch used for rendering
+     * @param energy the current energy level (0-100)
+     */
     public void render(SpriteBatch batch, float energy){
         ViewportAdapter.drawUI(vp, batch, holderLeft, x, y, edgeWidth, height);
         ViewportAdapter.drawUI(vp, batch, holderCentre, x+edgeWidth, y, width-edgeWidth*2, height);
@@ -61,6 +82,9 @@ public class EnergyBar implements Disposable {
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
 
+    /**
+     * Disposes of all resources used by this energy bar.
+     */
     @Override
     public void dispose() {
         resourceManager.disposeAll();

@@ -17,7 +17,9 @@ import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 import com.mygdx.game.Utils.ViewportAdapter;
 
-
+/**
+ * The LeaderBoardScreen class represents the screen that displays the leaderboard.
+ */
 public class LeaderBoardScreen implements Screen {
     private final Viewport vp;
     private final LeaderBoard leaderBoard;
@@ -27,7 +29,11 @@ public class LeaderBoardScreen implements Screen {
     private final Texture backButton;
     private final SpriteBatch batch;
 
-
+    /**
+     * Constructs a LeaderBoardScreen with the specified game instance.
+     *
+     * @param game the game instance
+     */
     public LeaderBoardScreen(HesHustle game) {
         this.game = game;
         batch = game.getBatch();
@@ -47,6 +53,11 @@ public class LeaderBoardScreen implements Screen {
 
     }
 
+    /**
+     * renders the leaderboard and other elements.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
@@ -87,6 +98,12 @@ public class LeaderBoardScreen implements Screen {
 
     }
 
+    /**
+     * Handles touch down events for the leaderboard screen.
+     *
+     * @param screenX the x position of the touch
+     * @param screenY the y position of the touch
+     */
     public void touchDown(float screenX, float screenY){
         Vector2 pos = ViewportAdapter.screenToGame(vp, screenX, screenY);
         if (ViewportAdapter.isOver(pos.x, pos.y, 30, 30, 64, 64)){

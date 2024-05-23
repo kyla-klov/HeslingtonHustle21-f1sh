@@ -7,6 +7,10 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The Collider class represents a collection of surfaces and points that can be used to detect collisions.
+ * It supports adding box colliders, individual surfaces, and damped points.
+ */
 public class Collider {
     private final List<Vector3> horSurfs;
     private final List<Vector3> vertSurfs;
@@ -14,6 +18,10 @@ public class Collider {
     private final List<Vector2> dampedPoints;
     private boolean dampedPointsActive;
 
+
+    /**
+     * Constructs a Collider with empty lists of surfaces and points.
+     */
     public Collider() {
         horSurfs = new ArrayList<>();
         vertSurfs = new ArrayList<>();
@@ -21,6 +29,11 @@ public class Collider {
         dampedPoints = new ArrayList<>();
     }
 
+    /**
+     * Adds a box collider to the collection.
+     *
+     * @param boxCollider the rectangle representing the box collider
+     */
     public void addBoxCollider(Rectangle boxCollider){
         horSurfs.add(new Vector3(boxCollider.x, boxCollider.y, boxCollider.width));
         horSurfs.add(new Vector3(boxCollider.x, boxCollider.y + boxCollider.height, boxCollider.width));
@@ -33,6 +46,12 @@ public class Collider {
         points.add(new Vector2(boxCollider.x + boxCollider.width, boxCollider.y + boxCollider.height));
     }
 
+    /**
+     * Adds a surface to the collection.
+     *
+     * @param surface the vector representing the surface
+     * @param isHor   true if the surface is horizontal, false if vertical
+     */
     public void addSurface(Vector3 surface, boolean isHor){
         points.add(new Vector2(surface.x, surface.y));
         if (isHor){
@@ -45,6 +64,11 @@ public class Collider {
         }
     }
 
+    /**
+     * Adds a damped point to the collection.
+     *
+     * @param point the vector representing the damped point
+     */
     public void addDampedPoint(Vector2 point){
         dampedPoints.add(point);
     }

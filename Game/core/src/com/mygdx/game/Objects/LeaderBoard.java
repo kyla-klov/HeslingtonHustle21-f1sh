@@ -28,6 +28,16 @@ public class LeaderBoard implements Disposable{
     private ArrayList<Data> data;
     private int page;
 
+    /**
+     * Constructs a LeaderBoard with the specified parameters.
+     *
+     * @param vp     the viewport to use for rendering
+     * @param font   the font to use for rendering text
+     * @param x      the x position of the leaderboard
+     * @param y      the y position of the leaderboard
+     * @param width  the width of the leaderboard
+     * @param height the height of the leaderboard
+     */
     public LeaderBoard(Viewport vp, BitmapFont font, float x, float y, float width, float height){
         this.vp = vp;
         this.x = x;
@@ -43,23 +53,25 @@ public class LeaderBoard implements Disposable{
         upArrowTexture = new Texture(Gdx.files.internal("up.png"));
         downArrowTexture = new Texture(Gdx.files.internal("down.png"));
     }
+
+    /**
+     * Constructs a LeaderBoard with the specified parameters, using a default font.
+     *
+     * @param vp     the viewport to use for rendering
+     * @param x      the x position of the leaderboard
+     * @param y      the y position of the leaderboard
+     * @param width  the width of the leaderboard
+     * @param height the height of the leaderboard
+     */
     public LeaderBoard(Viewport vp, float x, float y, float width, float height) {
         this(vp, new BitmapFont(Gdx.files.internal("font.fnt")), x, y, width, height);
-//        this.vp = vp;
-//        this.x = x;
-//        this.y = y;
-//        this.width = width;
-//        this.height = height;
-//        page = 0;
-//        font = new BitmapFont(Gdx.files.internal("font.fnt"));
-//        data = readPlayerData();
-//        Collections.sort(data);
-//        Collections.reverse(data);
-//        leaderBoardTexture = new Texture(Gdx.files.internal("LeaderBoard.png"));
-//        upArrowTexture = new Texture(Gdx.files.internal("up.png"));
-//        downArrowTexture = new Texture(Gdx.files.internal("down.png"));
     }
 
+    /**
+     * Renders the leaderboard using the specified sprite batch.
+     *
+     * @param batch the sprite batch used for rendering
+     */
     public void render(SpriteBatch batch){
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
             touchDown(Gdx.input.getX(), Gdx.input.getY());
@@ -88,6 +100,12 @@ public class LeaderBoard implements Disposable{
         }
     }
 
+
+    /**
+     * Reads player data from a file and fetches additional scores from the server.
+     *
+     * @return an ArrayList of Data objects containing player information
+     */
     private ArrayList<Data> readPlayerData() {
         data = new ArrayList<>();
         FileHandle file = Gdx.files.local(FILE_PATH);
@@ -98,6 +116,7 @@ public class LeaderBoard implements Disposable{
                 if (parts.length == 3) {
                     String name = parts[0];
                     float score = Float.parseFloat(parts[1]);
+                    System.out.println();
                     int status = Integer.parseInt(parts[2]);
                     data.add(new Data(name, score, status));
                 }
@@ -109,6 +128,12 @@ public class LeaderBoard implements Disposable{
         return data;
     }
 
+    /**
+     * Handles touch down events for navigating the leaderboard.
+     *
+     * @param screenX the x position of the touch
+     * @param screenY the y position of the touch
+     */
     public void touchDown(int screenX, int screenY) {
         Vector2 gamePos = ViewportAdapter.screenToGame(vp, screenX, screenY);
         if (ViewportAdapter.isOver(gamePos.x, gamePos.y, x + 250*width/301f, y + 300*height/377f, 32*width/301f, 32*height/377f)){
@@ -119,15 +144,28 @@ public class LeaderBoard implements Disposable{
         }
     }
 
+    /**
+     * Disposes of all resources used by this leaderboard.
+     */
     @Override
     public void dispose() {
 
     }
 
+    /**
+     * Gets the player data displayed on the leaderboard.
+     *
+     * @return an ArrayList of Data objects containing player information
+     */
     public ArrayList<Data> getData() {
         return data;
     }
 
+    /**
+     * Gets the current page of the leaderboard.
+     *
+     * @return the current page number
+     */
     @SuppressWarnings("unused")
     public int getPage() {
         return page;

@@ -15,11 +15,19 @@ import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 
+/**
+ * Initializes and renders the UI elements for the controls screen.
+ */
 public class ControlsScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final ResourceManager resourceManager;
 
+    /**
+     * Constructs a ControlsScreen with game instance.
+     *
+     * @param game the game instance
+     */
     public ControlsScreen(HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
@@ -27,6 +35,9 @@ public class ControlsScreen implements Screen {
         initialiseSettings();
     }
 
+    /**
+     * Initializes the settings and UI elements for the controls screen.
+     */
     private void initialiseSettings() {
         Gdx.input.setInputProcessor(stage);
 

@@ -20,6 +20,10 @@ import com.mygdx.game.Utils.Achievement;
 import com.mygdx.game.Utils.GameClock;
 import com.mygdx.game.Utils.ScreenType;
 
+/**
+ * The DuckGameScreen class represents the screen for a mini-game where the player clicks on ducks.
+ * It handles the game logic, rendering, and input processing for the duck clicking game.
+ */
 public class DuckGameScreen implements Screen, InputProcessor{
     private float duckX;
     private float duckY;
@@ -40,6 +44,11 @@ public class DuckGameScreen implements Screen, InputProcessor{
     private final GlyphLayout glyphLayout;
     private final SpriteBatch batch;
 
+    /**
+     * Constructs a DuckGameScreen with the specified game instance.
+     *
+     * @param game the game instance
+     */
     public DuckGameScreen(HesHustle game){
         this.game = game;
         batch = game.getBatch();
@@ -57,6 +66,9 @@ public class DuckGameScreen implements Screen, InputProcessor{
         spawnDuck();
     }
 
+    /**
+     * Spawns a duck at a random position on the screen.
+     */
     public void spawnDuck(){
         int numberRounds = 15;
         if (numberDucksClicked < numberRounds){
@@ -80,6 +92,9 @@ public class DuckGameScreen implements Screen, InputProcessor{
         }
     }
 
+    /**
+     * Ends the game and switches back to the main game screen.
+     */
     public void endGame(){
         game.getScreenManager().setScreen(ScreenType.GAME_SCREEN);
     }
@@ -96,6 +111,11 @@ public class DuckGameScreen implements Screen, InputProcessor{
         vp.update(width, height, true);
     }
 
+    /**
+     * Renders game elements
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         gameClock.update(delta);
@@ -139,6 +159,15 @@ public class DuckGameScreen implements Screen, InputProcessor{
         return false;
     }
 
+    /**
+     * Detects if player presses on duck.
+     *
+     * @param worldX The x coordinate, origin is in the upper left corner
+     * @param worldY The y coordinate, origin is in the upper left corner
+     * @param pointer the pointer for the event.
+     * @param button the button
+     * @return false
+     */
     @Override
     public boolean touchDown(int worldX, int worldY, int pointer, int button) {
         Vector2 touchPoint = vp.unproject(new Vector2(worldX, worldY));

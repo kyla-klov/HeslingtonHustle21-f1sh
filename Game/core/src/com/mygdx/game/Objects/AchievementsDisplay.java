@@ -17,6 +17,10 @@ import com.mygdx.game.Utils.ViewportAdapter;
 
 import java.util.*;
 
+/**
+ * The AchievementsDisplay class is responsible for displaying achievements in the game.
+ * It handles the rendering of achievements, scrolling, and user interactions with the achievements display.
+ */
 public class AchievementsDisplay implements Disposable {
     final private Texture background;
     final private Texture tick;
@@ -42,6 +46,15 @@ public class AchievementsDisplay implements Disposable {
     private float relY;
     private float scrollY;
 
+    /**
+     * Constructs an AchievementsDisplay with the specified parameters.
+     *
+     * @param vp                the viewport to use for rendering
+     * @param font              the font to use for rendering text
+     * @param achievementHandler the achievement handler to use for retrieving achievements
+     * @param posX              the x position of the achievements display
+     * @param posY              the y position of the achievements display
+     */
     public AchievementsDisplay(Viewport vp, BitmapFont font, AchievementHandler achievementHandler, float posX, float posY){
         this.vp = vp;
         this.achievementHandler = achievementHandler;
@@ -80,45 +93,23 @@ public class AchievementsDisplay implements Disposable {
         selectHeight = 25;
     }
 
+    /**
+     * Constructs an AchievementsDisplay with the specified parameters, using a default font.
+     *
+     * @param vp                the viewport to use for rendering
+     * @param achievementHandler the achievement handler to use for retrieving achievements
+     * @param posX              the x position of the achievements display
+     * @param posY              the y position of the achievements display
+     */
     public AchievementsDisplay(Viewport vp, AchievementHandler achievementHandler, float posX, float posY){
         this(vp, new BitmapFont(Gdx.files.internal("font.fnt")), achievementHandler, posX, posY);
-//        this.vp = vp;
-//        this.achievementHandler = achievementHandler;
-//        this.posX = posX;
-//        this.posY = posY;
-//
-//        resourceManager = new ResourceManager();
-//        achievementDims = new HashMap<>();
-//
-//        for (Achievement achievement : achievementHandler.getAchievements()) {
-//            achievementDims.put(achievement, new Rectangle());
-//        }
-//
-//        visible = false;
-//        unlocked = true;
-//        buttonPressed = false;
-//        font = resourceManager.addDisposable(new BitmapFont(Gdx.files.internal("font.fnt")));
-//        background = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/AchievementsBackground.png")));
-//        tick = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/check-mark.png")));
-//        padlock = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/lock-padlock-symbol-for-security-interface.png")));
-//        scrollBar = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/ScrollBar2.png")));
-//        highlight = resourceManager.addDisposable(new Texture(Gdx.files.internal("AchievementsDisplay/HighlightSelected.png")));
-//
-//        bgWidth = background.getWidth() * scale;
-//        bgHeight = background.getHeight() * scale;
-//        achievementWidth = 210f * scale;
-//        achievementHeight = 70f * scale;
-//        scrollWidth = 13f * scale;
-//        scrollHeight = 67f * scale;
-//        scrollY = bgHeight*0.67f + posY;
-//        scrollX = posX+bgWidth*0.87f;
-//        tickX = posX + bgWidth * 0.3f;
-//        padlockX = posX + bgWidth * 0.65f;
-//        selectY = posY + bgHeight * 0.88f;
-//        selectWidth = 25;
-//        selectHeight = 25;
     }
 
+    /**
+     * Renders the achievements display.
+     *
+     * @param batch the sprite batch to use for rendering
+     */
     public void render(SpriteBatch batch){
         if (!visible) return;
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)){
@@ -142,6 +133,9 @@ public class AchievementsDisplay implements Disposable {
         writeDescriptions(batch, Gdx.input.getX(), Gdx.input.getY());
     }
 
+    /**
+     * Updates the scroller position based on user input.
+     */
     private void updateScroller(){
         //Handle Scroll Logic
         if (scrolling){
@@ -154,6 +148,11 @@ public class AchievementsDisplay implements Disposable {
         }
     }
 
+    /**
+     * Draws the achievements within the display.
+     *
+     * @param batch the sprite batch to use for rendering
+     */
     private void drawAchievements(SpriteBatch batch){
         //Calculate the screen coords of scissor box
         Vector2 blCorner = ViewportAdapter.toScreen(vp, posX, posY + 25 * scale);
@@ -183,11 +182,12 @@ public class AchievementsDisplay implements Disposable {
         Gdx.gl.glDisable(GL20.GL_SCISSOR_TEST);
     }
 
-    @Override
-    public void dispose() {
-        resourceManager.disposeAll();
-    }
-
+    /**
+     * Handles touch down events.
+     *
+     * @param screenX the x position of the touch
+     * @param screenY the y position of the touch
+     */
     public void touchDown(int screenX, int screenY) {
         Vector2 gamePos = ViewportAdapter.screenToGame(vp,  screenX, screenY);
 
@@ -203,6 +203,13 @@ public class AchievementsDisplay implements Disposable {
         }
     }
 
+    /**
+     * Writes descriptions for achievements.
+     *
+     * @param batch    the sprite batch to use for rendering
+     * @param screenX  the x position of the touch
+     * @param screenY  the y position of the touch
+     */
     public void writeDescriptions(SpriteBatch batch, int screenX, int screenY){
         Vector2 gamePos = ViewportAdapter.screenToGame(vp,  screenX, screenY);
         for (Achievement achievement : achievementHandler.getAchievements()) {
@@ -214,22 +221,45 @@ public class AchievementsDisplay implements Disposable {
         }
     }
 
+    /**
+     * Handles touch up events.
+     */
     public void touchUp() {
         scrolling = false;
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Shows the achievements display.
+     */
     public void show(){
         visible = true;
     }
 
-    @SuppressWarnings("unused")
+    /**
+     * Hides the achievements display.
+     */
     public void hide(){
         scrollY = bgHeight*0.67f + posY;
         visible = false;
     }
 
+    /**
+     * Checks if the achievements display is visible.
+     *
+     * @return true if the display is visible, false otherwise
+     */
     public boolean isVisible(){
         return visible;
     }
+
+    /**
+     * Disposes of all resources used by this display.
+     */
+    @Override
+    public void dispose() {
+        resourceManager.disposeAll();
+    }
+
 }
+
+

@@ -7,14 +7,28 @@ import com.mygdx.game.Objects.Ball;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * The BallPhysics class handles the physics for a ball object, including collision detection and response.
+ */
 public class BallPhysics {
+    /**
+     * A class for storing information about a collision.
+     */
     private static class CollisionInfo {
         private final float score;
         private final Vector2 velocity;
         private final Vector2 position;
         private final String type;
 
-        //A class for storing information about a collision
+        /**
+         * Constructs a CollisionInfo object with the specified parameters.
+         *
+         * @param score    the collision score
+         * @param velocity the velocity of the ball after the collision
+         * @param position the position of the ball at the point of collision
+         * @param type     the type of collision (horizontal, vertical, point)
+         */
         public CollisionInfo(float score, Vector2 velocity, Vector2 position, String type) {
             this.score = score;
             this.velocity = velocity;
@@ -26,16 +40,31 @@ public class BallPhysics {
     private final List<Collider> colliders;
     private final Ball ball;
 
+    /**
+     * Constructs a BallPhysics object with the specified ball.
+     *
+     * @param ball the ball object to be managed by the physics engine
+     */
     public BallPhysics(Ball ball){
         this.colliders = new ArrayList<>();
         this.ball = ball;
         ball.setAcceleration(new Vector2(ball.getAcceleration().x, -2000));
     }
 
+    /**
+     * Adds a collider to the list of colliders.
+     *
+     * @param collider the collider to be added
+     */
     public void addCollider(Collider collider){
         colliders.add(collider);
     }
 
+    /**
+     * Adjusts the position of the ball based on detected collisions.
+     *
+     * @param deltaTime the time elapsed since the last update
+     */
     public void adjustBall(float deltaTime){
         Vector2 nextPos = ball.nextPosition(deltaTime);
 
@@ -45,6 +74,12 @@ public class BallPhysics {
         }
     }
 
+    /**
+     * Detects and handles collisions for the ball.
+     *
+     * @param nextPos the next position of the ball
+     * @return true if a collision was detected, false otherwise
+    */
     private boolean detectCollision(Vector2 nextPos){
         Vector2 dir = nextPos.cpy().sub(ball.getPosition()).nor(); //direction vector of ball's trajectory
         float grad = dir.y/dir.x; //gradient of ball's trajectory
@@ -99,6 +134,14 @@ public class BallPhysics {
         return false;
     }
 
+    /**
+     * Grabs collision info for collisions with horizontal surfaces.
+     *
+     * @param surface The surface dimensions
+     * @param nextPos The next position of the object pre-adjustment.
+     * @param grad gradient of objects path
+     * @return Collision Information
+     */
     private CollisionInfo horizontalCollision(Vector3 surface, Vector2 nextPos, float grad){
         //Calculates the offset, which is just the distance from the centre of the ball to the impact point
         //Offset magnitude is always just the balls radius
@@ -125,6 +168,14 @@ public class BallPhysics {
         return null;
     }
 
+    /**
+     * Grabs collision info for collisions with vertical surfaces.
+     *
+     * @param surface The surface dimensions
+     * @param nextPos The next position of the object pre-adjustment.
+     * @param grad gradient of objects path
+     * @return Collision Information
+     */
     private CollisionInfo verticalCollision(Vector3 surface, Vector2 nextPos, float grad){
         //Calculates the offset, which is just the distance from the centre of the ball to the impact point
         //Offset magnitude is always just the balls radius
@@ -152,7 +203,15 @@ public class BallPhysics {
         return null;
     }
 
-
+    /**
+     * Grabs collision info for collisions with vertical surfaces.
+     *
+     * @param point Coordinates of the point
+     * @param nextPos The next position of the object pre-adjustment.
+     * @param grad gradient of objects path
+     * @param damped true if the point is damped, false otherwise
+     * @return Collision Information
+     */
     private CollisionInfo pointCollision(Vector2 point, Vector2 nextPos, float grad, boolean damped){
         //Centre the ball at (0, 0)
         Vector2 p = point.cpy().sub(ball.getPosition());
@@ -185,6 +244,13 @@ public class BallPhysics {
         return null;
     }
 
+    /**
+     * Calculates the bounce of the object.
+     *
+     * @param grad gradient of collision
+     * @param damped is damped?
+     * @return velocity after bounce
+     */
     private Vector2 bounce(float grad, boolean damped) {
         float reduction = this.reduction;
         if (damped) {

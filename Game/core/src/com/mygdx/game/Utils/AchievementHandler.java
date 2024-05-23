@@ -4,37 +4,29 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-Documentation on usage
-
-The AchievementHandler can be accessed through game.achievementHandler.
-To create a new achievement use game.achievementHandler.createAchievement
-and pass in the name of the achievement along with a breath description.
-This will return an Achievement object which you can then manipulate the
-name, description and also set the achievement to gold or silver. For example
-if you want to set an achievement to golf if x == 3 else silver:
-
-    Achievement myAchievement = game.achievementHandler.createAchievement(x, y);
-    if (x == 3){
-        myAchievement.setGoldAchievement();
-    } else {
-        myAchievement.setSilverAchievement();
-    }
-
-The prepareAchievementsForDisplay can be used in the end screen to obtain an achievements name
-and whether they got gold, silver or nothing. It returns a Mapping which you can loop over
+/**
+ * The AchievementHandler class manages a collection of achievements.
+ * It provides methods to retrieve achievements and handles the disposal of resources.
  */
-
-
-
 public class AchievementHandler implements Disposable {
 
     private final List<Achievement> achievements;
+
+    /**
+     * Constructs an AchievementHandler and initializes the list of achievements.
+     */
     public AchievementHandler(){
         achievements = new ArrayList<>();
         generateAchievements();
     }
 
+    /**
+     * Retrieves an achievement based on its name and type.
+     *
+     * @param name the name of the achievement
+     * @param achievementType the type of the achievement
+     * @return the achievement with the specified name and type, or null if not found
+     */
     public Achievement getAchievement(String name, Achievement.Type achievementType){
         for (Achievement achievement : achievements){
             if (name.equals(achievement.getName()) && achievementType == achievement.getAchievmentType()){
@@ -44,10 +36,18 @@ public class AchievementHandler implements Disposable {
         return null;
     }
 
+    /**
+     * Returns the list of achievements.
+     *
+     * @return the list of achievements
+     */
     public List<Achievement> getAchievements(){
         return achievements;
     }
 
+    /**
+     * Generates the list of achievements and adds them to the collection.
+     */
     private void generateAchievements(){
         achievements.add(new Achievement("Baller", "Score at least 8 points in basketball", Achievement.Type.BRONZE, "AchievementsDisplay/BallerAchievementBronze.png"));
         achievements.add(new Achievement("Baller", "Score at least 10 points in basketball", Achievement.Type.SILVER, "AchievementsDisplay/BallerAchievementSilver.png"));

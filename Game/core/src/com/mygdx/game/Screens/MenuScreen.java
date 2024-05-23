@@ -18,13 +18,20 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 
-
+/**
+ * The MenuScreen class represents the main menu of the game.
+ */
 public class MenuScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final ResourceManager resourceManager;
     private Image backgroundImage;
 
+    /**
+     * Constructs a MenuScreen with the specified game instance.
+     *
+     * @param game the game instance
+     */
     public MenuScreen(HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
@@ -32,6 +39,9 @@ public class MenuScreen implements Screen {
         initialiseMenu();
     }
 
+    /**
+     * Initializes the menu UI elements and sets up the stage.
+     */
     private void initialiseMenu(){
         Gdx.input.setInputProcessor(stage);
 

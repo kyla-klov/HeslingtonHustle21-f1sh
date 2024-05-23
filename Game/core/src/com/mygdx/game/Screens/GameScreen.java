@@ -50,6 +50,18 @@ public class GameScreen implements Screen {
 
     private Achievement.Type hiker = null;
 
+    /**
+     * Constructs a GameScreen with the specified parameters.
+     *
+     * @param game             the game instance
+     * @param gameClock        the game clock to manage time
+     * @param tiledMap         the tiled map for the game world
+     * @param TmRender         the tiled map renderer
+     * @param camera           the camera to use for rendering
+     * @param vp               the viewport to use for rendering
+     * @param uiElements       the UI elements to display
+     * @param nameTextField    the text field for entering the player's name
+     */
     public GameScreen(final HesHustle game, final GameClock gameClock, final TiledMap tiledMap,
                       final TiledMapRenderer TmRender, final OrthographicCamera camera,
                       final FitViewport vp,
@@ -86,6 +98,9 @@ public class GameScreen implements Screen {
         this(game, new OrthographicCamera());
     }
 
+    /**
+     * Initializes the game objects and settings.
+     */
     public void create(){
 
         // Initialize the collision layer (Will need to change 'cs' to an actual collision layer
@@ -111,6 +126,12 @@ public class GameScreen implements Screen {
             activityImages.add(eventM.listEvents().get(i).getActivityImage());
         }
     }
+
+    /**
+     * Updates the game state.
+     *
+     * @param delta the time elapsed since the last update
+     */
     public void update(float delta) {
         gameClock.update(delta);
 
@@ -139,7 +160,11 @@ public class GameScreen implements Screen {
     }
 
 
-
+    /**
+     * Renders game elements.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
 
@@ -179,13 +204,18 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * Renders activity images on the screen.
+     */
     public void renderActivityImages(){
         for (ActivityImage activityImage : activityImages) {
             if (activityImage != null) activityImage.render(vp.getCamera(),batch);
         }
     }
 
-    // method updates the camera position, so it follows the player but shows less out-of-bounds area
+    /**
+     * Updates the camera position to follow the player, showing less out-of-bounds area.
+     */
     public void updateCamera()
     {
         float x,y;
@@ -220,14 +250,25 @@ public class GameScreen implements Screen {
         return closest;
     }
 
+    /**
+     * @return the nearest building
+     */
     public List<Building> getBuildings() {
         return buildings;
     }
 
+    /**
+     * Checks game over condition.
+     *
+     * @return true if condition met, false otherwise.
+     */
     private boolean checkGameOverCondition(){
         return gameClock.getDays() > 7;
     }
 
+    /**
+     * Saves players game run data to file and attempts to write it to server.
+     */
     public void writeToFile() {
         String player = nameTextField.getValue();
         float score = eventM.calcScore();

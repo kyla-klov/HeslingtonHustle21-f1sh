@@ -12,14 +12,20 @@ import com.mygdx.game.HesHustle;
 import com.mygdx.game.Utils.ResourceManager;
 import com.mygdx.game.Utils.ScreenType;
 
+/**
+ * The SettingsScreen class represents the screen that allows the player to adjust game settings.
+ */
 public class SettingsScreen implements Screen {
     private final HesHustle game;
     private final Stage stage;
     private final ResourceManager resourceManager;
-
-
     private SelectBox<String> resolutionSelectBox;
 
+    /**
+     * Constructs a SettingsScreen with the specified game instance.
+     *
+     * @param game the game instance
+     */
     public SettingsScreen(HesHustle game) {
         this.game = game;
         this.resourceManager = new ResourceManager();
@@ -28,6 +34,9 @@ public class SettingsScreen implements Screen {
         initialiseSettings();
     }
 
+    /**
+     * Initializes the settings UI elements and sets up the stage.
+     */
     private void initialiseSettings() {
 
         Skin skin = resourceManager.addDisposable(new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json")));
@@ -100,6 +109,11 @@ public class SettingsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Render SettingsScreen elements.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         if (resolutionSelectBox.getSelected().equals("Full Screen")){

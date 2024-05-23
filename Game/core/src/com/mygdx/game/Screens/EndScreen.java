@@ -14,6 +14,9 @@ import com.mygdx.game.Objects.AchievementsDisplay;
 import com.mygdx.game.Objects.LeaderBoard;
 import com.mygdx.game.Utils.ScreenType;
 
+/**
+ * The EndScreen class represents the screen displayed at the end of the game.
+ */
 public class EndScreen implements Screen{
     private final HesHustle game;
     private final Stage stage;
@@ -26,18 +29,16 @@ public class EndScreen implements Screen{
     private final FitViewport vp;
     private final float score;
 
-
+    /**
+     * Constructs an EndScreen with the specified game instance and score.
+     *
+     * @param game  the game instance
+     * @param score the player's score
+     */
     public EndScreen(final HesHustle game, final float score) {
         this(game, score, new Stage(new FitViewport(1600, 900)),
                 new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json")));
-//        this.game = game;
-//        stage = new Stage(new ScreenViewport());
-//        Gdx.input.setInputProcessor(stage);
-//        skin = new Skin(Gdx.files.internal("Craftacular_UI_Skin/craftacular-ui.json"));
-//        playAgainButton = new TextButton("Play Again", skin);
-//        mainMenuButton = new TextButton("Main Menu", skin);
-//        exitButton = new TextButton("Exit", skin);
-//        setupUi();
+
     }
 
     private EndScreen(final HesHustle game, final float score, final Stage stage, final Skin skin) {
@@ -67,6 +68,9 @@ public class EndScreen implements Screen{
         setupUi();
     }
 
+    /**
+     * Sets up the UI elements for the end screen, including labels and buttons.
+     */
     private void setupUi(){
         Table table = new Table ();
         table.setFillParent(true);
@@ -119,6 +123,11 @@ public class EndScreen implements Screen{
         Gdx.input.setInputProcessor(stage);
     }
 
+    /**
+     * Renders screen elements
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.396f, 0.263f, 0.129f, 1);
