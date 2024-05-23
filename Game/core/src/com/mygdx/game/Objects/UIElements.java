@@ -24,16 +24,32 @@ public class UIElements {
     private boolean tapActive;
     private boolean buttonPressed;
 
-    public UIElements(Viewport vp, AchievementHandler achievementHandler) {
+    public UIElements(Viewport vp, AchievementHandler achievementHandler,
+                      EnergyBar energyBar, AchievementsDisplay achievementsDisplay, BitmapFont font){
         this.vp = vp;
-        font = new BitmapFont(Gdx.files.internal("font.fnt"));
+        this.energyBar = energyBar;
+        this.achievementsDisplay = achievementsDisplay;
+        this.font = font;
         achievementsButton  = new Texture(Gdx.files.internal("badge.png"));
         tap = new Texture(Gdx.files.internal("tap.png"));
-        energyBar = new EnergyBar(vp, 80, 600, 270, 50, 27);
-        achievementsDisplay = new AchievementsDisplay(vp, achievementHandler, 1200, 370);
         startX = 1490; startY = 750;
         endX = 1475; endY = 775;
         tapActive = true;
+    }
+    public UIElements(Viewport vp, AchievementHandler achievementHandler) {
+        this(vp, achievementHandler,
+                new EnergyBar(vp, 80, 600, 270, 50, 27),
+                new AchievementsDisplay(vp, achievementHandler, 1200, 370),
+                new BitmapFont(Gdx.files.internal("font.fnt")));
+//        this.vp = vp;
+//        font = new BitmapFont(Gdx.files.internal("font.fnt"));
+//        achievementsButton  = new Texture(Gdx.files.internal("badge.png"));
+//        tap = new Texture(Gdx.files.internal("tap.png"));
+//        energyBar = new EnergyBar(vp, 80, 600, 270, 50, 27);
+//        achievementsDisplay = new AchievementsDisplay(vp, achievementHandler, 1200, 370);
+//        startX = 1490; startY = 750;
+//        endX = 1475; endY = 775;
+//        tapActive = true;
     }
 
     public void update(float deltaTime){
@@ -93,5 +109,13 @@ public class UIElements {
     }
 
     public void touchUp(){
+    }
+
+    public float getCurX() {
+        return curX;
+    }
+
+    public float getCurY() {
+        return curY;
     }
 }

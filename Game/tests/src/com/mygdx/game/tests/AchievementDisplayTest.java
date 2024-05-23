@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 
 @RunWith(GdxTestRunner.class)
 public class AchievementDisplayTest {
-    private AchievementHandler achievementHandler = new AchievementHandler();
+    private final AchievementHandler achievementHandler = new AchievementHandler();
     private final OrthographicCamera camera = new OrthographicCamera();
     private final Viewport vp = new FitViewport(2400,740, camera);
     private final BitmapFont mockedFont = mock(BitmapFont.class);
