@@ -96,7 +96,7 @@ project(":tests") {
         sourceSets project(':core').sourceSets.main
         afterEvaluate {
             classDirectories.setFrom(files(classDirectories.files.collect {
-                fileTree(dir: it, exclude: ['**/*test.*', '**/GdxTestRunner.*', '**/*Test.*', '**/Server*.*'])
+                fileTree(dir: it, exclude: ['**/*test.*', '**/GdxTestRunner.*', '**/*Test.*', '**/Server*.*', '**/HesHustle*.*'])
             }))
         }
     }
