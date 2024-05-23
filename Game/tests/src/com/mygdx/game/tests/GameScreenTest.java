@@ -1,23 +1,14 @@
 package com.mygdx.game.tests;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.FileTextureData;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.HesHustle;
 import com.mygdx.game.Objects.ActivityImage;
@@ -25,7 +16,6 @@ import com.mygdx.game.Objects.NameTextField;
 import com.mygdx.game.Objects.PlayerController;
 import com.mygdx.game.Objects.UIElements;
 import com.mygdx.game.Screens.GameScreen;
-import com.mygdx.game.Server;
 import com.mygdx.game.Utils.*;
 import org.junit.After;
 import org.junit.Before;
@@ -53,16 +43,12 @@ public class GameScreenTest {
     private final UIElements mockedUiElements = mock(UIElements.class);
     private final NameTextField mockedNameTextField = mock(NameTextField.class);
     private static final AchievementHandler mockedAchievementHandler = spy(AchievementHandler.class);
-//    private final Batch mockedBatch = mock(Batch.class);
 
     private final ScreenManager mockedSM = mock(ScreenManager.class);
-    private final Event mockedEvent = mock(Event.class);
-    private final ScreenType mockedST = mock(ScreenType.class);
+
 
     private final ActivityImage mockedImage = mock(ActivityImage.class);
-    private final ActivityImage mockedStudyImage = mock(ActivityImage.class, withSettings()
-            .useConstructor("Activitys/cs.png")
-            .defaultAnswer(CALLS_REAL_METHODS));
+
 
     @Spy private final Event FeedDucks = new Event(1, 2, 0, -5, Event.Type.RECREATIONAL, 0, "",ScreenType.DUCK_GAME_SCREEN);
     @Spy private final Event StudyCS = new Event(3, -20, 1, -10, Event.Type.STUDY, 15, "CSBuildingStudy", ScreenType.CHECKIN_CODE_SCREEN);
@@ -75,9 +61,6 @@ public class GameScreenTest {
             .useConstructor(mockedGame, mockedClock)
             .defaultAnswer(CALLS_REAL_METHODS));
 
-    private final Skin skin = new Skin(Gdx.files.internal("metalui/metal-ui.json"));
-
-    private final ShapeRenderer mockedShapeRenderer = mock(ShapeRenderer.class);
     private final TiledMap mockedTiledMap = spy(new TmxMapLoader().load("MAP/map1.tmx"));
     private final TiledMapRenderer mockedTiledMapRender = mock(TiledMapRenderer.class);
     @Spy private final PlayerController player = new PlayerController(1000,1000,
